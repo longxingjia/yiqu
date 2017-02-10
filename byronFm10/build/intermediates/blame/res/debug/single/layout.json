@@ -1,0 +1,70 @@
+[
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\list_footer.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\list_footer.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\abs_net_fragment.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\abs_net_fragment.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\tab_host.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\tab_host.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\titlebar_back_next_progress.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\titlebar_back_next_progress.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\view_super_switch.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\view_super_switch.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\view_super_edit_single_edit.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\view_super_edit_single_edit.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\ah_notification_dwnld.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\ah_notification_dwnld.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\progress.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\progress.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\view_super_edit_text.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\view_super_edit_text.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\menu_list.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\menu_list.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\slidingmenumain.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\slidingmenumain.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\progress_overlay.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\progress_overlay.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\view_super_edit.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\view_super_edit.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\menu_dialog.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\menu_dialog.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\menu_dialog_item.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\menu_dialog_item.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\titlebar_base.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\titlebar_base.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\layout\\list_header.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\layout\\list_header.xml"
+    }
+]

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   
+    
+    <!-- for start intent -->
+    <string name="fm_start_failure">操作失败</string> 
+    
+    <!--for abs act -->
+    <string name="fm_indeterminism_error">出了点小问题，请稍后重试</string>
+    
+    <!-- for loadmore view -->
+    <string name="fm_load_more_text">加载中&#8230;</string>
+    
+    <!-- for menu list -->
+    <string name="fm_menu_cancel">取消</string>
+  
+   
+    <!-- for net -->
+    <string name="fm_net_call_msg_default">请稍候&#8230;</string>
+    <string name="fm_net_call_no_network">暂无网络</string>
+    <string name="fm_net_call_error">系统繁忙，请稍后再试</string>
+    <string name="fm_net_call_timeout">系统繁忙，请稍后再试</string>
+    
+    <string name="fm_net_error">系统繁忙，请稍后再试</string>
+    
+    <!-- broadcast -->
+    <string name="fm_action_logcout"></string>
+    
+    <!-- dialog -->
+    <string name="fm_dialog_default_titile">提示</string>
+    <string name="fm_dialog_default_btnok">确定</string>
+    <string name="fm_dialog_default_btncancel">取消</string>
+    
+    <string name="header_refresh">下拉刷新</string>
+ 	<string name="list_loading">正在刷新...</string>
+    <string name="released_more">松手立即刷新</string>
+    <string name="refreshOk">刷新成功</string>
+    <string name="refreshFail">刷新失败</string>
+</resources>

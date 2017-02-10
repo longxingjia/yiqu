@@ -1,0 +1,1069 @@
+[
+    {
+        "outputFile": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 35,
+                    "endOffset": 86
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 91,
+                    "endColumn": 49,
+                    "endOffset": 136
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 141,
+                    "endColumn": 55,
+                    "endOffset": 192
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 197,
+                    "endColumn": 44,
+                    "endOffset": 237
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 242,
+                    "endColumn": 47,
+                    "endOffset": 285
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 290,
+                    "endColumn": 57,
+                    "endOffset": 343
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 348,
+                    "endColumn": 56,
+                    "endOffset": 400
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 405,
+                    "endColumn": 47,
+                    "endOffset": 448
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 453,
+                    "endColumn": 51,
+                    "endOffset": 500
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 505,
+                    "endColumn": 45,
+                    "endOffset": 546
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 551,
+                    "endColumn": 51,
+                    "endOffset": 598
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 603,
+                    "endColumn": 53,
+                    "endOffset": 652
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 657,
+                    "endColumn": 48,
+                    "endOffset": 701
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 706,
+                    "endColumn": 46,
+                    "endOffset": 748
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 753,
+                    "endColumn": 55,
+                    "endOffset": 804
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 809,
+                    "endColumn": 53,
+                    "endOffset": 858
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 809,
+                        "endColumn": 53,
+                        "endOffset": 858
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 863,
+                    "endColumn": 62,
+                    "endOffset": 921
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 926,
+                    "endColumn": 60,
+                    "endOffset": 982
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 987,
+                    "endColumn": 47,
+                    "endOffset": 1030
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 3893,
+                    "endColumn": 47,
+                    "endOffset": 3936
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 3941,
+                    "endColumn": 48,
+                    "endOffset": 3985
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 3990,
+                    "endColumn": 57,
+                    "endOffset": 4043
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 51,
+                    "startColumn": 4,
+                    "startOffset": 4048,
+                    "endColumn": 55,
+                    "endOffset": 4099
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 52,
+                    "startColumn": 4,
+                    "startOffset": 4104,
+                    "endColumn": 42,
+                    "endOffset": 4142
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 53,
+                    "startColumn": 4,
+                    "startOffset": 4147,
+                    "endColumn": 47,
+                    "endOffset": 4190
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 54,
+                    "startColumn": 4,
+                    "startOffset": 4195,
+                    "endColumn": 47,
+                    "endOffset": 4238
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 55,
+                    "startColumn": 4,
+                    "startOffset": 4243,
+                    "endColumn": 42,
+                    "endOffset": 4281
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 4286,
+                    "endColumn": 47,
+                    "endOffset": 4329
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 57,
+                    "startColumn": 4,
+                    "startOffset": 4334,
+                    "endColumn": 47,
+                    "endOffset": 4377
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 58,
+                    "startColumn": 4,
+                    "startOffset": 4382,
+                    "endColumn": 48,
+                    "endOffset": 4426
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 59,
+                    "startColumn": 4,
+                    "startOffset": 4431,
+                    "endColumn": 45,
+                    "endOffset": 4472
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 4477,
+                    "endColumn": 47,
+                    "endOffset": 4520
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 4525,
+                    "endColumn": 49,
+                    "endOffset": 4570
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 4575,
+                    "endColumn": 41,
+                    "endOffset": 4612
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 63,
+                    "startColumn": 4,
+                    "startOffset": 4617,
+                    "endColumn": 43,
+                    "endOffset": 4656
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 64,
+                    "startColumn": 4,
+                    "startOffset": 4661,
+                    "endColumn": 47,
+                    "endOffset": 4704
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 65,
+                    "startColumn": 4,
+                    "startOffset": 4709,
+                    "endColumn": 57,
+                    "endOffset": 4762
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 66,
+                    "startColumn": 4,
+                    "startOffset": 4767,
+                    "endColumn": 56,
+                    "endOffset": 4819
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 67,
+                    "startColumn": 4,
+                    "startOffset": 4824,
+                    "endColumn": 56,
+                    "endOffset": 4876
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 68,
+                    "startColumn": 4,
+                    "startOffset": 4881,
+                    "endColumn": 55,
+                    "endOffset": 4932
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 4937,
+                    "endColumn": 63,
+                    "endOffset": 4996
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 70,
+                    "startColumn": 4,
+                    "startOffset": 5001,
+                    "endColumn": 65,
+                    "endOffset": 5062
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 71,
+                    "startColumn": 4,
+                    "startOffset": 5067,
+                    "endColumn": 64,
+                    "endOffset": 5127
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 72,
+                    "startColumn": 4,
+                    "startOffset": 5132,
+                    "endColumn": 57,
+                    "endOffset": 5185
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 73,
+                    "startColumn": 4,
+                    "startOffset": 5190,
+                    "endColumn": 57,
+                    "endOffset": 5243
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 74,
+                    "startColumn": 4,
+                    "startOffset": 5248,
+                    "endColumn": 58,
+                    "endOffset": 5302
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 75,
+                    "startColumn": 4,
+                    "startOffset": 5307,
+                    "endColumn": 59,
+                    "endOffset": 5362
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 76,
+                    "startColumn": 4,
+                    "startOffset": 5367,
+                    "endColumn": 54,
+                    "endOffset": 5417
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 77,
+                    "startColumn": 4,
+                    "startOffset": 5422,
+                    "endColumn": 55,
+                    "endOffset": 5473
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 78,
+                    "startColumn": 4,
+                    "startOffset": 5478,
+                    "endColumn": 42,
+                    "endOffset": 5516
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 79,
+                    "startColumn": 4,
+                    "startOffset": 5521,
+                    "endColumn": 53,
+                    "endOffset": 5570
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 80,
+                    "startColumn": 4,
+                    "startOffset": 5575,
+                    "endColumn": 40,
+                    "endOffset": 5611
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 81,
+                    "startColumn": 4,
+                    "startOffset": 5616,
+                    "endColumn": 38,
+                    "endOffset": 5650
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 82,
+                    "startColumn": 4,
+                    "startOffset": 5655,
+                    "endColumn": 58,
+                    "endOffset": 5709
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 83,
+                    "startColumn": 4,
+                    "startOffset": 5714,
+                    "endColumn": 54,
+                    "endOffset": 5764
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 84,
+                    "startColumn": 4,
+                    "startOffset": 5769,
+                    "endColumn": 55,
+                    "endOffset": 5820
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 85,
+                    "startColumn": 4,
+                    "startOffset": 5825,
+                    "endColumn": 63,
+                    "endOffset": 5884
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 86,
+                    "startColumn": 4,
+                    "startOffset": 5889,
+                    "endColumn": 50,
+                    "endOffset": 5935
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 87,
+                    "startColumn": 4,
+                    "startOffset": 5940,
+                    "endColumn": 45,
+                    "endOffset": 5981
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 88,
+                    "startColumn": 4,
+                    "startOffset": 5986,
+                    "endColumn": 56,
+                    "endOffset": 6038
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 89,
+                    "startColumn": 4,
+                    "startOffset": 6043,
+                    "endColumn": 56,
+                    "endOffset": 6095
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 90,
+                    "startColumn": 4,
+                    "startOffset": 6100,
+                    "endColumn": 55,
+                    "endOffset": 6151
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 91,
+                    "startColumn": 4,
+                    "startOffset": 6156,
+                    "endColumn": 58,
+                    "endOffset": 6210
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 92,
+                    "startColumn": 4,
+                    "startOffset": 6215,
+                    "endColumn": 51,
+                    "endOffset": 6262
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 93,
+                    "startColumn": 4,
+                    "startOffset": 6267,
+                    "endColumn": 49,
+                    "endOffset": 6312
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 94,
+                    "startColumn": 4,
+                    "startOffset": 6317,
+                    "endColumn": 47,
+                    "endOffset": 6360
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 95,
+                    "startColumn": 4,
+                    "startOffset": 6365,
+                    "endColumn": 48,
+                    "endOffset": 6409
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 96,
+                    "startColumn": 4,
+                    "startOffset": 6414,
+                    "endColumn": 44,
+                    "endOffset": 6454
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 97,
+                    "startColumn": 4,
+                    "startOffset": 6459,
+                    "endColumn": 44,
+                    "endOffset": 6499
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 98,
+                    "startColumn": 4,
+                    "startOffset": 6504,
+                    "endColumn": 42,
+                    "endOffset": 6542
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 99,
+                    "startColumn": 4,
+                    "startOffset": 6547,
+                    "endColumn": 48,
+                    "endOffset": 6591
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 100,
+                    "startColumn": 4,
+                    "startOffset": 6596,
+                    "endLine": 103,
+                    "endColumn": 12,
+                    "endOffset": 6835
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 104,
+                    "startColumn": 4,
+                    "startOffset": 6840,
+                    "endLine": 105,
+                    "endColumn": 12,
+                    "endOffset": 6919
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 106,
+                    "startColumn": 4,
+                    "startOffset": 6924,
+                    "endLine": 107,
+                    "endColumn": 12,
+                    "endOffset": 6969
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 108,
+                    "startColumn": 4,
+                    "startOffset": 6974,
+                    "endLine": 109,
+                    "endColumn": 12,
+                    "endOffset": 7069
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 110,
+                    "startColumn": 4,
+                    "startOffset": 7074,
+                    "endLine": 117,
+                    "endColumn": 12,
+                    "endOffset": 7454
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 118,
+                    "startColumn": 4,
+                    "startOffset": 7459,
+                    "endLine": 126,
+                    "endColumn": 12,
+                    "endOffset": 8003
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 127,
+                    "startColumn": 4,
+                    "startOffset": 8008,
+                    "endLine": 133,
+                    "endColumn": 12,
+                    "endOffset": 8304
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 134,
+                    "startColumn": 4,
+                    "startOffset": 8309,
+                    "endLine": 135,
+                    "endColumn": 12,
+                    "endOffset": 8406
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 136,
+                    "startColumn": 4,
+                    "startOffset": 8411,
+                    "endLine": 137,
+                    "endColumn": 12,
+                    "endOffset": 8524
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 138,
+                    "startColumn": 4,
+                    "startOffset": 8529,
+                    "endLine": 139,
+                    "endColumn": 12,
+                    "endOffset": 8635
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 140,
+                    "startColumn": 4,
+                    "startOffset": 8640,
+                    "endLine": 145,
+                    "endColumn": 12,
+                    "endOffset": 8897
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 146,
+                    "startColumn": 4,
+                    "startOffset": 8902,
+                    "endLine": 153,
+                    "endColumn": 12,
+                    "endOffset": 9298
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 134,
+                        "startColumn": 4,
+                        "startOffset": 7865,
+                        "endLine": 141,
+                        "endColumn": 12,
+                        "endOffset": 8261
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 154,
+                    "startColumn": 4,
+                    "startOffset": 9303,
+                    "endLine": 159,
+                    "endColumn": 12,
+                    "endOffset": 9588
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 160,
+                    "startColumn": 4,
+                    "startOffset": 9593,
+                    "endLine": 163,
+                    "endColumn": 12,
+                    "endOffset": 9745
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 164,
+                    "startColumn": 4,
+                    "startOffset": 9750,
+                    "endLine": 167,
+                    "endColumn": 12,
+                    "endOffset": 9906
+                },
+                "from": {
+                    "file": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml"
+                }
+            }
+        ]
+    }
+]

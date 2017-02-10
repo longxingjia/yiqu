@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="38dp"
+    android:background="#000000"  >
+
+
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:scaleType="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:visibility="invisible" 
+            android:src="@drawable/navigationbar_back"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:textSize="17dp"
+            android:visibility="visible" />
+
+        
+            <!-- 字按钮 -->
+        <TextView
+            android:id="@+id/title_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:textColor="@color/title_next_text_color_selector"
+            android:textSize="14dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:visibility="invisible" 
+            android:layout_alignParentRight="true"/>
+            
+
+
+</RelativeLayout>

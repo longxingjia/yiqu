@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="38dp"
+    android:gravity="center_vertical"
+    android:background="#000000"  >
+
+
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:scaleType="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:visibility="invisible" 
+            android:src="@drawable/navigationbar_back"/>
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:textSize="17dp"
+            android:visibility="visible" />
+
+        
+         <!-- 字按钮 -->
+        <RelativeLayout 
+	    android:layout_width="wrap_content"
+	    android:gravity="center"
+	    android:layout_height="38dp" >
+        <TextView
+            android:id="@+id/title_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:gravity="center|right"
+            android:textColor="@color/title_next_text_color_selector"
+            android:textSize="17dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
+        	<ProgressBar
+		    android:id="@+id/title_progress"
+            style="@android:style/Widget.ProgressBar.Small.Inverse"
+            android:layout_width="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginLeft="3dp"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="3dp"
+            android:layout_height="wrap_content" />
+        </RelativeLayout>
+</LinearLayout>
