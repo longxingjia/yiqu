@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.fwrestnet.NetResponse;
+import com.ui.views.CircleImageView;
 import com.ui.views.LoadMoreView;
 import com.ui.views.LoadMoreView.OnMoreListener;
 import com.ui.views.RefreshList;
 import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
 import com.yiqu.iyijiayi.fragment.menu.LoginFragment;
 import com.yiqu.iyijiayi.fragment.menu.RegisterFragment;
 import com.yiqu.iyijiayi.fragment.menu.SelectLoginFragment;
@@ -22,6 +24,7 @@ import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
+import static android.R.attr.background;
 import static android.R.attr.onClick;
 
 public class Tab5Fragment extends TabContentFragment implements OnMoreListener, IRefreshListViewListener,View.OnClickListener {
@@ -29,7 +32,8 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
 
     private Button loginBt;
     private UserInfo userInfo;
-
+    private CircleImageView head;
+    private MenuDialogPicHelper mMenuDialogPicHelper;
     @Override
     protected int getTitleView() {
 
@@ -46,6 +50,8 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
     protected void initView(View v) {
 
         loginBt = (Button) v.findViewById(R.id.login);
+        head = (CircleImageView) v.findViewById(R.id.head);
+
 
 
 
@@ -60,10 +66,20 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
     @Override
     protected void init(Bundle savedInstanceState) {
 
+
         boolean isLogin = AppShare.getIsLogin(getActivity());
+        mMenuDialogPicHelper = new MenuDialogPicHelper(this, new MenuDialogPicHelper.BitmapListener() {
+            @Override
+            public void onBitmapUrl(String url) {
+                // TODO Auto-generated method stub
+                //headBase64 = url;
+            }
+        });
+
         if(isLogin){
             loginBt.setVisibility(View.GONE);
             userInfo = AppShare.getUserInfo(getActivity());
+            head.setOnClickListener(this);
         }else {
             loginBt.setVisibility(View.VISIBLE);
         }
@@ -136,6 +152,11 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.head:
+                mMenuDialogPicHelper.show(v, head);
+                break;
+        }
 
     }
 }
