@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- tab config start -->   
+    <string-array name="tab_host_names">
+        <item >@string/label_tab1</item>
+        <item >@string/label_tab2</item>
+        <item >@string/label_tab3</item>
+        <item >@string/label_tab4</item>
+        <item >@string/label_tab5</item>
+    </string-array>
+    <string-array name="main_tab_item_click">
+        <item >com.yiqu.iyijiayi.fragment.Tab1Fragment</item>
+        <item >com.yiqu.iyijiayi.fragment.Tab2Fragment</item>
+        <item >com.yiqu.iyijiayi.fragment.Tab3Fragment</item>
+        <item >com.yiqu.iyijiayi.fragment.Tab4Fragment</item>
+        <item >com.yiqu.iyijiayi.fragment.Tab5Fragment</item>
+    </string-array>
+    <string-array name="main_tab_icon">
+        <item >main_tab1_pressed</item>
+        <item >main_tab2_pressed</item>
+        <item >main_tab3_pressed</item>
+        <item >main_tab4_pressed</item>
+        <item >main_tab5_pressed</item>
+    </string-array>
+    <string-array name="main_tab_icon_disable">
+      	<item >main_tab1</item>
+        <item >main_tab2</item>
+        <item >main_tab3</item>
+        <item >main_tab4</item>
+        <item >main_tab5</item>
+    </string-array>
+	<!-- tab config end -->   
+
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <color name="transparent">#00000000</color>    
+   <color name="fm_list_item_bg_press">#888888</color>
+   <color name="fm_list_item_bg">#ffffff</color>
+   <color name="fm_page_bg">#ffffff</color>
+   
+   <!-- #1898c4 179cfb-->
+    <!-- page -->
+    <color name="page_bg_color">#ffffff</color>
+    <color name="page_set_bg_color">#f1eef9</color>
+    <color name="menu_bg_color">#f1f0f8</color>
+    
+   
+    <!-- title next text -->
+    <color name="title_next_txt_eable_color">#ffffff</color>
+    <color name="title_next_txt_disable_color">#cecece</color>
+    
+    <!-- menu text -->
+    <color name="menu_text_enable_color">#000000</color>
+    <color name="menu_text_disable_color">#cecece</color>
+    
+    <!-- tab  -->
+    <color name="tab_bg_color">#f8f8f8</color>
+    <color name="tab_txt_eable_color">#ff0000</color>
+    <color name="tab_txt_disable_color">#b3b3b3</color>
+    
+    <!-- set item -->
+    <color name="set_item_bg_press">#cecece</color>
+    <color name="set_item_bg">#ffffff</color>
+    <color name="set_item_edit_color">#898989</color>
+    <color name="set_line_color">#999999</color>
+    
+
+</resources>

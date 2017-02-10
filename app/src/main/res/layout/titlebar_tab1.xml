@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+
+    android:gravity="center" >
+
+    <ImageView
+        android:id="@+id/title_back"
+        android:layout_width="@dimen/title_touch_area"
+        android:layout_height="40dp"
+        android:background="@drawable/pic_menu_bitmap"
+        android:visibility="gone"
+        
+        />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textSize="18dp"
+        android:visibility="visible" />
+
+    <!-- 字按钮 -->
+
+    <RelativeLayout
+        android:layout_width="@dimen/title_touch_area"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/title_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/refresh_selector"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/title_progress"
+            style="@style/fm_small_progressbar_Inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</LinearLayout>

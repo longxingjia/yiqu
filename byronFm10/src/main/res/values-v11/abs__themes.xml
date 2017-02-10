@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="fm_AppBaseTheme" parent="@android:style/Theme.Holo.Light"></style>
+
+    <style name="fm_small_progressbar_Inverse" parent="@android:style/Widget.Holo.Light.ProgressBar.Small.Inverse"></style>
+
+    <style name="fm_small_progressbar" parent="@android:style/Widget.Holo.Light.ProgressBar.Small"></style>
+  <style name="fm_full_AppBaseTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+    </style>
+     <style name="fm_small_progressbar_hor" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
+    </style>
+</resources>

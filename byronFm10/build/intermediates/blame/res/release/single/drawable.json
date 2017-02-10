@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\list_selector_background_transition_holo_light.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\menu_selector_background.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\menu_selector_background.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\pic_menu_reddot_bitmap.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\pic_menu_reddot_bitmap.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\pic_menu_reddot.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\pic_menu_reddot.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\pic_menu_bitmap.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\pic_menu_bitmap.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\navigationbar_back.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\navigationbar_back.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\log_btn_selector.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\log_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\refresh_selector.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\refresh_selector.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\log_btn_round_click.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\log_btn_round_click.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\btn_radio_holo_light.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\btn_radio_holo_light.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\log_btn_round_normal.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\log_btn_round_normal.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\edit_input_clear.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\edit_input_clear.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\list_selector_holo_light.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\list_selector_holo_light.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\set_item_selector.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\set_item_selector.xml"
+    }
+]

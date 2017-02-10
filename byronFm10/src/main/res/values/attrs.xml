@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ExpandableTextView">
+        <attr name="expanded" format="boolean" />
+        <attr name="minLines" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="GifView">  
+        <attr name="gif" format="reference" />  
+        <attr name="paused" format="boolean" />  
+    </declare-styleable>  
+    <declare-styleable name="CustomTheme">  
+        <attr name="gifViewStyle" format="reference" />  
+    </declare-styleable> 
+    
+   <declare-styleable name="RatioImageView">  
+        <attr name="ratio" format="float" />  
+    </declare-styleable> 
+    
+    <declare-styleable name="LockView">
+        <attr name="padding" format="dimension" />
+    </declare-styleable>
+     <declare-styleable name="Menu">
+        <!-- 菜单内容的布局文件 -->
+        <attr name="content" format="integer" />
+    </declare-styleable>
+    
+     <declare-styleable name="TabHostView">
+        <attr name="num" format="integer" />
+        <attr name="name_array" format="reference" />
+        <attr name="icon_array" format="reference" />
+        <attr name="icon_disable_array" format="reference" />
+    </declare-styleable>
+ 
+    <declare-styleable name="SuperEditView">
+        <attr name="location">
+            <enum name="single" value="0" />
+            <enum name="top" value="1" />
+            <enum name="center" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="label_txt" format="string" />
+        <attr name="label_icon" format="reference|color" />
+        <attr name="edit_hint" format="string" />
+        <attr name="edit_txt" format="string" />
+        <attr name="more_icon" format="reference|color" />
+        <attr name="edit_layout" format="reference" />
+    </declare-styleable>
+    
+     <declare-styleable name="SuperSwitchView">
+        <attr name="location"/>         
+        <attr name="label_txt" />
+        <attr name="sub_label_txt" format="string"/>
+        <attr name="is_switch" format="boolean" />
+    </declare-styleable>
+</resources>
