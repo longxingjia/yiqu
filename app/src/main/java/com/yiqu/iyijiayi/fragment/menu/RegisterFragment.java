@@ -21,11 +21,14 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.fragment.Tab5Fragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.YzmKey;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.regex.Matcher;
@@ -35,7 +38,6 @@ public class RegisterFragment extends AbsAllFragment {
 
     EditText txt01;
     EditText txt02;
-
     TextView btn01;
     Button btn02;
 
@@ -155,24 +157,31 @@ public class RegisterFragment extends AbsAllFragment {
         if ("getLoginMessageCode".equals(id)) {
             mMyCount = new MyCount(60000 * 5, 1000);
             mMyCount.start();
-            ToastManager.getInstance(getActivity()).showText("发送成功");
-            Gson gson = new Gson();
-            YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
-            key = yzmKey.key;
-
-        } else if ("login".equals(id)) {
-
 
             if (netResponse.bool == 0) {
                 LogUtils.LOGE(netResponse.toString());
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
             } else {
-           //     LogUtils.LOGE(netResponse.data.toString());
+                Gson gson = new Gson();
+                YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
+                key = yzmKey.key;
+                ToastManager.getInstance(getActivity()).showText("发送成功");
+            }
+        } else if ("login".equals(id)) {
 
+            if (netResponse.bool == 0) {
+                LogUtils.LOGE(netResponse.toString());
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            } else {
+                //     LogUtils.LOGE(netResponse.data.toString());
                 Gson gson = new Gson();
                 UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                 LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
+                AppShare.setIsLogin(getActivity(), true);
+                AppShare.setUserInfo(getActivity(), userInfo);
+//                Model.startNextAct(getActivity(), Tab5Fragment.class.getName());
 
+                getActivity().finish();
             }
 
         }

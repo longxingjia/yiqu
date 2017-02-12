@@ -37,7 +37,7 @@
             android:background="@drawable/edit_bg"
             android:maxLength="10"
             android:paddingLeft="15dp"
-            android:text="966189"
+
             android:paddingRight="150dp"
             android:singleLine="true"
             android:textSize="13dp" />

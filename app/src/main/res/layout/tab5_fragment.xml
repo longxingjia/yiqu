@@ -36,9 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginBottom="15dp"
-            android:orientation="vertical"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
-            android:layout_marginTop="15dp">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/login"
@@ -54,12 +54,13 @@
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/userinfo"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -68,6 +69,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/username"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:gravity="center_vertical"
@@ -78,7 +80,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35dp" />
                 </LinearLayout>
+
                 <TextView
+                    android:id="@+id/user_school"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:gravity="center_vertical"
@@ -86,6 +90,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/user_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:gravity="center_vertical"
@@ -93,9 +98,7 @@
                     android:textSize="16sp" />
 
 
-
             </LinearLayout>
-
 
 
         </LinearLayout>
@@ -110,8 +113,7 @@
                 android:id="@+id/menu_item_wodeyijiayizhuye"
                 style="@style/textview_mine"
                 android:drawableLeft="@mipmap/mine_about"
-                android:text="我的艺加艺主页"
-                />
+                android:text="我的艺加艺主页" />
 
 
             <ImageView
@@ -123,21 +125,22 @@
 
             <TextView
                 android:id="@+id/menu_item_wowen"
+                style="@style/textview_mine"
                 android:drawableLeft="@mipmap/mine_about"
-                android:text="我问"
-                style="@style/textview_mine"/>
+                android:text="我问" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/tab_line_color" />
+
             <TextView
-                style="@style/textview_mine"
                 android:id="@+id/menu_item_woting"
+                style="@style/textview_mine"
                 android:drawableLeft="@mipmap/mine_about"
-                android:text="我听"
-             />
+                android:text="我听" />
 
 
             <ImageView
@@ -149,10 +152,9 @@
 
             <TextView
                 android:id="@+id/menu_item_wodeyue"
-                android:drawableLeft="@mipmap/mine_about"
-                android:text="我的余额"
                 style="@style/textview_mine"
-                />
+                android:drawableLeft="@mipmap/mine_about"
+                android:text="我的余额" />
 
 
             <ImageView
@@ -163,11 +165,11 @@
                 android:background="@color/tab_line_color" />
 
             <TextView
-                style="@style/textview_mine"
                 android:id="@+id/menu_item_wodeyibi"
+                style="@style/textview_mine"
                 android:drawableLeft="@mipmap/mine_about"
-                android:text="我的艺币"
-                />
+                android:text="我的艺币" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -176,11 +178,11 @@
                 android:background="@color/tab_line_color" />
 
             <TextView
-                style="@style/textview_mine"
                 android:id="@+id/menu_item_shezhi"
+                style="@style/textview_mine"
                 android:drawableLeft="@mipmap/mine_about"
-                android:text="设置"
-                />
+                android:text="设置" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -188,12 +190,12 @@
                 android:layout_marginRight="5dp"
                 android:background="@color/tab_line_color" />
         </LinearLayout>
+
         <TextView
+            android:id="@+id/menu_item_jiesuanshuoming"
             style="@style/textview_mine"
-            android:id="@+id/menu_item_1"
             android:drawableLeft="@mipmap/mine_account"
-            android:text="结算说明"
-             />
+            android:text="结算说明" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -203,11 +205,10 @@
             android:background="@color/tab_line_color" />
 
         <TextView
+            android:id="@+id/menu_item_bangzhu"
             style="@style/textview_mine"
-            android:id="@+id/menu_item_2"
             android:drawableLeft="@mipmap/mine_ask"
-            android:text="帮助"
-            />
+            android:text="帮助" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -217,11 +218,10 @@
             android:background="@color/tab_line_color" />
 
         <TextView
+            android:id="@+id/menu_item_guanyu"
             style="@style/textview_mine"
-            android:id="@+id/menu_item_3"
             android:drawableLeft="@mipmap/mine_about"
-            android:text="关于"
-             />
+            android:text="关于" />
 
 
         <ImageView
@@ -230,7 +230,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@color/tab_line_color" />
-
 
 
         <RelativeLayout
