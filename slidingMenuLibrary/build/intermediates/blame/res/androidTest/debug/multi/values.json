@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\iyijiayi\\slidingMenuLibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+        "outputFile": "H:\\Git\\slidingMenuLibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 1130
                 },
                 "from": {
-                    "file": "D:\\iyijiayi\\slidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "file": "H:\\Git\\slidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,

@@ -27,7 +27,7 @@ public class SelectLoginFragment extends AbsAllFragment {
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override
@@ -65,7 +65,8 @@ public class SelectLoginFragment extends AbsAllFragment {
             public void onClick(View v) {
                 SendAuth.Req req = new SendAuth.Req();
                 req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
+                req.state = "wechat_sdk";
+//                req.state = "wechat_sdk_demo_test";
                 api.sendReq(req);
 
 

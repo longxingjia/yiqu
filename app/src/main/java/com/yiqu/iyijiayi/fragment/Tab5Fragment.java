@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.fwrestnet.NetResponse;
 import com.ui.views.CircleImageView;
@@ -34,6 +35,8 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
     private UserInfo userInfo;
     private CircleImageView head;
     private MenuDialogPicHelper mMenuDialogPicHelper;
+    private LinearLayout llUserInfo;
+
     @Override
     protected int getTitleView() {
 
@@ -51,7 +54,7 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
 
         loginBt = (Button) v.findViewById(R.id.login);
         head = (CircleImageView) v.findViewById(R.id.head);
-
+        llUserInfo = (LinearLayout) v.findViewById(R.id.userinfo);
 
 
 

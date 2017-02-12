@@ -20,6 +20,7 @@
             android:name=".StubActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
         <activity
             android:name=".wxapi.WXEntryActivity"

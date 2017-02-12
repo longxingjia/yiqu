@@ -163,7 +163,7 @@ public class SetPhoneFragment extends AbsAllFragment {
             mMyCount.start();
             ToastManager.getInstance(getActivity()).showText("发送成功");
 
-            key = netResponse.data;
+            //key = netResponse.data;
             Gson gson = new Gson();
             YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
             key = yzmKey.key;

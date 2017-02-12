@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.model.YzmKey;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -140,7 +141,7 @@ public class RegisterFragment extends AbsAllFragment {
                 LogUtils.LOGE(phonenum + "--" + key);//key 35688
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.login, MyNetRequestConfig.login(
-                                getActivity(), phonenum, code, "35688", "0"), "login",
+                                getActivity(), phonenum, code, key, "0"), "login",
                         RegisterFragment.this);
 
             }
@@ -155,7 +156,9 @@ public class RegisterFragment extends AbsAllFragment {
             mMyCount = new MyCount(60000 * 5, 1000);
             mMyCount.start();
             ToastManager.getInstance(getActivity()).showText("发送成功");
-            key = netResponse.data;
+            Gson gson = new Gson();
+            YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
+            key = yzmKey.key;
 
         } else if ("login".equals(id)) {
 
@@ -164,9 +167,10 @@ public class RegisterFragment extends AbsAllFragment {
                 LogUtils.LOGE(netResponse.toString());
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
             } else {
+           //     LogUtils.LOGE(netResponse.data.toString());
 
                 Gson gson = new Gson();
-                UserInfo userInfo = gson.fromJson(netResponse.toString(), UserInfo.class);
+                UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                 LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
 
             }
