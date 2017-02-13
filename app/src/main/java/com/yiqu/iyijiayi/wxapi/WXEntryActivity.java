@@ -15,6 +15,7 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
@@ -226,7 +227,14 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     Gson gson = new Gson();
                                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                                     AppShare.setUserInfo(mContext, userInfo);
-                                    Model.startNextAct(mContext, Tab5Fragment.class.getName());
+//                                    Model.startNextAct(mContext, Tab5Fragment.class.getName());
+//                                    finish();
+
+                                    Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
+                                    startActivity(intent);
+
+
                                 }
                                 finish();
                             }

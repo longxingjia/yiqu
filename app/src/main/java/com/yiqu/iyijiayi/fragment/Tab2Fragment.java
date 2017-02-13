@@ -64,7 +64,7 @@ public class Tab2Fragment extends TabContentFragment {
 
 	@Override
 	protected void init(Bundle savedInstanceState) {
-
+		setSlidingMenuEnable(false);
 
 	}
 

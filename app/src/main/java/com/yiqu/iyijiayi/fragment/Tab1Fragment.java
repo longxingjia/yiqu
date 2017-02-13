@@ -5,309 +5,269 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.jauker.widget.BadgeView;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1ViewPagerAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
+import com.yiqu.iyijiayi.model.Remen;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.view.VpSwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.zip.Inflater;
 
-public class Tab1Fragment extends TabContentFragment implements OnClickListener {
+public class Tab1Fragment extends TabContentFragment implements OnClickListener ,SwipeRefreshLayout.OnRefreshListener {
 
-	private static final int TAB_1 = 1;
+    private static final int TAB_1 = 1;
+    //	List<>
 //	private ArrayList<BookStyle> style = new ArrayList<BookStyle>();
-	private BadgeView imageBadgeView;
+    private BadgeView imageBadgeView;
 
-	ImageView btn_home_one;
-	ImageView btn_home_two;
-	ImageView btn_home_three;
-	ImageView btn_home_four;
-	ImageView btn_home_five;
-	ImageView btn_home_six;
-	TextView btn_home_one_text;
-	TextView btn_home_two_text;
-	TextView btn_home_three_text;
-	TextView btn_home_four_text;
-	TextView btn_home_five_text;
-	TextView btn_home_six_text;
+    private ImageLoaderHm<ImageView> mImageLoaderHm;
+    private ViewPager vp_spinner;
+    private ImageView[] tips;
+    /**
+     * 装ImageView数组
+     */
+    private ArrayList<ImageView> mImageViews;
+    /**
+     * 图片资源id
+     */
+    private int[] imgIdArray;
+    private ArrayList<View> views;
+    private VpSwipeRefreshLayout vpSwipeRefreshLayout;
+    private static final int REFRESH_COMPLETE = 0X110;
 
-	@Override
-	protected int getTitleView() {
-		// TODO Auto-generated method stub
+    private Handler mHandler = new Handler()
+    {
+        public void handleMessage(android.os.Message msg)
+        {
+            switch (msg.what)
+            {
+                case REFRESH_COMPLETE:
+//                    mDatas.addAll(Arrays.asList("Lucene", "Canvas", "Bitmap"));
+//                    mAdapter.notifyDataSetChanged();
+                    vpSwipeRefreshLayout.setRefreshing(false);
+                    break;
 
-		return R.layout.titlebar_tab1;
-	}
+            }
+        };
+    };
+    private String uid;
+    private ArrayList<Sound> sound;
+    private ArrayList<Xizuo> xizuo;
+    private ListView lvXizuo;
+    private Tab1XizuoAdapter tab1XizuoAdapter;
+    private ListView lvSound;
+    private Tab1SoundAdapter tab1SoundAdapter;
 
-	@Override
-	protected int getBodyView() {
-		// TODO Auto-generated method stub
-		return R.layout.tab1_fragment;
-	}
+    @Override
+    protected int getTitleView() {
+        return R.layout.titlebar_tab1;
+    }
 
-	@Override
-	protected void initView(View v) {
-		// changeDot(false);
-		// TODO Auto-generated method stub
-		btn_home_one = (ImageView) v.findViewById(R.id.btn_home_one);
-		btn_home_two = (ImageView) v.findViewById(R.id.btn_home_two);
-		btn_home_three = (ImageView) v.findViewById(R.id.btn_home_three);
-		btn_home_four = (ImageView) v.findViewById(R.id.btn_home_four);
-		btn_home_five = (ImageView) v.findViewById(R.id.btn_home_five);
-		btn_home_six = (ImageView) v.findViewById(R.id.btn_home_six);
+    @Override
+    protected int getBodyView() {
+        return R.layout.tab1_fragment;
+    }
 
-		btn_home_one_text = (TextView) v.findViewById(R.id.btn_home_one_text);
-		btn_home_two_text = (TextView) v.findViewById(R.id.btn_home_two_text);
-		btn_home_three_text = (TextView) v
-				.findViewById(R.id.btn_home_three_text);
-		btn_home_four_text = (TextView) v.findViewById(R.id.btn_home_four_text);
-		btn_home_five_text = (TextView) v.findViewById(R.id.btn_home_five_text);
-		btn_home_six_text = (TextView) v.findViewById(R.id.btn_home_six_text);
+    @Override
+    protected void initView(View v) {
 
-		v.findViewById(R.id.btn_home_one).setOnClickListener(this);
-		v.findViewById(R.id.btn_home_two).setOnClickListener(this);
-		v.findViewById(R.id.btn_home_three).setOnClickListener(this);
-		v.findViewById(R.id.btn_home_four).setOnClickListener(this);
-		v.findViewById(R.id.btn_home_five).setOnClickListener(this);
-		v.findViewById(R.id.btn_home_six).setOnClickListener(this);
-		v.findViewById(R.id.btn_tab_1).setOnClickListener(this);
+        lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
+        lvSound = (ListView) v.findViewById(R.id.lv_sound);
+        vp_spinner = (ViewPager) v.findViewById(R.id.vp_spinner);
+        vpSwipeRefreshLayout = (VpSwipeRefreshLayout) v.findViewById(R.id.id_swipe_ly);
 
-	}
+        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(),300);
+        vpSwipeRefreshLayout.setOnRefreshListener(this);
 
-	@Override
-	protected boolean isTouchMaskForNetting() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    }
 
-	@Override
-	protected void init(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-//		setSlidingMenuEnable(true);
-//		initADDRedDotBroadcast();
-//		initCancelRedDotBroadcast();
-//		imageBadgeView = new BadgeView(getActivity());
-//
-//		if (!AppUpdateShare.getIsClick(getActivity())) {
-//			if (menuOrBack != null) {
-//
-//				imageBadgeView.setText("");
-//				imageBadgeView
-//						.setBackgroundResource(R.drawable.pic_menu_reddot);
-//				imageBadgeView.setBadgeMargin(0, 2, 2, 0);
-//				imageBadgeView.setTargetView(menuOrBack);
-//
-//			}
-//		}
-//
-//		RestNetCallHelper.callNet(
-//				getActivity(),
-//				MyNetApiConfig.coursethemeList,
-//				MyNetRequestConfig.coursethemeList(getActivity(),
-//						AppShare.getToken(getActivity()),
-//						AppShare.getPhone(getActivity()), "01"),
-//				"coursethemeList", this);
-	}
+    @Override
+    protected boolean isTouchMaskForNetting() {
+        return false;
+    }
 
-	@Override
-	public void onDestroy() {
+    @Override
+    protected void init(Bundle savedInstanceState) {
+        setSlidingMenuEnable(false);
 
-		super.onDestroy();
-	}
+        imgIdArray = new int[]{R.mipmap.banner_1, R.mipmap.banner_2};
+        // 得到views集合
+        views = new ArrayList<View>();
+        //此处可以根据需要自由设定，这里只是简单的测试
+        for (int i = 1; i <= imgIdArray.length; i++) {
+            View view = getActivity().getLayoutInflater().inflate(R.layout.tab1_viewpage, null);
+            views.add(view);
+        }
 
-	@Override
-	protected int getTitleBarType() {
-		// TODO Auto-generated method stub
-		return FLAG_TXT | FLAG_BACK;
-	}
+        vp_spinner.setAdapter(new MyAdapter());
+        vp_spinner.setCurrentItem(0);
 
-	@Override
-	protected boolean onPageBack() {
-		// TODO Auto-generated method stub
-		if (mOnFragmentListener != null) {
-			mOnFragmentListener.onFragmentBack(this);
-		}
-		return true;
-	}
+        if (AppShare.getIsLogin(getActivity())){
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        }else{
+            uid = "0";
+        }
 
-	@Override
-	protected boolean onPageNext() {
-		// TODO Auto-generated method stub
-		pageNextComplete();
-		return true;
-	}
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),mImageLoaderHm);
 
-	@Override
-	protected void initTitle() {
-		// TODO Auto-generated method stub
-	//	setTitleText(getString(R.string.label_tab1_title));
-	}
+        lvXizuo.setAdapter(tab1XizuoAdapter);
 
-	@Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-//		if (arg0.getId() == R.id.btn_home_one) {
-//			BookStyle b = getId("01");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			// in.putExtra("fragment", KeChenListFragment.class.getName());
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_home_two) {
-//			BookStyle b = getId("02");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_home_three) {
-//			BookStyle b = getId("03");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_home_four) {
-//			BookStyle b = getId("04");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_home_five) {
-//			BookStyle b = getId("05");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_home_six) {
-//			BookStyle b = getId("06");
-//			if (b == null) {
-//				ToastManager.getInstance(getActivity()).showText("请重新获取当前页面数据");
-//				return;
-//			}
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", KeChenViewPagerFragment.class.getName());
-//			in.putExtra("shfmf", b.shfmf);
-//			in.putExtra("ztbh", b.ztbh);
-//			in.putExtra("ztmch", b.ztmch);
-//			getActivity().startActivity(in);
-//		} else if (arg0.getId() == R.id.btn_tab_1) {
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", ProtectFragment.class.getName());
-//			getActivity().startActivity(in);
-//		}
-	}
+        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(),mImageLoaderHm);
+        lvSound.setAdapter(tab1SoundAdapter);
 
-//	public BookStyle getId(String name) {
-//		for (int i = 0; i < style.size(); i++) {
-//			if (name.equals(style.get(i).ztbh)) {
-//				return style.get(i);
-//			}
-//		}
-//		return null;
-//	}
+//        lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.remen,
+                MyNetRequestConfig.remen(getActivity(),uid),
+                "Remen", Tab1Fragment.this);
+    }
 
-	@Override
-	public void onNetEnd(String id, int type, NetResponse netResponse) {
-		// TODO Auto-generated method stub
-//		if ("coursethemeList".equals(id)) {
-//			if (TYPE_SUCCESS == type) {
-//				try {
-//					JSONArray j = new JSONArray(netResponse.body.toString());
-//
-//					for (int i = 0; i < j.length(); i++) {
-//						JSONObject k = new JSONObject(j.get(i).toString());
-//						BookStyle mBookStyle = new BookStyle();
-//						mBookStyle.shfmf = "" + k.get("shfmf");
-//						mBookStyle.ztbh = "" + k.get("ztbh");
-//						mBookStyle.ztmch = "" + k.get("ztmch");
-//						style.add(mBookStyle);
-//
-//					}
-//
-//					for (int i = 0; i < style.size(); i++) {
-//						if ("01".equals(style.get(i).ztbh)) {
-//							btn_home_one.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p1));
-//							btn_home_one_text.setText(style.get(i).ztmch);
-//						}
-//						if ("02".equals(style.get(i).ztbh)) {
-//							btn_home_two.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p6));
-//							btn_home_two_text.setText(style.get(i).ztmch);
-//						}
-//						if ("03".equals(style.get(i).ztbh)) {
-//							btn_home_three.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p2));
-//							btn_home_three_text.setText(style.get(i).ztmch);
-//						}
-//						if ("04".equals(style.get(i).ztbh)) {
-//							btn_home_four.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p3));
-//							btn_home_four_text.setText(style.get(i).ztmch);
-//						}
-//						if ("05".equals(style.get(i).ztbh)) {
-//							btn_home_five.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p4));
-//							btn_home_five_text.setText(style.get(i).ztmch);
-//						}
-//						if ("06".equals(style.get(i).ztbh)) {
-//							btn_home_six.setImageDrawable(getResources()
-//									.getDrawable(R.drawable.p5));
-//							btn_home_six_text.setText(style.get(i).ztmch);
-//						}
-//					}
-//
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//				}
-//
-//			}
+    @Override
+    public void onDestroy() {
+        mImageLoaderHm.stop();
+        super.onDestroy();
+    }
 
-//		}
+    @Override
+    protected int getTitleBarType() {
+        return FLAG_ALL;
+    }
 
-		super.onNetEnd(id, type, netResponse);
-	}
-	
+    @Override
+    protected boolean onPageBack() {
+        if (mOnFragmentListener != null) {
+            mOnFragmentListener.onFragmentBack(this);
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean onPageNext() {
+        pageNextComplete();
+        return true;
+    }
+
+    @Override
+    protected void initTitle() {
+        	setTitleText("热门");
+    }
+
+    @Override
+    public void onClick(View arg0) {
+
+    }
+
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+        if ("Remen".equals(id)) {
+
+            if(netResponse.bool==1){
+                Gson gson = new Gson();
+                Remen remen = gson.fromJson(netResponse.data,Remen.class);
+                sound = remen.sound;
+                xizuo = remen.xizuo;
+
+//                ArrayAdapter<Xizuo> adapter = new ArrayAdapter<Xizuo>(this,
+//                        R.layout.remen_xizuo, new String[xizuo.]{},new int[]{R.id.musicname});
+
+                tab1XizuoAdapter.setData(xizuo);
+                tab1SoundAdapter.setData(sound);
+
+            }else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            }
 
 
+        }
+
+        super.onNetEnd(id, type, netResponse);
+    }
+
+
+
+    @Override
+    public void onRefresh() {
+        mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
+
+    }
+
+    // PagerAdapter是object的子类
+    class MyAdapter extends PagerAdapter {
+
+        /**
+         * PagerAdapter管理数据大小
+         */
+        @Override
+        public int getCount() {
+            return views.size();
+        }
+
+        /**
+         * 关联key 与 obj是否相等，即是否为同一个对象
+         */
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj; // key
+        }
+
+        /**
+         * 销毁当前page的相隔2个及2个以上的item时调用
+         */
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
+        }
+
+        /**
+         * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
+         */
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            View view = views.get(position);
+            // 如果访问网络下载图片，此处可以进行异步加载
+            ImageView img = (ImageView) view.findViewById(R.id.spinner);
+//            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
+            img.setBackgroundResource(imgIdArray[position]);
+            container.addView(view);
+            return views.get(position); // 返回该view对象，作为key
+        }
+    }
 
 
 }

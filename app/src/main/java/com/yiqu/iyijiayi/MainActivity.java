@@ -15,6 +15,7 @@ import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 public class MainActivity extends AbsFragmentActForMainAct implements Handler.Callback,
         NetCallBack {
@@ -79,6 +80,11 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
             }
         }
 
+        String className = getIntent().getStringExtra("fragmentName");
+        if (className!=null&&!className.isEmpty()){
+            changeTabFragment(className);
+        }
+
     }
 
     @Override
@@ -113,6 +119,9 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
             ft.beginTransaction().show(f).commit();
             TabContentFragment b = (TabContentFragment) f;
             b.onSelect();
+            b.onResume();
+
+
         } else {
             f = Model.creatFragment(className);
             if (f != null) {

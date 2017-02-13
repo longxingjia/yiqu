@@ -25,7 +25,7 @@ import android.widget.Toast;
  *@comments soap网络访问处理类。
  */
 public class RestSyncTask extends AbsRestSyncTask  {
-	public static final String TAG = "RestNet";
+	public static final String TAG = "RestSyncTask";
 	/**网络访问对话框*/
 	protected ProgressDialog p;
 	protected Context mContext;
@@ -61,7 +61,7 @@ public class RestSyncTask extends AbsRestSyncTask  {
 	
 	@Override
 	public void minTimeControl(long t) {
-		// TODO Auto-generated method stub
+
 		//不显示对话框时不做最小时间控制
 		if(mNetApi.isOnlyDialogMinTimeControl() && !mShowDialogEanble){
 			return;
@@ -78,7 +78,7 @@ public class RestSyncTask extends AbsRestSyncTask  {
 	
 	@Override
 	protected void onCancelled() {
-		// TODO Auto-generated method stub
+
 		//设置接口已经取消了的标记
 		isCanceled = true;
 		//通知回调 接口结束

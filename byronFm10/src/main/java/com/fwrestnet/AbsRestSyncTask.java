@@ -43,7 +43,7 @@ import android.util.Log;
  *根据NetApiConfig的接口配置，自动获取所需信息，使用异步的方式实现网络访问，别回调结果和异常信息。
  */
 public abstract class AbsRestSyncTask extends AsyncTask<Object, Object, NetResponse> {
-	private static final String TAG = "RestNet";
+	private static final String TAG = "AbsRestSyncTask";
 	
 	/**
 	 * ASCII code for < symbol
@@ -91,7 +91,6 @@ public abstract class AbsRestSyncTask extends AsyncTask<Object, Object, NetRespo
 	
 	@Override
 	protected void onPostExecute(NetResponse result) {
-		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 	}
 
@@ -140,7 +139,7 @@ public abstract class AbsRestSyncTask extends AsyncTask<Object, Object, NetRespo
 	}
 	private void log() throws MalformedURLException{
 		Log.d(TAG, httpUriRequest.getURI().toURL().toString());
-		Log.d(TAG, mNetApi.getNetMethod().toString());
+		Log.w(TAG, mNetApi.getNetMethod().toString());
 		if(netRequest.getData() != null){
 			Log.d(TAG, netRequest.getData().toString());
 		}

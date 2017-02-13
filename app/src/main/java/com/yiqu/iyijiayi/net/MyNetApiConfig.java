@@ -4,6 +4,7 @@ package com.yiqu.iyijiayi.net;
 import android.annotation.SuppressLint;
 
 
+import com.fwrestnet.NetMethod;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -16,7 +17,7 @@ import org.json.JSONException;
 @SuppressLint("NewApi")
 public class MyNetApiConfig {
 
-
+	public static String ImageServerAddr = "http://www.hunanyiqu.com";
 	public static String ServerAddr = "http://www.hunanyiqu.com/YijiayiServer/web";
 	public static String  wechatUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" +
 			"%s&secret=%s&code=%s&grant_type=authorization_code";
@@ -222,6 +223,31 @@ public class MyNetApiConfig {
 
 
 	};
+
+	/**
+	 * 67、热门，返回3条习作和热门问题
+	 */
+	public static MyNetApi remen = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/sound/remen";
+		}
+
+		@Override
+		public NetMethod getNetMethod() {
+			return NetMethod.GET;
+		}
+
+		//
+//		@Override
+//		public Object parseBody(String body) throws JSONException {
+//			// TODO Auto-generated method stub
+//			return FindAllBbxdxx.parseList(body);
+//		}
+
+
+	};
+
 
 
 

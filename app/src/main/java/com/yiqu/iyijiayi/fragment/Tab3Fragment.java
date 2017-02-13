@@ -103,7 +103,7 @@ public class Tab3Fragment extends TabContentFragment implements OnMoreListener,I
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
-		mImageLoaderHm.stop();
+		//mImageLoaderHm.stop();
 
 		super.onDestroy();
 	}

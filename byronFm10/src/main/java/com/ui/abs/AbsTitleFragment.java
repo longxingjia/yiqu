@@ -37,8 +37,6 @@ public abstract class AbsTitleFragment extends AbsFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		// return
 		View v = null;
 		try {
 			v = inflater.inflate(getContentView(), null);

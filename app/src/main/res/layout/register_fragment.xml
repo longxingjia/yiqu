@@ -19,7 +19,7 @@
         android:maxLength="11"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="18974828408"
+        android:text="18539343936"
         android:singleLine="true"
         android:textSize="13dp" />
 
@@ -37,7 +37,7 @@
             android:background="@drawable/edit_bg"
             android:maxLength="10"
             android:paddingLeft="15dp"
-
+            android:text="000000"
             android:paddingRight="150dp"
             android:singleLine="true"
             android:textSize="13dp" />

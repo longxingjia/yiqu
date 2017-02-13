@@ -30,7 +30,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import static android.R.attr.background;
 import static android.R.attr.onClick;
 
-public class Tab5Fragment extends TabContentFragment implements OnMoreListener, IRefreshListViewListener,View.OnClickListener {
+public class Tab5Fragment extends TabContentFragment implements View.OnClickListener {
 
 
     private Button loginBt;
@@ -136,9 +136,7 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
             llUserInfo.setVisibility(View.VISIBLE);
             head.setOnClickListener(this);
             LogUtils.LOGE(userInfo.toString());
-
             username.setText(userInfo.username);
-
 
         }else {
             llUserInfo.setVisibility(View.GONE);
@@ -146,10 +144,15 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
         }
     }
 
+    @Override
+    public void onResume() {
+     //   LogUtils.LOGE("hhhh");
+        initUI();
+        super.onResume();
+    }
 
     @Override
     public void onDestroy() {
-
 
         super.onDestroy();
     }
@@ -186,20 +189,6 @@ public class Tab5Fragment extends TabContentFragment implements OnMoreListener, 
 //
         super.onNetEnd(id, type, netResponse);
     }
-
-    @Override
-    public boolean onMore(AbsListView view) {
-        // TODO Auto-generated method stub
-//
-        return false;
-    }
-
-    @Override
-    public void onRefresh() {
-        // TODO Auto-generated method stub
-//
-    }
-
 
     @Override
     public void onClick(View v) {

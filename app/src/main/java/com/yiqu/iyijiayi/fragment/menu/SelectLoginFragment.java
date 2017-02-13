@@ -6,10 +6,13 @@ import android.view.View;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by Administrator on 2017/2/9.
@@ -68,6 +71,7 @@ public class SelectLoginFragment extends AbsAllFragment {
                 req.state = "wechat_sdk";
 //                req.state = "wechat_sdk_demo_test";
                 api.sendReq(req);
+             //   getActivity().finish();
 
 
             }
@@ -77,6 +81,7 @@ public class SelectLoginFragment extends AbsAllFragment {
             @Override
             public void onClick(View v) {
                 Model.startNextAct(getActivity(), RegisterFragment.class.getName());
+               // getActivity().finish();
 
             }
         });

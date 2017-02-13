@@ -68,21 +68,11 @@ public class MyNetRequestConfig {
 	}
 
 	/**
-	 * 5、修改用户基本信息 参数：String token//登录凭证,String shjhm //登录手机号,String yhtx
-	 * //用户头像,String yhzhch//用户昵称, String sex//性别,String age//年龄,String
-	 * xxdzh//详细地址
+	 * 5、Remen
 	 */
-	public static NetRequest updateUserInfo(Context c, String token,
-                                            String shjhm, String yhtx, String yhzhch, String sex, String age,
-                                            String xxdzh) {
+	public static NetRequest remen(Context c, String checkpay) {
 		MyNetRequest r = new MyNetRequest(c);
-		r.addHttpParam("token", token);
-		r.addHttpParam("shjhm", shjhm);
-		r.addHttpParam("yhtx", yhtx);
-		r.addHttpParam("yhzhch", yhzhch);
-		r.addHttpParam("sex", sex);
-		r.addHttpParam("age", age);
-		r.addHttpParam("xxdzh", xxdzh);
+		r.addHttpParam("checkpay", checkpay);
 		return r;
 	}
 

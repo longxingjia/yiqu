@@ -12,8 +12,8 @@
             android:layout_width="@dimen/title_touch_area"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:visibility="invisible" 
-            android:src="@mipmap/ic_launcher"/>
+            android:visibility="invisible"
+            android:src="@mipmap/menu_head"/>
         <TextView
             android:id="@+id/title_text"
             android:layout_width="0dp"

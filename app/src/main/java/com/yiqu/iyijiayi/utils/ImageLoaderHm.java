@@ -26,6 +26,7 @@ public class ImageLoaderHm<T> extends ImageLoaderEx<T> {
 	}
 	@Override
 	protected File getFile(String url) {
+
 		String fileName = getFileNameFromUrlFormat(url, "jpg");
 		
 		//存到data/data/pakege..下
