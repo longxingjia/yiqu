@@ -7,4 +7,49 @@
 package com.jeremyfeinstein.slidingmenu.lib;
 
 public final class R {
+    public static final class attr {
+        public static int behindOffset = 0x7f01000d;
+        public static int behindScrollScale = 0x7f01000f;
+        public static int behindWidth = 0x7f01000e;
+        public static int fadeDegree = 0x7f010015;
+        public static int fadeEnabled = 0x7f010014;
+        public static int mode = 0x7f01000a;
+        public static int selectorDrawable = 0x7f010017;
+        public static int selectorEnabled = 0x7f010016;
+        public static int shadowDrawable = 0x7f010012;
+        public static int shadowWidth = 0x7f010013;
+        public static int touchModeAbove = 0x7f010010;
+        public static int touchModeBehind = 0x7f010011;
+        public static int viewAbove = 0x7f01000b;
+        public static int viewBehind = 0x7f01000c;
+    }
+    public static final class id {
+        public static int fullscreen = 0x7f090003;
+        public static int left = 0x7f090001;
+        public static int margin = 0x7f090004;
+        public static int none = 0x7f090005;
+        public static int right = 0x7f090002;
+        public static int selected_view = 0x7f090000;
+        public static int slidingmenumain = 0x7f090023;
+    }
+    public static final class layout {
+        public static int slidingmenumain = 0x7f030009;
+    }
+    public static final class styleable {
+        public static int[] SlidingMenu = { 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f, 0x7f010010, 0x7f010011, 0x7f010012, 0x7f010013, 0x7f010014, 0x7f010015, 0x7f010016, 0x7f010017 };
+        public static int SlidingMenu_behindOffset = 3;
+        public static int SlidingMenu_behindScrollScale = 5;
+        public static int SlidingMenu_behindWidth = 4;
+        public static int SlidingMenu_fadeDegree = 11;
+        public static int SlidingMenu_fadeEnabled = 10;
+        public static int SlidingMenu_mode = 0;
+        public static int SlidingMenu_selectorDrawable = 13;
+        public static int SlidingMenu_selectorEnabled = 12;
+        public static int SlidingMenu_shadowDrawable = 8;
+        public static int SlidingMenu_shadowWidth = 9;
+        public static int SlidingMenu_touchModeAbove = 6;
+        public static int SlidingMenu_touchModeBehind = 7;
+        public static int SlidingMenu_viewAbove = 1;
+        public static int SlidingMenu_viewBehind = 2;
+    }
 }

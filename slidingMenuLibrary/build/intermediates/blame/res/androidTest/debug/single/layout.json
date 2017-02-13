@@ -2,5 +2,9 @@
     {
         "merged": "H:\\Git\\slidingMenuLibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slidingmenumain.xml",
         "source": "H:\\Git\\slidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\layout\\slidingmenumain.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\slidingMenuLibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\slidingmenumain.xml",
+        "source": "D:\\iyijiayi\\slidingMenuLibrary\\build\\intermediates\\bundles\\debug\\res\\layout\\slidingmenumain.xml"
     }
 ]
