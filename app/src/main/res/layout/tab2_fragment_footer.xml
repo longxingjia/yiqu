@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fafafa" >
+
+
+    <!--<com.yiqu.iyijiayi.view.ScrollViewWithListView-->
+        <!--android:id="@+id/lv_student"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:divider="@color/background_color_rating_grey"-->
+        <!--android:dividerHeight="1dp"-->
+        <!--android:minHeight="255dp"-->
+        <!--android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>-->
+
+
+    <TextView
+        android:id="@+id/loadmore_student"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:drawableRight="@mipmap/arrow_red"
+        android:textColor="@color/redMain"
+        android:text="加载更多学生"
+        />
+     
+</RelativeLayout >

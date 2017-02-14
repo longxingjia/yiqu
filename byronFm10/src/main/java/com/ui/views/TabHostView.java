@@ -27,7 +27,6 @@ public class TabHostView extends LinearLayout {
 
 	public TabHostView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		if (attrs != null) {
 			TypedArray a = context.obtainStyledAttributes(attrs,
 					R.styleable.TabHostView, 0, 0);

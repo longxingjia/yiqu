@@ -5,204 +5,249 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.jauker.widget.BadgeView;
+import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
+import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
+import com.yiqu.iyijiayi.model.Remen;
+import com.yiqu.iyijiayi.model.Student;
+import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.ZhaoRen;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.view.ReScrollViewWithListView;
+import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
 
-public class Tab2Fragment extends TabContentFragment {
+public class Tab2Fragment extends TabContentFragment implements RefreshList.IRefreshListViewListener {
 
-	private static final int TAB_2 = 2;
-//	private NoScollViewPager mPager;
-	private ArrayList<Fragment> fragmentList;
-	private RelativeLayout liaotian_tab, message_tab;
-//	private PageCursorView cursor;
-	private TextView liaotian;
-	private TextView message;
-//	NewConversationListFragment btFragment = new NewConversationListFragment();
-//	Fragment secondFragment = new BeautifulFragment();
+    private static final int TAB_2 = 2;
+    private String uid;
+    private ScrollViewWithListView lvTeacher;
+    private ArrayList<Teacher> teacher;
+    private ArrayList<Student> student;
+    private ImageLoaderHm<ImageView> mImageLoaderHm;
+    private Tab2TeacherAdapter tab2TeacherAdapter;
+    private Tab2StudentAdapter tab2StudentAdapter;
+    private ScrollViewWithListView lvStudent;
 
-	@Override
-	protected int getTitleView() {
-		return R.layout.titlebar_tab1;
-	}
+    @Override
+    protected int getTitleView() {
+        return R.layout.titlebar_tab1;
+    }
 
-	@Override
-	public void onSelect() {
-		super.onSelect();
-	}
+    @Override
+    public void onSelect() {
+        super.onSelect();
+    }
 
-	@Override
-	public void onNoSelect() {
-		super.onNoSelect();
-	}
+    @Override
+    public void onNoSelect() {
+        super.onNoSelect();
+    }
 
-	@Override
-	protected int getBodyView() {
-		return R.layout.tab2_fragment;
-	}
+    @Override
+    protected int getBodyView() {
+        return R.layout.tab2_fragment;
+    }
 
-	@Override
-	protected void initView(View v) {
+    @Override
+    protected void initView(View v) {
+        View footView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_header, null);
 
-		InitTextView(v);
-		InitImage(v);
-		InitViewPager(v);
-	}
+        lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
+        lvTeacher.addHeaderView(headView);
 
-	@Override
-	protected boolean isTouchMaskForNetting() {
-		return false;
-	}
+//        lvTeacher.addFooterView(footView);
+        lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
-	@Override
-	protected void init(Bundle savedInstanceState) {
-		setSlidingMenuEnable(false);
+//        lvTeacher.setRefreshListListener(this);
+        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(),300);
+        ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(),300);
+        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(),mImageLoaderHm);
+        lvTeacher.setAdapter(tab2TeacherAdapter);
 
-	}
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(),mImageLoader);
+        lvStudent.setAdapter(tab2StudentAdapter);
 
-	@Override
-	protected int getTitleBarType() {
-		return FLAG_TXT | FLAG_BACK;
-	}
 
-	@Override
-	protected boolean onPageBack() {
-		if (mOnFragmentListener != null) {
-			mOnFragmentListener.onFragmentBack(this);
-		}
-		return true;
-	}
+    }
 
-	@Override
-	protected boolean onPageNext() {
-		pageNextComplete();
-		return true;
-	}
+    @Override
+    protected boolean isTouchMaskForNetting() {
+        return false;
+    }
 
-	@Override
-	protected void initTitle() {
-		setTitleText(getString(R.string.label_tab2));
-	}
+    @Override
+    protected void init(Bundle savedInstanceState) {
+        setSlidingMenuEnable(false);
 
-	/*
-	 * 初始化标签名
-	 */
-	public void InitTextView(View v) {
-		liaotian = (TextView) v.findViewById(R.id.regist);
-		message = (TextView) v.findViewById(R.id.regist);
-		liaotian_tab = (RelativeLayout) v.findViewById(R.id.liaotian_tab);
-		message_tab = (RelativeLayout) v.findViewById(R.id.message_tab);
+        if (AppShare.getIsLogin(getActivity())){
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        }else{
+            uid = "0";
+        }
 
-		liaotian_tab.setOnClickListener(new txListener(0));
-		message_tab.setOnClickListener(new txListener(1));
-	}
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.follow_recommend,
+                MyNetRequestConfig.follow_recommend(getActivity(),uid),
+                "teacher", Tab2Fragment.this);
 
-	public class txListener implements View.OnClickListener {
-		private int index = 0;
+    }
 
-		public txListener(int i) {
-			index = i;
-		}
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-		@Override
-		public void onClick(View v) {
-//			mPager.setCurrentItem(index);
-		}
-	}
+        LogUtils.LOGE(netResponse.toString());
 
-	/*
-	 * 初始化图片的位移像素
-	 */
-	public void InitImage(View v) {
-//		cursor = (PageCursorView) v.findViewById(R.id.cursor);
-//		cursor.setCount(2);
-	}
+        if(netResponse.bool==1){
+            Gson gson = new Gson();
+            ZhaoRen zhaoRen = gson.fromJson(netResponse.data,ZhaoRen.class);
+            teacher = zhaoRen.teacher;
+            student = zhaoRen.student;
 
-	/*
-	 * 初始化ViewPager
-	 */
-	public void InitViewPager(View v) {
-//		mPager = (NoScollViewPager) v.findViewById(R.id.viewpager);
-//		fragmentList = new ArrayList<Fragment>();
-//		fragmentList.add(btFragment);
-//		fragmentList.add(secondFragment);
+            LogUtils.LOGE(student.toString());
+
+            tab2TeacherAdapter.setData(teacher);
+            setListViewHeightBasedOnChildren(lvTeacher);
+            tab2StudentAdapter.setData(student);
+//            setListViewHeightBasedOnChildren(lvStudent);
+
+//            resfreshOk();
+        }else {
+            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+//            resfreshFail();
+        }
+
+        super.onNetEnd(id, type, netResponse);
+    }
+
+    @Override
+    protected int getTitleBarType() {
+        return FLAG_TXT | FLAG_BACK;
+    }
+
+    @Override
+    protected boolean onPageBack() {
+        if (mOnFragmentListener != null) {
+            mOnFragmentListener.onFragmentBack(this);
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean onPageNext() {
+        pageNextComplete();
+        return true;
+    }
+
+    @Override
+    protected void initTitle() {
+        setTitleText(getString(R.string.label_tab2));
+    }
+
+
+    @Override
+    public void onDestroy() {
+        mImageLoaderHm.stop();
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onRefresh() {
+
+    }
 //
-//		// 给ViewPager设置适配器
-//		mPager.setAdapter(new MyFragmentPagerAdapter(getActivity()
-//				.getSupportFragmentManager(), fragmentList));
-//		mPager.setCurrentItem(0);// 设置当前显示标签页为第一页
-//		mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
-//		mPager.setOffscreenPageLimit(6);// 缓存数
-	}
-
-//	public class MyOnPageChangeListener implements OnPageChangeListener {
 //
-//		@Override
-//		public void onPageScrolled(int arg0, float arg1, int arg2) {
+//    public void resfreshOk(){
+//        lvTeacher.refreshOk();
+//        new AsyncTask<Void, Void, Void>() {
+//            protected Void doInBackground(Void... params) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
 //
-//		}
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                lvTeacher.stopRefresh();
+//            }
 //
-//		@Override
-//		public void onPageScrollStateChanged(int arg0) {
 //
-//		}
+//        }.execute();
 //
-//		@Override
-//		public void onPageSelected(int arg0) {
-//			cursor.setPosition(arg0);
-//			switch (arg0) {
-//			case 0:
-//				// setSlidingMenuEnable(true);
-//				Drawable drawable1_0 = getResources().getDrawable(
-//						R.drawable.liaotian_tab2_pressed);
-//				Drawable drawable2_0 = getResources().getDrawable(
-//						R.drawable.message_tab2);
-//				drawable1_0.setBounds(0, 0, drawable1_0.getMinimumWidth(),
-//						drawable1_0.getMinimumHeight());
-//				drawable2_0.setBounds(0, 0, drawable2_0.getMinimumWidth(),
-//						drawable2_0.getMinimumHeight());
-//				liaotian.setCompoundDrawables(drawable1_0, null, null, null);
-//				message.setCompoundDrawables(drawable2_0, null, null, null);
-//				liaotian.setTextColor(getResources().getColor(
-//						R.color.main_color));
-//				message.setTextColor(getResources().getColor(R.color.black));
-//				break;
-//			case 1:
-//				Drawable drawable1_1 = getResources().getDrawable(
-//						R.drawable.liaotian_tab2);
-//				Drawable drawable2_1 = getResources().getDrawable(
-//						R.drawable.message_tab2_pressed);
-//				drawable1_1.setBounds(0, 0, drawable1_1.getMinimumWidth(),
-//						drawable1_1.getMinimumHeight());
-//				drawable2_1.setBounds(0, 0, drawable2_1.getMinimumWidth(),
-//						drawable2_1.getMinimumHeight());
-//				liaotian.setCompoundDrawables(drawable1_1, null, null, null);
-//				message.setCompoundDrawables(drawable2_1, null, null, null);
-//				liaotian.setTextColor(getResources().getColor(R.color.black));
-//				message.setTextColor(getResources()
-//						.getColor(R.color.main_color));
-//				break;
-//			}
-//			int i = arg0 + 1;
-//		}
-//	}
+//    }
+//
+//    public void resfreshFail(){
+//        lvTeacher.refreshFail();
+//        new AsyncTask<Void, Void, Void>() {
+//            protected Void doInBackground(Void... params) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                lvTeacher.stopRefresh();
+//            }
+//
+//
+//        }.execute();
+//    }
 
+    /**
+     * @param listView
+     */
+    private void setListViewHeightBasedOnChildren(ListView listView) {
 
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
 
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
 
-	@Override
-	public void onDestroy() {
-
-		super.onDestroy();
-	}
-
-
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
 }

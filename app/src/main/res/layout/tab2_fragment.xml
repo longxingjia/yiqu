@@ -2,70 +2,69 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     android:background="#fafafa" >
 
-    <LinearLayout 
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-	    android:layout_height="43dp"
-	    android:orientation="horizontal" >
-	    
-        <RelativeLayout
-            android:id="@+id/liaotian_tab" 
-            android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width=
+                "match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#fafafa">
+            android:fillViewport="true"
+            android:orientation="vertical">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
+                android:id="@+id/lv_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/background_color_rating_grey"
+                android:dividerHeight="1dp"
+                android:minHeight="255dp"
+                android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
+
             <TextView
-                android:id="@+id/regist"
-                android:layout_width="wrap_content"
+                android:id="@+id/loadmore_teacher"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:drawableRight="@mipmap/arrow_red"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="加载更多导师"
+                android:textColor="@color/redMain" />
+
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
+                android:id="@+id/lv_student"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="注册"
-                android:textColor="#cc73e1"
-                android:textSize="15dp"
+                android:divider="@color/background_color_rating_grey"
+                android:dividerHeight="1dp"
+                android:minHeight="255dp"
+                android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
-                android:drawablePadding="5dp"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-        
-        <TextView 
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#999999"
-            android:layout_marginTop="11dp"
-            android:layout_marginBottom="11dp"/>
-        
-        <RelativeLayout
-            android:id="@+id/message_tab"  
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#fafafa">
-             <TextView
-                android:id="@+id/login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:text="登录"
-                android:textColor="#000000"
-                android:textSize="15dp"
+            </LinearLayout>
+        </ScrollView>
 
-                android:drawablePadding="5dp"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-        
-    </LinearLayout>
-    
-    <com.yiqu.iyijiayi.utils.PageCursorView
-        android:id="@+id/cursor"
-        android:layout_width="match_parent"  
-        android:layout_height="3dp"  
-        />  
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.yiqu.iyijiayi.utils.NoScollViewPager
-        android:id="@+id/viewpager"  
-        android:layout_width="match_parent"  
-        android:layout_height="match_parent"  
-        android:flipInterval="30"  
-        android:persistentDrawingCache="animation"/> 
-     
+
+    <!--<com.yiqu.iyijiayi.view.ReScrollViewWithListView-->
+    <!--android:id="@+id/lv_teacher"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:divider="@color/background_color_rating_grey"-->
+    <!--android:dividerHeight="1dp"-->
+    <!--android:minHeight="255dp"-->
+    <!--android:scrollbars="none"></com.yiqu.iyijiayi.view.ReScrollViewWithListView>-->
+
+
 </LinearLayout>
+

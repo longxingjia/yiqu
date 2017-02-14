@@ -225,6 +225,20 @@ public class MyNetApiConfig {
 	};
 
 	/**
+	 * 67、获取推荐关注接口
+	 */
+	public static MyNetApi follow_recommend = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/user/follow-recommend";
+		}
+
+		@Override
+		public NetMethod getNetMethod() {
+			return NetMethod.GET;
+		}
+
+	};	/**
 	 * 67、热门，返回3条习作和热门问题
 	 */
 	public static MyNetApi remen = new MyNetApi() {

@@ -3,9 +3,9 @@
     <string name="resend_verification_code_normal">获取验证码</string>
 
     <string name="label_tab1">热门</string>
-    <string name="label_tab2">关注</string>
-    <string name="label_tab3"></string>
-    <string name="label_tab4">找人</string>
+    <string name="label_tab2">找人</string>
+    <string name="label_tab3"> </string>
+    <string name="label_tab4">发现</string>
     <string name="label_tab5">我</string>
     <string name="register_label">注册</string>
     <string name="fm_net_call_no_network">没有网络</string>

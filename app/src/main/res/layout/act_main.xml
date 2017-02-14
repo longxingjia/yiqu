@@ -21,6 +21,8 @@
 			android:background="@mipmap/tab_bg"
 			android:layout_height="60dp"
 		>
+
+
 			<com.ui.views.TabHostView
 				xmlns:tab="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
 				android:id="@+id/tabHostView"
@@ -32,12 +34,21 @@
 				tab:icon_array="@array/main_tab_icon"
 				tab:icon_disable_array="@array/main_tab_icon_disable"
 				/>
+
+			<ImageView
+				android:layout_width="60dp"
+				android:layout_height="match_parent"
+				android:layout_centerInParent="true"
+				android:src="@mipmap/main_tab3_an"
+				android:layout_marginBottom="2dp"
+				/>
 		</RelativeLayout>
 
 
 	</LinearLayout>
-	<FrameLayout 
-    android:id="@+id/content_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+
+	<!--<FrameLayout-->
+		<!--android:id="@+id/content_frame"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="match_parent" />-->
 </FrameLayout>

@@ -7,9 +7,15 @@
  */
 package com.yiqu.iyijiayi.adapter;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,17 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener {
@@ -71,9 +88,15 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
     private class HoldChild {
 
-        TextView name;
-        TextView content;
-        ImageView icon;
+        TextView musicname;
+        TextView desc;
+        TextView soundtime;
+        TextView tea_name;
+        TextView tectitle;
+        ImageView stu_header;
+        ImageView tea_header;
+
+        TextView stu_listen;
 
     }
 
@@ -84,18 +107,46 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_xizuo, null);
-                h.name = (TextView) v.findViewById(R.id.musicname);
-                h.content = (TextView) v.findViewById(R.id.desc);
-                h.icon = (ImageView) v.findViewById(R.id.header);
+                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
+                h.tea_name = (TextView) v.findViewById(R.id.tea_name);
+                h.tectitle = (TextView) v.findViewById(R.id.tectitle);
+
+                h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
+                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
             }
+
+
             h = (HoldChild) v.getTag();
             Sound f = getItem(position);
-            h.name.setText(f.musicname);
-            h.content.setText(f.desc);
-            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr+f.stuimage);
-            mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.stuimage, h.icon);
+            h.musicname.setText(f.musicname);
+            h.desc.setText(f.desc);
+            h.soundtime.setText(f.soundtime);
+            h.tea_name.setText(f.tecname);
+            h.tectitle.setText(f.tectitle);
+//            LogUtils.LOGE(f.soundpath);
+
+            if (f.tecimage!=null){
+                mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.tecimage, h.tea_header);
+            }
+
+            if (f.stuimage!=null){
+                mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.stuimage, h.stu_header);
+            }
+
+            h.stu_listen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    LogUtils.LOGE("fjs");
+
+                }
+            });
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,11 +154,200 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         return v;
     }
 
+    public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
+
+        private final String TAG = "DownLoaderTask";
+        private URL mUrl;
+        private File mFile;
+        private ProgressDialog mDialog;
+        private int mProgress = 0;
+        private ProgressReportingOutputStream mOutputStream;
+        private Activity mContext = null;
+        private String mLesson;
+
+        public DownLoaderTask(String downloadPath, String packageName,
+                              String out, Activity context) {
+            super();
+            if (context != null) {
+                mDialog = new ProgressDialog(context);
+
+                mContext = context;
+            } else {
+                mDialog = null;
+            }
+
+            mLesson = packageName;
+
+            try {
+                mUrl = new URL(downloadPath);
+                String fileName = downloadPath.substring(
+                        downloadPath.lastIndexOf("/") + 1,
+                        downloadPath.length());
+                mFile = new File(out, fileName);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // super.onPreExecute();
+            if (mDialog != null) {
+                mDialog.setTitle("Downloading...");
+                // mDialog.setMessage(mGame.getGameName());
+                mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        cancel(true);
+//                        Tools.delete(mFile);
+                    }
+                });
+                mDialog.show();
+            }
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            return download();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            // TODO Auto-generated method stub
+            // super.onProgressUpdate(values);
+            if (mDialog == null)
+                return;
+            if (values.length > 1) {
+                int contentLength = values[1];
+                if (contentLength == -1) {
+                    mDialog.setIndeterminate(true);
+                } else {
+                    mDialog.setMax(contentLength);
+                }
+            } else {
+                mDialog.setProgress(values[0].intValue());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            // TODO Auto-generated method stub
+            // super.onPostExecute(result);
+
+            //	Log.e(TAG, "下载完");
+
+           // Tools.unzip(mFile, mLesson);
+            mFile.delete();
+
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
+
+//            Intent intent = new Intent();
+//            intent.setClass(mContext, GameActivity.class);
+//            intent.putExtra("Lesson", mLesson);
+//            startActivityForResult(intent, GameActivity.RESULT_CODE);
+
+            if (isCancelled())
+                return;
+        }
+
+        private long download() {
+            URLConnection connection = null;
+            int bytesCopied = 0;
+            try {
+                connection = mUrl.openConnection();
+                int length = connection.getContentLength();
+                if (mFile.exists()/* && length == mFile.length() */) {
+                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
+                    mFile.delete();
+                }
+//                File directory = new File(Tools.DB_PATH);
+//                if (null != directory && !directory.exists()) {
+//                    directory.mkdir();
+//                }
+
+                mOutputStream = new ProgressReportingOutputStream(mFile);
+                publishProgress(0, length);
+                bytesCopied = copy(connection.getInputStream(), mOutputStream);
+                if (bytesCopied != length && length != -1) {
+                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
+                            + ", length" + length);
+                }
+                mOutputStream.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return bytesCopied;
+        }
+
+        private int copy(InputStream input, OutputStream output) {
+            byte[] buffer = new byte[1024 * 8];
+            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
+            BufferedOutputStream out = new BufferedOutputStream(output,
+                    1024 * 8);
+            int count = 0, n = 0;
+            try {
+                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
+                    out.write(buffer, 0, n);
+                    count += n;
+                }
+                out.flush();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            return count;
+        }
+
+        private final class ProgressReportingOutputStream extends
+                FileOutputStream {
+
+            public ProgressReportingOutputStream(File file)
+                    throws FileNotFoundException {
+                super(file);
+                // TODO Auto-generated constructor stub
+            }
+
+            @Override
+            public void write(byte[] buffer, int byteOffset, int byteCount)
+                    throws IOException {
+                // TODO Auto-generated method stub
+                super.write(buffer, byteOffset, byteCount);
+                mProgress += byteCount;
+                publishProgress(mProgress);
+            }
+
+        }
+
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+
         // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
+        Sound f = getItem(arg2 - 1);
+        LogUtils.LOGE(f.toString());
 //
 //        if (!isNetworkConnected(mContext)) {
 //            ToastManager.getInstance(mContext).showText(

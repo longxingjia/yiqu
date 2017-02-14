@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="redMain">#FF5050</color>
-    <color name="green">#0BE3A8</color>
+
+
+
 
     <!-- 标题栏背景 -->
     <color name="main_color">#ffffff</color>
@@ -20,7 +18,111 @@
     <color name="dd_gray">#878787</color>
     <color name="navpage">#FFE1E8EB</color>
 
+    <color name="book_selection_bg_color">#9087cdfa</color>
 
+    <color name="comment_detail_write_commen_color">#cc4b5159</color>
+
+    <color name="game_detail_bg">#fafafa</color>
+
+    <color name="light_grey_bg">#f5f5f5</color>
+
+    <color name="grey">#ff58616d</color>
+    <color name="darkgray">#8b8b8b</color>
+    <color name="lightgrey">#ff737373</color>
+    <color name="apk_category_color">#a6a6a6</color>
+    <color name="appinfo_down_item_gray">#ff999999</color>
+    <color name="dialog_btn_pressed">#ffe0e0e0</color>
+    <color name="dialog_btn_normal">#fff7f7f7</color>
+    <color name="line_top_title">#ffcccccc</color>
+    <color name="background_gray">#DCDCDC</color>
+    <color name="launch_image_bg_gray">#F5F4F4</color>
+    <color name="top_bar_search_select_bg_color">#662d3037</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="diver_color">#E0E0E0</color>
+    <color name="background_color_rating_grey">#ffe9e9e9</color>
+    <color name="about_separate_line_bg">#ffdddddd</color>
+    <color name="search_bar_txt">#ff757985</color>
+    <color name="search_navigation_txt">#ff1d1d1d</color>
+    <color name="dark_slate_gray">#2F4F4F</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="blue">#ffccddff</color>
+    <color name="lightransparent">#a0000000</color>
+    <color name="dark_bg_color">#ff1d1d1d</color>
+    <color name="dialog_transparent">#bf000000</color>
+    <color name="conatct_info_summary_color">#ff000000</color>
+    <color name="general_sub_background_color">#ffbab9b5</color>
+    <color name="text_input_limit_tips">#ff7f7f7f</color>
+    <color name="service_normal_color">#172E59</color>
+    <color name="nickname_normal_color">#ff444444</color>
+    <color name="normal_color">#ff888888</color>
+    <color name="normal_text_color">#ff353535</color>
+    <color name="normal_text_color_disable">#7f353535</color>
+    <color name="hint_text_color">#ff999999</color>
+    <color name="tab_title_normal_color">#ff8c8c8c</color>
+    <color name="launcher_tab_text_color">#ff575757</color>
+    <color name="hint_text_color_dark_bg">#ff484c4c</color>
+    <color name="hint_color_white_bg">#ffc5c5c5</color>
+    <color name="footer_text_color">#ff7f7f7f</color>
+    <color name="dialog_msg_color">#ff818282</color>
+    <color name="link_color">#ff7a93af</color>
+    <color name="link_color_pressed">#ff576b95</color>
+    <color name="actionbar_devider_color">#ff212324</color>
+    <color name="menu_devider_color">#ff282a2b</color>
+    <color name="menu_pressed_color">@color/menu_devider_color</color>
+    <color name="menu_normal_color">#f22e3132</color>
+    <color name="actionbar_bg_color">#ff2e3132</color>
+    <color name="album_ui_bg">#ff191919</color>
+    <color name="mall_order_detail_item_title_color">#ff353535</color>
+    <color name="mall_index_topbar_color">#ff2d3132</color>
+    <color name="talk_room_tv_red">#fffa80a0</color>
+    <color name="account_delete_text_color">#ffbb5f5d</color>
+    <color name="red">#ffff0101</color>
+    <color name="text_input_limit_warn">#fff00000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="redMain">#F94E62</color>
+    <color name="tag_color_orange">#ffa500</color>
+    <color name="popup_windows_bg_blue">#5d7b3d</color>
+    <color name="popup_windows_bg_blue_dark">#3b5b31</color>
+    <color name="kk_preference_description_more">#ff416184</color>
+    <color name="search_listbtn_text_color">#ff7a93af</color>
+    <color name="home_list_item_pressed">#ffd6e9c3</color>
+    <color name="add_btn_text_color">#ff469f04</color>
+    <color name="fav_tag_text_color">#ff03bc01</color>
+    <color name="apk_install_state">#ff5ac65c</color>
+    <color name="gc_install_text_color">#ff14bd20</color>
+    <color name="radar_quit_text_color">#ff45c01a</color>
+    <color name="wechat_green">#ff45c01a</color>
+    <color name="tab_select_green">#64d50d</color>
+    <color name="app_feature_green">#68df37</color>
+    <color name="toasterro">#ff9fd524</color>
+    <color name="ConversationVoiceTextColor">#ff339900</color>
+    <color name="level2">#A3CB2A</color>
+    <color name="level1">#526D26</color>
+    <color name="level3">#52C2EA</color>
+    <color name="foot_bar_bg_color">#00cdcd</color>
+    <color name="talk_room_tv_green">#ff79ffc5</color>
+    <color name="stu_voice">#0BE3A8</color>
+    <color name="green">#0BE3A8</color>
+
+    <color name="gc_installed_game_show_all">#ff576b95</color>
+    <color name="invite_btn_text_color">#ff04539c</color>
+    <color name="font_color_blue_shoallow">#ffb2d7ff</color>
+    <color name="font_color_blue">#ff007aff</color>
+    <color name="appinfo_down_foot_item">#ff116cc4</color>
+    <color name="color_btn_app_open_press">#ff388deb</color>
+    <color name="color_btn_app_open_normal">#ff3e9aff</color>
+    <color name="group_action">#ff288be1</color>
+    <color name="section_header_bg">#678fbc</color>
+    <color name="about_policy_txt_color">#ff116cc4</color>
+    <color name="update_btn_bg_blue">#003E85</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="help_title">#172E59</color>
+    <color name="unit_content">#142b54</color>
     <drawable name="translate">#00000000</drawable> <!-- 透明色 -->
     <drawable name="pic_dea">#eeeeee</drawable>
+
+
+
 </resources>

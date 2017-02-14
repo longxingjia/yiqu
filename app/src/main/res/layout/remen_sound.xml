@@ -7,30 +7,29 @@
 
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/musicname"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:textSize="18sp"
-            android:text="今夜无人入睡"/>
+            android:text="今夜无人入睡"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="70dp"
             android:layout_height="20dp"
-            android:textSize="13sp"
-            android:drawableRight="@mipmap/arrow"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="查看详情"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
+            android:drawableRight="@mipmap/arrow_detail"
             android:gravity="center"
+            android:text="查看详情"
             android:textColor="@color/dd_gray"
-            />
+            android:textSize="13sp" />
 
     </RelativeLayout>
 
@@ -41,6 +40,7 @@
         android:layout_marginLeft="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:singleLine="true"
         android:textColor="@color/dd_gray"
         android:text="今夜无人夜无人夜无人夜无人夜无人夜无人夜无人夜无人入睡"
@@ -49,28 +49,48 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_gravity="center">
 
         <TextView
+            android:id="@+id/soundtime"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="260"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="20dp"
             android:textSize="25sp"
-            android:textColor="@drawable/btn_radio_holo_light"/>
+            android:textColor="@color/stu_voice"/>
 
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="我也要听"
-            android:background="@color/colorPrimary"
-            android:textSize="25sp"
-            android:textColor="@drawable/btn_radio_holo_light"/>
+
+        <RelativeLayout
+            android:layout_width="250dp"
+            android:paddingLeft="10dp"
+            android:layout_height="match_parent"
+            >
+            <ProgressBar
+                android:id="@+id/seekbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/stu_voice"
+                android:thumb="@drawable/stu_progress"
+                android:progressDrawable="@drawable/progressbar_stu"
+                style="?android:attr/progressBarStyleHorizontal"
+                 />
+
+            <TextView
+                android:id="@+id/stu_listen"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_width="150dp"
+                android:background="@color/transparent"
+                android:layout_height="match_parent"
+                android:text="我也要听"
+                android:textSize="25sp"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
 
         <com.ui.views.CircleImageView
             android:id="@+id/stu_header"
@@ -97,7 +117,7 @@
             android:text="jintielin"/>
 
         <TextView
-            android:id="@+id/tea_chenghao"
+            android:id="@+id/tectitle"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_toRightOf="@id/tea_name"

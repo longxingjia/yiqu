@@ -1,96 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:orientation="vertical">
 
-    <com.yiqu.iyijiayi.view.VpSwipeRefreshLayout
-       android:id="@+id/id_swipe_ly"
+    <com.ui.views.RefreshList
+        android:id="@+id/lv_sound"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@color/background_color_rating_grey"
+        android:dividerHeight="5dp"
+        android:minHeight="255dp"
+        android:scrollbars="none"></com.ui.views.RefreshList>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+</LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/vp_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="144dp">
-
-                </android.support.v4.view.ViewPager>
-
-                <RelativeLayout
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
-                        android:padding="5dp"
-                        android:background="@drawable/red_box"
-                        android:text="热门习作"
-                        android:layout_marginLeft="10dp"
-
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        />
-
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
-                        android:textSize="13sp"
-                        android:drawableRight="@mipmap/arrow"
-                        android:layout_centerVertical="true"
-                        android:text="更多"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentRight="true"
-                        android:gravity="center"
-                        android:textColor="@color/dd_gray"
-                        />
-
-                </RelativeLayout>
-                
-                <ListView
-                    android:id="@+id/lv_xizuo"
-                    android:divider="#00000000"
-                    android:dividerHeight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:scrollbars="none"
-                    android:minHeight="55dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp">
-                </ListView>
-
-                <ListView
-                    android:id="@+id/lv_sound"
-                    android:divider="#00000000"
-                    android:dividerHeight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:scrollbars="none"
-                    android:minHeight="55dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"></ListView>
-
-
-
-            </LinearLayout>
-
-
-        </ScrollView>
-
-
-    </com.yiqu.iyijiayi.view.VpSwipeRefreshLayout>
-
-
-
-</RelativeLayout>
