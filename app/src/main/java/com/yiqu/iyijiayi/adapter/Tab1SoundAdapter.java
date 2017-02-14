@@ -60,13 +60,11 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
 
     public void setData(ArrayList<Sound> list) {
-        // TODO Auto-generated method stub
         datas = list;
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<Sound> allDatas) {
-        // TODO Auto-generated method stub
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -128,7 +126,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.soundtime.setText(f.soundtime);
             h.tea_name.setText(f.tecname);
             h.tectitle.setText(f.tectitle);
-//            LogUtils.LOGE(f.soundpath);
+            LogUtils.LOGE(f.soundpath);
 
             if (f.tecimage!=null){
                 mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.tecimage, h.tea_header);
@@ -141,7 +139,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.stu_listen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    LogUtils.LOGE("fjs");
 
                 }
             });
@@ -211,14 +208,12 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         @Override
         protected Long doInBackground(Void... params) {
-            // TODO Auto-generated method stub
             return download();
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             // TODO Auto-generated method stub
-            // super.onProgressUpdate(values);
             if (mDialog == null)
                 return;
             if (values.length > 1) {

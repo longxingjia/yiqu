@@ -49,7 +49,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_gravity="center">
 
         <TextView
@@ -58,6 +58,7 @@
             android:gravity="center"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:text="260"
             android:layout_marginLeft="20dp"
             android:textSize="25sp"
@@ -65,16 +66,16 @@
 
 
         <RelativeLayout
-            android:layout_width="250dp"
-            android:paddingLeft="10dp"
+            android:layout_width="200dp"
+
             android:layout_height="match_parent"
+            android:background="@drawable/stu_voice"
             >
             <ProgressBar
-                android:id="@+id/seekbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/pb_stu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/stu_voice"
-                android:thumb="@drawable/stu_progress"
                 android:progressDrawable="@drawable/progressbar_stu"
                 style="?android:attr/progressBarStyleHorizontal"
                  />
@@ -83,7 +84,7 @@
                 android:id="@+id/stu_listen"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:background="@color/transparent"
                 android:layout_height="match_parent"
                 android:text="我也要听"
