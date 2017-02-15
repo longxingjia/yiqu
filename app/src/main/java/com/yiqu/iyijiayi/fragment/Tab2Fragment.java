@@ -7,8 +7,10 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +42,9 @@ import com.yiqu.iyijiayi.view.ReScrollViewWithListView;
 import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Tab2Fragment extends TabContentFragment implements RefreshList.IRefreshListViewListener {
+public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int TAB_2 = 2;
     private String uid;
@@ -52,6 +55,7 @@ public class Tab2Fragment extends TabContentFragment implements RefreshList.IRef
     private Tab2TeacherAdapter tab2TeacherAdapter;
     private Tab2StudentAdapter tab2StudentAdapter;
     private ScrollViewWithListView lvStudent;
+    private SwipeRefreshLayout swipeRe;
 
     @Override
     protected int getTitleView() {
@@ -75,23 +79,24 @@ public class Tab2Fragment extends TabContentFragment implements RefreshList.IRef
 
     @Override
     protected void initView(View v) {
+        swipeRe = (SwipeRefreshLayout) v.findViewById(R.id.swipeRe);
+        swipeRe.setOnRefreshListener(this);
         View footView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_header, null);
 
         lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
         lvTeacher.addHeaderView(headView);
 
-//        lvTeacher.addFooterView(footView);
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
-//        lvTeacher.setRefreshListListener(this);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(),300);
-        ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(),300);
-        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(),mImageLoaderHm);
+        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
+        ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(), 300);
+        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), mImageLoaderHm);
         lvTeacher.setAdapter(tab2TeacherAdapter);
 
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(),mImageLoader);
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm);
         lvStudent.setAdapter(tab2StudentAdapter);
+        lvStudent.addHeaderView(footView);
 
 
     }
@@ -104,45 +109,53 @@ public class Tab2Fragment extends TabContentFragment implements RefreshList.IRef
     @Override
     protected void init(Bundle savedInstanceState) {
         setSlidingMenuEnable(false);
-
-        if (AppShare.getIsLogin(getActivity())){
+        ZhaoRen zhaoRen = AppShare.getZhaoRenList(getActivity());
+        if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
-        }else{
+        } else {
             uid = "0";
         }
+        if (zhaoRen == null) {
 
-        RestNetCallHelper.callNet(
-                getActivity(),
-                MyNetApiConfig.follow_recommend,
-                MyNetRequestConfig.follow_recommend(getActivity(),uid),
-                "teacher", Tab2Fragment.this);
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.follow_recommend,
+                    MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                    "teacher", Tab2Fragment.this);
+        } else {
+            teacher = zhaoRen.teacher;
+            student = zhaoRen.student;
+
+            LogUtils.LOGE(student.toString());
+            tab2TeacherAdapter.setData(teacher);
+            setListViewHeightBasedOnChildren(lvTeacher);
+            tab2StudentAdapter.setData(student);
+        }
 
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        LogUtils.LOGE(netResponse.toString());
+        if (netResponse != null) {
+            LogUtils.LOGE(netResponse.toString());
 
-        if(netResponse.bool==1){
-            Gson gson = new Gson();
-            ZhaoRen zhaoRen = gson.fromJson(netResponse.data,ZhaoRen.class);
-            teacher = zhaoRen.teacher;
-            student = zhaoRen.student;
-
-            LogUtils.LOGE(student.toString());
-
-            tab2TeacherAdapter.setData(teacher);
-            setListViewHeightBasedOnChildren(lvTeacher);
-            tab2StudentAdapter.setData(student);
-//            setListViewHeightBasedOnChildren(lvStudent);
-
+            if (netResponse.bool == 1) {
+                Gson gson = new Gson();
+                ZhaoRen zhaoRen = gson.fromJson(netResponse.data, ZhaoRen.class);
+                AppShare.setZhaoRenList(getActivity(),zhaoRen);
+                teacher = zhaoRen.teacher;
+                student = zhaoRen.student;
+                LogUtils.LOGE(student.toString());
+                tab2TeacherAdapter.setData(teacher);
+                setListViewHeightBasedOnChildren(lvTeacher);
+                tab2StudentAdapter.setData(student);
 //            resfreshOk();
-        }else {
-            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            } else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
 //            resfreshFail();
+            }
         }
-
         super.onNetEnd(id, type, netResponse);
     }
 
@@ -181,52 +194,25 @@ public class Tab2Fragment extends TabContentFragment implements RefreshList.IRef
     @Override
     public void onRefresh() {
 
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.follow_recommend,
+                        MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                        "teacher", Tab2Fragment.this);
+
+                swipeRe.setRefreshing(false);
+
+            }
+        }, 300);
     }
-//
-//
-//    public void resfreshOk(){
-//        lvTeacher.refreshOk();
-//        new AsyncTask<Void, Void, Void>() {
-//            protected Void doInBackground(Void... params) {
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                lvTeacher.stopRefresh();
-//            }
-//
-//
-//        }.execute();
-//
-//    }
-//
-//    public void resfreshFail(){
-//        lvTeacher.refreshFail();
-//        new AsyncTask<Void, Void, Void>() {
-//            protected Void doInBackground(Void... params) {
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                lvTeacher.stopRefresh();
-//            }
-//
-//
-//        }.execute();
-//    }
+
+
+
+
 
     /**
      * @param listView

@@ -95,8 +95,9 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
             h.name.setText(f.username);
             h.content.setText(f.title);
 //            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr+f.userimage);
-            mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.userimage, h.icon);
-
+            if (f.userimage!=null) {
+                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

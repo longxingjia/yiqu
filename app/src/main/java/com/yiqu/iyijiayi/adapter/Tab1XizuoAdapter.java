@@ -98,8 +98,10 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             Xizuo f = getItem(position);
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
-            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr+f.stuimage);
-            mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.stuimage, h.icon);
+            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr + f.stuimage);
+            if (f.stuimage != null) {
+                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.stuimage, h.icon);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

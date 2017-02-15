@@ -84,17 +84,20 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
             if (v == null) {
                 h = new HoldChild();
                 v = inflater.inflate(R.layout.zhaoren_student, parent,false);
-//                h.name = (TextView) v.findViewById(R.id.name);
-//                h.content = (TextView) v.findViewById(R.id.desc);
-//                h.icon = (ImageView) v.findViewById(R.id.header);
+                h.name = (TextView) v.findViewById(R.id.stu_name);
+                h.content = (TextView) v.findViewById(R.id.title);
+                h.icon = (ImageView) v.findViewById(R.id.head);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-//            Student f = getItem(position);
-//            h.name.setText(f.username);
-//            h.content.setText(f.title);
-//            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr+f.userimage);
-         //   mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.userimage, h.icon);
+            Student f = getItem(position);
+            h.name.setText(f.username);
+            h.content.setText(f.title);
+
+            if (f.userimage!=null){
+                   mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.userimage, h.icon);
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -122,13 +122,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         vp_spinner.setAdapter(new MyAdapter());
         vp_spinner.setCurrentItem(0);
-
-        if (AppShare.getIsLogin(getActivity())){
-            uid = AppShare.getUserInfo(getActivity()).uid;
-        }else{
-            uid = "0";
-        }
-
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),mImageLoaderHm);
 
         lvXizuo.setAdapter(tab1XizuoAdapter);
@@ -137,11 +130,28 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
 
-        RestNetCallHelper.callNet(
-                getActivity(),
-                MyNetApiConfig.remen,
-                MyNetRequestConfig.remen(getActivity(),uid),
-                "Remen", Tab1Fragment.this);
+        if (AppShare.getIsLogin(getActivity())){
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        }else{
+            uid = "0";
+        }
+        Remen remen = AppShare.getRemenList(getActivity());
+        if (remen==null){
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.remen,
+                    MyNetRequestConfig.remen(getActivity(),uid),
+                    "Remen", Tab1Fragment.this);
+        }else {
+            tab1XizuoAdapter.setData(remen.xizuo);
+            tab1SoundAdapter.setData(remen.sound);
+
+        }
+
+
+
+
+
     }
 
     @Override
@@ -182,11 +192,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if ("Remen".equals(id)) {
+        if (netResponse!=null&&"Remen".equals(id)) {
 
             if(netResponse.bool==1){
                 Gson gson = new Gson();
                 Remen remen = gson.fromJson(netResponse.data,Remen.class);
+                AppShare.setRemenList(getActivity(),remen);
                 sound = remen.sound;
                 xizuo = remen.xizuo;
                 tab1XizuoAdapter.setData(xizuo);

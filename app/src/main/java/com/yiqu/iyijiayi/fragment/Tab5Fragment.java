@@ -67,7 +67,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     protected void initView(View v) {
 
-        loginBt = (Button) v.findViewById(R.id.login);
+        loginBt = (Button) v.findViewById(R.id.tab5_login);
         loginOutBt = (Button) v.findViewById(R.id.logout);
         head = (CircleImageView) v.findViewById(R.id.head);
         llUserInfo = (LinearLayout) v.findViewById(R.id.userinfo);
@@ -78,7 +78,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         menu_item_wodeyibi = (TextView) v.findViewById(R.id.menu_item_wodeyibi);
         menu_item_shezhi = (TextView) v.findViewById(R.id.menu_item_shezhi);
         menu_item_jiesuanshuoming = (TextView) v.findViewById(R.id.menu_item_jiesuanshuoming);
-        menu_item_bangzhu = (TextView) v.findViewById(R.id.menu_item_bangzhu);
+//        menu_item_bangzhu = (TextView) v.findViewById(R.id.menu_item_bangzhu);
         menu_item_guanyu = (TextView) v.findViewById(R.id.menu_item_guanyu);
         username = (TextView) v.findViewById(R.id.username);
         user_school = (TextView) v.findViewById(R.id.user_school);
