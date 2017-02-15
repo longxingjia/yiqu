@@ -51,6 +51,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
     private ImageLoaderHm<ImageView> mImageLoaderHm;
+    private String tag ="Tab1SoundAdapter";
 
     public Tab1SoundAdapter(Context context, ImageLoaderHm<ImageView> m) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -126,7 +127,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.soundtime.setText(f.soundtime);
             h.tea_name.setText(f.tecname);
             h.tectitle.setText(f.tectitle);
-            LogUtils.LOGE(f.soundpath);
+            LogUtils.LOGE(tag,f.soundpath);
 
             if (f.tecimage!=null){
                 mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.tecimage, h.tea_header);
@@ -342,7 +343,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         // TODO Auto-generated method stub
         Sound f = getItem(arg2 - 1);
-        LogUtils.LOGE(f.toString());
+
 //
 //        if (!isNetworkConnected(mContext)) {
 //            ToastManager.getInstance(mContext).showText(

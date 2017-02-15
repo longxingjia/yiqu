@@ -33,7 +33,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import java.util.ArrayList;
 
 public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener {
-
+    private String tag ="Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<Xizuo> datas = new ArrayList<Xizuo>();
     private Context mContext;
@@ -98,7 +98,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             Xizuo f = getItem(position);
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
-            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr + f.stuimage);
+            LogUtils.LOGE(tag,MyNetApiConfig.ImageServerAddr + f.stuimage);
             if (f.stuimage != null) {
                 mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.stuimage, h.icon);
             }

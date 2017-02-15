@@ -198,7 +198,7 @@ public class MyNetApiConfig {
 	/**
 	 * 17、添加到关注
 	 */
-	public static MyNetApi addollow = new MyNetApi() {
+	public static MyNetApi addfollow = new MyNetApi() {
 		@Override
 		public String getPath() {
 			return ServerAddr + "/user/add-follow";
@@ -209,7 +209,7 @@ public class MyNetApiConfig {
 	/**
 	 * 18、取消关注
 	 */
-	public static MyNetApi delollow = new MyNetApi() {
+	public static MyNetApi delfollow = new MyNetApi() {
 		@Override
 		public String getPath() {
 			return ServerAddr + "/user/del-follow";
@@ -252,13 +252,20 @@ public class MyNetApiConfig {
 			return NetMethod.GET;
 		}
 
-		//
-//		@Override
-//		public Object parseBody(String body) throws JSONException {
-//			// TODO Auto-generated method stub
-//			return FindAllBbxdxx.parseList(body);
-//		}
+	};
+	/**
+	 * 67、热门，返回3条习作和热门问题
+	 */
+	public static MyNetApi get_follow_recommend_list = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/user/get-follow-recommend-list";
+		}
 
+		@Override
+		public NetMethod getNetMethod() {
+			return NetMethod.GET;
+		}
 
 	};
 

@@ -15,7 +15,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:visibility="invisible" 
-            android:src="@drawable/navigationbar_back"/>
+            android:src="@drawable/navigationbar_back_btn"/>
         <TextView
             android:id="@+id/title_text"
             android:layout_width="0dp"

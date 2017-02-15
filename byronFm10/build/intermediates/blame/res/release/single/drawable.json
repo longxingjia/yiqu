@@ -40,12 +40,20 @@
         "source": "H:\\Git\\byronFm10\\src\\main\\res\\drawable\\log_btn_round_normal.xml"
     },
     {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\navigationbar_back_btn.png",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\navigationbar_back_btn.png"
+    },
+    {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\log_btn_selector.xml",
         "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\log_btn_selector.xml"
     },
     {
         "merged": "H:\\Git\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\btn_radio_holo_light.xml",
         "source": "H:\\Git\\byronFm10\\src\\main\\res\\drawable\\btn_radio_holo_light.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\back.png",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\back.png"
     },
     {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\release\\drawable\\refresh_selector.xml",

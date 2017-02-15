@@ -41,11 +41,12 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:padding="5dp"
-        android:src="@mipmap/follow"
-        android:scaleType="centerInside"
+        android:id="@+id/add_follow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+       android:layout_marginTop="5dp"
+        android:background="@mipmap/follow"
+        android:layout_marginRight="10dp"
         />
 
 </LinearLayout>

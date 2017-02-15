@@ -4,14 +4,9 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
-import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -19,8 +14,7 @@ import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
-import com.yiqu.iyijiayi.fragment.menu.RegisterFragment;
-import com.yiqu.iyijiayi.fragment.menu.SetPhoneFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SetPhoneFragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -31,21 +25,12 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.NetworkRestClient;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
@@ -217,7 +202,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                             @Override
                             public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                LogUtils.LOGE(netResponse.toString());
+//                                LogUtils.LOGE(netResponse.toString());
                                 if (netResponse.bool==0){
                                     //新用户
                                     Model.startNextAct(mContext, SetPhoneFragment.class.getName());

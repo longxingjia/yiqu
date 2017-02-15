@@ -1,17 +1,15 @@
-package com.yiqu.iyijiayi.fragment.menu;
+package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.MyFragmentPagerAdapter;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
-import com.yiqu.iyijiayi.utils.PageCursorView;
 
 import java.util.ArrayList;
 

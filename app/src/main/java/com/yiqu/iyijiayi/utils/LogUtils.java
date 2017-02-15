@@ -10,8 +10,8 @@ public class  LogUtils {
         Log.e(tag, message);
     }
 
-    public static void LOGE( String message) {
-        Log.e("he", message);
-    }
+//    public static void LOGE( String message) {
+//        Log.e("he", message);
+//    }
 
 }

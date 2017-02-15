@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color_rating_grey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_head"
+            style="@style/textview_edit_layout"
+            android:layout_height="70dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/menu_item_wodeyijiayizhuye"
+                style="@style/textview_edit_left"
+                android:text="头像" />
+
+            <com.ui.views.CircleImageView
+                android:id="@+id/edit_head"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="20dp"
+                android:src="@mipmap/menu_head" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_name"
+            style="@style/textview_edit_layout">
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="名字" />
+
+            <TextView
+                android:id="@+id/edit_name"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_title"
+            style="@style/textview_edit_layout">
+
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="头衔" />
+
+            <TextView
+                android:id="@+id/edit_title"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_sex"
+            style="@style/textview_edit_layout">
+
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="性别" />
+
+            <TextView
+                android:id="@+id/edit_sex"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_school"
+            style="@style/textview_edit_layout">
+
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="学校" />
+
+            <TextView
+                android:id="@+id/edit_school"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_background"
+            style="@style/textview_edit_layout"
+            android:layout_height="70dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="背景" />
+
+            <TextView
+                android:id="@+id/edit_background"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_photo"
+            style="@style/textview_edit_layout">
+
+
+            <TextView
+
+                style="@style/textview_edit_left"
+                android:text="相册" />
+
+            <TextView
+                android:id="@+id/edit_photo"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_introduction"
+            style="@style/textview_edit_layout">
+            <TextView
+
+                style="@style/textview_edit_left"
+                android:text="个人简介" />
+
+            <TextView
+                android:id="@+id/edit_introduction"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_edit_apply"
+            style="@style/textview_edit_layout">
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="导师申请" />
+
+            <TextView
+
+                android:id="@+id/edit_apply"
+                style="@style/textview_edit_right"
+                android:text="导师资格申请" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>
+
+

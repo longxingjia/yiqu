@@ -50,7 +50,6 @@ public abstract class AbsTitleNetFragment extends AbsTitleFragment implements
 			setTitleType(root, getTitleBarType());
 			// 初始化标题
 			initTitle();
-
 			// 其他初始化
 			init(savedInstanceState);
 		} catch (Exception e) {

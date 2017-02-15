@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class Tab1ViewPagerAdapter extends PagerAdapter {
 
     ArrayList<ImageView> mImageViews;
+    private String tag ="Tab1ViewPagerAdapter";
     public Tab1ViewPagerAdapter( ArrayList<ImageView> mImageViews) {
               this.mImageViews = mImageViews;
     }
@@ -45,7 +46,7 @@ public class Tab1ViewPagerAdapter extends PagerAdapter {
     {
          container.addView(mImageViews.get(position % mImageViews.size()), 0);
 
-        LogUtils.LOGE(mImageViews.get(position % mImageViews.size()) + "");
+        LogUtils.LOGE(tag,mImageViews.get(position % mImageViews.size()) + "");
         return mImageViews.get(position % mImageViews.size());
     }
 }

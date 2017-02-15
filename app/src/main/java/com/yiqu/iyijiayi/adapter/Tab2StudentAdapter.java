@@ -19,10 +19,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.ZhaoRen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
@@ -104,6 +109,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
         }
         return v;
     }
+
 
 
     @Override

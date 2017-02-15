@@ -19,10 +19,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.fragment.Tab2Fragment;
+import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.ZhaoRen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -33,12 +43,15 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
     private LayoutInflater mLayoutInflater;
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Context mContext;
+    private String uid ;
     private ImageLoaderHm<ImageView> mImageLoaderHm;
+    private  String tag="Tab2TeacherAdapter";
 
-    public Tab2TeacherAdapter(Context context, ImageLoaderHm<ImageView> m) {
+    public Tab2TeacherAdapter(Context context, ImageLoaderHm<ImageView> m,String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         mImageLoaderHm = m;
+        this.uid = uid;
     }
 
 
@@ -74,7 +87,7 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
         TextView name;
         TextView content;
         ImageView icon;
-
+        ImageView follow;
     }
 
     @Override
@@ -88,13 +101,96 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                 h.name = (TextView) v.findViewById(R.id.name);
                 h.content = (TextView) v.findViewById(R.id.desc);
                 h.icon = (ImageView) v.findViewById(R.id.header);
+                h.follow = (ImageView) v.findViewById(R.id.add_follow);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Teacher f = getItem(position);
+           final Teacher f = getItem(position);
             h.name.setText(f.username);
             h.content.setText(f.title);
-//            LogUtils.LOGE(MyNetApiConfig.ImageServerAddr+f.userimage);
+            if (f.isfollow.equals("0")){  //没有关注
+                h.follow.setBackgroundResource(R.mipmap.follow);
+
+
+            }else {
+                h.follow.setBackgroundResource(R.mipmap.followed);
+            }
+
+            h.follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (f.isfollow.equals("0")){  //没有关注
+//                        h.follow.setBackgroundResource(R.mipmap.follow);
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.addfollow,
+                                MyNetRequestConfig.addfollow(mContext,uid,f.uid ),
+                                "teacher", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+                                        if (netResponse!=null){
+                                            if(netResponse.bool==1){
+                                                f.isfollow = "1";
+                                                notifyDataSetChanged();
+                                            }else {
+                                               ToastManager.getInstance(mContext).showText(netResponse.result);
+                                            }
+
+                                        }
+
+                                    }
+                                });
+
+                    }else {
+//                        if (f.isfollow.equals("0")){  //没有关注
+//                        h.follow.setBackgroundResource(R.mipmap.follow);
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.delfollow,
+                                MyNetRequestConfig.delfollow(mContext,uid,f.uid ),
+                                "delfollow", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+                                        if (netResponse!=null){
+                                            if(netResponse.bool==1){
+                                                f.isfollow = "0";
+                                                notifyDataSetChanged();
+                                            }else {
+                                                ToastManager.getInstance(mContext).showText(netResponse.result);
+                                            }
+
+                                        }
+
+                                    }
+                                });
+                    }
+                }
+            });
+
             if (f.userimage!=null) {
                 mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
             }

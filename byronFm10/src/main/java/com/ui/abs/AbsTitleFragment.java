@@ -107,9 +107,7 @@ public abstract class AbsTitleFragment extends AbsFragment {
 				View v = root.findViewById(R.id.title_text);
 				if (v != null) {
 					v.setVisibility(View.VISIBLE);
-					// if (v instanceof TextView) {
-					// ((TextView) v).setText(getTitle());
-					// }
+
 				}
 			}
 			if ((flag & FLAG_BACK) == FLAG_BACK) {
@@ -139,6 +137,8 @@ public abstract class AbsTitleFragment extends AbsFragment {
 			if ((flag & FLAG_BTN) == FLAG_BTN) {
 				View v = root.findViewById(R.id.title_btn);
 				if (v != null) {
+
+					Log.e("he","fs");
 					v.setVisibility(View.VISIBLE);
 					v.setOnClickListener(new OnClickListener() {
 						@Override

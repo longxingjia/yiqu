@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="H:\Git\slidingMenuLibrary\src\main\assets"/><source path="H:\Git\slidingMenuLibrary\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="H:\Git\slidingMenuLibrary\src\release\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\iyijiayi\slidingMenuLibrary\src\main\assets"/><source path="D:\iyijiayi\slidingMenuLibrary\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\iyijiayi\slidingMenuLibrary\src\release\assets"/></dataSet></merger>

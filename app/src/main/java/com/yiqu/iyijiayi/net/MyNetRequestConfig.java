@@ -85,32 +85,33 @@ public class MyNetRequestConfig {
         return r;
     }
 
-    /**
-     * 7、忘记密码 String shjhm //手机号,String newmm//新密码, String idCode //验证码,String
-     * idCodeToken//验证码凭证
-     */
-    public static NetRequest forgetPassword(Context c, String shjhm,
-                                            String newmm, String idCode, String idCodeToken, String timestamp) {
+    public static NetRequest addfollow(Context c, String uid, String fuid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("newmm", newmm);
-        r.addHttpParam("idCode", idCode);
-        r.addHttpParam("idCodeToken", idCodeToken);
-        r.addHttpParam("timestamp", timestamp);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("fuid", fuid);
+
+        return r;
+    }
+
+
+    public static NetRequest delfollow(Context c, String uid, String fuid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("fuid", fuid);
 
         return r;
     }
 
     /**
-     * 8、获取主题信息 String token//登录凭证,String shjhm //手机号,string bjlxbh//班级类型编号
+     * 8、
      */
-    public static NetRequest coursethemeList(Context c, String token,
-                                             String shjhm, String bjlxbh) {
+    public static NetRequest get_follow_recommend_list(Context c, String uid,
+                                                       String type, int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("bjlxbh", bjlxbh);
-
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("type", type);
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
         return r;
     }
 

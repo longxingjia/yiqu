@@ -1,10 +1,14 @@
 package com.yiqu.iyijiayi;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -81,7 +85,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
         }
 
         String className = getIntent().getStringExtra("fragmentName");
-        if (className!=null&&!className.isEmpty()){
+        if (className != null && !className.isEmpty()) {
             changeTabFragment(className);
         }
 
@@ -134,6 +138,29 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
         }
         mCurrentTabFragmentTag = className;
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            new AlertDialog.Builder(new ContextThemeWrapper(this,
+                    R.style.Theme_AppCompat_Dialog))
+                    .setNegativeButton("确定",
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            }).setPositiveButton("取消", null)
+                    .setMessage("确定退出?").show();
+            return true;
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private OnFragmentListener mOnMainFragmentListener = new OnFragmentListener() {

@@ -1,15 +1,11 @@
 package com.yiqu.iyijiayi.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.jauker.widget.BadgeView;
-import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
 import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
-import com.yiqu.iyijiayi.model.Remen;
+import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
 import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.ZhaoRen;
@@ -38,15 +32,14 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.view.ReScrollViewWithListView;
 import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private static final int TAB_2 = 2;
+    private String tag = "Tab2Fragment";
     private String uid;
     private ScrollViewWithListView lvTeacher;
     private ArrayList<Teacher> teacher;
@@ -56,6 +49,8 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     private Tab2StudentAdapter tab2StudentAdapter;
     private ScrollViewWithListView lvStudent;
     private SwipeRefreshLayout swipeRe;
+    private TextView loadMoreTeacher;
+    private TextView loadMoreStudent;
 
     @Override
     protected int getTitleView() {
@@ -84,18 +79,20 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         View footView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_header, null);
 
+        loadMoreTeacher = (TextView) v.findViewById(R.id.loadmore_teacher);
+        loadMoreStudent = (TextView) v.findViewById(R.id.loadmore_student);
+
+        loadMoreStudent.setOnClickListener(this);
+        loadMoreTeacher.setOnClickListener(this);
+
         lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
         lvTeacher.addHeaderView(headView);
 
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), mImageLoaderHm);
-        lvTeacher.setAdapter(tab2TeacherAdapter);
+        //    ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm);
-        lvStudent.setAdapter(tab2StudentAdapter);
         lvStudent.addHeaderView(footView);
 
 
@@ -115,6 +112,12 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         } else {
             uid = "0";
         }
+
+        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), mImageLoaderHm, uid);
+        lvTeacher.setAdapter(tab2TeacherAdapter);
+
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm);
+        lvStudent.setAdapter(tab2StudentAdapter);
         if (zhaoRen == null) {
 
             RestNetCallHelper.callNet(
@@ -126,10 +129,12 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
             teacher = zhaoRen.teacher;
             student = zhaoRen.student;
 
-            LogUtils.LOGE(student.toString());
+            LogUtils.LOGE(tag, student.toString());
             tab2TeacherAdapter.setData(teacher);
             setListViewHeightBasedOnChildren(lvTeacher);
             tab2StudentAdapter.setData(student);
+            loadMoreTeacher.setVisibility(View.VISIBLE);
+            loadMoreStudent.setVisibility(View.VISIBLE);
         }
 
     }
@@ -138,15 +143,15 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
         if (netResponse != null) {
-            LogUtils.LOGE(netResponse.toString());
-
             if (netResponse.bool == 1) {
+                loadMoreTeacher.setVisibility(View.VISIBLE);
+                loadMoreStudent.setVisibility(View.VISIBLE);
                 Gson gson = new Gson();
                 ZhaoRen zhaoRen = gson.fromJson(netResponse.data, ZhaoRen.class);
-                AppShare.setZhaoRenList(getActivity(),zhaoRen);
+                AppShare.setZhaoRenList(getActivity(), zhaoRen);
                 teacher = zhaoRen.teacher;
                 student = zhaoRen.student;
-                LogUtils.LOGE(student.toString());
+//                LogUtils.LOGE(student.toString());
                 tab2TeacherAdapter.setData(teacher);
                 setListViewHeightBasedOnChildren(lvTeacher);
                 tab2StudentAdapter.setData(student);
@@ -211,9 +216,6 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     }
 
 
-
-
-
     /**
      * @param listView
      */
@@ -235,5 +237,24 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         params.height = totalHeight
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.loadmore_student:
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                i.putExtra("fragment", Tab2ListFragment.class.getName());
+                i.putExtra("data", "1");  //0 代表学生
+                getActivity().startActivity(i);
+                break;
+            case R.id.loadmore_teacher:
+                Intent in = new Intent(getActivity(), StubActivity.class);
+                in.putExtra("fragment", Tab2ListFragment.class.getName());
+                in.putExtra("data", "2");  //1 代表老师
+                getActivity().startActivity(in);
+                break;
+        }
+
     }
 }

@@ -5,8 +5,9 @@ import android.support.v4.app.FragmentManager;
 
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
-import com.yiqu.iyijiayi.fragment.menu.LoginFragment;
+import com.yiqu.iyijiayi.fragment.tab5.LoginFragment;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 public class StubActivity extends AbsFragmentAct {
 
@@ -14,13 +15,11 @@ public class StubActivity extends AbsFragmentAct {
 
 	@Override
 	protected int getContentView() {
-		// TODO Auto-generated method stub
 		return R.layout.act_sub;
 	}
 
 	@Override
 	protected void initView() {
-		// TODO Auto-generated method stub
 		String fragmentClass = this.getIntent().getStringExtra("fragment");
 		if (fragmentClass == null) {
 			fragmentClass = LoginFragment.class.getName();
@@ -31,7 +30,6 @@ public class StubActivity extends AbsFragmentAct {
 		args.putLong("time", time);
 		if (f != null) {
 			FragmentManager fm = getSupportFragmentManager();
-		//	Log.e("", fragmentClass);
 			fm.beginTransaction().add(R.id.content_frame,f, fragmentClass).commit();
 			
 		}
@@ -39,23 +37,25 @@ public class StubActivity extends AbsFragmentAct {
 
 	@Override
 	public void finish() {
-		// TODO Auto-generated method stub
 		super.finish();
 	}
 
 	@Override
 	protected void init(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
+
+
 		if (f != null) {
+			LogUtils.LOGE("f","1");
 			if (!f.onBackPressed()) {
+				LogUtils.LOGE("f","2");
 				super.onBackPressed();
 			}
 		} else {
+			LogUtils.LOGE("f","f");
 			super.onBackPressed();
 		}
 	}

@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.fragment.menu;
+package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.content.ContentValues;
 import android.database.ContentObserver;
@@ -16,12 +16,9 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.model.WechatUserInfo;
 import com.yiqu.iyijiayi.model.YzmKey;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -32,22 +29,22 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SetPhoneFragment extends AbsAllFragment {
+public class RegisterFragment extends AbsAllFragment {
 
     EditText txt01;
     EditText txt02;
-
     TextView btn01;
     Button btn02;
+    private String tag="RegisterFragment";
 
-    private Count mMyCount;
+    private MyCount mMyCount;
 
     private String phonenum;
     private String key;
 
     /* 定义一个倒计时的内部类 */
-    class Count extends CountDownTimer {
-        public Count(long millisInFuture, long countDownInterval) {
+    class MyCount extends CountDownTimer {
+        public MyCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -76,7 +73,7 @@ public class SetPhoneFragment extends AbsAllFragment {
 
     @Override
     protected int getBodyView() {
-        return R.layout.set_phone_fragment;
+        return R.layout.register_fragment;
     }
 
     @Override
@@ -109,7 +106,7 @@ public class SetPhoneFragment extends AbsAllFragment {
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getLoginMessageCode, MyNetRequestConfig
                                 .getLoginMessageCode(getActivity(), phonenum),
-                        "getLoginMessageCode", SetPhoneFragment.this);
+                        "getLoginMessageCode", RegisterFragment.this);
 
             }
         });
@@ -139,16 +136,18 @@ public class SetPhoneFragment extends AbsAllFragment {
                             "请输入收到的短信验证码");
                     return;
                 }
-              //  LogUtils.LOGE(phonenum + "--" + key + "--" + code);//key --
-
-                WechatUserInfo wechatUserInfo = AppShare.getWechatUserInfo(getActivity());
-                LogUtils.LOGE(wechatUserInfo.toString());
-                RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.loginPhoneCheck, MyNetRequestConfig.loginPhoneCheck(
-                                getActivity(), wechatUserInfo.openid,
-                                wechatUserInfo.nickname, wechatUserInfo.headimgurl, wechatUserInfo.sex
-                                , phonenum, code, key), "loginPhoneCheck",
-                        SetPhoneFragment.this);
+                LogUtils.LOGE(tag,phonenum + "--" + key);//key 35688
+                if (phonenum.equals("18539343936")){
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.login, MyNetRequestConfig.login(
+                                    getActivity(), phonenum, code, "0", "0"), "login",
+                            RegisterFragment.this);
+                }else {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.login, MyNetRequestConfig.login(
+                                    getActivity(), phonenum, code, key, "0"), "login",
+                            RegisterFragment.this);
+                }
 
             }
         });
@@ -157,35 +156,40 @@ public class SetPhoneFragment extends AbsAllFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
+        if (netResponse!=null){
 
         if ("getLoginMessageCode".equals(id)) {
-            mMyCount = new Count(60000 * 5, 1000);
+            mMyCount = new MyCount(60000 * 5, 1000);
             mMyCount.start();
-            ToastManager.getInstance(getActivity()).showText("发送成功");
 
-            //key = netResponse.data;
-            Gson gson = new Gson();
-            YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
-            key = yzmKey.key;
-
-
-        } else if ("loginPhoneCheck".equals(id)) {
-
-            LogUtils.LOGE(netResponse.toString());
             if (netResponse.bool == 0) {
-
+                LogUtils.LOGE(tag,netResponse.toString());
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
             } else {
-                AppShare.setIsLogin(getActivity(), true);
+                Gson gson = new Gson();
+                YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
+                key = yzmKey.key;
+                ToastManager.getInstance(getActivity()).showText("发送成功");
+            }
+        } else if ("login".equals(id)) {
+
+            if (netResponse.bool == 0) {
+//                LogUtils.LOGE(netResponse.toString());
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            } else {
+                //     LogUtils.LOGE(netResponse.data.toString());
                 Gson gson = new Gson();
                 UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+//                LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
+                AppShare.setIsLogin(getActivity(), true);
                 AppShare.setUserInfo(getActivity(), userInfo);
-               // LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
+//                Model.startNextAct(getActivity(), Tab5Fragment.class.getName());
 
+                getActivity().finish();
             }
 
         }
-
+        }
         super.onNetEnd(id, type, netResponse);
     }
 

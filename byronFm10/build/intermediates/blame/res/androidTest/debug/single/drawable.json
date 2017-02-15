@@ -12,16 +12,20 @@
         "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\list_selector_holo_light.xml"
     },
     {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\navigationbar_back_btn.png",
+        "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\navigationbar_back_btn.png"
+    },
+    {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\list_selector_background_transition_holo_light.xml",
         "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\list_selector_background_transition_holo_light.xml"
     },
     {
-        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\pic_menu_reddot_bitmap.xml",
-        "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\pic_menu_reddot_bitmap.xml"
-    },
-    {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\log_btn_round_normal.xml",
         "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\log_btn_round_normal.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\pic_menu_reddot_bitmap.xml",
+        "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\pic_menu_reddot_bitmap.xml"
     },
     {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\log_btn_selector.xml",
@@ -66,6 +70,10 @@
     {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_radio_holo_light.xml",
         "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_radio_holo_light.xml"
+    },
+    {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\back.png",
+        "source": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\bundles\\debug\\res\\drawable\\back.png"
     },
     {
         "merged": "H:\\Git\\byronFm10\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_radio_holo_light.xml",

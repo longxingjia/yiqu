@@ -1,18 +1,14 @@
-package com.yiqu.iyijiayi.fragment.menu;
+package com.yiqu.iyijiayi.fragment.tab5;
 
-import android.os.CountDownTimer;
 import android.view.View;
 
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by Administrator on 2017/2/9.
