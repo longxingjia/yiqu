@@ -33,7 +33,7 @@ public class SimpleFragmentNetCallBack implements NetCallBack {
 		case TYPE_SUCCESS:
 			break;
 		case TYPE_TOKEN_INVALID:
-			
+
 			break;
 		case TYPE_ERROR:
 			if(mAbsFragment == null || mAbsFragment.isVisible()){

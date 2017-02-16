@@ -5,6 +5,10 @@
     android:orientation="vertical"
     >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/background_color_rating_grey"/>
 
     <TextView
         android:layout_width="match_parent"

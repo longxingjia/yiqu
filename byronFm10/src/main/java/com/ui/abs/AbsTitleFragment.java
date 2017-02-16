@@ -33,6 +33,7 @@ public abstract class AbsTitleFragment extends AbsFragment {
 
 	private boolean isNexting = false;
 	private View mRootView;
+	private String tag ="AbsTitleFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,7 +139,7 @@ public abstract class AbsTitleFragment extends AbsFragment {
 				View v = root.findViewById(R.id.title_btn);
 				if (v != null) {
 
-					Log.e("he","fs");
+
 					v.setVisibility(View.VISIBLE);
 					v.setOnClickListener(new OnClickListener() {
 						@Override

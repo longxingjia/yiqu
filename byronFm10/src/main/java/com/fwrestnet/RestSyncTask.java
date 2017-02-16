@@ -215,6 +215,16 @@ public class RestSyncTask extends AbsRestSyncTask  {
 				return;
 			}
 			int type = NetCallBack.TYPE_ERROR;
+			if (result==null){
+				type = NetCallBack.TYPE_CANCEL;
+			}else {
+				if (result.bool==1){
+					type = NetCallBack.TYPE_SUCCESS;
+				}else {
+					type = NetCallBack.TYPE_ERROR;
+				}
+			}
+
 //			if(result.e != null){
 //				//接口访问出错
 //				Log.e(TAG, result.e.toString());

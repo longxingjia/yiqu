@@ -22,7 +22,7 @@ import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
 
-public class Tab3Fragment extends TabContentFragment implements OnMoreListener,IRefreshListViewListener {
+public class Tab3Fragment extends TabContentFragment  {
 	
 
 	@Override
@@ -80,25 +80,5 @@ public class Tab3Fragment extends TabContentFragment implements OnMoreListener,I
 		setTitleText("录制和提问");
 	}
 
-	@Override
-	public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-		super.onNetEnd(id, type, netResponse);
-	}
-
-	@Override
-	public boolean onMore(AbsListView view) {
-
-		return false;
-	}
-
-	@Override
-	public void onRefresh() {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	
 	
 }

@@ -25,11 +25,11 @@
         android:layout_marginLeft="10dp"
         android:background="@drawable/edit_bg"
         android:textSize="16sp"
-        android:hint="请填写您的学校和头衔"
+        android:hint="请填写您所在的学校或机构"
         />
 
     <EditText
-        android:id="@+id/major"
+        android:id="@+id/et_title"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -37,7 +37,7 @@
         android:layout_marginLeft="10dp"
         android:background="@drawable/edit_bg"
         android:textSize="16sp"
-        android:hint="请填写您的专业，多个专业用“，”隔开"
+        android:hint="请填写您的头衔"
         />
 
 
@@ -51,7 +51,7 @@
         android:layout_marginLeft="10dp"
         android:background="@drawable/edit_bg"
         android:textSize="16sp"
-        android:hint="请填写您的基本资料以及您常用的联系方式，以方便我们联系到您，么么哒"
+        android:hint="请填写您的个人简介，展示您的专长，吸引学生向您提问"
         />
 
 

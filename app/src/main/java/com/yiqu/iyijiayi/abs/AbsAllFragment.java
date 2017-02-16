@@ -67,6 +67,8 @@ public abstract class AbsAllFragment extends AbsTitleNetFragment {
 //			Model.startNextAct(getActivity(), LoginFragment.class.getName());
 			getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			
+		}else if (type ==TYPE_ERROR ){
+			ToastManager.getInstance(getActivity()).showText(netResponse.result);
 		}
 		super.onNetEnd(id, type, netResponse);
 	}

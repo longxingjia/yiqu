@@ -12,6 +12,12 @@
 		android:background="@color/white"
 		android:layout_weight="1">
 
+		<ImageView
+			android:layout_centerInParent="true"
+			android:id="@+id/add_sound"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@mipmap/add_sound"/>
 
 
 	</RelativeLayout>
@@ -23,6 +29,13 @@
 		android:background="@color/white"
 
 		android:layout_weight="1">
+
+		<ImageView
+			android:layout_centerInParent="true"
+			android:id="@+id/add_question"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@mipmap/add_question"/>
 
 	</RelativeLayout>
 

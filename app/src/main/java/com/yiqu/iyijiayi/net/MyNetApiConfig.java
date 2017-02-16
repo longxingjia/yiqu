@@ -186,16 +186,6 @@ public class MyNetApiConfig {
 	};
 
 	/**
-	 * 16、保存个人学习记录发送小红花的接口
-	 */
-	public static MyNetApi updateXxjlxhf = new MyNetApi() {
-		@Override
-		public String getPath() {
-			return ServerAddr + "/user/updateXxjlxhf";
-		}
-	};
-
-	/**
 	 * 17、添加到关注
 	 */
 	public static MyNetApi addfollow = new MyNetApi() {
@@ -213,6 +203,23 @@ public class MyNetApiConfig {
 		@Override
 		public String getPath() {
 			return ServerAddr + "/user/del-follow";
+		}
+//
+//		@Override
+//		public Object parseBody(String body) throws JSONException {
+//			// TODO Auto-generated method stub
+//			return FindAllBbxdxx.parseList(body);
+//		}
+
+
+	};
+	/**
+	 * 18、取消关注
+	 */
+	public static MyNetApi addTeacherApply = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/user/add-teacher-apply";
 		}
 //
 //		@Override
@@ -260,6 +267,18 @@ public class MyNetApiConfig {
 		@Override
 		public String getPath() {
 			return ServerAddr + "/user/get-follow-recommend-list";
+		}
+
+		@Override
+		public NetMethod getNetMethod() {
+			return NetMethod.GET;
+		}
+
+	};
+	public static MyNetApi getSoundList = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/sound/get-sound-list";
 		}
 
 		@Override

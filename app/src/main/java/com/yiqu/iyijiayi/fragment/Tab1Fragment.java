@@ -162,7 +162,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_ALL;
+        return FLAG_TXT;
     }
 
     @Override
@@ -213,8 +213,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         super.onNetEnd(id, type, netResponse);
     }
-
-
 
     @Override
     public void onRefresh() {

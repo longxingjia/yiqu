@@ -93,9 +93,12 @@
 
                 <TextView
                     android:id="@+id/user_desc"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="45dp"
                     android:gravity="center_vertical"
+                    android:maxLines="2"
                     android:text="写下一段话介绍自己吧"
                     android:textSize="16sp" />
 

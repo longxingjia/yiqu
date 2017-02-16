@@ -72,6 +72,10 @@
         "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable-xhdpi\\list_focused_holo.9.png"
     },
     {
+        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\back.png",
+        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable-xhdpi\\back.png"
+    },
+    {
         "merged": "H:\\Git\\byronFm10\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\arrow.png",
         "source": "H:\\Git\\byronFm10\\src\\main\\res\\drawable-xhdpi\\arrow.png"
     },

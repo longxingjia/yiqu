@@ -144,6 +144,7 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                                         if (netResponse!=null){
                                             if(netResponse.bool==1){
                                                 f.isfollow = "1";
+//                                                AppShare.setZhaoRenList();
                                                 notifyDataSetChanged();
                                             }else {
                                                ToastManager.getInstance(mContext).showText(netResponse.result);

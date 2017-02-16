@@ -116,40 +116,42 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 9、幼儿园基本信息数据同步的接口 String token//登录凭证,String shjhm //手机号
+     * 9、
      */
-    public static NetRequest synchrodata(Context c, String token, String shjhm) {
+    public static NetRequest editUser(Context c, String uid, String dataName,String dataValue) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam(dataName, dataValue);
+        return r;
+    }
+
+    /**
+     * 10、
+     */
+    public static NetRequest addTeacherApply(Context c, String uid, String username,
+                                         String school, String title,String desc) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("username", username);
+        r.addHttpParam("school", school);
+        r.addHttpParam("title", title);
+        r.addHttpParam("desc", desc);
 
         return r;
     }
 
     /**
-     * 10、完善用户资料接口 参数：String token//登录凭证,String shjhm //手机号， string
-     * yeybh//幼儿园编号,string bjbh//班级编号
+     * 20、获取热门/发现列表
      */
-    public static NetRequest perfectUser(Context c, String token, String shjhm,
-                                         String yeybh, String bjbh) {
+    public static NetRequest getSoundList(Context c, String myuid, String arr,
+                                        int count, int rows, String orderby, String sort) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("yeybh", yeybh);
-        r.addHttpParam("bjbh", bjbh);
-
-        return r;
-    }
-
-    /**
-     * 11、意见反馈 String token//登录凭证,String shjhm //手机号，string content//反馈内容
-     */
-    public static NetRequest saveRemark(Context c, String token, String shjhm,
-                                        String content) {
-        MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("content", content);
+        r.addHttpParam("myuid", myuid);
+        r.addHttpParam("arr", arr);
+        r.addHttpParam("count", count+"");
+        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("orderby", orderby);
+        r.addHttpParam("sort", sort);
 
         return r;
     }

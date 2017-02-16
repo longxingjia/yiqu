@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.fragment.tab5;
+package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,11 +9,13 @@ import android.widget.TextView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.MyFragmentPagerAdapter;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
+import com.yiqu.iyijiayi.fragment.tab5.LoginFragment;
+import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
 
-public class TabRegisterOrLoginFragment extends TabContentFragment {
+public class TabRegisterOrLoginFragment extends Fragment {
 
 
 	private NoScollViewPager mPager;
@@ -25,68 +27,6 @@ public class TabRegisterOrLoginFragment extends TabContentFragment {
 	RegisterFragment registerFragment = new RegisterFragment();
 	LoginFragment loginFragment = new LoginFragment();
 
-	@Override
-	protected int getTitleView() {
-		return R.layout.titlebar_back;
-	}
-
-	@Override
-	public void onSelect() {
-		super.onSelect();
-	}
-
-	@Override
-	public void onNoSelect() {
-		super.onNoSelect();
-	}
-
-	@Override
-	protected int getBodyView() {
-		return R.layout.tab_re_or_login_fragment;
-	}
-
-	@Override
-	protected void initView(View v) {
-
-		InitTextView(v);
-
-		InitViewPager(v);
-	}
-
-	@Override
-	protected boolean isTouchMaskForNetting() {
-		return false;
-	}
-
-	@Override
-	protected void init(Bundle savedInstanceState) {
-
-
-	}
-
-	@Override
-	protected int getTitleBarType() {
-		return FLAG_TXT | FLAG_BACK;
-	}
-
-	@Override
-	protected boolean onPageBack() {
-		if (mOnFragmentListener != null) {
-			mOnFragmentListener.onFragmentBack(this);
-		}
-		return true;
-	}
-
-	@Override
-	protected boolean onPageNext() {
-		pageNextComplete();
-		return true;
-	}
-
-	@Override
-	protected void initTitle() {
-		setTitleText("注册");
-	}
 
 	/*
 	 * 初始化标签名

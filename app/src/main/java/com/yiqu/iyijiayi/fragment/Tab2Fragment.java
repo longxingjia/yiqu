@@ -91,7 +91,6 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        //    ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
         lvStudent.addHeaderView(footView);
 
@@ -166,7 +165,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT | FLAG_BACK;
+        return FLAG_TXT ;
     }
 
     @Override

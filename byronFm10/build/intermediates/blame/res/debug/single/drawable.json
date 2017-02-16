@@ -32,10 +32,6 @@
         "source": "H:\\Git\\byronFm10\\src\\main\\res\\drawable\\list_selector_holo_light.xml"
     },
     {
-        "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\drawable\\back.png",
-        "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\back.png"
-    },
-    {
         "merged": "D:\\iyijiayi\\byronFm10\\build\\intermediates\\res\\merged\\debug\\drawable\\list_selector_background_transition_holo_light.xml",
         "source": "D:\\iyijiayi\\byronFm10\\src\\main\\res\\drawable\\list_selector_background_transition_holo_light.xml"
     },

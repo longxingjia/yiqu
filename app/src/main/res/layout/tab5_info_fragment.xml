@@ -47,13 +47,29 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_edit_school"
+            style="@style/textview_edit_layout">
+
+
+            <TextView
+                style="@style/textview_edit_left"
+                android:text="学校" />
+
+            <TextView
+                android:id="@+id/edit_school"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/rl_edit_title"
             style="@style/textview_edit_layout">
 
 
             <TextView
                 style="@style/textview_edit_left"
-                android:text="头衔" />
+                android:text="专业" />
 
             <TextView
                 android:id="@+id/edit_title"
@@ -78,21 +94,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_edit_school"
-            style="@style/textview_edit_layout">
 
-
-            <TextView
-                style="@style/textview_edit_left"
-                android:text="学校" />
-
-            <TextView
-                android:id="@+id/edit_school"
-                style="@style/textview_edit_right"
-                android:text="" />
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_edit_background"
@@ -138,6 +140,8 @@
 
             <TextView
                 android:id="@+id/edit_introduction"
+                android:layout_width="200dp"
+                android:singleLine="true"
                 style="@style/textview_edit_right"
                 android:text="" />
 

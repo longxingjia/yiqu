@@ -15,7 +15,7 @@ import com.byron.framework.R;
 
 public abstract class AbsFragment extends Fragment {
 
-	protected static String tag = "AbsFragment";
+	private static String tag = "AbsFragment";
 
 	public View menuOrBack;
 
