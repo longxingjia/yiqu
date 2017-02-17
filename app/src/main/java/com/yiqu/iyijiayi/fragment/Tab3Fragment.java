@@ -18,6 +18,7 @@ import com.ui.views.LoadMoreView.OnMoreListener;
 import com.ui.views.RefreshList;
 import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
@@ -37,6 +38,21 @@ public class Tab3Fragment extends TabContentFragment  {
 	
 	@Override
 	protected void initView(View v) {
+		v.findViewById(R.id.add_sound).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), Tab3Activity.class);
+				startActivity(intent);
+
+			}
+		});
+
+		v.findViewById(R.id.add_question).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
 
 	
 	}

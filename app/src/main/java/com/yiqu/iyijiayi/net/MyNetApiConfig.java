@@ -287,6 +287,18 @@ public class MyNetApiConfig {
 		}
 
 	};
+	public static MyNetApi getMusicList = new MyNetApi() {
+		@Override
+		public String getPath() {
+			return ServerAddr + "/sound/get-music-list";
+		}
+
+		@Override
+		public NetMethod getNetMethod() {
+			return NetMethod.GET;
+		}
+
+	};
 
 
 

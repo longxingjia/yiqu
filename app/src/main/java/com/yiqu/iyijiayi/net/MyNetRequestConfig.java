@@ -157,16 +157,12 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 12、获取课程列表的接口 String token//登录凭证,String shjhm //手机号，string ztbh //主题编号
+     * 12、
      */
-    public static NetRequest courseList(Context c, String token, String shjhm,
-                                        String ztbh, String page, String pageSize) {
+    public static NetRequest getMusicList(Context c,  int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("ztbh", ztbh);
-        r.addHttpParam("page", page);
-        r.addHttpParam("pageSize", pageSize);
+        r.addHttpParam("count", count+"");
+        r.addHttpParam("rows", rows+"");
         return r;
     }
 

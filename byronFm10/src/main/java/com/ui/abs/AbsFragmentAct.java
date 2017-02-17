@@ -16,7 +16,6 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);

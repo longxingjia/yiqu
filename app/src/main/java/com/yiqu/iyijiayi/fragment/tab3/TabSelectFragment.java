@@ -15,7 +15,7 @@ import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
 
-public class TabRegisterOrLoginFragment extends Fragment {
+public class TabSelectFragment extends Fragment {
 
 
 	private NoScollViewPager mPager;
@@ -52,7 +52,6 @@ public class TabRegisterOrLoginFragment extends Fragment {
 			mPager.setCurrentItem(index);
 		}
 	}
-
 
 
 	/*
