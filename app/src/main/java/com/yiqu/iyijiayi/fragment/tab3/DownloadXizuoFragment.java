@@ -2,12 +2,14 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.audiofx.LoudnessEnhancer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
 import java.io.BufferedInputStream;
@@ -38,12 +41,11 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
 
     private TextView musicName;
-    private TextView sumbit;
+    private Button submit;
     private String tag = "DownloadXizuoFragment";
     private Music music;
     private ProgressBar progressBar;
     private TextView tv_progress;
-    private TextView submit;
 
     @Override
     protected int getTitleBarType() {
@@ -64,7 +66,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     protected void initTitle() {
 //
         setTitleText("录制习作");
-
     }
 
     @Override
@@ -81,9 +82,8 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     protected void initView(View v) {
         musicName = (TextView) v.findViewById(R.id.musicname);
         tv_progress = (TextView) v.findViewById(R.id.tv_progress);
-        submit = (TextView) v.findViewById(R.id.submit);
+        submit = (Button) v.findViewById(R.id.submit);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-
 
     }
 
@@ -94,7 +94,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         music = (Music) intent.getSerializableExtra("music");
 
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
+        Tools.DB_PATH = Tools.getExternalCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
@@ -108,11 +108,12 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 Log.d(tag, "file " + mFile.getName() + " already exits!!");
 //                mFile.delete();
                 Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", DownloadXizuoFragment.class.getName());
+                i.putExtra("fragment", RecordedXizuoFragment.class.getName());
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("music", music);
                 i.putExtras(bundle);
                 getActivity().finish();
+                LogUtils.LOGE(tag,"jj");
             } else {
                 if (Tools.isNetworkAvailable(getActivity())){
                     DownLoaderTask task = new DownLoaderTask(Url, Tools.DB_PATH, fileName, getActivity());
@@ -128,7 +129,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", DownloadXizuoFragment.class.getName());
+                i.putExtra("fragment", RecordedXizuoFragment.class.getName());
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("music", music);
                 i.putExtras(bundle);

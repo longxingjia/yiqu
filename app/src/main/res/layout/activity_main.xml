@@ -82,7 +82,7 @@
             android:minHeight="5dip"
             android:padding="@dimen/compose_progressBar_padding"
             android:progressDrawable="@drawable/progress_bar_compose_voice"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -212,4 +212,10 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
     public void onNetStart(String id) {
 
     }
+
+    @Override
+    public void onDestroy() {
+        mImageLoaderHm.stop();
+        super.onDestroy();
+    }
 }

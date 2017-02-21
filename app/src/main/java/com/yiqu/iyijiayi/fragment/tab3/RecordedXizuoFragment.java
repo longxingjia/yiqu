@@ -1,14 +1,17 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -18,6 +21,7 @@ import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
 import java.io.File;
@@ -34,6 +38,30 @@ public class RecordedXizuoFragment extends AbsAllFragment  implements VoicePlaye
     private String tag = "RecordedXizuoFragment";
     private Music music;
     private TextView submit;
+
+    private boolean recordVoiceBegin;
+    private int width;
+    private int height;
+    private int recordTime;
+    private int actualRecordTime;
+
+    private String className;
+    private String tempVoicePcmUrl;
+    private String musicFileUrl;
+    private String decodeFileUrl;
+    private String composeVoiceUrl;
+
+    private TextView recordHintTextView;
+    private TextView recordDurationView;
+
+    private Button recordVoiceButton;
+    private Button composeVoiceButton;
+    private Button deleteVoiceButton;
+    private Button playComposeVoiceButton;
+
+    private ProgressBar composeProgressBar;
+
+    private static Activity instance;
 
     @Override
     protected int getTitleBarType() {
@@ -69,6 +97,11 @@ public class RecordedXizuoFragment extends AbsAllFragment  implements VoicePlaye
 
     @Override
     protected void initView(View v) {
+        instance = getActivity();
+
+        LogUtils.LOGE(tag,"hh");
+
+        className = getClass().getSimpleName();
         musicName = (TextView) v.findViewById(R.id.musicname);
         TextView   musictime = (TextView) v.findViewById(R.id.musictime);
 
@@ -84,7 +117,7 @@ public class RecordedXizuoFragment extends AbsAllFragment  implements VoicePlaye
         music = (Music) intent.getSerializableExtra("music");
 
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
+        Tools.DB_PATH = Tools.getExternalCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(

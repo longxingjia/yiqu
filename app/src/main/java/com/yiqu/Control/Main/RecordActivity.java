@@ -29,7 +29,6 @@ import com.yiqu.iyijiayi.R;
 public class RecordActivity extends Activity
         implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface, VoiceRecorderOperateInterface {
     private boolean recordVoiceBegin;
-
     private int width;
     private int height;
     private int recordTime;

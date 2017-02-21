@@ -183,7 +183,7 @@ public class RegisterFragment extends AbsAllFragment {
 //                LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
                 AppShare.setIsLogin(getActivity(), true);
                 AppShare.setUserInfo(getActivity(), userInfo);
-//                Model.startNextAct(getActivity(), Tab5Fragment.class.getName());
+
 
                 getActivity().finish();
             }
