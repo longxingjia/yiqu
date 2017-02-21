@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.fragment.tab3.RecordedXizuoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
 import com.yiqu.iyijiayi.model.Music;
@@ -117,7 +118,7 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         Music m = getItem(arg2 - 1);
         Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", RecordedXizuoFragment.class.getName());
+        i.putExtra("fragment", DownloadXizuoFragment.class.getName());
         Bundle bundle = new Bundle();
         bundle.putSerializable("music", m);
         i.putExtras(bundle);

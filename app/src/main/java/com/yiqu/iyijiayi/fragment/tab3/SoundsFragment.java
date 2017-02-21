@@ -74,10 +74,10 @@ public class SoundsFragment extends AbsFragment implements View.OnClickListener 
 
         fragmentList=new ArrayList<Fragment>();
         SoundsTab2fragment soundsTab2Fragment = new SoundsTab2fragment();
-        SoundTab1Fragment soundTab1Fragment = new SoundTab1Fragment();
+        SoundsTab1Fragment soundsTab1Fragment = new SoundsTab1Fragment();
         SoundsTab3fragment soundsTab3Fragment = new SoundsTab3fragment();
 
-        fragmentList.add(soundTab1Fragment);
+        fragmentList.add(soundsTab1Fragment);
         fragmentList.add(soundsTab2Fragment);
         fragmentList.add(soundsTab3Fragment);
 

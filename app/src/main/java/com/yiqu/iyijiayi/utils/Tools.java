@@ -10,6 +10,9 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.base.utils.ToastManager;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -29,6 +32,19 @@ public class Tools {
 	public static String SD_PATH = null;
 	public static final String PACKAGE_NAME = "com.yiqu.iyijiayi";
 	public static String DB_PATH = null;
+
+
+//	public static boolean isNetworkConnected(Context context) {
+//		if (context != null) {
+//			ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+//					.getSystemService(Context.CONNECTIVITY_SERVICE);
+//			NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+//			if (mNetworkInfo != null) {
+//				return mNetworkInfo.isAvailable();
+//			}
+//		}
+//		return false;
+//	}
 	
 	public static boolean isSDCardAvailable(Context context) {
 		if (Environment.getExternalStorageState().equals(
@@ -242,6 +258,7 @@ public class Tools {
         
         if (connectivityManager == null)
         {
+			ToastManager.getInstance(activity).showText("网络不可用，请检查网络状态");
             return false;
         }
         else
@@ -263,6 +280,7 @@ public class Tools {
                 }
             }
         }
+		ToastManager.getInstance(activity).showText("网络不可用，请检查网络状态");
         return false;
     }
 
