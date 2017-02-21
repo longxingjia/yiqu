@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/2/13.
  */
 
-public class Xizuo {
+public class Xizuo implements Serializable{
 
     public int sid;
     public int type;
@@ -29,11 +31,11 @@ public class Xizuo {
     public String musictype;
     public String accompaniment;
     public String chapter;
-    public String soundtime;
+    public int soundtime;
     public String soundpath;
     public String commentpath;
-    public String created;
-    public String edited;
+    public long created;
+    public long edited;
     public String stuname;
     public String stuimage;
     public String tecname;

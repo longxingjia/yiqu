@@ -30,6 +30,7 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -124,6 +125,13 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
             h.tectitle.setText(f.tectitle);
             h.tea_name.setText(f.tecname);
             h.views.setText(f.views+"");
+
+            String2TimeUtils string2TimeUtils = new String2TimeUtils();
+            long currentTimeMillis = System.currentTimeMillis()/1000;
+
+            long time = currentTimeMillis - f.edited;
+            h.time.setText(string2TimeUtils.long2Time(time)+"前");
+
 
 //            if (f.musictype.equals("1")){
 //                h.musictype.setBackgroundResource();

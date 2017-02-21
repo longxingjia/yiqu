@@ -49,13 +49,11 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
 
 
     public void setData(ArrayList<Teacher> list) {
-        // TODO Auto-generated method stub
         datas = list;
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<Teacher> allDatas) {
-        // TODO Auto-generated method stub
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -94,7 +101,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         TextView tectitle;
         ImageView stu_header;
         ImageView tea_header;
-
         TextView stu_listen;
 
     }
@@ -112,22 +118,20 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 h.soundtime = (TextView) v.findViewById(R.id.soundtime);
                 h.tea_name = (TextView) v.findViewById(R.id.tea_name);
                 h.tectitle = (TextView) v.findViewById(R.id.tectitle);
-
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
             }
 
-
             h = (HoldChild) v.getTag();
             Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime);
+            h.soundtime.setText(f.soundtime+"\"");
             h.tea_name.setText(f.tecname);
             h.tectitle.setText(f.tectitle);
-            LogUtils.LOGE(tag,f.soundpath);
+          //  LogUtils.LOGE(tag,f.soundpath);
 
             if (f.tecimage!=null){
                 mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.tecimage, h.tea_header);
@@ -340,30 +344,26 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-
-        // TODO Auto-generated method stub
-        Sound f = getItem(arg2 - 1);
-
-//
+        Sound f = getItem(arg2-2);//加了头部
 //        if (!isNetworkConnected(mContext)) {
 //            ToastManager.getInstance(mContext).showText(
 //                    R.string.fm_net_call_no_network);
 //            return;
-//        }.
+//        };
+        if (AppShare.getIsLogin(mContext)){
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            i.putExtra("data",f.sid+"");
 
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
+            mContext.startActivity(i);
+        }else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
+
+        }
+
 
     }
 

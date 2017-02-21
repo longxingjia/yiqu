@@ -103,7 +103,7 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 8、
+     * 8、 type:1,学生,2,老师
      */
     public static NetRequest get_follow_recommend_list(Context c, String uid,
                                                        String type, int count, int rows) {
@@ -173,30 +173,13 @@ public class MyNetRequestConfig {
      *
      */
 
-    /**
-     * @param c
-     * @param token 登录凭证
-     * @param shjhm 手机号
-     * @param ztbh  主题编号
-     * @return 状态码：statusCode：0表示数据库访问异常，1表示成功。2表示token失效 验证安全凭证：token,1小时失效
-     * kchbh//课程编号,kchmch//课程名称,kchslt//课程缩略图,kchjj//简介
-     * chjshj//创建时间,sdjf//所得积分,shfhdxhh//是否获得小红花 返回结果：
-     * {"data":[{"chjshj":"2015-08-16 21:35:31","kchbh":"777",
-     * "kchjj":"777777777777"
-     * ,"kchmch":"777","kchslt":"o_19srbhj9m1dkg1klc1kf9b8113tm.jpg",
-     * "sdjf":"666","shfhdxhh":"是"},
-     * {"chjshj":"2015-08-17 00:04:40","kchbh":"888",
-     * "kchjj":"8888888888","kchmch":"888",
-     * "kchslt":"o_19srk2n036cmefv1b4s1ons17u4m.jpg"
-     * ,"sdjf":"0","shfhdxhh":"否"}], "msg":"获取成功", "statusCode":"1" } 或
-     * {"msg":"登录超时，请重新登录","statusCode":"2"}
-     */
-    public static NetRequest courseListNew(Context c, String token,
-                                           String shjhm, String ztbh) {
+
+    public static NetRequest getSoundDetail(Context c, String sid,
+                                           String uid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("ztbh", ztbh);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("checkpay", uid);
+
         return r;
     }
 

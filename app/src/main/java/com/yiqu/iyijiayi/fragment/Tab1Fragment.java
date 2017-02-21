@@ -73,7 +73,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab1;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         tab1SoundAdapter = new Tab1SoundAdapter(getActivity(),mImageLoaderHm);
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
-
+        lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
         if (AppShare.getIsLogin(getActivity())){
             uid = AppShare.getUserInfo(getActivity()).uid;
         }else{
@@ -147,10 +147,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             tab1SoundAdapter.setData(remen.sound);
 
         }
-
-
-
-
 
     }
 

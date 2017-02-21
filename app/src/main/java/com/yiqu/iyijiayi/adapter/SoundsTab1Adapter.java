@@ -97,7 +97,6 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
                 v.setTag(h);
             }
 
-
             h = (HoldChild) v.getTag();
             Music f = getItem(position);
             h.musicname.setText(f.musicname);
@@ -117,7 +116,6 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         Music m = getItem(arg2 - 1);
-
         Intent i = new Intent(mContext, StubActivity.class);
         i.putExtra("fragment", RecordedXizuoFragment.class.getName());
         Bundle bundle = new Bundle();
@@ -126,6 +124,5 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
         mContext.startActivity(i);
 
     }
-
 
 }

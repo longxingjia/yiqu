@@ -1,21 +1,22 @@
 package com.yiqu.iyijiayi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/2/13.
  */
-
-public class Sound {
+public class Sound implements Serializable{
     public int sid;
     public int stype;
     public int type;
     public int mid;
-    public int isformulation;
+    public int isformulation; //是否艺考曲目
     public int fromuid;
     public int touid;
-    public int commenttime;
+    public int commenttime;// 评论时长
     public int questionprice;
-    public int views;
-    public int like;
+    public int views;// 浏览量
+    public int like;  //点赞量
     public int isopen;
     public int listenprice;
     public int ispay;
@@ -24,6 +25,7 @@ public class Sound {
     public int oid;
     public int isnew;
     public int isnewreply;
+    public String followcount;
     public int isnewread;
     public int listen;
     public String desc;
@@ -34,8 +36,8 @@ public class Sound {
     public String soundtime;
     public String soundpath;
     public String commentpath;
-    public String created;
-    public String edited;
+    public long created;
+    public long edited;
     public String stuname;
     public String stuimage;
     public String tecname;
@@ -55,6 +57,7 @@ public class Sound {
                 ", commenttime=" + commenttime +
                 ", questionprice=" + questionprice +
                 ", views=" + views +
+                ", followcount=" + followcount +
                 ", like=" + like +
                 ", isopen=" + isopen +
                 ", listenprice=" + listenprice +

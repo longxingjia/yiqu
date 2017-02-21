@@ -75,14 +75,13 @@
             android:layout_marginRight="10dp"
             android:text="260"
             android:layout_marginLeft="20dp"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textColor="@color/stu_voice"/>
-
 
         <RelativeLayout
             android:layout_width="200dp"
-
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
+           android:layout_gravity="center"
             android:background="@drawable/stu_voice"
             >
             <ProgressBar
@@ -177,8 +176,8 @@
 
         <RelativeLayout
             android:layout_width="200dp"
-
-            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="40dp"
             android:background="@mipmap/tea_voice"
             >
             <ProgressBar

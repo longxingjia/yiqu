@@ -107,8 +107,6 @@ public class RecordedXizuoFragment extends AbsAllFragment {
         submit = (TextView) v.findViewById(R.id.submit);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-//
-
 
     }
 
@@ -117,22 +115,10 @@ public class RecordedXizuoFragment extends AbsAllFragment {
 
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
-//        LogUtils.LOGE(tag, music.toString());
 
         musicName.setText(music.musicname + "");
         Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
 
-//        LogUtils.LOGE(tag, Tools.DB_PATH );
-//        File directory = new File(Tools.DB_PATH + "/" + kchbhGame);
-//        if(null != directory && directory.exists())
-//        {
-//            Intent intent = new Intent();
-//            intent.setClass(getActivity(), GameActivity.class);
-//            intent.putExtra("Lesson", kchbhGame);
-//            startActivityForResult(intent,
-//                    GameActivity.RESULT_CODE);
-//            return;
-//        }
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
                 Url.lastIndexOf("/") + 1,
