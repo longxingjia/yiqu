@@ -109,9 +109,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
                 //headBase64 = url;
             }
         });
-        initUI();
-
-
+      //  initUI();
 
         Btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,8 +126,9 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         if(isLogin){
             Btlogin.setVisibility(View.GONE);
             userInfo = AppShare.getUserInfo(getActivity());
-
-            LogUtils.LOGE(Tab5Fragment.class.getName(),userInfo.toString());
+            user_school.setText(userInfo.school);
+            user_desc.setText(userInfo.desc);
+           // LogUtils.LOGE(Tab5Fragment.class.getName(),userInfo.toString());
 
 
             if(userInfo.type.equals("1")){  //1是学生
@@ -167,7 +166,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     protected int getTitleBarType() {
 
-        return FLAG_BACK|FLAG_TXT;
+        return FLAG_TXT;
     }
 
     @Override
@@ -200,9 +199,13 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             case R.id.head:
 //                mMenuDialogPicHelper.show(v, head);
 
-                Model.startNextAct(getActivity(),
-                        InfoFragment.class.getName());
-
+                if (AppShare.getIsLogin(getActivity())){
+                    Model.startNextAct(getActivity(),
+                            InfoFragment.class.getName());
+                }else{
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                }
 
                 break;
             case R.id.logout:

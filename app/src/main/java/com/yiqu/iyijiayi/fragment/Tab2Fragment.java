@@ -23,6 +23,7 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
 import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
 import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.ZhaoRen;
@@ -54,7 +55,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab1;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -91,7 +92,6 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        //    ImageLoaderHm mImageLoader = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
         lvStudent.addHeaderView(footView);
 
@@ -113,10 +113,12 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
             uid = "0";
         }
 
+
+
         tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), mImageLoaderHm, uid);
         lvTeacher.setAdapter(tab2TeacherAdapter);
 
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm);
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm,uid);
         lvStudent.setAdapter(tab2StudentAdapter);
         if (zhaoRen == null) {
 
@@ -129,10 +131,10 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
             teacher = zhaoRen.teacher;
             student = zhaoRen.student;
 
-            LogUtils.LOGE(tag, student.toString());
-            tab2TeacherAdapter.setData(teacher);
+            LogUtils.LOGE(tag, zhaoRen.toString());
+            tab2TeacherAdapter.setData(zhaoRen);
             setListViewHeightBasedOnChildren(lvTeacher);
-            tab2StudentAdapter.setData(student);
+            tab2StudentAdapter.setData(zhaoRen);
             loadMoreTeacher.setVisibility(View.VISIBLE);
             loadMoreStudent.setVisibility(View.VISIBLE);
         }
@@ -152,9 +154,9 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
                 teacher = zhaoRen.teacher;
                 student = zhaoRen.student;
 //                LogUtils.LOGE(student.toString());
-                tab2TeacherAdapter.setData(teacher);
+                tab2TeacherAdapter.setData(zhaoRen);
                 setListViewHeightBasedOnChildren(lvTeacher);
-                tab2StudentAdapter.setData(student);
+                tab2StudentAdapter.setData(zhaoRen);
 //            resfreshOk();
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
@@ -166,7 +168,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT | FLAG_BACK;
+        return FLAG_TXT ;
     }
 
     @Override
@@ -243,12 +245,30 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.loadmore_student:
+                if (uid.equals("0")){
+                    Intent i = new Intent(getActivity(), StubActivity.class);
+                    i.putExtra("fragment", SelectLoginFragment.class.getName());
+                    getActivity().startActivity(i);
+                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+
+                    return;
+                }
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", Tab2ListFragment.class.getName());
                 i.putExtra("data", "1");  //0 代表学生
                 getActivity().startActivity(i);
                 break;
             case R.id.loadmore_teacher:
+                if (uid.equals("0")){
+                    Intent it = new Intent(getActivity(), StubActivity.class);
+                    it.putExtra("fragment", SelectLoginFragment.class.getName());
+                    getActivity().startActivity(it);
+                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+
+                    return;
+                }
+
+
                 Intent in = new Intent(getActivity(), StubActivity.class);
                 in.putExtra("fragment", Tab2ListFragment.class.getName());
                 in.putExtra("data", "2");  //1 代表老师

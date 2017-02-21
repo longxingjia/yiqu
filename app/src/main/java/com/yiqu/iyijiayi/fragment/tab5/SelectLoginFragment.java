@@ -77,7 +77,7 @@ public class SelectLoginFragment extends AbsAllFragment {
             @Override
             public void onClick(View v) {
                 Model.startNextAct(getActivity(), RegisterFragment.class.getName());
-               // getActivity().finish();
+                getActivity().finish();
 
             }
         });

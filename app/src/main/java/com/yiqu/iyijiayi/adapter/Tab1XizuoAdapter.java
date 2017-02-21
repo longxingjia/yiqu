@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,12 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -47,13 +52,11 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
 
     public void setData(ArrayList<Xizuo> list) {
-        // TODO Auto-generated method stub
         datas = list;
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<Xizuo> allDatas) {
-        // TODO Auto-generated method stub
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -70,7 +73,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     private class HoldChild {
@@ -109,33 +112,28 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         return v;
     }
 
-
     @Override
-    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Xizuo f = getItem(position);
 //
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
+        if (AppShare.getIsLogin(mContext)){
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
 
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
+            Bundle b = new Bundle();
+            b.putSerializable("data",f);
+            i.putExtras(b);
+            mContext.startActivity(i);
+        }else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
 
+        }
+//
     }
+
 
     public boolean isNetworkConnected(Context context) {
         if (context != null) {

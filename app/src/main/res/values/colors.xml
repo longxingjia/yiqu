@@ -44,6 +44,7 @@
     <color name="search_bar_txt">#ff757985</color>
     <color name="search_navigation_txt">#ff1d1d1d</color>
     <color name="dark_slate_gray">#2F4F4F</color>
+    <color name="record_bg">#7f6c31</color>
 
     <color name="transparent">#00000000</color>
     <color name="blue">#ffccddff</color>

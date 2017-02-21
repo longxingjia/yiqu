@@ -8,10 +8,12 @@
         android:id="@+id/content"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
+        android:gravity="top"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/edit_bg"
+        android:maxLength="15"
         />
 
     <Button

@@ -12,6 +12,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 public class StubActivity extends AbsFragmentAct {
 
 	private AbsFragment f;
+	private String tag = "StubActivity";
 
 	@Override
 	protected int getContentView() {
@@ -47,15 +48,14 @@ public class StubActivity extends AbsFragmentAct {
 	@Override
 	public void onBackPressed() {
 
-
 		if (f != null) {
-			LogUtils.LOGE("f","1");
+			LogUtils.LOGE(tag,"1");
 			if (!f.onBackPressed()) {
-				LogUtils.LOGE("f","2");
+				LogUtils.LOGE(tag,"2");
 				super.onBackPressed();
 			}
 		} else {
-			LogUtils.LOGE("f","f");
+			LogUtils.LOGE(tag,"f");
 			super.onBackPressed();
 		}
 	}

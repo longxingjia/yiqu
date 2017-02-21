@@ -32,7 +32,7 @@ public class App extends Application  {
 	private BroadcastReceiver myReceiver = new BroadcastReceiver(){
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
+
 			String action  = intent.getAction();
 			if(Intent.ACTION_SCREEN_OFF.equals(action)){
 				App.isActive = false;
@@ -42,7 +42,7 @@ public class App extends Application  {
 	
 	@Override
 	public void onTerminate() {
-		// TODO Auto-generated method stub
+
 		try{
 			unregisterReceiver(myReceiver);
 		}catch(Exception e){

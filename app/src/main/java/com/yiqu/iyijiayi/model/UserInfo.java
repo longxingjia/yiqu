@@ -15,7 +15,7 @@ public class UserInfo {
     public String desc;//个人介绍
     public String userimage;//  个人图片
     public String province;// 省
-    public String city;//市
+    public String city;//市+9--------------------------------------------------------------------------------------------
     public String title;// 教师头衔
     public String sex;// 性别:0女生 1男生
     public String specialities;//学生专业

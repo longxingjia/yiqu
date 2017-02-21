@@ -17,6 +17,7 @@ public abstract class AbsTitleNetFragment extends AbsTitleFragment implements
 	private View mTouchMask;
 	private View mProgress;
 	public View mNext;
+	private String tag="AbsTitleNetFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

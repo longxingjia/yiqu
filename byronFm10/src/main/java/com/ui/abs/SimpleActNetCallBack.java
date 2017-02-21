@@ -33,7 +33,7 @@ public class SimpleActNetCallBack implements NetCallBack {
 		case TYPE_SUCCESS:
 			break;
 		case TYPE_TOKEN_INVALID:
-			
+
 			break;
 		case TYPE_ERROR:
 			if(mAbsFragmentAct == null || mAbsFragmentAct.isActVisibile()){

@@ -8,6 +8,7 @@
 package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
@@ -24,8 +25,11 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.Tab2Fragment;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
+import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.model.ZhaoRen;
@@ -44,6 +48,7 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Context mContext;
     private String uid ;
+    private ZhaoRen zhaoRen;
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private  String tag="Tab2TeacherAdapter";
 
@@ -54,15 +59,13 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
         this.uid = uid;
     }
 
-
-    public void setData(ArrayList<Teacher> list) {
-        // TODO Auto-generated method stub
-        datas = list;
+    public void setData(ZhaoRen list) {
+        datas = list.teacher;
+        zhaoRen =list;
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<Teacher> allDatas) {
-        // TODO Auto-generated method stub
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -79,11 +82,10 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     private class HoldChild {
-
         TextView name;
         TextView content;
         ImageView icon;
@@ -120,6 +122,15 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                 @Override
                 public void onClick(View v) {
 
+                    if (uid.equals("0")){
+                        Intent i = new Intent(mContext, StubActivity.class);
+                        i.putExtra("fragment", SelectLoginFragment.class.getName());
+                        mContext.startActivity(i);
+                        ToastManager.getInstance(mContext).showText("请登录后在操作");
+
+                        return;
+                    }
+
 
                     if (f.isfollow.equals("0")){  //没有关注
 //                        h.follow.setBackgroundResource(R.mipmap.follow);
@@ -144,6 +155,8 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                                         if (netResponse!=null){
                                             if(netResponse.bool==1){
                                                 f.isfollow = "1";
+                                                zhaoRen.teacher = datas;
+                                                AppShare.setZhaoRenList(mContext,zhaoRen);
                                                 notifyDataSetChanged();
                                             }else {
                                                ToastManager.getInstance(mContext).showText(netResponse.result);

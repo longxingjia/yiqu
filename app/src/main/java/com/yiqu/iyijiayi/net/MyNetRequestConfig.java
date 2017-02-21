@@ -103,7 +103,7 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 8、
+     * 8、 type:1,学生,2,老师
      */
     public static NetRequest get_follow_recommend_list(Context c, String uid,
                                                        String type, int count, int rows) {
@@ -116,55 +116,53 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 9、幼儿园基本信息数据同步的接口 String token//登录凭证,String shjhm //手机号
+     * 9、
      */
-    public static NetRequest synchrodata(Context c, String token, String shjhm) {
+    public static NetRequest editUser(Context c, String uid, String dataName,String dataValue) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam(dataName, dataValue);
+        return r;
+    }
+
+    /**
+     * 10、
+     */
+    public static NetRequest addTeacherApply(Context c, String uid, String username,
+                                         String school, String title,String desc) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("username", username);
+        r.addHttpParam("school", school);
+        r.addHttpParam("title", title);
+        r.addHttpParam("desc", desc);
 
         return r;
     }
 
     /**
-     * 10、完善用户资料接口 参数：String token//登录凭证,String shjhm //手机号， string
-     * yeybh//幼儿园编号,string bjbh//班级编号
+     * 20、获取热门/发现列表
      */
-    public static NetRequest perfectUser(Context c, String token, String shjhm,
-                                         String yeybh, String bjbh) {
+    public static NetRequest getSoundList(Context c, String myuid, String arr,
+                                        int count, int rows, String orderby, String sort) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("yeybh", yeybh);
-        r.addHttpParam("bjbh", bjbh);
+        r.addHttpParam("myuid", myuid);
+        r.addHttpParam("arr", arr);
+        r.addHttpParam("count", count+"");
+        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("orderby", orderby);
+        r.addHttpParam("sort", sort);
 
         return r;
     }
 
     /**
-     * 11、意见反馈 String token//登录凭证,String shjhm //手机号，string content//反馈内容
+     * 12、
      */
-    public static NetRequest saveRemark(Context c, String token, String shjhm,
-                                        String content) {
+    public static NetRequest getMusicList(Context c,  int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("content", content);
-
-        return r;
-    }
-
-    /**
-     * 12、获取课程列表的接口 String token//登录凭证,String shjhm //手机号，string ztbh //主题编号
-     */
-    public static NetRequest courseList(Context c, String token, String shjhm,
-                                        String ztbh, String page, String pageSize) {
-        MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("ztbh", ztbh);
-        r.addHttpParam("page", page);
-        r.addHttpParam("pageSize", pageSize);
+        r.addHttpParam("count", count+"");
+        r.addHttpParam("rows", rows+"");
         return r;
     }
 
@@ -175,30 +173,13 @@ public class MyNetRequestConfig {
      *
      */
 
-    /**
-     * @param c
-     * @param token 登录凭证
-     * @param shjhm 手机号
-     * @param ztbh  主题编号
-     * @return 状态码：statusCode：0表示数据库访问异常，1表示成功。2表示token失效 验证安全凭证：token,1小时失效
-     * kchbh//课程编号,kchmch//课程名称,kchslt//课程缩略图,kchjj//简介
-     * chjshj//创建时间,sdjf//所得积分,shfhdxhh//是否获得小红花 返回结果：
-     * {"data":[{"chjshj":"2015-08-16 21:35:31","kchbh":"777",
-     * "kchjj":"777777777777"
-     * ,"kchmch":"777","kchslt":"o_19srbhj9m1dkg1klc1kf9b8113tm.jpg",
-     * "sdjf":"666","shfhdxhh":"是"},
-     * {"chjshj":"2015-08-17 00:04:40","kchbh":"888",
-     * "kchjj":"8888888888","kchmch":"888",
-     * "kchslt":"o_19srk2n036cmefv1b4s1ons17u4m.jpg"
-     * ,"sdjf":"0","shfhdxhh":"否"}], "msg":"获取成功", "statusCode":"1" } 或
-     * {"msg":"登录超时，请重新登录","statusCode":"2"}
-     */
-    public static NetRequest courseListNew(Context c, String token,
-                                           String shjhm, String ztbh) {
+
+    public static NetRequest getSoundDetail(Context c, String sid,
+                                           String uid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("ztbh", ztbh);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("checkpay", uid);
+
         return r;
     }
 

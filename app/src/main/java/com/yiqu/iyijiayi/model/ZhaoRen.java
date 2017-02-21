@@ -13,9 +13,9 @@ public class ZhaoRen {
 
     @Override
     public String toString() {
-        return "Remen{" +
-                "sound=" + teacher +
-                ", xizuo=" + student +
+        return "ZhaoRen{" +
+                "teacher=" + teacher +
+                ", student=" + student +
                 '}';
     }
 }
