@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -31,10 +32,19 @@ import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -44,8 +54,13 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
+import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
+import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.model.Music;
+import com.yiqu.iyijiayi.net.FormFile;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.SocketHttpRequester;
+import com.yiqu.iyijiayi.net.UploadImage;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -334,6 +349,18 @@ public class RecordActivity extends Activity
                                 case 0:
                                     break;
                                 case 1:
+
+                                    final Map<String, String> params = new HashMap<String, String>();
+                                    params.put("type", String.valueOf(0));
+
+                                    File file = new File(composeVoiceUrl);
+                                    final Map<String, File> files = new HashMap<String, File>();
+                                    files.put("Upload", file);
+                                    LogUtils.LOGE(tag,file.getName());
+
+                                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(),params,files,instance);
+                                    upLoaderTask.execute();
+
                                     break;
                             }
 
@@ -438,6 +465,96 @@ public class RecordActivity extends Activity
 
     private void clearAnimation() {
         image_anim.clearAnimation();
+
+    }
+
+    public class UpLoaderTask extends AsyncTask<Void, Integer, String> {
+
+        private final String TAG = "DownLoaderTask";
+        private  Map<String, String> params;
+        private   Map<String, File> files;
+        private  String mUrl;
+
+        public UpLoaderTask(String mUrl, Map<String, String> params, Map<String, File> files, Activity context) {
+            super();
+            this.params =params;
+            this.files = files;
+            this.mUrl =mUrl;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... p) {
+
+                File file = new File(composeVoiceUrl);
+//                final String request = UploadImage.uploadFile(mUrl, params, file);
+//                LogUtils.LOGE(tag, request);
+
+            try
+
+            {
+
+                //得到SDCard的目录
+
+//                File uploadFile = new File(Environment.getExternalStorageDirectory(), videoText.getText().toString());
+
+                //上传音频文件
+
+                FormFile formfile = new FormFile(file.getName(), file, "Upload", "audio/mpeg");
+
+                SocketHttpRequester.post(mUrl, params, formfile);
+
+//                Toast.makeText(RecordActivity.this, "success", 1).show();
+
+            }
+
+            catch (Exception e)
+
+            {
+
+//                Toast.makeText(MainActivity.this, R.string.error, 1).show();
+
+                Log.e(TAG, e.toString());
+
+            }
+
+
+            return "";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            LogUtils.LOGE(tag,values[0].intValue()+"");
+
+            if (isCancelled()) {
+
+                return;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            Log.e(TAG, "下载完");
+
+
+            if (isCancelled()){
+
+
+            }
+            return;
+        }
+
+
+
+
 
     }
 

@@ -20,6 +20,7 @@ public class MyNetApiConfig {
     public static String ServerAddr = "http://www.hunanyiqu.com/YijiayiServer/web";
     public static String wechatUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" +
             "%s&secret=%s&code=%s&grant_type=authorization_code";
+
     public static String getWechatUserInfo = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
     /**
      * 1、根据手机获取用户  get
@@ -309,6 +310,14 @@ public class MyNetApiConfig {
         public NetMethod getNetMethod() {
             return NetMethod.GET;
         }
+
+    };
+    public static MyNetApi uploadSounds = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/upload-sound";
+        }
+//        public static String uploadSounds = ServerAddr+"";
 
     };
 
