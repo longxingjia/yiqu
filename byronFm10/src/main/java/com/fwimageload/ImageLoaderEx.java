@@ -341,6 +341,7 @@ public abstract class ImageLoaderEx<T> {
 		if(!executorService.isShutdown()){
 			try{
 				executorService.shutdownNow();
+				clear();
 			}catch(Exception e){
 				e.printStackTrace();
 			}			

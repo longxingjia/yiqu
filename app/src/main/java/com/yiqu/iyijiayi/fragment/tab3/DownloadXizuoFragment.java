@@ -2,7 +2,6 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.audiofx.LoudnessEnhancer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,11 +12,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.Tool.Global.Variable;
+import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
@@ -90,30 +93,26 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     @Override
     protected void init(Bundle savedInstanceState) {
         submit.setClickable(false);
+        submit.setEnabled(false);
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
 
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Tools.getExternalCacheDirectory(getActivity(), Environment.DIRECTORY_DOWNLOADS).toString();
+        Tools.DB_PATH = Variable.StorageDirectoryPath;
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
                 Url.lastIndexOf("/") + 1,
                 Url.length());
         fileName = music.musicname + "_" + fileName;
+//        AppShare
 
         if (!TextUtils.isEmpty(Tools.DB_PATH)) {
             File mFile = new File(Tools.DB_PATH, fileName);
             if (mFile.exists()) {
                 Log.d(tag, "file " + mFile.getName() + " already exits!!");
 //                mFile.delete();
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", RecordedXizuoFragment.class.getName());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("music", music);
-                i.putExtras(bundle);
-                getActivity().finish();
-                LogUtils.LOGE(tag,"jj");
+                nextPage();
             } else {
                 if (Tools.isNetworkAvailable(getActivity())){
                     DownLoaderTask task = new DownLoaderTask(Url, Tools.DB_PATH, fileName, getActivity());
@@ -128,16 +127,20 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", RecordedXizuoFragment.class.getName());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("music", music);
-                i.putExtras(bundle);
-                getActivity().finish();
+               nextPage();
             }
         });
 
+    }
 
+    private void nextPage() {
+        Intent i = new Intent(getActivity(), RecordActivity.class);
+//        i.putExtra("fragment", RecordXizuoFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("music", music);
+        i.putExtras(bundle);
+        getActivity().startActivity(i);
+        getActivity().finish();
     }
 
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
@@ -209,22 +212,16 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         protected void onPostExecute(Long result) {
             // super.onPostExecute(result);
             submit.setClickable(true);
-            //	Log.e(TAG, "下载完");
-//             Tools.unzip(mFile, mLesson);
-//            mFile.delete();
+            submit.setEnabled(true);
+            Log.e(TAG, "下载完");
 
-//            if (mDialog != null && mDialog.isShowing()) {
-//                mDialog.dismiss();
-//            }
+            DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
+            downloadMusicInfoDBHelper.insert(music);
 
-//            Intent intent = new Intent();
-//            intent.setClass(mContext, GameActivity.class);
-//            intent.putExtra("Lesson", mLesson);
-//            startActivityForResult(intent, GameActivity.RESULT_CODE);
-
-            if (isCancelled())
+            if (isCancelled()){
                 mFile.delete();
-            submit.setClickable(false);
+                submit.setClickable(false);
+            }
             return;
         }
 

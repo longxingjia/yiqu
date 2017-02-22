@@ -16,11 +16,11 @@ public class Music implements Serializable {
     public String musictype;
     public String chapter;
     public String accompaniment;
-    public String time;
+    public int time;
     public String size;
     public String isformulation;
-    public String created;
-    public String edited;
+    public long created;
+    public long edited;
 
 
     @Override

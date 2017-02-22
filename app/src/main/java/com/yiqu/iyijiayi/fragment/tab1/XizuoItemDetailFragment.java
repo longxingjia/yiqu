@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,13 +19,9 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.fragment.tab3.RecordedXizuoFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -501,8 +496,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     public void onDestroy() {
-        LogUtils.LOGE(tag, "2");
 
+        mImageLoaderHm.stop();
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
