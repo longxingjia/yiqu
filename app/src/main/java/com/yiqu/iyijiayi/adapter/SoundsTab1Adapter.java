@@ -9,8 +9,6 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +22,9 @@ import android.widget.TextView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
-import com.yiqu.iyijiayi.fragment.tab3.RecordedXizuoFragment;
-import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
 import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.ArrayList;
 

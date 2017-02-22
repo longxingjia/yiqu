@@ -3,6 +3,7 @@ package com.ui.views;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,11 +37,12 @@ public class MenuDialog implements AnimationListener  {
 	private View bg_layout;
 	private String[] items;
 	
-	public MenuDialog(Context context, String[] items, OnMenuListener l) {
+	public MenuDialog(Context context, String title,String[] items, OnMenuListener l) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mMenuView = inflater.inflate(R.layout.menu_dialog, null);
 		Button btn_cancel = (Button) mMenuView.findViewById(R.id.btn_cancel);
+		Button bt_title = (Button) mMenuView.findViewById(R.id.bt_title);
 		//取消按钮
 		btn_cancel.setOnClickListener(new OnClickListener() {
 
@@ -48,6 +50,11 @@ public class MenuDialog implements AnimationListener  {
 				cancel();
 			}
 		});
+
+		if (!TextUtils.isEmpty(title)){
+			bt_title.setText(title);
+		}
+
 		bg_layout = mMenuView.findViewById(R.id.bg_layout);
 		content_layout = mMenuView.findViewById(R.id.content_layout);
 		LinearLayout item_layout = (LinearLayout)mMenuView.findViewById(R.id.item_layout);
@@ -58,6 +65,7 @@ public class MenuDialog implements AnimationListener  {
 			item_layout.addView(view);
 			view.setOnClickListener(creatOnClickListener(i));
 			view.setText(item);
+			view.setTextColor(context.getResources().getColor(R.color.font_color_blue));
 		}
 		mOnMenuListener = l;
 		mPopupWindow = new PopupWindow(context);

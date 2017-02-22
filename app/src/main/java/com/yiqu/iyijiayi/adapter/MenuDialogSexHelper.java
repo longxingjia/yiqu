@@ -16,7 +16,7 @@ public class MenuDialogSexHelper {
 	public MenuDialogSexHelper(Fragment f, final SexListener sexListener){
 		mFragment = f;
 		String[] items = new String[]{"男","女"};
-		mMenuDialog = new MenuDialog(f.getActivity(), items , new OnMenuListener() {
+		mMenuDialog = new MenuDialog(f.getActivity(), "性别",items , new OnMenuListener() {
 			@Override
 			public void onMenuClick(MenuDialog dialog, int which, String item) {
 				switch(which){

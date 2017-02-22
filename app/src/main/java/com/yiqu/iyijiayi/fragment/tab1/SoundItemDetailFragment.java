@@ -771,8 +771,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     public void onDestroy() {
-        LogUtils.LOGE(tag, "2");
-
+        mImageLoaderHm.stop();
         if (stuMediaPlayer != null && stuMediaPlayer.isPlaying()) {
             stuMediaPlayer.stop();
             stuMediaPlayer.release();

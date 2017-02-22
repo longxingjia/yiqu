@@ -153,6 +153,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onDestroy() {
         mImageLoaderHm.stop();
+//        mImageLoaderHm.
         super.onDestroy();
     }
 
@@ -213,6 +214,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onRefresh() {
 //        mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
+//        mImageLoaderHm.stop();
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
 

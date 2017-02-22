@@ -40,7 +40,7 @@ public class MenuDialogPicHelper {
 	public MenuDialogPicHelper(Fragment f, BitmapListener mBitmapListener){
 		mFragment = f;
 		String[] items = new String[]{"拍照","相册"};
-		mMenuDialog = new MenuDialog(f.getActivity(), items , new OnMenuListener() {
+		mMenuDialog = new MenuDialog(f.getActivity(), "",items , new OnMenuListener() {
 			@Override
 			public void onMenuClick(MenuDialog dialog, int which, String item) {
 				switch(which){

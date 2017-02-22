@@ -30,6 +30,6 @@
     <color name="set_item_bg">#ffffff</color>
     <color name="set_item_edit_color">#898989</color>
     <color name="set_line_color">#999999</color>
-    
+    <color name="font_color_blue">#ff007aff</color>
 
 </resources>

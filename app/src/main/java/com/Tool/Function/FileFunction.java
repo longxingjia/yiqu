@@ -37,10 +37,11 @@ public class FileFunction {
 
     public static void InitStorage(Application application) {
         if (!FileFunction.IsExitsSdcard()) {
-            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
+//            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
+            Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
         } else {
-            Variable.StorageDirectoryPath =
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
+            Variable.StorageDirectoryPath =application.getExternalCacheDir().getAbsolutePath()+"/music/";
+//                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
         }
 
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
