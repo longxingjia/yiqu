@@ -1,29 +1,16 @@
 package com.yiqu.iyijiayi.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ImageView;
-
-import com.fwrestnet.NetResponse;
-import com.jauker.widget.BadgeView;
-import com.ui.views.LoadMoreView;
-import com.ui.views.LoadMoreView.OnMoreListener;
-import com.ui.views.RefreshList;
-import com.ui.views.RefreshList.IRefreshListViewListener;
+import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.utils.AppShare;
 
-import java.util.ArrayList;
-
-public class Tab3Fragment extends TabContentFragment  {
+public class Tab3Fragment extends TabContentFragment implements View.OnClickListener {
 	
 
 	@Override
@@ -38,23 +25,9 @@ public class Tab3Fragment extends TabContentFragment  {
 	
 	@Override
 	protected void initView(View v) {
-		v.findViewById(R.id.add_sound).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), Tab3Activity.class);
-				startActivity(intent);
+		v.findViewById(R.id.rl_add1).setOnClickListener(this);
+		v.findViewById(R.id.rl_add2).setOnClickListener(this);
 
-			}
-		});
-
-		v.findViewById(R.id.add_question).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-			}
-		});
-
-	
 	}
 	
 	@Override
@@ -96,5 +69,18 @@ public class Tab3Fragment extends TabContentFragment  {
 		setTitleText("录制和提问");
 	}
 
-	
+
+	@Override
+	public void onClick(View v) {
+		if (AppShare.getIsLogin(getActivity())){
+			Intent intent = new Intent(getActivity(), Tab3Activity.class);
+			startActivity(intent);
+		}else {
+			Intent i = new Intent(getActivity(), StubActivity.class);
+			i.putExtra("fragment", SelectLoginFragment.class.getName());
+			getActivity().startActivity(i);
+			ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+		}
+
+	}
 }

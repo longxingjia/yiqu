@@ -23,32 +23,33 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.model.Music;
+import com.yiqu.iyijiayi.model.UploadVoice;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
 
-public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListener {
+public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Music> datas = new ArrayList<Music>();
+    private ArrayList<UploadVoice> datas = new ArrayList<UploadVoice>();
     private Context mContext;
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private String tag = "SoundsTab1Adapter";
 
-    public SoundsTab1Adapter(Context context, ImageLoaderHm<ImageView> m) {
+    public SoundsTab3Adapter(Context context, ImageLoaderHm<ImageView> m) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         mImageLoaderHm = m;
     }
 
 
-    public void setData(ArrayList<Music> list) {
+    public void setData(ArrayList<UploadVoice> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Music> allDatas) {
+    public void addData(ArrayList<UploadVoice> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -59,7 +60,7 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
     }
 
     @Override
-    public Music getItem(int position) {
+    public UploadVoice getItem(int position) {
         return datas.get(position);
     }
 
@@ -71,6 +72,8 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
     private class HoldChild {
 
         TextView musicname;
+        TextView add_question;
+        TextView upload;
         TextView accompaniment;
         ImageView image;
 
@@ -84,22 +87,35 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.tab2_sounds_list, null);
+                v = mLayoutInflater.inflate(R.layout.tab3_sounds_list, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.accompaniment = (TextView) v.findViewById(R.id.accompaniment);
+                h.add_question = (TextView) v.findViewById(R.id.add_question);
+                h.upload = (TextView) v.findViewById(R.id.upload);
                 h.image = (ImageView) v.findViewById(R.id.image);
-
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            Music f = getItem(position);
+            UploadVoice f = getItem(position);
             h.musicname.setText(f.musicname);
             h.accompaniment.setText(f.accompaniment);
             //  LogUtils.LOGE(tag,f.toString());
-            if (f.image != null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.image, h.image);
-            }
+//            if (f.image != null) {
+//                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.image, h.image);
+//            }
+            h.upload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            h.add_question.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,13 +126,13 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        Music m = getItem(arg2 - 1);
-        Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", DownloadXizuoFragment.class.getName());
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("music", m);
-        i.putExtras(bundle);
-        mContext.startActivity(i);
+//        Music m = getItem(arg2 - 1);
+//        Intent i = new Intent(mContext, StubActivity.class);
+//        i.putExtra("fragment", DownloadXizuoFragment.class.getName());
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("music", m);
+//        i.putExtras(bundle);
+//        mContext.startActivity(i);
 
     }
 

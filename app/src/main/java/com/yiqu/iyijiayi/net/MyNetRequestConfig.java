@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.net;
 import android.content.Context;
 
 import com.fwrestnet.NetRequest;
+import com.yiqu.iyijiayi.model.UploadVoice;
 
 /**
  * @comments 接口的参数配置
@@ -184,29 +185,56 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 13、获取课程详情接口 String token//登录凭证,String shjhm //手机号，string kchbh //课程编号
+     * 13、
+     * @param stype 1问题 2习作
      */
-    public static NetRequest courseInfo(Context c, String token, String shjhm,
-                                        String kchbh) {
+    public static NetRequest addSound(Context c,String stype, UploadVoice uploadVoice) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("kchbh", kchbh);
+        r.addHttpParam("stype", stype);
+        r.addHttpParam("fromuid", uploadVoice.fromuid);
+        r.addHttpParam("mid", uploadVoice.mid+"");
+        r.addHttpParam("type", uploadVoice.type);
+        r.addHttpParam("musicname", uploadVoice.musicname);
+        r.addHttpParam("musictype", uploadVoice.musictype);
+        r.addHttpParam("chapter", uploadVoice.chapter);
+        r.addHttpParam("accompaniment", uploadVoice.accompaniment);
+        r.addHttpParam("soundtime", uploadVoice.soundtime+"");
+        r.addHttpParam("soundpath", uploadVoice.soundpath);
+        r.addHttpParam("isformulation", uploadVoice.isformulation);
+        r.addHttpParam("touid", uploadVoice.touid+"");
+        r.addHttpParam("commentpath", uploadVoice.commentpath);
+        r.addHttpParam("commenttime", uploadVoice.commenttime);
+        r.addHttpParam("questionprice", uploadVoice.questionprice);
+        r.addHttpParam("listenprice", uploadVoice.listenprice);
+        r.addHttpParam("isopen", uploadVoice.isopen);
+        r.addHttpParam("status", uploadVoice.status);
+        r.addHttpParam("ispay", uploadVoice.ispay);
+        r.addHttpParam("isreply", uploadVoice.isreply);
+        r.addHttpParam("desc", uploadVoice.desc);
         return r;
     }
 
     /**
-     * 14、获取个人学习历史列表的接口 参数：String token//登录凭证,String loginshjhm//登录手机号,String
-     * shjhm //学生手机号
+
      */
-    public static NetRequest findALLXxjl(Context c, String token, String shjhm,
-                                         String loginshjhm) {
+    public static NetRequest getUnfollowTeacherList(Context c, String myuid, String rows,
+                                         String count) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("loginshjhm", loginshjhm);
+        r.addHttpParam("myuid", myuid);
+        r.addHttpParam("rows", rows);
+        r.addHttpParam("count", count);
         return r;
     }
+
+    public static NetRequest getFollowTeacherList(Context c, String myuid, String rows,
+                                                    String count) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("myuid", myuid);
+        r.addHttpParam("rows", rows);
+        r.addHttpParam("count", count);
+        return r;
+    }
+
 
     /**
      * 15、保存个人学习记录积分的接口 参数：String token//登录凭证,String shjhm //手机号, String

@@ -6,61 +6,53 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.Tool.Function.AudioFunction;
 import com.Tool.Function.CommonFunction;
-import com.Tool.Function.FileFunction;
-import com.Tool.Function.LogFunction;
 import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.base.utils.ToastManager;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
-import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
+import com.yiqu.iyijiayi.db.UploadVoiceInfoDBHelper;
+import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
+import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.net.FormFile;
+import com.yiqu.iyijiayi.model.UploadVoice;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.SocketHttpRequester;
 import com.yiqu.iyijiayi.net.UploadImage;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -101,6 +93,8 @@ public class RecordActivity extends Activity
     private ImageView title_back;
     private ImageView image_anim;
     private Animation rotate;
+    private String fileNameCom;
+    private UploadVoice uploadVoice;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,13 +159,14 @@ public class RecordActivity extends Activity
         if (!TextUtils.isEmpty(Tools.DB_PATH)) {
             File mFile = new File(Tools.DB_PATH, fileName);
             if (mFile.exists()) {
-                Log.e(tag, "file " + mFile.getName() + " already exits!!");
+//                Log.e(tag, "file " + mFile.getName() + " already exits!!");
                 musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
                 recordTime = 0;
                 tempVoicePcmUrl = Tools.DB_PATH + music.musicname + "_tempVoice.pcm";
                 LogUtils.LOGE(tag, tempVoicePcmUrl);
                 musicFileUrl = mFile.getAbsolutePath();
                 decodeFileUrl = Tools.DB_PATH + music.musicname + "_decodeFile.pcm";
+                fileNameCom = music.musicname + "_composeVoice.mp3";
                 composeVoiceUrl = Tools.DB_PATH + music.musicname + "_composeVoice.mp3";
                 recordVoiceButton.setOnClickListener(this);
             }
@@ -326,7 +321,31 @@ public class RecordActivity extends Activity
         recordVoiceButton.setText("完成");
         recordComFinish = true;
         clearAnimation();
+        uploadVoice = new UploadVoice();
+        uploadVoice.fromuid = AppShare.getUserInfo(instance).uid;
+        uploadVoice.mid = music.mid;
+        uploadVoice.musicname = music.musicname;
+        uploadVoice.musictype = music.musictype;
+        uploadVoice.chapter = music.chapter;
+        uploadVoice.accompaniment = music.accompaniment;
+        uploadVoice.soundtime = actualRecordTime;
+        uploadVoice.isformulation = music.isformulation;
+        uploadVoice.isopen = "1";
+        uploadVoice.status = "1";
+        uploadVoice.listenprice = "1";
+        uploadVoice.questionprice = "0";
+        uploadVoice.commenttime = "0";
+        uploadVoice.commentpath = "";
+        uploadVoice.touid = 0;
+        uploadVoice.soundpath = "";
+        uploadVoice.voicename = fileNameCom;
+        uploadVoice.type = music.type + "";
+        uploadVoice.isreply = "0";
+        uploadVoice.ispay = "0";
 
+        UploadVoiceInfoDBHelper uploadVoiceInfoDBHelper = new UploadVoiceInfoDBHelper(instance);
+        uploadVoiceInfoDBHelper.insert(uploadVoice);
+        uploadVoiceInfoDBHelper.close();
     }
 
     @Override
@@ -341,25 +360,30 @@ public class RecordActivity extends Activity
         switch (v.getId()) {
             case R.id.recordVoiceButton:
                 if (recordComFinish) {
-
+                    final Bundle bundle = new Bundle();
+                    bundle.putSerializable("uploadVoice", uploadVoice);
                     MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
                         @Override
                         public void onTea(int tea) {
                             switch (tea) {
+
                                 case 0:
+                                    Intent intent = new Intent(instance, StubActivity.class);
+                                    intent.putExtra("fragment", AddQuestionFragment.class.getName());
+
+                                    intent.putExtras(bundle);
+                                    instance.startActivity(intent);
+
                                     break;
                                 case 1:
 
-                                    final Map<String, String> params = new HashMap<String, String>();
-                                    params.put("type", String.valueOf(0));
+                                    Intent i = new Intent(instance, StubActivity.class);
+                                    i.putExtra("fragment", UploadXizuoFragment.class.getName());
 
-                                    File file = new File(composeVoiceUrl);
-                                    final Map<String, File> files = new HashMap<String, File>();
-                                    files.put("Upload", file);
-                                    LogUtils.LOGE(tag,file.getName());
+                                    i.putExtras(bundle);
 
-                                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(),params,files,instance);
-                                    upLoaderTask.execute();
+                                    instance.startActivity(i);
+
 
                                     break;
                             }
@@ -377,7 +401,6 @@ public class RecordActivity extends Activity
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
 
                                 recordHintTextView.setText("已结束录音");
 //                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
@@ -468,94 +491,5 @@ public class RecordActivity extends Activity
 
     }
 
-    public class UpLoaderTask extends AsyncTask<Void, Integer, String> {
-
-        private final String TAG = "DownLoaderTask";
-        private  Map<String, String> params;
-        private   Map<String, File> files;
-        private  String mUrl;
-
-        public UpLoaderTask(String mUrl, Map<String, String> params, Map<String, File> files, Activity context) {
-            super();
-            this.params =params;
-            this.files = files;
-            this.mUrl =mUrl;
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(Void... p) {
-
-                File file = new File(composeVoiceUrl);
-//                final String request = UploadImage.uploadFile(mUrl, params, file);
-//                LogUtils.LOGE(tag, request);
-
-            try
-
-            {
-
-                //得到SDCard的目录
-
-//                File uploadFile = new File(Environment.getExternalStorageDirectory(), videoText.getText().toString());
-
-                //上传音频文件
-
-                FormFile formfile = new FormFile(file.getName(), file, "Upload", "audio/mpeg");
-
-                SocketHttpRequester.post(mUrl, params, formfile);
-
-//                Toast.makeText(RecordActivity.this, "success", 1).show();
-
-            }
-
-            catch (Exception e)
-
-            {
-
-//                Toast.makeText(MainActivity.this, R.string.error, 1).show();
-
-                Log.e(TAG, e.toString());
-
-            }
-
-
-            return "";
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            LogUtils.LOGE(tag,values[0].intValue()+"");
-
-            if (isCancelled()) {
-
-                return;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            Log.e(TAG, "下载完");
-
-
-            if (isCancelled()){
-
-
-            }
-            return;
-        }
-
-
-
-
-
-    }
 
 }

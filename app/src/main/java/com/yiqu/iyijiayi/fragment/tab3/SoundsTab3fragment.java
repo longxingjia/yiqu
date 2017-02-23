@@ -12,8 +12,11 @@ import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
+import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
+import com.yiqu.iyijiayi.db.UploadVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.Music;
+import com.yiqu.iyijiayi.model.UploadVoice;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
@@ -30,9 +33,9 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     private String tag = "SoundsTab3fragment";
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private RefreshList listView;
-    private SoundsTab1Adapter soundsTab1Adapter;
-    private ArrayList<Music> musics;
-    private DownloadMusicInfoDBHelper downloadMusicInfoDBHelper;
+    private SoundsTab3Adapter soundsTab3Adapter;
+    private ArrayList<UploadVoice> uploadVoices;
+    private UploadVoiceInfoDBHelper uploadVoiceInfoDBHelper;
 
 
     @Override
@@ -49,9 +52,9 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        soundsTab1Adapter = new SoundsTab1Adapter(getActivity(), mImageLoaderHm);
-        listView.setAdapter(soundsTab1Adapter);
-        listView.setOnItemClickListener(soundsTab1Adapter);
+        soundsTab3Adapter = new SoundsTab3Adapter(getActivity(), mImageLoaderHm);
+        listView.setAdapter(soundsTab3Adapter);
+        listView.setOnItemClickListener(soundsTab3Adapter);
         listView.setRefreshListListener(this);
     }
 
@@ -59,20 +62,20 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
 
-        downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
-        musics = downloadMusicInfoDBHelper.getAll();
-        if (musics!=null&&musics.size()>0){
-            soundsTab1Adapter.setData(musics);
+        uploadVoiceInfoDBHelper = new UploadVoiceInfoDBHelper(getActivity());
+        uploadVoices = uploadVoiceInfoDBHelper.getAll();
+        if (uploadVoices!=null&&uploadVoices.size()>0){
+            soundsTab3Adapter.setData(uploadVoices);
         }
 
-        LogUtils.LOGE(tag, musics.toString());
+//        LogUtils.LOGE(tag, uploadVoices.toString());
     }
 
     @Override
     public void onRefresh() {
-        musics = downloadMusicInfoDBHelper.getAll();
-        if (musics!=null&&musics.size()>0){
-            soundsTab1Adapter.setData(musics);
+        uploadVoices = uploadVoiceInfoDBHelper.getAll();
+        if (uploadVoices!=null&&uploadVoices.size()>0){
+            soundsTab3Adapter.setData(uploadVoices);
             resfreshOk();
         }
 

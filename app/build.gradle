@@ -52,4 +52,5 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     testCompile 'junit:junit:4.12'
     compile files('libs/rxjava-1.1.0.jar')
+    compile files('libs/android-async-http-1.4.6.jar')
 }

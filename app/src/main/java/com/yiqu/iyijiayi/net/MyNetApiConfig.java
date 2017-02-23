@@ -18,6 +18,7 @@ public class MyNetApiConfig {
 
     public static String ImageServerAddr = "http://www.hunanyiqu.com";
     public static String ServerAddr = "http://www.hunanyiqu.com/YijiayiServer/web";
+    //    public static String ServerAddr = "http://172.28.224.107/YijiayiServer/web";
     public static String wechatUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" +
             "%s&secret=%s&code=%s&grant_type=authorization_code";
 
@@ -130,6 +131,11 @@ public class MyNetApiConfig {
             return ServerAddr + "/user/get-unfollow-teacher-list";
         }
 
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
     };
 
 
@@ -152,6 +158,10 @@ public class MyNetApiConfig {
             return ServerAddr + "/user/get-follow-teacher-list";
         }
 
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
     };
 
     /**
@@ -316,6 +326,14 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/upload-sound";
+        }
+//        public static String uploadSounds = ServerAddr+"";
+
+    };
+    public static MyNetApi addSound = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/add-sound";
         }
 //        public static String uploadSounds = ServerAddr+"";
 
