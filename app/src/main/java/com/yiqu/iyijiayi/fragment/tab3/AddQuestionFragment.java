@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.Tool.Global.Variable;
@@ -19,9 +18,9 @@ import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.UploadVoice;
+import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -36,6 +35,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -48,11 +49,12 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     private String tag = "UploadXizuoFragment";
     private Music music;
     private String fileUrl;
-    private UploadVoice uploadVoice;
+    private ComposeVoice composeVoice;
     private LinearLayout ll_select;
     private static int requestCode =1;
     private TextView tea_name;
     private TextView tea_price;
+    private Teacher teacher;
 
     @Override
     protected int getTitleBarType() {
@@ -101,8 +103,8 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
         Intent intent = getActivity().getIntent();
-        uploadVoice = (UploadVoice) intent.getSerializableExtra("uploadVoice");
-        fileUrl = Variable.StorageDirectoryPath + uploadVoice.voicename;
+        composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
+        fileUrl = Variable.StorageDirectoryPath + composeVoice.voicename;
 
 //        ll_select.setOnClickListener(this);
 //
@@ -111,7 +113,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", TeacherListFragment.class.getName());
-                getActivity().startActivityForResult(i,requestCode);
+                startActivityForResult(i,requestCode);
 
             }
         });
@@ -137,9 +139,10 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
                 }
 
-
-                uploadVoice.musicname = musicNameStr;
-                uploadVoice.desc = contentStr;
+                composeVoice.questionprice = teacher.price;
+                composeVoice.touid = Integer.parseInt(teacher.uid);
+                composeVoice.musicname = musicNameStr;
+                composeVoice.desc = contentStr;
 
                 final Map<String, String> params = new HashMap<String, String>();
                 if (AppShare.getUserInfo(getActivity()).type.equals("1")) {
@@ -163,7 +166,18 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_OK:
+                Bundle b=data.getExtras(); //data为B中回传的Intent
+                //str即为回传的值
+                teacher = (Teacher)b.getSerializable("teacher");
+                tea_name.setText(teacher.username);
+                tea_price.setText(teacher.price);
 
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -224,12 +238,13 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                     if (bool .equals("1") ) {
 
                     String url = new JSONObject(data).getString("filepath");
-                    uploadVoice.soundpath = url;
+                    composeVoice.soundpath = url;
+
 
                     RestNetCallHelper.callNet(
                             getActivity(),
                             MyNetApiConfig.addSound,
-                            MyNetRequestConfig.addSound(getActivity(),"1", uploadVoice),
+                            MyNetRequestConfig.addSound(getActivity(),"1", composeVoice),
                             "addSound", AddQuestionFragment.this);
 
                 } else {

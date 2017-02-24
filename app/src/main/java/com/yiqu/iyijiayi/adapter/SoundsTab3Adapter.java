@@ -21,10 +21,9 @@ import android.widget.TextView;
 
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.UploadVoice;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
+import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
+import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
 public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<UploadVoice> datas = new ArrayList<UploadVoice>();
+    private ArrayList<ComposeVoice> datas = new ArrayList<ComposeVoice>();
     private Context mContext;
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private String tag = "SoundsTab1Adapter";
@@ -44,12 +43,12 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     }
 
 
-    public void setData(ArrayList<UploadVoice> list) {
+    public void setData(ArrayList<ComposeVoice> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<UploadVoice> allDatas) {
+    public void addData(ArrayList<ComposeVoice> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -60,7 +59,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     }
 
     @Override
-    public UploadVoice getItem(int position) {
+    public ComposeVoice getItem(int position) {
         return datas.get(position);
     }
 
@@ -97,7 +96,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
             }
 
             h = (HoldChild) v.getTag();
-            UploadVoice f = getItem(position);
+            final ComposeVoice f = getItem(position);
             h.musicname.setText(f.musicname);
             h.accompaniment.setText(f.accompaniment);
             //  LogUtils.LOGE(tag,f.toString());
@@ -107,12 +106,26 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
             h.upload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent i = new Intent(mContext, StubActivity.class);
+                    i.putExtra("fragment", UploadXizuoFragment.class.getName());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("uploadVoice", f);
+                    i.putExtras(bundle);
+                    mContext.startActivity(i);
+
 
                 }
             });
             h.add_question.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("uploadVoice", f);
+                    Intent intent = new Intent(mContext, StubActivity.class);
+                    intent.putExtra("fragment", AddQuestionFragment.class.getName());
+
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
 
                 }
             });

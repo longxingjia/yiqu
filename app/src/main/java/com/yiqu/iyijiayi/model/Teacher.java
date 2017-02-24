@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/2/14.
  */
 
-public class Teacher {
+public class Teacher implements Serializable{
 
     public String uid;
     public String username;

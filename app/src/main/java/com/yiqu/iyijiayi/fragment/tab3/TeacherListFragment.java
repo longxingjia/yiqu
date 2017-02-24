@@ -1,22 +1,16 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.ui.views.LoadMoreView;
-import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.SelectTeacherAdapter;
-import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -36,7 +30,9 @@ public class TeacherListFragment extends AbsAllFragment  {
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private String tag = "TeacherListFragment";
     private ArrayList<Teacher> datas;
+    private ArrayList<Teacher> datasUnfollow;
     private SelectTeacherAdapter selectTeacherAdapter;
+    private SelectTeacherAdapter selectUnAdapter;
 
     //分页
     private int count = 0;
@@ -64,7 +60,6 @@ public class TeacherListFragment extends AbsAllFragment  {
         listView_unfollow = (ListView) v.findViewById(R.id.listView_unfollow);
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
-
     }
 
     @Override
@@ -81,9 +76,12 @@ public class TeacherListFragment extends AbsAllFragment  {
         }
 
         selectTeacherAdapter = new SelectTeacherAdapter(getActivity(), mImageLoaderHm);
+        selectUnAdapter = new SelectTeacherAdapter(getActivity(), mImageLoaderHm);
         listView.setAdapter(selectTeacherAdapter);
         listView.setOnItemClickListener(selectTeacherAdapter);
 
+        listView_unfollow.setOnItemClickListener(selectUnAdapter);
+        listView_unfollow.setAdapter(selectUnAdapter);
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getFollowTeacherList,
                 MyNetRequestConfig.getFollowTeacherList(getActivity()
@@ -97,6 +95,8 @@ public class TeacherListFragment extends AbsAllFragment  {
                         ,uid,rows+"",count+""),
                 "getUnfollowTeacherList",
                 this);
+
+
     }
 
     @Override
@@ -138,7 +138,6 @@ public class TeacherListFragment extends AbsAllFragment  {
 
         if (id.equals("getFollowTeacherList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag,netResponse.toString());
 
                 try {
                     datas = parseList(netResponse.data.toString());
@@ -153,19 +152,16 @@ public class TeacherListFragment extends AbsAllFragment  {
             }
         } else if ("getUnfollowTeacherList".equals(id)) {
             if (TYPE_SUCCESS == type) {
-                LogUtils.LOGE(tag+"--",netResponse.toString());
-
-
 //                ArrayList<FindAllPushMsg>  list = (ArrayList<FindAllPushMsg>) netResponse.body;
 //                mBeautifulAdapter.addData(list);
-//                try {
-//                    datas = parseList(netResponse.data.toString());
-//                    tab2ListFragmetAdapter.addData(datas);
-//
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    datasUnfollow = parseList(netResponse.data.toString());
+                    selectUnAdapter.addData(datasUnfollow);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }

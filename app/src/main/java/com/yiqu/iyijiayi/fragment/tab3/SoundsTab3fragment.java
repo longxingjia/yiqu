@@ -2,24 +2,16 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
-import com.yiqu.iyijiayi.db.UploadVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.UploadVoice;
+import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
+import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
 
@@ -34,8 +26,8 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private RefreshList listView;
     private SoundsTab3Adapter soundsTab3Adapter;
-    private ArrayList<UploadVoice> uploadVoices;
-    private UploadVoiceInfoDBHelper uploadVoiceInfoDBHelper;
+    private ArrayList<ComposeVoice> composeVoices;
+    private ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper;
 
 
     @Override
@@ -62,20 +54,20 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
 
-        uploadVoiceInfoDBHelper = new UploadVoiceInfoDBHelper(getActivity());
-        uploadVoices = uploadVoiceInfoDBHelper.getAll();
-        if (uploadVoices!=null&&uploadVoices.size()>0){
-            soundsTab3Adapter.setData(uploadVoices);
+        composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(getActivity());
+        composeVoices = composeVoiceInfoDBHelper.getAll(ComposeVoiceInfoDBHelper.COMPOSE);
+        if (composeVoices !=null&& composeVoices.size()>0){
+            soundsTab3Adapter.setData(composeVoices);
         }
 
-//        LogUtils.LOGE(tag, uploadVoices.toString());
+//        LogUtils.LOGE(tag, composeVoices.toString());
     }
 
     @Override
     public void onRefresh() {
-        uploadVoices = uploadVoiceInfoDBHelper.getAll();
-        if (uploadVoices!=null&&uploadVoices.size()>0){
-            soundsTab3Adapter.setData(uploadVoices);
+        composeVoices = composeVoiceInfoDBHelper.getAll(ComposeVoiceInfoDBHelper.COMPOSE);
+        if (composeVoices !=null&& composeVoices.size()>0){
+            soundsTab3Adapter.setData(composeVoices);
             resfreshOk();
         }
 

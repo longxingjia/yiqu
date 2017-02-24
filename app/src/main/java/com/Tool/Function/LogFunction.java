@@ -89,7 +89,7 @@ public class LogFunction {
 	 */
     public static void log(String title, String content) {
         if (Constant.Debug) {
-            Log.d(tag + ":" + title, getStackInformation(content));
+            Log.e(tag + ":" + title, getStackInformation(content));
         }
     }
 

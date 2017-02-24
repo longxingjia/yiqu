@@ -6,8 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.UploadVoice;
+import com.yiqu.iyijiayi.model.ComposeVoice;
 
 import java.util.ArrayList;
 
@@ -15,9 +14,9 @@ import java.util.ArrayList;
  * @version 1.0
  * @comments 数据库
  */
-public class UploadVoiceInfoDBHelper extends AbsDBHelper {
+public class VoiceInfoDBHelper extends AbsDBHelper {
 
-    public static final String TAG = "UploadVoiceInfoDBHelper";
+    public static final String TAG = "VoiceInfoDBHelper";
     public static final String TABLE_NAME = "upload_voice_info";
     public static final String FROMUID = "fromuid";
     public static final String TOUID = "touid";
@@ -41,7 +40,7 @@ public class UploadVoiceInfoDBHelper extends AbsDBHelper {
     public static final String ISREPLY = "isreply";
 
 
-    public UploadVoiceInfoDBHelper(Context context) {
+    public VoiceInfoDBHelper(Context context) {
         super(context);
     }
 
@@ -51,15 +50,15 @@ public class UploadVoiceInfoDBHelper extends AbsDBHelper {
      * @comments 获取所有已经保存的列表
      * @version 1.0
      */
-    public ArrayList<UploadVoice> getAll() {
-        ArrayList<UploadVoice> ds = new ArrayList<UploadVoice>();
+    public ArrayList<ComposeVoice> getAll(String isCompose) {
+        ArrayList<ComposeVoice> ds = new ArrayList<ComposeVoice>();
         Cursor c = null;
         try {
             SQLiteDatabase db = getReadableDatabase();
-            c = db.query(TABLE_NAME, null, null, null, null, null, null);
+            c = db.query(TABLE_NAME, null, MID + " = " + isCompose + " ", null, null, null, null);
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                UploadVoice music = new UploadVoice();
+                ComposeVoice music = new ComposeVoice();
                 music.fromuid = c.getString(c.getColumnIndex(FROMUID));
                 music.mid = c.getInt(c.getColumnIndex(MID));
                 music.touid = c.getInt(c.getColumnIndex(TOUID));
@@ -164,7 +163,7 @@ public class UploadVoiceInfoDBHelper extends AbsDBHelper {
      * @comments 插入一个
      * @version 1.0
      */
-    public long insert(UploadVoice cc) {
+    public long insert(ComposeVoice cc) {
         long count = 0;
         try {
             SQLiteDatabase db = getWritableDatabase();
@@ -205,7 +204,7 @@ public class UploadVoiceInfoDBHelper extends AbsDBHelper {
      * @comments 更新某一个
      * @version 1.0
      */
-    public int update(UploadVoice cc, String mid) {
+    public int update(ComposeVoice cc, String mid) {
         // TODO Auto-generated method stub
         try {
             SQLiteDatabase db = getWritableDatabase();

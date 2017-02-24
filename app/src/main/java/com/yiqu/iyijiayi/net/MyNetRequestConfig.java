@@ -3,7 +3,7 @@ package com.yiqu.iyijiayi.net;
 import android.content.Context;
 
 import com.fwrestnet.NetRequest;
-import com.yiqu.iyijiayi.model.UploadVoice;
+import com.yiqu.iyijiayi.model.ComposeVoice;
 
 /**
  * @comments 接口的参数配置
@@ -188,29 +188,29 @@ public class MyNetRequestConfig {
      * 13、
      * @param stype 1问题 2习作
      */
-    public static NetRequest addSound(Context c,String stype, UploadVoice uploadVoice) {
+    public static NetRequest addSound(Context c,String stype, ComposeVoice composeVoice) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("stype", stype);
-        r.addHttpParam("fromuid", uploadVoice.fromuid);
-        r.addHttpParam("mid", uploadVoice.mid+"");
-        r.addHttpParam("type", uploadVoice.type);
-        r.addHttpParam("musicname", uploadVoice.musicname);
-        r.addHttpParam("musictype", uploadVoice.musictype);
-        r.addHttpParam("chapter", uploadVoice.chapter);
-        r.addHttpParam("accompaniment", uploadVoice.accompaniment);
-        r.addHttpParam("soundtime", uploadVoice.soundtime+"");
-        r.addHttpParam("soundpath", uploadVoice.soundpath);
-        r.addHttpParam("isformulation", uploadVoice.isformulation);
-        r.addHttpParam("touid", uploadVoice.touid+"");
-        r.addHttpParam("commentpath", uploadVoice.commentpath);
-        r.addHttpParam("commenttime", uploadVoice.commenttime);
-        r.addHttpParam("questionprice", uploadVoice.questionprice);
-        r.addHttpParam("listenprice", uploadVoice.listenprice);
-        r.addHttpParam("isopen", uploadVoice.isopen);
-        r.addHttpParam("status", uploadVoice.status);
-        r.addHttpParam("ispay", uploadVoice.ispay);
-        r.addHttpParam("isreply", uploadVoice.isreply);
-        r.addHttpParam("desc", uploadVoice.desc);
+        r.addHttpParam("fromuid", composeVoice.fromuid);
+        r.addHttpParam("mid", composeVoice.mid+"");
+        r.addHttpParam("type", composeVoice.type);
+        r.addHttpParam("musicname", composeVoice.musicname);
+        r.addHttpParam("musictype", composeVoice.musictype);
+        r.addHttpParam("chapter", composeVoice.chapter);
+        r.addHttpParam("accompaniment", composeVoice.accompaniment);
+        r.addHttpParam("soundtime", composeVoice.soundtime+"");
+        r.addHttpParam("soundpath", composeVoice.soundpath);
+        r.addHttpParam("isformulation", composeVoice.isformulation);
+        r.addHttpParam("touid", composeVoice.touid+"");
+        r.addHttpParam("commentpath", composeVoice.commentpath);
+        r.addHttpParam("commenttime", composeVoice.commenttime);
+        r.addHttpParam("questionprice", composeVoice.questionprice);
+        r.addHttpParam("listenprice", composeVoice.listenprice);
+        r.addHttpParam("isopen", composeVoice.isopen);
+        r.addHttpParam("status", composeVoice.status);
+        r.addHttpParam("ispay", composeVoice.ispay);
+        r.addHttpParam("isreply", composeVoice.isreply);
+        r.addHttpParam("desc", composeVoice.desc);
         return r;
     }
 

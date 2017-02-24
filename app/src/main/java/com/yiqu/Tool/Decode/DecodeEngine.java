@@ -24,7 +24,7 @@ import vavi.sound.pcm.resampling.ssrc.SSRC;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 
 /**
- * Created by 郑童宇 on 2016/03/04.
+ * Created by  on 2016/03/04.
  */
 public class DecodeEngine {
     private static DecodeEngine instance;

@@ -89,7 +89,6 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
         fragmentList.add(SoundsFragment);
         fragmentList.add(RecordFragment);
 
-
         //给ViewPager设置适配器
         mPager.setAdapter(new MyTab3FragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
         mPager.setCurrentItem(0);//设置当前显示标签页为第一页
@@ -119,9 +118,9 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
 //            animation.setFillAfter(true);//动画终止时停留在最后一帧，不然会回到没有执行前的状态
 //            animation.setDuration(200);//动画持续时间0.2秒
 //            image.startAnimation(animation);//是用ImageView来显示动画的
-            int i = arg0 + 1;
+//            int i = arg0 + 1;
 
-            ToastManager.getInstance(mContext).showText("您选择了第"+i+"个页卡");
+//            ToastManager.getInstance(mContext).showText("您选择了第"+i+"个页卡");
         }
     }
 

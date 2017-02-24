@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -34,7 +34,7 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="5dp"
                 android:text="jin"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/accompaniment"
@@ -60,14 +60,12 @@
 
         <Button
             android:id="@+id/upload"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
+            android:padding="5dp"
+            android:layout_gravity="center"
             android:layout_height="40dp"
             android:layout_marginRight="5dp"
-            android:drawableTop="@mipmap/mine_xizuo"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:textColor="@color/redMain"
-            android:text="演唱" />
+            android:background="@drawable/upload_btn_selector" />
     </LinearLayout>
 
 </LinearLayout>

@@ -306,4 +306,147 @@ public class AudioFunction {
             }
         });
     }
+
+
+    public static void Pcm2Mp3(String firstAudioFilePath,
+                                    String composeAudioFilePath, boolean deleteSource,
+                                    float firstAudioWeight,
+                                    int audioOffset,
+                                    final ComposeAudioInterface composeAudioInterface) {
+        boolean firstAudioFinish = false;
+        byte[] firstAudioByteBuffer;
+        byte[] mp3Buffer;
+        short resultShort;
+        short[] outputShortArray;
+        int index;
+        int firstAudioReadNumber;
+        int outputShortArrayLength;
+        final int byteBufferSize = 1024;
+
+        firstAudioByteBuffer = new byte[byteBufferSize];
+        mp3Buffer = new byte[(int) (7200 + (byteBufferSize * 1.25))];
+
+        outputShortArray = new short[byteBufferSize / 2];
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        FileInputStream firstAudioInputStream = FileFunction.GetFileInputStreamFromFile
+                (firstAudioFilePath);
+
+        FileOutputStream composeAudioOutputStream = FileFunction.GetFileOutputStreamFromFile
+                (composeAudioFilePath);
+
+        LameUtil.init(Constant.RecordSampleRate, Constant.LameBehaviorChannelNumber,
+                Constant.BehaviorSampleRate, Constant.LameBehaviorBitRate, Constant.LameMp3Quality);
+
+        try {
+            while (!firstAudioFinish ) {
+                index = 0;
+
+                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
+
+                    outputShortArrayLength = firstAudioReadNumber / 2;
+
+                    for (; index < outputShortArrayLength; index++) {
+                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
+                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
+
+                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
+                    }
+
+                    audioOffset -= firstAudioReadNumber;
+
+                    if (firstAudioReadNumber < 0) {
+                        firstAudioFinish = true;
+                        break;
+                    }
+
+                    if (audioOffset <= 0) {
+                        break;
+                    }
+
+
+                if (outputShortArrayLength > 0) {
+                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
+                            outputShortArrayLength, mp3Buffer);
+
+                    if (encodedSize > 0) {
+                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
+                    }
+                }
+            }
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (composeAudioInterface != null) {
+                        composeAudioInterface.updateComposeProgress(20);
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            LogFunction.error("ComposeAudio异常", e);
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (composeAudioInterface != null) {
+                        composeAudioInterface.composeFail();
+                    }
+                }
+            });
+
+            return;
+        }
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (composeAudioInterface != null) {
+                    composeAudioInterface.updateComposeProgress(50);
+                }
+            }
+        });
+
+        try {
+            final int flushResult = LameUtil.flush(mp3Buffer);
+
+            if (flushResult > 0) {
+                composeAudioOutputStream.write(mp3Buffer, 0, flushResult);
+            }
+        } catch (Exception e) {
+            LogFunction.error("释放ComposeAudio LameUtil异常", e);
+        } finally {
+            try {
+                composeAudioOutputStream.close();
+            } catch (Exception e) {
+                LogFunction.error("关闭合成输出音频流异常", e);
+            }
+
+            LameUtil.close();
+        }
+
+        if (deleteSource) {
+            FileFunction.DeleteFile(firstAudioFilePath);
+
+        }
+
+        try {
+            firstAudioInputStream.close();
+
+        } catch (IOException e) {
+            LogFunction.error("关闭合成输入音频流异常", e);
+        }
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (composeAudioInterface != null) {
+                    composeAudioInterface.composeSuccess();
+                }
+            }
+        });
+    }
+
+
 }

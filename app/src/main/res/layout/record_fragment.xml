@@ -2,18 +2,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/background_color_rating_grey">
 
-    <!-- 底部四个导航按钮 -->
+    <RelativeLayout
+        android:id="@+id/rl_have_record"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/btn_one"
+        <TextView
+            android:id="@+id/buttonOne"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="去录音"
+            android:textSize="18sp"
+            android:background="@drawable/white_box"/>
+
+        <ListView
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/record"
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/bg_record"
+            android:scaleType="centerInside"/>
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_no_record"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:src="@mipmap/bg_record"
+        android:scaleType="centerInside"/>
 
+    <TextView
+        android:id="@+id/buttonTwo"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
-        android:textColor="@color/redMain"
-        android:text="伴奏" />
+        android:textColor="@color/white"
+        android:text="去录音"
+        android:textSize="18sp"
+        android:background="@drawable/red_box"/>
+
+    </RelativeLayout>
 
 
 

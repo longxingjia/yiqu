@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Administrator on 2017/2/23.
  */
 
-public class UploadVoice implements Serializable{
+public class Voice implements Serializable{
 
     public String fromuid;
     public String type ;

@@ -7,9 +7,12 @@
  */
 package com.yiqu.iyijiayi.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,28 +22,25 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
-import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
-    private Context mContext;
+    private Activity mContext;
 
     private ImageLoaderHm<ImageView> mImageLoaderHm;
     private  String tag="SelectTeacherAdapter";
 
-    public SelectTeacherAdapter(Context context, ImageLoaderHm<ImageView> m) {
+    public SelectTeacherAdapter(Activity context, ImageLoaderHm<ImageView> m) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         mImageLoaderHm = m;
@@ -110,29 +110,13 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
-//
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
-
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
-
+        Teacher teacher =  getItem(arg2 - 1);
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("teacher",teacher);
+        intent.putExtras(bundle);
+        mContext.setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+        mContext.finish();//此处一定要调用finish()方法
     }
 
     public boolean isNetworkConnected(Context context) {

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
@@ -104,8 +105,21 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
             }
             h = (HoldChild) v.getTag();
            final Student f = getItem(position);
+
+
             h.name.setText(f.username);
             h.content.setText(f.title);
+
+            h.icon.setTag(f.userimage);
+
+
+//            if (f.userimage!=null) {
+//                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
+//            }
+            if (f.userimage!=null) {
+                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
+            }
+
             if (f.isfollow.equals("0")){  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);
 
@@ -200,9 +214,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                 }
             });
 
-            if (f.userimage!=null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -213,27 +225,6 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
-//
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
-
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
 
     }
 

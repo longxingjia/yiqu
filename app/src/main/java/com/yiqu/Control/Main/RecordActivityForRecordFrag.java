@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,9 +27,7 @@ import com.Tool.Function.CommonFunction;
 import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
-
-import java.io.File;
-
+import com.czt.mp3recorder.util.LameUtil;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -41,12 +44,16 @@ import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.DensityUtil;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tools;
+import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
-public class RecordActivity extends Activity
+import java.io.File;
+
+public class RecordActivityForRecordFrag extends Activity
         implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface, VoiceRecorderOperateInterface, View.OnClickListener {
     private boolean recordVoiceBegin;
     private boolean recordComFinish = false;
@@ -62,22 +69,28 @@ public class RecordActivity extends Activity
     private TextView recordVoiceButton;
     private String className;
     private String tempVoicePcmUrl;
-    private String musicFileUrl;
+//    private String musicFileUrl;
     private String decodeFileUrl;
     private String composeVoiceUrl;
 
     private TextView recordHintTextView;
     private TextView recordDurationView;
+//
+//    private Button composeVoiceButton;
+//    private Button deleteVoiceButton;
+//    private Button playComposeVoiceButton;
+
     private ProgressBar composeProgressBar;
 
-    private static RecordActivity instance;
-    private Music music;
+    private static RecordActivityForRecordFrag instance;
+//    private Music music;
     private RelativeLayout rlHint;
     private ImageView title_back;
     private ImageView image_anim;
     private Animation rotate;
     private String fileNameCom;
     private ComposeVoice composeVoice;
+    private RecorderAndPlayUtil mRecorderUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +98,7 @@ public class RecordActivity extends Activity
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        init(R.layout.record_xizuo_fragment);
+        init(R.layout.record_voice_fragment);
     }
 
     private void init(int layoutId) {
@@ -94,9 +107,7 @@ public class RecordActivity extends Activity
         bindView();
         initView();
         initData();
-
         className = getClass().getSimpleName();
-
         instance = this;
     }
 
@@ -126,34 +137,46 @@ public class RecordActivity extends Activity
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
-        Intent intent = getIntent();
-        music = (Music) intent.getSerializableExtra("music");
-        LogUtils.LOGE(tag, music.toString());
-        musicName.setText(music.musicname + "");
+//        Intent intent = getIntent();
+//        music = (Music) intent.getSerializableExtra("music");
+//        LogUtils.LOGE(tag, music.toString());
+//        musicName.setText(music.musicname + "");
         Tools.DB_PATH = Variable.StorageDirectoryPath;
-        String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
-        String fileName = Url.substring(
-                Url.lastIndexOf("/") + 1,
-                Url.length());
-        fileName = music.musicname + "_" + fileName;
-        String2TimeUtils string2TimeUtils = new String2TimeUtils();
-        musictime.setText(string2TimeUtils.stringForTimeS(music.time));
+////        String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
+//        String fileName = Url.substring(
+//                Url.lastIndexOf("/") + 1,
+//                Url.length());
+//        fileName = music.musicname + "_" + fileName;
+//        String2TimeUtils string2TimeUtils = new String2TimeUtils();
+//        musictime.setText(string2TimeUtils.stringForTimeS(music.time));
+//
+//        if (!TextUtils.isEmpty(Tools.DB_PATH)) {
+//            File mFile = new File(Tools.DB_PATH, fileName);
+//            if (mFile.exists()) {
+////                Log.e(tag, "file " + mFile.getName() + " already exits!!");
+//
+//            }
+//        }
 
-        if (!TextUtils.isEmpty(Tools.DB_PATH)) {
-            File mFile = new File(Tools.DB_PATH, fileName);
-            if (mFile.exists()) {
-//                Log.e(tag, "file " + mFile.getName() + " already exits!!");
-                musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
-                recordTime = 0;
-                tempVoicePcmUrl = Tools.DB_PATH + music.musicname + "_tempVoice.pcm";
-                LogUtils.LOGE(tag, tempVoicePcmUrl);
-                musicFileUrl = mFile.getAbsolutePath();
-                decodeFileUrl = Tools.DB_PATH + music.musicname + "_decodeFile.pcm";
-                fileNameCom = music.musicname + "_composeVoice.mp3";
-                composeVoiceUrl = Tools.DB_PATH + fileNameCom;
-                recordVoiceButton.setOnClickListener(this);
-            }
-        }
+//        musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
+        recordTime = 0;
+        tempVoicePcmUrl = Tools.DB_PATH + "_tempVoice.pcm";
+        LogUtils.LOGE(tag, tempVoicePcmUrl);
+//                musicFileUrl = mFile.getAbsolutePath();
+        decodeFileUrl = Tools.DB_PATH +  "_decodeFile.pcm";
+        fileNameCom =  "_composeVoice.mp3";
+        composeVoiceUrl = Tools.DB_PATH +  "_composeVoice.mp3";
+        recordVoiceButton.setOnClickListener(this);
+
+        LayoutInflater inflater = LayoutInflater.from(RecordActivityForRecordFrag.this);
+        View popupView = inflater.inflate(R.layout.popup_record, null);
+        PopupWindow  popup = new PopupWindow(popupView, DensityUtil.dip2px(this, 600), DensityUtil.dip2px(this, 500), true);
+        popup.setTouchable(true);
+        popup.setOutsideTouchable(true);
+        popup.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+
+//        popup.showAtLocation(image_anim, Gravity.CENTER, 0, 0);
+
 
         recordHintTextView.setText("按下开始录音");
     }
@@ -161,6 +184,7 @@ public class RecordActivity extends Activity
 
     private void goRecordSuccessState() {
         recordVoiceBegin = false;
+
 
         recordDurationView.setText(CommonFunction.FormatRecordTime(actualRecordTime));
 
@@ -181,8 +205,16 @@ public class RecordActivity extends Activity
         composeProgressBar.setProgress(0);
         recordHintTextView.setText("合成开始");
         composeProgressBar.setVisibility(View.VISIBLE);
-        AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
-                actualRecordTime + Constant.MusicCutEndOffset, this);
+//        AudioFunction.DecodeMusicFile("", decodeFileUrl, 0,
+//                actualRecordTime + Constant.MusicCutEndOffset, this);
+
+//        AudioFunction.Pcm2Mp3(tempVoicePcmUrl,  composeVoiceUrl, false,
+//               Constant.VoiceBackgroundWeight,
+//                -1 * Constant.MusicCutEndOffset / 2 * Constant.RecordDataNumberInOneSecond, this);
+        mRecorderUtil = new RecorderAndPlayUtil();
+
+        mRecorderUtil.startRecording();
+
     }
 
     @Override
@@ -296,35 +328,35 @@ public class RecordActivity extends Activity
         VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
 
         CommonFunction.showToast("合成成功", className);
-        recordVoiceButton.setText("完成");
-        recordComFinish = true;
-        clearAnimation();
-        composeVoice = new ComposeVoice();
-        composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
-        composeVoice.mid = music.mid;
-        composeVoice.musicname = music.musicname;
-        composeVoice.musictype = music.musictype;
-        composeVoice.chapter = music.chapter;
-        composeVoice.accompaniment = music.accompaniment;
-        composeVoice.soundtime = actualRecordTime;
-        composeVoice.isformulation = music.isformulation;
-        composeVoice.isopen = "1";
-        composeVoice.status = "1";
-        composeVoice.listenprice = "1";
-        composeVoice.questionprice = "0";
-        composeVoice.commenttime = "0";
-        composeVoice.commentpath = "";
-        composeVoice.touid = 0;
-        composeVoice.soundpath = "";
-        composeVoice.voicename = fileNameCom;
-        composeVoice.type = music.type + "";
-        composeVoice.isreply = "0";
-        composeVoice.ispay = "0";
-        composeVoice.createtime = System.currentTimeMillis();
-
-        ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
-        composeVoiceInfoDBHelper.insert(composeVoice,ComposeVoiceInfoDBHelper.COMPOSE);
-        composeVoiceInfoDBHelper.close();
+//        recordVoiceButton.setText("完成");
+//        recordComFinish = true;
+//        clearAnimation();
+//        composeVoice = new ComposeVoice();
+//        composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
+//        composeVoice.mid = music.mid;
+//        composeVoice.musicname = music.musicname;
+//        composeVoice.musictype = music.musictype;
+//        composeVoice.chapter = music.chapter;
+//        composeVoice.accompaniment = music.accompaniment;
+//        composeVoice.soundtime = actualRecordTime;
+//        composeVoice.isformulation = music.isformulation;
+//        composeVoice.isopen = "1";
+//        composeVoice.status = "1";
+//        composeVoice.listenprice = "1";
+//        composeVoice.questionprice = "0";
+//        composeVoice.commenttime = "0";
+//        composeVoice.commentpath = "";
+//        composeVoice.touid = 0;
+//        composeVoice.soundpath = "";
+//        composeVoice.voicename = fileNameCom;
+//        composeVoice.type = music.type + "";
+//        composeVoice.isreply = "0";
+//        composeVoice.ispay = "0";
+//        composeVoice.createtime = System.currentTimeMillis();
+//
+//        ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
+//        composeVoiceInfoDBHelper.insert(composeVoice,ComposeVoiceInfoDBHelper.UPCOMPOSE);
+//        composeVoiceInfoDBHelper.close();
     }
 
     @Override
@@ -381,10 +413,10 @@ public class RecordActivity extends Activity
 
                                 recordHintTextView.setText("已结束录音");
 //                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-                                VoiceFunction.StopVoice();
-                                VoiceFunction.StopRecordVoice();
-                                compose();
+//                                VoiceFunction.StopVoice();
+//                                VoiceFunction.StopRecordVoice();
 
+                                mRecorderUtil.stopRecording();
                                 dialog.dismiss();
                             }
                         });
@@ -392,10 +424,10 @@ public class RecordActivity extends Activity
 
                     } else {
                         startAnimation();
-//
+                        compose();
                         VoiceFunction.StartRecordVoice(tempVoicePcmUrl,
                                 instance);
-                        VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
+//                        VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
                         recordVoiceButton.setText("完成录制");
                     }
                 }

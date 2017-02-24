@@ -131,7 +131,6 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
             teacher = zhaoRen.teacher;
             student = zhaoRen.student;
 
-            LogUtils.LOGE(tag, zhaoRen.toString());
             tab2TeacherAdapter.setData(zhaoRen);
             setListViewHeightBasedOnChildren(lvTeacher);
             tab2StudentAdapter.setData(zhaoRen);
@@ -194,6 +193,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     @Override
     public void onDestroy() {
         mImageLoaderHm.stop();
+        mImageLoaderHm = null;
         super.onDestroy();
     }
 
