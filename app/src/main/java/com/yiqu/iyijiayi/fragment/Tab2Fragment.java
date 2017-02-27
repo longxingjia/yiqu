@@ -45,13 +45,15 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     private ScrollViewWithListView lvTeacher;
     private ArrayList<Teacher> teacher;
     private ArrayList<Student> student;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private Tab2TeacherAdapter tab2TeacherAdapter;
     private Tab2StudentAdapter tab2StudentAdapter;
     private ScrollViewWithListView lvStudent;
     private SwipeRefreshLayout swipeRe;
     private TextView loadMoreTeacher;
     private TextView loadMoreStudent;
+    private ZhaoRen zhaoRen;
+    private static int REQUESTNO = 1;
 
     @Override
     protected int getTitleView() {
@@ -91,7 +93,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
+
 
         lvStudent.addHeaderView(footView);
 
@@ -106,20 +108,19 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     @Override
     protected void init(Bundle savedInstanceState) {
         setSlidingMenuEnable(false);
-        ZhaoRen zhaoRen = AppShare.getZhaoRenList(getActivity());
+        zhaoRen = AppShare.getZhaoRenList(getActivity());
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
         } else {
             uid = "0";
         }
 
-
-
-        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), mImageLoaderHm, uid);
+        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), uid);
         lvTeacher.setAdapter(tab2TeacherAdapter);
 
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), mImageLoaderHm,uid);
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(),uid);
         lvStudent.setAdapter(tab2StudentAdapter);
+
         if (zhaoRen == null) {
 
             RestNetCallHelper.callNet(
@@ -138,6 +139,11 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
             loadMoreStudent.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -192,8 +198,6 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
-        mImageLoaderHm = null;
         super.onDestroy();
     }
 
@@ -242,13 +246,21 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.loadmore_student:
                 if (uid.equals("0")){
                     Intent i = new Intent(getActivity(), StubActivity.class);
                     i.putExtra("fragment", SelectLoginFragment.class.getName());
-                    getActivity().startActivity(i);
+
+                    startActivityForResult(i,REQUESTNO);
+
                     ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
 
                     return;

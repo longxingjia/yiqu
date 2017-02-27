@@ -1,5 +1,6 @@
 package com.yiqu.iyijiayi.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +10,9 @@ import android.widget.TextView;
 import com.fwrestnet.NetResponse;
 import com.ui.views.CircleImageView;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;
@@ -29,7 +32,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     private TextView menu_item_wodeyijiayizhuye;
     private TextView menu_item_wowen;
     private TextView menu_item_woting;
-    private TextView menu_item_wodeyue;
+
     private TextView menu_item_wodeyibi;
     private TextView menu_item_shezhi;
     private TextView menu_item_jiesuanshuoming;
@@ -69,7 +72,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         menu_item_wodexizuo = (TextView) v.findViewById(R.id.menu_item_wodexizuo);
 
         menu_item_woting = (TextView) v.findViewById(R.id.menu_item_woting);
-        menu_item_wodeyue = (TextView) v.findViewById(R.id.menu_item_wodeyue);
+
         menu_item_wodeyibi = (TextView) v.findViewById(R.id.menu_item_wodeyibi);
         menu_item_shezhi = (TextView) v.findViewById(R.id.menu_item_shezhi);
         menu_item_jiesuanshuoming = (TextView) v.findViewById(R.id.menu_item_jiesuanshuoming);
@@ -82,7 +85,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         menu_item_wodeyijiayizhuye .setOnClickListener(this);
         menu_item_wowen .setOnClickListener(this);
         menu_item_woting .setOnClickListener(this);
-        menu_item_wodeyue .setOnClickListener(this);
+
         menu_item_wodeyibi .setOnClickListener(this);
         menu_item_shezhi .setOnClickListener(this);
         menu_item_jiesuanshuoming .setOnClickListener(this);
@@ -212,6 +215,11 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
                 AppShare.setIsLogin(getActivity(),false);
                 initUI();
 
+                break;
+            case R.id.menu_item_wodeyijiayizhuye:
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                i.putExtra("fragment", HomePageFragment.class.getName());
+                getActivity().startActivity(i);
                 break;
         }
 

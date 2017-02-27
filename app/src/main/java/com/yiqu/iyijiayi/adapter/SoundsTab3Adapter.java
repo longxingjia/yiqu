@@ -33,13 +33,13 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     private LayoutInflater mLayoutInflater;
     private ArrayList<ComposeVoice> datas = new ArrayList<ComposeVoice>();
     private Context mContext;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private String tag = "SoundsTab1Adapter";
 
-    public SoundsTab3Adapter(Context context, ImageLoaderHm<ImageView> m) {
+    public SoundsTab3Adapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
+
     }
 
 
@@ -109,7 +109,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
                     Intent i = new Intent(mContext, StubActivity.class);
                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("uploadVoice", f);
+                    bundle.putSerializable("composeVoice", f);
                     i.putExtras(bundle);
                     mContext.startActivity(i);
 
@@ -120,7 +120,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("uploadVoice", f);
+                    bundle.putSerializable("composeVoice", f);
                     Intent intent = new Intent(mContext, StubActivity.class);
                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
 

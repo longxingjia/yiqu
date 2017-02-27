@@ -30,6 +30,7 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.io.BufferedInputStream;
@@ -131,20 +132,7 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
             long time = currentTimeMillis - f.edited;
             h.time.setText(string2TimeUtils.long2Time(time)+"前");
-
-
-//            if (f.musictype.equals("1")){
-//                h.musictype.setBackgroundResource();
-//            }
-
-
-
-            if (f.tecimage != null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.tecimage, h.tea_header);
-            }
-
-
-
+            PictureUtils.showPicture(mContext,f.tecimage,h.tea_header);
 
         } catch (Exception e) {
             e.printStackTrace();

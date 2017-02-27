@@ -13,4 +13,5 @@
     <string name="common_dialog_loading_data">请稍候&#8230;</string>
     <string name="start_recording">开始录制</string>
     <string name="download">已下载</string>
+    <!--<string name="desc">%s</string>-->
 </resources>

@@ -294,7 +294,6 @@ public class RecordActivity extends Activity
         recordHintTextView.setText("合成成功，可播放合成语音");
         composeProgressBar.setVisibility(View.GONE);
         VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
-
         CommonFunction.showToast("合成成功", className);
         recordVoiceButton.setText("完成");
         recordComFinish = true;

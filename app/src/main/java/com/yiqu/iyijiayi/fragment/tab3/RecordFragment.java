@@ -1,28 +1,35 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ui.abs.AbsFragment;
+import com.ui.views.RefreshList;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 /**
  * Created by Administrator on 2017/2/15.
  */
 
-public class RecordFragment extends AbsFragment implements View.OnClickListener {
+public class RecordFragment extends AbsFragment implements View.OnClickListener,RefreshList.IRefreshListViewListener {
 
 
     private TextView buttonOne;
@@ -30,13 +37,14 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener 
     private RelativeLayout rl_no_record;
     private RelativeLayout rl_have_record;
     private ArrayList<ComposeVoice> voice;
+    private RefreshList listView;
+    private SoundsTab3Adapter soundsTab3Adapter;
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
-            case R.id.buttonOne:
-                record();
-                break;
+
             case R.id.buttonTwo:
                 record();
                 break;
@@ -52,36 +60,97 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener 
 
     @Override
     protected void initView(View v) {
-        buttonOne = (TextView) v.findViewById(R.id.buttonOne);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View headView = inflater.inflate(R.layout.header_view_record, null);
+
+        buttonOne = (TextView) headView.findViewById(R.id.buttonOne);
         buttonTwo = (TextView) v.findViewById(R.id.buttonTwo);
         rl_no_record = (RelativeLayout) v.findViewById(R.id.rl_no_record);
         rl_have_record = (RelativeLayout) v.findViewById(R.id.rl_have_record);
+        listView = (RefreshList) v.findViewById(R.id.listView);
+        listView.addHeaderView(headView);
 
-        buttonOne.setOnClickListener(this);
+        buttonOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                record();
+            }
+        });
         buttonTwo.setOnClickListener(this);
+
+        soundsTab3Adapter = new SoundsTab3Adapter( getActivity());
+        listView.setAdapter(soundsTab3Adapter);
+        listView.setOnItemClickListener(soundsTab3Adapter);
+        listView.setRefreshListListener(this);
 
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         ComposeVoiceInfoDBHelper com = new ComposeVoiceInfoDBHelper(getActivity());
-        voice = com.getAll(ComposeVoiceInfoDBHelper.UPCOMPOSE);
+        voice = com.getAll(ComposeVoiceInfoDBHelper.UNCOMPOSE);
+        com.close();
         if (voice.size()==0){
             rl_no_record.setVisibility(View.VISIBLE);
             rl_have_record.setVisibility(View.INVISIBLE);
         }else {
             rl_no_record.setVisibility(View.INVISIBLE);
             rl_have_record.setVisibility(View.VISIBLE);
+            soundsTab3Adapter.setData(voice);
         }
-
-
     }
 
     private void record() {
         Intent intent = new Intent(getActivity(), RecordActivityForRecordFrag.class);
         getActivity().startActivity(intent);
-        getActivity().finish();
+
     }
 
+    @Override
+    public void onRefresh() {
+        ComposeVoiceInfoDBHelper com = new ComposeVoiceInfoDBHelper(getActivity());
+        voice = com.getAll(ComposeVoiceInfoDBHelper.UNCOMPOSE);
+        com.close();
+        if (voice.size()==0){
+            rl_no_record.setVisibility(View.VISIBLE);
+            rl_have_record.setVisibility(View.INVISIBLE);
+        }else {
+            rl_no_record.setVisibility(View.INVISIBLE);
+            rl_have_record.setVisibility(View.VISIBLE);
+            soundsTab3Adapter.setData(voice);
+            resfreshOk();
+
+        }
+    }
+
+    public void resfreshOk() {
+        listView.refreshOk();
+        new AsyncTask<Void, Void, Void>() {
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                listView.stopRefresh();
+            }
+
+
+        }.execute();
+
+    }
 }

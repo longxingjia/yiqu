@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -37,16 +38,14 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Context mContext;
     private String uid ;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
-    private  String tag="Tab2TeacherAdapter";
 
-    public Tab2ListFragmetAdapter(Context context, ImageLoaderHm<ImageView> m, String uid) {
+    private  String tag="Tab2ListFragmetAdapter";
+
+    public Tab2ListFragmetAdapter(Context context,  String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
         this.uid = uid;
     }
-
 
     public void setData(ArrayList<Teacher> list) {
         datas = list;
@@ -107,13 +106,18 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
 
+                if (f.userimage!=null&&f.userimage.contains("http://wx.qlogo.cn")){
+                    Picasso.with(mContext).load( f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
+                }else {
+                    Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
+                }
+
             h.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
                     if (f.isfollow.equals("0")){  //没有关注
-//                        h.follow.setBackgroundResource(R.mipmap.follow);
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.addfollow,
@@ -182,10 +186,8 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
                 }
             });
 
-            if (f.userimage!=null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
-            }
-        } catch (Exception e) {
+
+    } catch (Exception e) {
             e.printStackTrace();
         }
         return v;
@@ -195,27 +197,6 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
-//
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
-
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
 
     }
 

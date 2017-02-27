@@ -8,7 +8,7 @@
         android:color="@color/blue_cosners" />
     -->
 
-    <solid android:color="@color/background_color_rating_grey" />
+    <solid android:color="@color/launch_image_bg_gray" />
 
     <corners
         android:bottomLeftRadius="8dip"

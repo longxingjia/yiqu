@@ -41,7 +41,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
     public static final String CREATETIME = "createtime";
     public static final String ISCOMPOSE = "isCompose";
     public static final String COMPOSE = "1";
-    public static final String UPCOMPOSE = "2";
+    public static final String UNCOMPOSE = "2";
 
     public ComposeVoiceInfoDBHelper(Context context) {
         super(context);

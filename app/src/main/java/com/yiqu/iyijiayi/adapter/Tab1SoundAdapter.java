@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
@@ -57,13 +58,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private String tag ="Tab1SoundAdapter";
 
-    public Tab1SoundAdapter(Context context, ImageLoaderHm<ImageView> m) {
+    public Tab1SoundAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
+
     }
 
 
@@ -133,12 +134,19 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.tectitle.setText(f.tectitle);
           //  LogUtils.LOGE(tag,f.soundpath);
 
-            if (f.tecimage!=null){
-                mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.tecimage, h.tea_header);
+
+            if (f.tecimage!=null&&f.tecimage.contains("http://wx.qlogo.cn")){
+//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
+                Picasso.with(mContext).load( f.tecimage).placeholder(R.mipmap.menu_head).into(h.tea_header);
+            }else {
+                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.tecimage).placeholder(R.mipmap.menu_head).into(h.tea_header);
             }
 
-            if (f.stuimage!=null){
-                mImageLoaderHm.DisplayImage( MyNetApiConfig.ImageServerAddr+f.stuimage, h.stu_header);
+            if (f.stuimage!=null&&f.stuimage.contains("http://wx.qlogo.cn")){
+//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
+                Picasso.with(mContext).load( f.stuimage).placeholder(R.mipmap.menu_head).into(h.stu_header);
+            }else {
+                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.stuimage).placeholder(R.mipmap.menu_head).into(h.stu_header);
             }
 
             h.stu_listen.setOnClickListener(new View.OnClickListener() {

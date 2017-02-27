@@ -36,6 +36,8 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
@@ -46,13 +48,12 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
     private Context mContext;
     private String uid ;
     private ZhaoRen zhaoRen;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
-    private  String tag="Tab2TeacherAdapter";
 
-    public Tab2StudentAdapter(Context context, ImageLoaderHm<ImageView> m, String uid) {
+    private  String tag="Tab2StudentAdapter";
+
+    public Tab2StudentAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
         this.uid = uid;
     }
 
@@ -112,13 +113,12 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
 
             h.icon.setTag(f.userimage);
 
+            PictureUtils.showPicture(mContext,f.userimage,h.icon);
+
 
 //            if (f.userimage!=null) {
-//                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
+//                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
 //            }
-            if (f.userimage!=null) {
-                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-            }
 
             if (f.isfollow.equals("0")){  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);

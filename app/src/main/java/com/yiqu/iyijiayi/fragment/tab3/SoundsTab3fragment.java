@@ -23,7 +23,7 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
 
 
     private String tag = "SoundsTab3fragment";
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private RefreshList listView;
     private SoundsTab3Adapter soundsTab3Adapter;
     private ArrayList<ComposeVoice> composeVoices;
@@ -43,8 +43,8 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     @Override
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        soundsTab3Adapter = new SoundsTab3Adapter(getActivity(), mImageLoaderHm);
+
+        soundsTab3Adapter = new SoundsTab3Adapter(getActivity());
         listView.setAdapter(soundsTab3Adapter);
         listView.setOnItemClickListener(soundsTab3Adapter);
         listView.setRefreshListListener(this);
@@ -103,7 +103,6 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;

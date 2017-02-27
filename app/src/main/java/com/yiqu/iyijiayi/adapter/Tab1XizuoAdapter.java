@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
@@ -42,12 +43,11 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private LayoutInflater mLayoutInflater;
     private ArrayList<Xizuo> datas = new ArrayList<Xizuo>();
     private Context mContext;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
 
-    public Tab1XizuoAdapter(Context context, ImageLoaderHm<ImageView> m) {
+    public Tab1XizuoAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
+
     }
 
 
@@ -102,8 +102,12 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
             LogUtils.LOGE(tag,MyNetApiConfig.ImageServerAddr + f.stuimage);
-            if (f.stuimage != null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.stuimage, h.icon);
+
+            if (f.stuimage!=null&&f.stuimage.contains("http://wx.qlogo.cn")){
+//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
+                Picasso.with(mContext).load( f.stuimage).placeholder(R.mipmap.menu_head).into(h.icon);
+            }else {
+                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.stuimage).placeholder(R.mipmap.menu_head).into(h.icon);
             }
 
         } catch (Exception e) {

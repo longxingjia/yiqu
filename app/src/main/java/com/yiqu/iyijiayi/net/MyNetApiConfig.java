@@ -272,7 +272,7 @@ public class MyNetApiConfig {
 
     };
     /**
-     * 67、热门，返回3条习作和热门问题
+     * 67、
      */
     public static MyNetApi get_follow_recommend_list = new MyNetApi() {
         @Override
@@ -289,7 +289,7 @@ public class MyNetApiConfig {
     public static MyNetApi getSoundList = new MyNetApi() {
         @Override
         public String getPath() {
-            return ServerAddr + "/sound/get-sound-list";
+            return ServerAddr + "/sound/get-follow-sound-list";
         }
 
         @Override

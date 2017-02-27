@@ -2,31 +2,39 @@ package com.yiqu.Control.Main;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.Tool.Function.AudioFunction;
 import com.Tool.Function.CommonFunction;
 import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
+import com.base.utils.ToastManager;
 import com.czt.mp3recorder.util.LameUtil;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -52,10 +60,11 @@ import com.yiqu.iyijiayi.utils.Tools;
 import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RecordActivityForRecordFrag extends Activity
-        implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface, VoiceRecorderOperateInterface, View.OnClickListener {
-    private boolean recordVoiceBegin;
+        implements VoicePlayerInterface, View.OnClickListener {
     private boolean recordComFinish = false;
     private String tag = "RecordActivity";
     //    private int width;
@@ -65,39 +74,48 @@ public class RecordActivityForRecordFrag extends Activity
     private TextView tv_record;
     private TextView musicName;
     private TextView musictime;
-    private TextView musicSize;
     private TextView recordVoiceButton;
     private String className;
-    private String tempVoicePcmUrl;
-//    private String musicFileUrl;
-    private String decodeFileUrl;
-    private String composeVoiceUrl;
-
     private TextView recordHintTextView;
     private TextView recordDurationView;
-//
-//    private Button composeVoiceButton;
-//    private Button deleteVoiceButton;
-//    private Button playComposeVoiceButton;
-
-    private ProgressBar composeProgressBar;
-
+    private boolean mIsRecording = false;
+    private boolean mIsLittleTime = false;
+    private boolean mIsSendVoice = false;
     private static RecordActivityForRecordFrag instance;
-//    private Music music;
+    //    private Music music;
     private RelativeLayout rlHint;
     private ImageView title_back;
     private ImageView image_anim;
     private Animation rotate;
-    private String fileNameCom;
     private ComposeVoice composeVoice;
     private RecorderAndPlayUtil mRecorderUtil;
+    private TimerTask mTimerTask = null;
+    private Timer mTimer = null;
+    private float mSecond = 0;
+    private static final int MSG_TIME_SHORT = 0x123;
+    private static final int POPUPWINDOW = 0x124;
+
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_TIME_SHORT:
+
+                    break;
+                case POPUPWINDOW:
+                    initPopuptWindow();
+                    // 这里是位置显示方式,在屏幕的左侧
+
+                    break;
+            }
+        }
+    };
+    private EditText desc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         init(R.layout.record_voice_fragment);
     }
 
@@ -105,10 +123,9 @@ public class RecordActivityForRecordFrag extends Activity
         setContentView(layoutId);
 
         bindView();
-        initView();
-        initData();
         className = getClass().getSimpleName();
         instance = this;
+        initData();
     }
 
     public void bindView() {
@@ -118,162 +135,65 @@ public class RecordActivityForRecordFrag extends Activity
 
         musicName = (TextView) findViewById(R.id.musicname);
         musictime = (TextView) findViewById(R.id.musictime);
-        musicSize = (TextView) findViewById(R.id.musicSize);
+//        musicSize = (TextView) findViewById(R.id.musicSize);
         tv_record = (TextView) findViewById(R.id.tv_record);
         recordVoiceButton = (TextView) findViewById(R.id.recordVoiceButton);
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
-        composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
+//        composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
 
         title_back.setOnClickListener(this);
     }
 
-    public void initView() {
-//        composeProgressBar.getLayoutParams().width = (int) (width * 0.72);
-    }
 
     public void initData() {
         rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
-
-//        Intent intent = getIntent();
-//        music = (Music) intent.getSerializableExtra("music");
-//        LogUtils.LOGE(tag, music.toString());
-//        musicName.setText(music.musicname + "");
         Tools.DB_PATH = Variable.StorageDirectoryPath;
-////        String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
-//        String fileName = Url.substring(
-//                Url.lastIndexOf("/") + 1,
-//                Url.length());
-//        fileName = music.musicname + "_" + fileName;
-//        String2TimeUtils string2TimeUtils = new String2TimeUtils();
-//        musictime.setText(string2TimeUtils.stringForTimeS(music.time));
-//
-//        if (!TextUtils.isEmpty(Tools.DB_PATH)) {
-//            File mFile = new File(Tools.DB_PATH, fileName);
-//            if (mFile.exists()) {
-////                Log.e(tag, "file " + mFile.getName() + " already exits!!");
-//
-//            }
-//        }
-
-//        musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
+        mRecorderUtil = new RecorderAndPlayUtil();
         recordTime = 0;
-        tempVoicePcmUrl = Tools.DB_PATH + "_tempVoice.pcm";
-        LogUtils.LOGE(tag, tempVoicePcmUrl);
-//                musicFileUrl = mFile.getAbsolutePath();
-        decodeFileUrl = Tools.DB_PATH +  "_decodeFile.pcm";
-        fileNameCom =  "_composeVoice.mp3";
-        composeVoiceUrl = Tools.DB_PATH +  "_composeVoice.mp3";
         recordVoiceButton.setOnClickListener(this);
-
-        LayoutInflater inflater = LayoutInflater.from(RecordActivityForRecordFrag.this);
-        View popupView = inflater.inflate(R.layout.popup_record, null);
-        PopupWindow  popup = new PopupWindow(popupView, DensityUtil.dip2px(this, 600), DensityUtil.dip2px(this, 500), true);
-        popup.setTouchable(true);
-        popup.setOutsideTouchable(true);
-        popup.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-
-//        popup.showAtLocation(image_anim, Gravity.CENTER, 0, 0);
-
-
+        mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         recordHintTextView.setText("按下开始录音");
     }
 
+    /**
+     * 创建PopupWindow
+     */
+    protected void initPopuptWindow() {
 
-    private void goRecordSuccessState() {
-        recordVoiceBegin = false;
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setView(LayoutInflater.from(this).inflate(R.layout.popup_record, null));
+        dialog.show();
+        dialog.getWindow().setContentView(R.layout.popup_record);
+        dialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
+        desc = (EditText) dialog.findViewById(R.id.desc);
+         final EditText name = (EditText) dialog.findViewById(R.id.name);
+        TextView btnPositive = (TextView) dialog.findViewById(R.id.btn_add);
+        TextView btnNegative = (TextView) dialog.findViewById(R.id.btn_cancel);
+        btnPositive.setOnClickListener(new View.OnClickListener() {
 
-
-        recordDurationView.setText(CommonFunction.FormatRecordTime(actualRecordTime));
-
-        recordHintTextView.setText("完成录音");
-    }
-
-    private void goRecordFailState() {
-        recordVoiceBegin = false;
-
-        recordDurationView.setVisibility(View.INVISIBLE);
-
-        recordVoiceButton.setEnabled(true);
-
-        recordHintTextView.setText("点击开始录音");
-    }
-
-    private void compose() {
-        composeProgressBar.setProgress(0);
-        recordHintTextView.setText("合成开始");
-        composeProgressBar.setVisibility(View.VISIBLE);
-//        AudioFunction.DecodeMusicFile("", decodeFileUrl, 0,
-//                actualRecordTime + Constant.MusicCutEndOffset, this);
-
-//        AudioFunction.Pcm2Mp3(tempVoicePcmUrl,  composeVoiceUrl, false,
-//               Constant.VoiceBackgroundWeight,
-//                -1 * Constant.MusicCutEndOffset / 2 * Constant.RecordDataNumberInOneSecond, this);
-        mRecorderUtil = new RecorderAndPlayUtil();
-
-        mRecorderUtil.startRecording();
-
-    }
-
-    @Override
-    public void recordVoiceBegin() {
-        VoiceFunction.StopVoice();
-
-        if (!recordVoiceBegin) {
-            recordVoiceBegin = true;
-
-            recordTime = 0;
-
-            recordDurationView.setText(CommonFunction.FormatRecordTime(recordTime));
-
-            recordDurationView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void recordVoiceStateChanged(int volume, long recordDuration) {
-        if (recordDuration > 0) {
-            recordTime = (int) (recordDuration / Constant.OneSecond);
-
-            recordDurationView.setText(CommonFunction.FormatRecordTime(recordTime));
-        }
-    }
-
-    @Override
-    public void prepareGiveUpRecordVoice() {
-
-    }
-
-    @Override
-    public void recoverRecordVoice() {
-
-    }
-
-    @Override
-    public void giveUpRecordVoice() {
-
-    }
-
-    @Override
-    public void recordVoiceFail() {
-        if (recordVoiceBegin) {
-            if (actualRecordTime != 0) {
-                goRecordSuccessState();
-            } else {
-                goRecordFailState();
+            @Override
+            public void onClick(View arg0) {
+                String str = name.getText().toString().trim();
+                if (TextUtils.isEmpty(str)) {
+                    ToastManager.getInstance(instance).showText("输入内如不能为空");
+                } else {
+                    dialog.dismiss();
+                    musicName.setText(str);
+                }
             }
-        }
+        });
+        btnNegative.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+               finish();
+            }
+        });
     }
 
-    @Override
-    public void recordVoiceFinish() {
-        if (recordVoiceBegin) {
-            actualRecordTime = recordTime;
-            goRecordSuccessState();
-        }
-    }
 
     @Override
     public void playVoiceBegin() {
@@ -290,81 +210,6 @@ public class RecordActivityForRecordFrag extends Activity
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
     }
 
-    @Override
-    public void updateDecodeProgress(int decodeProgress) {
-        composeProgressBar.setProgress(
-                decodeProgress * Constant.MaxDecodeProgress / Constant.NormalMaxProgress);
-    }
-
-    @Override
-    public void decodeSuccess() {
-        composeProgressBar.setProgress(Constant.MaxDecodeProgress);
-
-        AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
-                Constant.VoiceWeight, Constant.VoiceBackgroundWeight,
-                -1 * Constant.MusicCutEndOffset / 2 * Constant.RecordDataNumberInOneSecond, this);
-
-
-    }
-
-    @Override
-    public void decodeFail() {
-        recordHintTextView.setText("解码失败,请您检查网络后，再次尝试");
-
-        composeProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void updateComposeProgress(int composeProgress) {
-        composeProgressBar.setProgress(
-                composeProgress * (Constant.NormalMaxProgress - Constant.MaxDecodeProgress) /
-                        Constant.NormalMaxProgress + Constant.MaxDecodeProgress);
-    }
-
-    @Override
-    public void composeSuccess() {
-        recordHintTextView.setText("合成成功，可播放合成语音");
-        composeProgressBar.setVisibility(View.GONE);
-        VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
-
-        CommonFunction.showToast("合成成功", className);
-//        recordVoiceButton.setText("完成");
-//        recordComFinish = true;
-//        clearAnimation();
-//        composeVoice = new ComposeVoice();
-//        composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
-//        composeVoice.mid = music.mid;
-//        composeVoice.musicname = music.musicname;
-//        composeVoice.musictype = music.musictype;
-//        composeVoice.chapter = music.chapter;
-//        composeVoice.accompaniment = music.accompaniment;
-//        composeVoice.soundtime = actualRecordTime;
-//        composeVoice.isformulation = music.isformulation;
-//        composeVoice.isopen = "1";
-//        composeVoice.status = "1";
-//        composeVoice.listenprice = "1";
-//        composeVoice.questionprice = "0";
-//        composeVoice.commenttime = "0";
-//        composeVoice.commentpath = "";
-//        composeVoice.touid = 0;
-//        composeVoice.soundpath = "";
-//        composeVoice.voicename = fileNameCom;
-//        composeVoice.type = music.type + "";
-//        composeVoice.isreply = "0";
-//        composeVoice.ispay = "0";
-//        composeVoice.createtime = System.currentTimeMillis();
-//
-//        ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
-//        composeVoiceInfoDBHelper.insert(composeVoice,ComposeVoiceInfoDBHelper.UPCOMPOSE);
-//        composeVoiceInfoDBHelper.close();
-    }
-
-    @Override
-    public void composeFail() {
-        recordHintTextView.setText("合成失败");
-        composeProgressBar.setVisibility(View.GONE);
-        CommonFunction.showToast("合成失败", className);
-    }
 
     @Override
     public void onClick(View v) {
@@ -381,7 +226,6 @@ public class RecordActivityForRecordFrag extends Activity
                                 case 0:
                                     Intent intent = new Intent(instance, StubActivity.class);
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
-
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
 
@@ -393,7 +237,6 @@ public class RecordActivityForRecordFrag extends Activity
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
 
-
                                     break;
                             }
 
@@ -402,21 +245,23 @@ public class RecordActivityForRecordFrag extends Activity
                     menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else {
                     rlHint.setVisibility(View.INVISIBLE);
-                    if (recordVoiceBegin) {
+                    if (mIsRecording) {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("完成录制");
-                        builder.setMessage("当前伴奏还没有结束，确定要提前完成录制吗？");
+                        builder.setMessage("确定要完成录制吗？");
                         builder.setNegativeButton("取消", null);
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
                                 recordHintTextView.setText("已结束录音");
-//                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-//                                VoiceFunction.StopVoice();
-//                                VoiceFunction.StopRecordVoice();
+                                if (mIsRecording) {
+                                    initRecording();
+                                    recordComFinish = true;
+                                }
+                                VoiceFunction.PlayToggleVoice(mRecorderUtil.getRecorderPath(), instance);
 
-                                mRecorderUtil.stopRecording();
+                                stopAnimation();
                                 dialog.dismiss();
                             }
                         });
@@ -424,10 +269,8 @@ public class RecordActivityForRecordFrag extends Activity
 
                     } else {
                         startAnimation();
-                        compose();
-                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl,
-                                instance);
-//                        VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
+                        down();
+
                         recordVoiceButton.setText("完成录制");
                     }
                 }
@@ -435,32 +278,77 @@ public class RecordActivityForRecordFrag extends Activity
 
             case R.id.title_back:
                 exit();
-
-
                 break;
         }
 
     }
 
+    private void initRecording() {
+        composeVoice = new ComposeVoice();
+        composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
+        composeVoice.mid = 0;
+        composeVoice.type =  "1";
+        composeVoice.musicname = musicName.getText().toString();
+        composeVoice.musictype ="";
+        composeVoice.chapter = "";
+        composeVoice.accompaniment ="";
+        composeVoice.soundtime = actualRecordTime;
+        composeVoice.isformulation = "";
+        composeVoice.isopen = "1";
+        composeVoice.status = "1";
+        composeVoice.listenprice = "1";
+        composeVoice.questionprice = "0";
+        composeVoice.commenttime = "0";
+        composeVoice.commentpath = "";
+        composeVoice.touid = 0;
+        composeVoice.soundpath = "";
+        composeVoice.voicename = mRecorderUtil.getRecorderPath().substring(
+                mRecorderUtil.getRecorderPath().lastIndexOf("/") + 1,
+                mRecorderUtil.getRecorderPath().length());
+
+        composeVoice.isreply = "0";
+        composeVoice.ispay = "0";
+        composeVoice.createtime = System.currentTimeMillis();
+
+        ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
+        composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.UNCOMPOSE);
+        composeVoiceInfoDBHelper.close();
+
+
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimerTask.cancel();
+        }
+        mRecorderUtil.stopRecording();
+        mIsRecording = false;
+        mSecond = 0;
+        mRecorderUtil.getRecorderPath();
+    }
+
     @Override
     protected void onDestroy() {
+        if (mIsRecording) {
+            initRecording();
+        }
         VoiceFunction.StopVoice();
-        VoiceFunction.StopRecordVoice();
+//        VoiceFunction.StopRecordVoice();
         super.onDestroy();
     }
 
     private void exit() {
-        if (recordVoiceBegin) {
+        if (mIsRecording) {
             MenuDialogGiveupRecordHelper menuDialogGiveupRecordHelper = new MenuDialogGiveupRecordHelper(instance, new MenuDialogListerner() {
                 @Override
                 public void onSelected(int selected) {
                     switch (selected) {
                         case 0:
                             actualRecordTime = 0;
-                            recordVoiceBegin = false;
-                            VoiceFunction.StopVoice();
-                            VoiceFunction.StopRecordVoice();
-                            clearAnimation();
+                            // mIsRecording = false;
+                            if (mIsRecording) {
+                                initRecording();
+                            }
+//                            VoiceFunction.StopRecordVoice();
+                            stopAnimation();
                             recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                             recordHintTextView.setText("按下开始录音");
 
@@ -495,8 +383,57 @@ public class RecordActivityForRecordFrag extends Activity
 
     }
 
-    private void clearAnimation() {
+    private void stopAnimation() {
         image_anim.clearAnimation();
+
+    }
+
+
+    private void down() {
+        if (mTimer != null) mTimer.cancel();
+        if (mTimerTask != null) mTimerTask.cancel();
+
+        mSecond = 0;
+        mIsRecording = true;
+        mIsLittleTime = true;
+        mTimerTask = new TimerTask() {
+            int i = 2000;
+
+            @Override
+            public void run() {
+                mIsLittleTime = false;
+                mSecond += 1;
+                i--;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        musictime.setText(mSecond + "s\"");
+
+                    }
+                });
+                if (i == 0) {
+                    mIsSendVoice = true;
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 录音结束
+
+                            mTimer.cancel();
+                            mTimerTask.cancel();
+                            mIsRecording = false;
+                            mRecorderUtil.stopRecording();
+                        }
+                    });
+                }
+                if (i < 0) {
+                    mTimer.cancel();
+                    mTimerTask.cancel();
+                }
+            }
+        };
+        mRecorderUtil.startRecording();
+        mTimer = new Timer(true);
+        mTimer.schedule(mTimerTask, 1000, 1000);
 
     }
 

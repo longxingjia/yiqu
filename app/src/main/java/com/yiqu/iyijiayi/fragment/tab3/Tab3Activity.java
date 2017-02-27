@@ -42,6 +42,7 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
         sounds = (TextView)findViewById(R.id.sounds);
         record = (TextView)findViewById(R.id.record);
         mContext = this;
+        findViewById(R.id.back).setOnClickListener(this);
         sounds.setOnClickListener(this);
         record.setOnClickListener(this);
 
@@ -71,6 +72,10 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
                 record.setTextColor(getResources().getColor(R.color.white));
                 record.setBackgroundResource(R.mipmap.record_pressed);
 
+
+                break;
+            case R.id.back:
+                finish();
 
                 break;
         }

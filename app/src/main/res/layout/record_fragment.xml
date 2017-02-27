@@ -2,74 +2,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/background_color_rating_grey">
+    android:background="@color/background_color_rating_grey"
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/rl_have_record"
-        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <TextView
-            android:id="@+id/buttonOne"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="去录音"
-            android:textSize="18sp"
-            android:background="@drawable/white_box"/>
 
-        <ListView
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/record"
+
+        <com.ui.views.RefreshList
             android:id="@+id/listView"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/bg_record"
-            android:scaleType="centerInside"/>
-
+            android:scaleType="centerInside"
+            android:src="@mipmap/bg_record" />
 
 
     </RelativeLayout>
-
-
-
-
 
 
     <RelativeLayout
         android:id="@+id/rl_no_record"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"
-        android:src="@mipmap/bg_record"
-        android:scaleType="centerInside"/>
+        android:visibility="visible">
 
-    <TextView
-        android:id="@+id/buttonTwo"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:text="去录音"
-        android:textSize="18sp"
-        android:background="@drawable/red_box"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/bg_record" />
+
+        <TextView
+            android:id="@+id/buttonTwo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/red_box"
+            android:gravity="center"
+            android:text="去录音"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>

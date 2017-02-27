@@ -38,7 +38,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     private static final int TAB_1 = 1;
     //	List<>
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private ViewPager vp_spinner;
     private LoadMoreView mLoadMoreView;
     /**
@@ -88,8 +88,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         vp_spinner = (ViewPager) headerView.findViewById(R.id.vp_spinner);
         lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
 
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(),300);
-
         lvSound.setRefreshListListener(this);
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
@@ -122,11 +120,11 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         vp_spinner.setAdapter(new MyAdapter());
         vp_spinner.setCurrentItem(0);
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),mImageLoaderHm);
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
         lvXizuo.setAdapter(tab1XizuoAdapter);
 
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(),mImageLoaderHm);
+        tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
@@ -152,8 +150,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
-        mImageLoaderHm = null;
+
 //        mImageLoaderHm.
         super.onDestroy();
     }

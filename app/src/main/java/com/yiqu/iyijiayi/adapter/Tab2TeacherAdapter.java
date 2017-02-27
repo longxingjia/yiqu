@@ -24,6 +24,7 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.Tab2Fragment;
@@ -39,6 +40,7 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
@@ -49,13 +51,11 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
     private Context mContext;
     private String uid ;
     private ZhaoRen zhaoRen;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
     private  String tag="Tab2TeacherAdapter";
 
-    public Tab2TeacherAdapter(Context context, ImageLoaderHm<ImageView> m,String uid) {
+    public Tab2TeacherAdapter(Context context,String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
         this.uid = uid;
     }
 
@@ -117,6 +117,8 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
             }else {
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
+
+            PictureUtils.showPicture(mContext,f.userimage,h.icon);
 
             h.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,9 +206,7 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                 }
             });
 
-            if (f.userimage!=null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

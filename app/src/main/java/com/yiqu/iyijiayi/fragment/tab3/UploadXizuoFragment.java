@@ -90,15 +90,16 @@ public class UploadXizuoFragment extends AbsAllFragment {
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
         fileUrl = Variable.StorageDirectoryPath + composeVoice.voicename;
+        LogUtils.LOGE(tag, fileUrl);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-           String  musicNameStr = musicName.getText().toString().trim();
-           String  contentStr = content.getText().toString().trim();
+                String musicNameStr = musicName.getText().toString().trim();
+                String contentStr = content.getText().toString().trim();
 
-                if (musicNameStr.length() == 0 ||contentStr.length()==0) {
+                if (musicNameStr.length() == 0 || contentStr.length() == 0) {
                     ToastManager.getInstance(getActivity()).showText(
                             "请您输入完后再上传");
                     return;
@@ -170,26 +171,26 @@ public class UploadXizuoFragment extends AbsAllFragment {
                 LogUtils.LOGE(tag, result);
 //                JsonObject jsonObject = new JsonObject();
                 try {
-                    JSONObject jsonObject =new JSONObject(result);
+                    JSONObject jsonObject = new JSONObject(result);
                     String bool = jsonObject.getString("bool");
                     String data = jsonObject.getString("data");
                     String re = jsonObject.getString("result");
-                    if (bool .equals("1") ) {
+                    if (bool.equals("1")) {
 
-                    String url = new JSONObject(data).getString("filepath");
-                    composeVoice.soundpath = url;
+                        String url = new JSONObject(data).getString("filepath");
+                        composeVoice.soundpath = url;
+                        LogUtils.LOGE(tag,composeVoice.toString());
 
-                    RestNetCallHelper.callNet(
-                            getActivity(),
-                            MyNetApiConfig.addSound,
-                            MyNetRequestConfig.addSound(getActivity(),"2", composeVoice),
-                            "addSound", UploadXizuoFragment.this);
+                        RestNetCallHelper.callNet(
+                                getActivity(),
+                                MyNetApiConfig.addSound,
+                                MyNetRequestConfig.addSound(getActivity(), "2", composeVoice),
+                                "addSound", UploadXizuoFragment.this);
 
 
-                } else {
-                    ToastManager.getInstance(getActivity()).showText(re);
-                }
-
+                    } else {
+                        ToastManager.getInstance(getActivity()).showText(re);
+                    }
 
 
                 } catch (JSONException e) {
@@ -199,9 +200,6 @@ public class UploadXizuoFragment extends AbsAllFragment {
 //
 
             }
-
-            Log.e(TAG, "下载完");
-
 
             if (isCancelled()) {
 
@@ -215,8 +213,9 @@ public class UploadXizuoFragment extends AbsAllFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        if (type == NetCallBack.TYPE_SUCCESS){
-           ToastManager.getInstance(getActivity()).showText("上传成功");
+        LogUtils.LOGE(tag,netResponse.toString());
+        if (type == NetCallBack.TYPE_SUCCESS) {
+//            ToastManager.getInstance(getActivity()).showText("上传成功");
             getActivity().finish();
         }
 //            LogUtils.LOGE(tag, netResponse.toString());

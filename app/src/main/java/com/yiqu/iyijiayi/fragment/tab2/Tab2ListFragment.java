@@ -33,8 +33,8 @@ import java.util.ArrayList;
 
 public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
-    Tab2ListFragmetAdapter tab2ListFragmetAdapter;
+
+    private Tab2ListFragmetAdapter tab2ListFragmetAdapter;
     private String tag = "Tab2ListFragment";
     private ArrayList<Teacher> datas;
 
@@ -61,7 +61,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     @Override
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.listView);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
@@ -90,7 +89,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                         ,uid,type,count,rows),
                 "get_follow_recommend_list",
                 this);
-        tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(), mImageLoaderHm,uid);
+        tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(),uid);
         listView.setAdapter(tab2ListFragmetAdapter);
         listView.setOnItemClickListener(tab2ListFragmetAdapter);
         listView.setRefreshListListener(this);
@@ -99,13 +98,13 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
+
         super.onDestroy();
     }
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override
@@ -119,8 +118,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     @Override
     protected boolean onPageNext() {
         pageNextComplete();
-
-        LogUtils.LOGE(tag,"1");
         return true;
     }
 
@@ -132,9 +129,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         }else {
             setTitleText("学生");
         }
-
-
-
 
     }
 
@@ -162,10 +156,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
             }
         } else if ("get_follow_recommend_list_more".equals(id)) {
             if (TYPE_SUCCESS == type) {
-                // TODO Auto-generated method stub
 
-//                ArrayList<FindAllPushMsg>  list = (ArrayList<FindAllPushMsg>) netResponse.body;
-//                mBeautifulAdapter.addData(list);
                 try {
                     datas = parseList(netResponse.data.toString());
                     tab2ListFragmetAdapter.addData(datas);
@@ -186,7 +177,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     public void onRefresh() {
-        // TODO Auto-generated method stub
+
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
@@ -201,7 +192,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     public boolean onMore(AbsListView view) {
-        // TODO Auto-generated method stub
         if (mLoadMoreView.getMoreAble()) {
             if (mLoadMoreView.isloading()) {
                 // 正在加载中

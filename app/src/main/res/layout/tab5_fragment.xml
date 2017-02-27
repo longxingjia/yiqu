@@ -121,13 +121,6 @@
             android:text="我的艺加艺主页" />
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
         <LinearLayout
 
             android:id="@+id/mine_teacher"
@@ -197,20 +190,6 @@
             style="@style/textview_mine"
             android:drawableLeft="@mipmap/mine_guanzhu"
             android:text="关注" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_wodeyue"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_eyu"
-            android:text="我的余额" />
-
 
         <ImageView
             android:layout_width="match_parent"
