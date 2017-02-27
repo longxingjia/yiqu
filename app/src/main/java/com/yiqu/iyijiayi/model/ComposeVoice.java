@@ -33,9 +33,34 @@ public class ComposeVoice implements Serializable{
     public String isCompose;
 
 
-
-
-
+    @Override
+    public String toString() {
+        return "ComposeVoice{" +
+                "fromuid='" + fromuid + '\'' +
+                ", type='" + type + '\'' +
+                ", mid=" + mid +
+                ", musicname='" + musicname + '\'' +
+                ", musictype='" + musictype + '\'' +
+                ", chapter='" + chapter + '\'' +
+                ", accompaniment='" + accompaniment + '\'' +
+                ", commentpath='" + commentpath + '\'' +
+                ", commenttime='" + commenttime + '\'' +
+                ", soundtime=" + soundtime +
+                ", isformulation='" + isformulation + '\'' +
+                ", listenprice='" + listenprice + '\'' +
+                ", isopen='" + isopen + '\'' +
+                ", ispay='" + ispay + '\'' +
+                ", isreply='" + isreply + '\'' +
+                ", status='" + status + '\'' +
+                ", touid=" + touid +
+                ", questionprice='" + questionprice + '\'' +
+                ", voicename='" + voicename + '\'' +
+                ", soundpath='" + soundpath + '\'' +
+                ", desc='" + desc + '\'' +
+                ", createtime=" + createtime +
+                ", isCompose='" + isCompose + '\'' +
+                '}';
+    }
 }
 
 

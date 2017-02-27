@@ -70,7 +70,7 @@ public class RecordActivityForRecordFrag extends Activity
     //    private int width;
 //    private int height;
     private int recordTime;
-    private int actualRecordTime;
+
     private TextView tv_record;
     private TextView musicName;
     private TextView musictime;
@@ -91,7 +91,7 @@ public class RecordActivityForRecordFrag extends Activity
     private RecorderAndPlayUtil mRecorderUtil;
     private TimerTask mTimerTask = null;
     private Timer mTimer = null;
-    private float mSecond = 0;
+    private int mSecond = 0;
     private static final int MSG_TIME_SHORT = 0x123;
     private static final int POPUPWINDOW = 0x124;
 
@@ -287,13 +287,13 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = 0;
-        composeVoice.type =  "1";
+        composeVoice.type =  "2";
         composeVoice.musicname = musicName.getText().toString();
         composeVoice.musictype ="";
         composeVoice.chapter = "";
         composeVoice.accompaniment ="";
-        composeVoice.soundtime = actualRecordTime;
-        composeVoice.isformulation = "";
+        composeVoice.soundtime = mSecond;
+        composeVoice.isformulation = "0";
         composeVoice.isopen = "1";
         composeVoice.status = "1";
         composeVoice.listenprice = "1";
@@ -342,7 +342,7 @@ public class RecordActivityForRecordFrag extends Activity
                 public void onSelected(int selected) {
                     switch (selected) {
                         case 0:
-                            actualRecordTime = 0;
+
                             // mIsRecording = false;
                             if (mIsRecording) {
                                 initRecording();
@@ -407,7 +407,7 @@ public class RecordActivityForRecordFrag extends Activity
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        musictime.setText(mSecond + "s\"");
+                        musictime.setText(mSecond + "\"");
 
                     }
                 });

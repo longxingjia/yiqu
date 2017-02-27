@@ -140,6 +140,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
                 c.put(CREATED, cc.created);
                 c.put(EDITED, cc.edited);
                 count = db.insert(TABLE_NAME, null, c);
+                db.close();
             }
         } catch (Exception e) {
             Log.w(TAG, e.toString());
@@ -157,8 +158,8 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     public long insert(Music cc) {
         long count = 0;
         try {
-            SQLiteDatabase db = getWritableDatabase();
             ContentValues c = new ContentValues();
+            SQLiteDatabase db = getWritableDatabase();
             c.put(MID, cc.mid);
             c.put(TYPE, cc.type);
             c.put(TYPENAME, cc.typename);
@@ -175,6 +176,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(EDITED, cc.edited);
 
             count = db.insert(TABLE_NAME, null, c);
+            db.close();
         } catch (Exception e) {
             Log.w(TAG, e.toString());
         } finally {
@@ -207,8 +209,9 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(ISFORMULATION, cc.isformulation);
             c.put(CREATED, cc.created);
             c.put(EDITED, cc.edited);
-
-            return db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
+            int r =db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
+//            db.close();
+            return r;
         } catch (Exception e) {
             Log.w(TAG, e.toString());
         } finally {
@@ -229,6 +232,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         // TODO Auto-generated method stub
         try {
             SQLiteDatabase db = getWritableDatabase();
+
             return db.delete(TABLE_NAME, MID + " = " + mid + " ", null);
         } catch (Exception e) {
             Log.w(TAG, e.toString());
