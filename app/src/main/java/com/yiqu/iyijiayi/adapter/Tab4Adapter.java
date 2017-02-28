@@ -7,14 +7,10 @@
  */
 package com.yiqu.iyijiayi.adapter;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,24 +22,9 @@ import android.widget.TextView;
 
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Discovery;
-import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
@@ -51,13 +32,13 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
     private LayoutInflater mLayoutInflater;
     private ArrayList<Discovery> datas = new ArrayList<Discovery>();
     private Context mContext;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
+
     private String tag = "Tab1SoundAdapter";
 
-    public Tab4Adapter(Context context, ImageLoaderHm<ImageView> m) {
+    public Tab4Adapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
+
     }
 
 
@@ -90,11 +71,12 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
         TextView musicname;
         TextView desc;
-        TextView tea_name;
-        TextView tectitle;
-        ImageView tea_header;
+        TextView name;
+        TextView title;
+        ImageView header;
         ImageView musictype;
         TextView views;
+        TextView pl;
         TextView time;
 
     }
@@ -109,10 +91,11 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
                 v = mLayoutInflater.inflate(R.layout.tab4_discovery, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.desc = (TextView) v.findViewById(R.id.desc);
-                h.tea_name = (TextView) v.findViewById(R.id.name);
-                h.tectitle = (TextView) v.findViewById(R.id.title);
+                h.pl = (TextView) v.findViewById(R.id.pl);
+                h.name = (TextView) v.findViewById(R.id.name);
+                h.title = (TextView) v.findViewById(R.id.title);
                 h.time = (TextView) v.findViewById(R.id.time);
-                h.tea_header = (ImageView) v.findViewById(R.id.header);
+                h.header = (ImageView) v.findViewById(R.id.header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.views = (TextView) v.findViewById(R.id.views);
                 v.setTag(h);
@@ -121,18 +104,55 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
             h = (HoldChild) v.getTag();
             Discovery f = getItem(position);
+
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.tectitle.setText(f.tectitle);
-            h.tea_name.setText(f.tecname);
-            h.views.setText(f.views+"");
+
+//            if (TextUtils.isEmpty(f.stuname)) {
+//                h.name.setText(f.tecname);
+//            } else {
+//                h.name.setText(f.stuname);
+//            }
+//            if (TextUtils.isEmpty(f.stuschool)) {
+//                h.title.setText(f.tecschool);
+//            } else {
+//                h.title.setText(f.stuschool);
+//            }
+//
+//            if (TextUtils.isEmpty(f.stuimage)) {
+//                PictureUtils.showPicture(mContext, f.tecimage, h.header);
+//            } else {
+//                PictureUtils.showPicture(mContext, f.stuimage, h.header);
+//            }
+            if (f.type==1){
+                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+            }else {
+                h.musictype.setBackgroundResource(R.mipmap.boyin);
+            }
+
+
+            if (f.stype == 1) {   //老师
+                h.name.setText(f.tecname);
+                h.title.setText(f.tecschool);
+                PictureUtils.showPicture(mContext, f.tecimage, h.header);
+
+                h.pl.setText("评论了");
+            } else {
+                h.title.setText(f.stuschool);
+                PictureUtils.showPicture(mContext, f.stuimage, h.header);
+                h.name.setText(f.stuname);
+                h.pl.setText("录制了");
+            }
+
+
+            h.views.setText(f.views + "");
 
             String2TimeUtils string2TimeUtils = new String2TimeUtils();
-            long currentTimeMillis = System.currentTimeMillis()/1000;
+            long currentTimeMillis = System.currentTimeMillis() / 1000;
 
             long time = currentTimeMillis - f.edited;
-            h.time.setText(string2TimeUtils.long2Time(time)+"前");
-            PictureUtils.showPicture(mContext,f.tecimage,h.tea_header);
+            h.time.setText(string2TimeUtils.long2Time(time) + "前");
+
 
         } catch (Exception e) {
             e.printStackTrace();

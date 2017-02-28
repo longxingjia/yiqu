@@ -7,19 +7,25 @@ package com.yiqu.iyijiayi.model;
 public class Discovery {
 
     public int sid;
-    public int type;
     public int stype;
+    public int type;
     public int isfree;
     public String desc;
     public int fromuid;  // 提问人
     public int mid;
+    public String musicname;
+    public String musictype;
+    public String accompaniment;
+    public String chapter;
+    public String soundtime;
+    public String soundpath;
     public int isformulation;  //是否艺考曲目
     public int touid;  //被提问老师UID
-    public int views;//浏览量
+    public String commentpath;
     public int commenttime;
     public int questionprice;
     public int listenprice;
-
+    public int views;//浏览量
     public int like;
     public int isopen;
     public int ispay;
@@ -29,37 +35,41 @@ public class Discovery {
     public int isnew;
     public int isnewreply;
     public int isnewread;
-    public String musicname;
-    public String musictype;
-    public String accompaniment;
-    public String chapter;
-    public String soundtime;
-    public String soundpath;
-    public String commentpath;
     public long created;
     public long edited;
-    public String stuname;
-    public String stuimage;
+
     public String tecname;
     public String tecimage;
-    public String tectitle;
+    public String tecschool;
+
+
+    public String stuname;
+    public String stuimage;
+    public String stuschool;
 
     @Override
     public String toString() {
         return "Discovery{" +
                 "sid=" + sid +
-                ", type=" + type +
                 ", stype=" + stype +
+                ", type=" + type +
                 ", isfree=" + isfree +
                 ", desc='" + desc + '\'' +
                 ", fromuid=" + fromuid +
                 ", mid=" + mid +
+                ", musicname='" + musicname + '\'' +
+                ", musictype='" + musictype + '\'' +
+                ", accompaniment='" + accompaniment + '\'' +
+                ", chapter='" + chapter + '\'' +
+                ", soundtime='" + soundtime + '\'' +
+                ", soundpath='" + soundpath + '\'' +
                 ", isformulation=" + isformulation +
                 ", touid=" + touid +
-                ", views=" + views +
+                ", commentpath='" + commentpath + '\'' +
                 ", commenttime=" + commenttime +
                 ", questionprice=" + questionprice +
                 ", listenprice=" + listenprice +
+                ", views=" + views +
                 ", like=" + like +
                 ", isopen=" + isopen +
                 ", ispay=" + ispay +
@@ -69,20 +79,14 @@ public class Discovery {
                 ", isnew=" + isnew +
                 ", isnewreply=" + isnewreply +
                 ", isnewread=" + isnewread +
-                ", musicname='" + musicname + '\'' +
-                ", musictype='" + musictype + '\'' +
-                ", accompaniment='" + accompaniment + '\'' +
-                ", chapter='" + chapter + '\'' +
-                ", soundtime='" + soundtime + '\'' +
-                ", soundpath='" + soundpath + '\'' +
-                ", commentpath='" + commentpath + '\'' +
-                ", created='" + created + '\'' +
-                ", edited='" + edited + '\'' +
-                ", stuname='" + stuname + '\'' +
-                ", stuimage='" + stuimage + '\'' +
+                ", created=" + created +
+                ", edited=" + edited +
                 ", tecname='" + tecname + '\'' +
                 ", tecimage='" + tecimage + '\'' +
-                ", tectitle='" + tectitle + '\'' +
+                ", tecschool='" + tecschool + '\'' +
+                ", stuname='" + stuname + '\'' +
+                ", stuimage='" + stuimage + '\'' +
+                ", stuschool='" + stuschool + '\'' +
                 '}';
     }
 }

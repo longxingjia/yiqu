@@ -35,7 +35,7 @@ public class RegisterFragment extends AbsAllFragment {
     EditText txt02;
     TextView btn01;
     Button btn02;
-    private String tag="RegisterFragment";
+    private String tag = "RegisterFragment";
 
     private MyCount mMyCount;
 
@@ -136,13 +136,13 @@ public class RegisterFragment extends AbsAllFragment {
                             "请输入收到的短信验证码");
                     return;
                 }
-                LogUtils.LOGE(tag,phonenum + "--" + key);//key 35688
-                if (phonenum.equals("18539343936")){
+                LogUtils.LOGE(tag, phonenum + "--" + key);//key 35688
+                if (phonenum.equals("18539343936")) {
                     RestNetCallHelper.callNet(getActivity(),
                             MyNetApiConfig.login, MyNetRequestConfig.login(
                                     getActivity(), phonenum, code, "0", "0"), "login",
                             RegisterFragment.this);
-                }else {
+                } else {
                     RestNetCallHelper.callNet(getActivity(),
                             MyNetApiConfig.login, MyNetRequestConfig.login(
                                     getActivity(), phonenum, code, key, "0"), "login",
@@ -156,39 +156,51 @@ public class RegisterFragment extends AbsAllFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (netResponse!=null){
+        if (netResponse != null) {
 
-        if ("getLoginMessageCode".equals(id)) {
-            mMyCount = new MyCount(60000 * 5, 1000);
-            mMyCount.start();
+            if ("getLoginMessageCode".equals(id)) {
+                mMyCount = new MyCount(60000 * 5, 1000);
+                mMyCount.start();
 
-            if (netResponse.bool == 0) {
-                LogUtils.LOGE(tag,netResponse.toString());
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
-            } else {
-                Gson gson = new Gson();
-                YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
-                key = yzmKey.key;
-                ToastManager.getInstance(getActivity()).showText("发送成功");
+                if (netResponse.bool == 0) {
+                    LogUtils.LOGE(tag, netResponse.toString());
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                } else {
+                    Gson gson = new Gson();
+                    YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
+                    key = yzmKey.key;
+                    ToastManager.getInstance(getActivity()).showText("发送成功");
+                }
+            } else if ("login".equals(id)) {
+
+                if (netResponse.bool == 0) {
+
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                } else {
+                    Gson gson = new Gson();
+                    UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
+                                    getActivity(), userInfo.uid), "getUserByPhoneUid",
+                            RegisterFragment.this);
+                    userInfo = null;
+
+
+                }
+
+            } else if ("getUserByPhoneUid".equals(id)) {
+
+                if (netResponse.bool == 0) {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                } else {
+                    LogUtils.LOGE(tag, netResponse.toString());
+                    Gson gson = new Gson();
+                    UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+                    AppShare.setIsLogin(getActivity(), true);
+                    AppShare.setUserInfo(getActivity(), userInfo);
+                    getActivity().finish();
+                }
             }
-        } else if ("login".equals(id)) {
-
-            if (netResponse.bool == 0) {
-//                LogUtils.LOGE(netResponse.toString());
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
-            } else {
-                //     LogUtils.LOGE(netResponse.data.toString());
-                Gson gson = new Gson();
-                UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
-//                LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
-                AppShare.setIsLogin(getActivity(), true);
-                AppShare.setUserInfo(getActivity(), userInfo);
-
-
-                getActivity().finish();
-            }
-
-        }
         }
         super.onNetEnd(id, type, netResponse);
     }

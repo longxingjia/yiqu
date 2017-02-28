@@ -74,7 +74,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
         listView = (RefreshList) v.findViewById(R.id.listView);
         loadErr = (ImageView) v.findViewById(R.id.loading_error);
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        tab4Adapter = new Tab4Adapter(getActivity(), mImageLoaderHm);
+        tab4Adapter = new Tab4Adapter(getActivity());
         listView.setAdapter(tab4Adapter);
         listView.setOnItemClickListener(tab4Adapter);
         listView.setRefreshListListener(this);
@@ -160,9 +160,10 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
 
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-
+                LogUtils.LOGE(tag,netResponse.toString());
                 try {
                     discoveries = parseList(netResponse.data.toString());
+                    LogUtils.LOGE(tag,discoveries.toString());
                     tab4Adapter.setData(discoveries);
                     if (discoveries.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -178,10 +179,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
             }
         } else if ("getSoundList_more".equals(id)) {
             if (TYPE_SUCCESS == type) {
-                // TODO Auto-generated method stub
 
-//                ArrayList<FindAllPushMsg>  list = (ArrayList<FindAllPushMsg>) netResponse.body;
-//                mBeautifulAdapter.addData(list);
                 try {
                     discoveries = parseList(netResponse.data.toString());
                     tab4Adapter.addData(discoveries);
@@ -195,6 +193,8 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                     e.printStackTrace();
                 }
 
+            }else {
+                mLoadMoreView.end();
             }
         }
         super.onNetEnd(id, type, netResponse);

@@ -141,13 +141,13 @@ public abstract class AbsRestSyncTask extends AsyncTask<Object, Object, NetRespo
 		Log.d(TAG, httpUriRequest.getURI().toURL().toString());
 		Log.w(TAG, mNetApi.getNetMethod().toString());
 		if(netRequest.getData() != null){
-			Log.d(TAG, netRequest.getData().toString());
+			Log.w(TAG, netRequest.getData().toString());
 		}
 		StringBuilder sb = new StringBuilder("?");
 		for (Entry<String, String> entry: netRequest.getHttpParams().entrySet()) {
 			sb.append(entry.getKey() + "=" + entry.getValue() + "&");
 		};
-		Log.d(TAG, sb.toString());
+		Log.w(TAG, sb.toString());
 //			
 //		Log.d(TAG, mNetApi.getPath() + sb.toString());
 		//Log.d(TAG,"Server request: \nURL=" + mNetApi.getPath() + sb.toString());

@@ -237,42 +237,44 @@ public class MyNetRequestConfig {
 
 
     /**
-     * 15、保存个人学习记录积分的接口 参数：String token//登录凭证,String shjhm //手机号, String
-     * kchbh//课程编号， String sdjf//所得积分, String yytgzs//游戏通关数,String dts//答题数
+     *
      */
-    public static NetRequest saveXxjl(Context c, String token, String shjhm,
-                                      String kchbh, String sdjf, String yytgzs, String dts) {
+    public static NetRequest getUserByPhoneUid(Context c, String uid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("kchbh", kchbh);
-        r.addHttpParam("sdjf", sdjf);
-        r.addHttpParam("yytgzs", yytgzs);
-        r.addHttpParam("dts", dts);
+        r.addHttpParam("uid", uid);
+
+        return r;
+    }
+
+
+    /**
+     *
+     * @param c
+     * @param type 2 点评,1 提问,@"3"]
+     * @param uid   个人页面对象的uid
+     * @param count
+     * @param rows
+     * @param checkpay 传当前用户UID
+     * @return
+     */
+    public static NetRequest getUserPageSoundList(Context c, String type,
+                                           String uid, int count, int rows,String checkpay) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("type", type);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("count", count+"");
+        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("checkpay", checkpay);
         return r;
     }
 
     /**
-     * 16、保存个人学习记录发送小红花的接口 参数：String token//登录凭证,String shjhm //手机号,
-     * kchbh//课程编号， shfhdxhh//是否获得小红花
+     * 17、
      */
-    public static NetRequest updateXxjlxhf(Context c, String token,
-                                           String shjhm, String kchbh, String shfhdxhh) {
+    public static NetRequest getUserPage(Context c, String uid, String myuid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("kchbh", kchbh);
-        r.addHttpParam("shfhdxhh", shfhdxhh);
-        return r;
-    }
-
-    /**
-     * 17、重置班级信息的接口 String token//登录凭证,String shjhm //手机号
-     */
-    public static NetRequest resetbj(Context c, String token, String shjhm) {
-        MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("myuid", myuid);
         return r;
     }
 

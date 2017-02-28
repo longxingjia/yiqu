@@ -1,160 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
     android:fillViewport="true"
     android:gravity="center_horizontal">
 
-    <LinearLayout
+
+    <com.ui.views.RefreshList
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fafafa"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        >
+        android:layout_marginBottom="5dp">
 
-        <RelativeLayout
-            android:background="@mipmap/home_bg"
-            android:layout_width="match_parent"
-            android:layout_height="180dp">
-
-            <ImageView
-                android:id="@+id/head"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:background="@mipmap/menu_head" />
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:textSize="20dp"
-                android:textColor="@color/white"
-                android:text="增员"
-                android:layout_below="@+id/head"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_centerHorizontal="true"
-                />
-
-            <ImageView
-                android:id="@+id/sex"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/head"
-                android:layout_toRightOf="@+id/name"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@mipmap/sex_female"/>
-
-            <TextView
-                android:id="@+id/desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_below="@+id/name"
-                android:layout_marginRight="5dp"
-                android:layout_centerHorizontal="true"/>
-
-        </RelativeLayout>
+    </com.ui.views.RefreshList>
 
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:id="@+id/dianping_tab"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#fafafa">
-                <TextView
-                    android:id="@+id/dianping"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="点评"
-                    android:textSize="15dp"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#999999"
-                android:layout_marginTop="11dp"
-                android:layout_marginBottom="11dp"/>
-
-            <RelativeLayout
-                android:id="@+id/tiwen_tab"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#fafafa">
-                <TextView
-                    android:id="@+id/tiwen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="提问"
-                    android:textColor="#000000"
-                    android:textSize="15dp"
-                    android:drawablePadding="5dp"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-
-
-            <TextView
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#999999"
-                android:layout_marginTop="11dp"
-                android:layout_marginBottom="11dp"/>
-
-            <RelativeLayout
-                android:id="@+id/xizuo_tab"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#fafafa">
-                <TextView
-                    android:id="@+id/xizuo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="习作"
-                    android:textColor="#000000"
-                    android:textSize="15dp"
-                    android:drawablePadding="5dp"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <com.yiqu.iyijiayi.utils.PageCursorView
-            android:id="@+id/cursor"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_alignParentBottom="true"
-            android:background="#88aaaaaa"
-            />
-        <com.yiqu.iyijiayi.utils.NoScollViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:flipInterval="30"
-            android:persistentDrawingCache="animation"/>
-
-
-    </LinearLayout>
-
-
-</ScrollView>
+</LinearLayout>

@@ -90,7 +90,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
         fileUrl = Variable.StorageDirectoryPath + composeVoice.voicename;
-        LogUtils.LOGE(tag, fileUrl);
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,11 +108,12 @@ public class UploadXizuoFragment extends AbsAllFragment {
                 composeVoice.desc = contentStr;
 
                 final Map<String, String> params = new HashMap<String, String>();
-                if (AppShare.getUserInfo(getActivity()).type.equals("1")) {
+                if (AppShare.getUserInfo(getActivity()).type.equals("1")) { //1是学生
                     params.put("type", String.valueOf(0));
                 } else {
                     params.put("type", String.valueOf(1));
                 }
+                params.put("isfree", String.valueOf(0));
 
                 File file = new File(fileUrl);
                 if (file.exists()) {
@@ -187,7 +188,6 @@ public class UploadXizuoFragment extends AbsAllFragment {
                                 MyNetRequestConfig.addSound(getActivity(), "2", composeVoice),
                                 "addSound", UploadXizuoFragment.this);
 
-
                     } else {
                         ToastManager.getInstance(getActivity()).showText(re);
                     }
@@ -215,7 +215,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         super.onNetEnd(id, type, netResponse);
         LogUtils.LOGE(tag,netResponse.toString());
         if (type == NetCallBack.TYPE_SUCCESS) {
-//            ToastManager.getInstance(getActivity()).showText("上传成功");
+            ToastManager.getInstance(getActivity()).showText("上传成功");
             getActivity().finish();
         }
 //            LogUtils.LOGE(tag, netResponse.toString());

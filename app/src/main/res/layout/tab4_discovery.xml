@@ -48,7 +48,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/add_follow"
+            android:id="@+id/pl"
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:layout_marginRight="10dp"
@@ -71,11 +71,13 @@
                 android:id="@+id/musicname"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:gravity="center"
                 android:text="今夜无人入睡"
                 android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/musictype"
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

@@ -91,6 +91,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
         lvTeacher.addHeaderView(headView);
 
+
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
 
@@ -117,9 +118,11 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
         tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), uid);
         lvTeacher.setAdapter(tab2TeacherAdapter);
+        lvTeacher.setOnItemClickListener(tab2TeacherAdapter);
 
         tab2StudentAdapter = new Tab2StudentAdapter(getActivity(),uid);
         lvStudent.setAdapter(tab2StudentAdapter);
+        lvStudent.setOnItemClickListener(tab2StudentAdapter);
 
         if (zhaoRen == null) {
 

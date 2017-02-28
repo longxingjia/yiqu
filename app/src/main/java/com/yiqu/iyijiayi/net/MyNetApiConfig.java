@@ -41,6 +41,12 @@ public class MyNetApiConfig {
         public String getPath() {
             return ServerAddr + "/user/get-user-by-uid";
         }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
     };
 
 
@@ -322,6 +328,32 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi getUserPageSoundList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-user-page-sound-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+
+    public static MyNetApi getUserPage = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/get-user-page";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+
     public static MyNetApi uploadSounds = new MyNetApi() {
         @Override
         public String getPath() {

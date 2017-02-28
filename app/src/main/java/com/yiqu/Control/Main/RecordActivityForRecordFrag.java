@@ -287,7 +287,7 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = 0;
-        composeVoice.type =  "2";
+        composeVoice.type = "2";
         composeVoice.musicname = musicName.getText().toString();
         composeVoice.musictype ="";
         composeVoice.chapter = "";

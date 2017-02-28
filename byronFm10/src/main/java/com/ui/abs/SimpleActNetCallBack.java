@@ -32,7 +32,7 @@ public class SimpleActNetCallBack implements NetCallBack {
 		switch(type){
 		case TYPE_SUCCESS:
 			break;
-		case TYPE_TOKEN_INVALID:
+		case TYPE_NO_VALUE:
 
 			break;
 		case TYPE_ERROR:

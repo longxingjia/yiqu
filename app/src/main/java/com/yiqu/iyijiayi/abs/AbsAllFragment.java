@@ -54,23 +54,28 @@ public abstract class AbsAllFragment extends AbsTitleNetFragment {
 	@Override
 	public void onNetEnd(String id, int type, NetResponse netResponse) {
 		// TODO Auto-generated method stub
-		if(type == TYPE_TOKEN_INVALID){
-			//如果token失效
-			Intent intent = new Intent();  
-			intent.setAction(Constant.ACTION_LOG_OUT);  
-			getActivity().sendBroadcast(intent);
-			//AppShare.LoginOut(getActivity());
-			
-			ToastManager.getInstance(getActivity()).showText("身份失效，需要重新登录");
-//			((MyApp)(getActivity().getApplication())).stopPush();
+//		if(type == TYPE_TOKEN_INVALID){
+//			//如果token失效
+//			Intent intent = new Intent();
+//			intent.setAction(Constant.ACTION_LOG_OUT);
+//			getActivity().sendBroadcast(intent);
+//			//AppShare.LoginOut(getActivity());
 //
-//			Model.startNextAct(getActivity(), LoginFragment.class.getName());
-			getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-			
-		}else if (type ==TYPE_ERROR ){
-			ToastManager.getInstance(getActivity()).showText(netResponse.result);
+//			ToastManager.getInstance(getActivity()).showText("身份失效，需要重新登录");
+////			((MyApp)(getActivity().getApplication())).stopPush();
+////
+////			Model.startNextAct(getActivity(), LoginFragment.class.getName());
+//			getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//
+//		}else
+        if (type == TYPE_ERROR) {
+            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+        }else if (type ==TYPE_NO_VALUE){
+			ToastManager.getInstance(getActivity()).showText("没有更多数据了");
+
 		}
-		super.onNetEnd(id, type, netResponse);
+
+        super.onNetEnd(id, type, netResponse);
 	}
 
 

@@ -8,7 +8,7 @@ public interface NetCallBack {
 	/**成功*/
 	public static final int TYPE_SUCCESS = 1;
 //	/**成功*/
-	public static final int TYPE_TOKEN_INVALID = 2;
+	public static final int TYPE_NO_VALUE = 2;
 	/**超时*/
 	public static final int TYPE_TIMEOUT = 3;
 	/**取消*/

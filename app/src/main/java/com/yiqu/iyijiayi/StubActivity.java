@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
-import com.yiqu.iyijiayi.fragment.tab5.LoginFragment;
+import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -23,7 +23,7 @@ public class StubActivity extends AbsFragmentAct {
 	protected void initView() {
 		String fragmentClass = this.getIntent().getStringExtra("fragment");
 		if (fragmentClass == null) {
-			fragmentClass = LoginFragment.class.getName();
+			fragmentClass = RegisterFragment.class.getName();
 		}
 		f = Model.creatFragment(fragmentClass);
 		long time = this.getIntent().getLongExtra("time", 0);

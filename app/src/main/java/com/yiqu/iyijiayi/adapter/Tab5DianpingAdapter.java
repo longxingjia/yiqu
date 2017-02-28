@@ -8,10 +8,8 @@
 package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,45 +17,43 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
 import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.PictureUtils;
-
 
 import java.util.ArrayList;
 
-public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag ="Tab1XizuoAdapter";
-    private LayoutInflater mLayoutInflater;
-    private ArrayList<Xizuo> datas = new ArrayList<Xizuo>();
-    private Context mContext;
+public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListener {
 
-    public Tab1XizuoAdapter(Context context) {
+    private LayoutInflater mLayoutInflater;
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
+    private Context mContext;
+    private String uid;
+
+    private String tag = "Tab2ListFragmetAdapter";
+
+    public Tab5DianpingAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-
+        this.uid = uid;
     }
 
-
-    public void setData(ArrayList<Xizuo> list) {
+    public void setData(ArrayList<Sound> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Xizuo> allDatas) {
+    public void addData(ArrayList<Sound> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -68,21 +64,25 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     }
 
     @Override
-    public Xizuo getItem(int position) {
+    public Sound getItem(int position) {
         return datas.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     private class HoldChild {
 
-        TextView name;
-        TextView content;
-        ImageView icon;
-
+        TextView musicname;
+        TextView desc;
+        TextView soundtime;
+        TextView tea_name;
+        TextView tectitle;
+        ImageView stu_header;
+        ImageView tea_header;
+        TextView stu_listen;
     }
 
     @Override
@@ -92,19 +92,30 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_xizuo, null);
-                h.name = (TextView) v.findViewById(R.id.musicname);
-                h.content = (TextView) v.findViewById(R.id.desc);
-                h.icon = (ImageView) v.findViewById(R.id.header);
+                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
+                h.tea_name = (TextView) v.findViewById(R.id.tea_name);
+                h.tectitle = (TextView) v.findViewById(R.id.tectitle);
+                h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
+                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
             }
-            h = (HoldChild) v.getTag();
-            Xizuo f = getItem(position);
-            h.name.setText(f.musicname);
-            h.content.setText(f.desc);
-          //  LogUtils.LOGE(tag,MyNetApiConfig.ImageServerAddr + f.stuimage);
 
-            PictureUtils.showPicture(mContext,f.stuimage,h.icon);
+            h = (HoldChild) v.getTag();
+            Sound f = getItem(position);
+            h.musicname.setText(f.musicname);
+            h.desc.setText(f.desc);
+            h.soundtime.setText(f.soundtime + "\"");
+            h.tea_name.setText(f.tecname);
+            h.tectitle.setText(f.tectitle);
+            //  LogUtils.LOGE(tag,f.soundpath);
+
+
+            PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
+            PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
 
 
         } catch (Exception e) {
@@ -113,28 +124,12 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         return v;
     }
 
+
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Xizuo f = getItem(position);
-//
-        if (AppShare.getIsLogin(mContext)){
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        // TODO Auto-generated method stub
 
-            Bundle b = new Bundle();
-            b.putSerializable("data",f);
-            i.putExtras(b);
-            mContext.startActivity(i);
-        }else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请登录后再试");
-            mContext.startActivity(i);
-
-        }
-//
     }
-
 
     public boolean isNetworkConnected(Context context) {
         if (context != null) {

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,11 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.Tab2Fragment;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.model.ZhaoRen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -49,11 +53,11 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
     private LayoutInflater mLayoutInflater;
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Context mContext;
-    private String uid ;
+    private String uid;
     private ZhaoRen zhaoRen;
-    private  String tag="Tab2TeacherAdapter";
+    private String tag = "Tab2TeacherAdapter";
 
-    public Tab2TeacherAdapter(Context context,String uid) {
+    public Tab2TeacherAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         this.uid = uid;
@@ -61,7 +65,7 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
 
     public void setData(ZhaoRen list) {
         datas = list.teacher;
-        zhaoRen =list;
+        zhaoRen = list;
         notifyDataSetChanged();
     }
 
@@ -107,24 +111,24 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-           final Teacher f = getItem(position);
+            final Teacher f = getItem(position);
             h.name.setText(f.username);
             h.content.setText(f.title);
-            if (f.isfollow.equals("0")){  //没有关注
+            if (f.isfollow.equals("0")) {  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);
 
 
-            }else {
+            } else {
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
 
-            PictureUtils.showPicture(mContext,f.userimage,h.icon);
+            PictureUtils.showPicture(mContext, f.userimage, h.icon);
 
             h.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (uid.equals("0")){
+                    if (uid.equals("0")) {
                         Intent i = new Intent(mContext, StubActivity.class);
                         i.putExtra("fragment", SelectLoginFragment.class.getName());
                         mContext.startActivity(i);
@@ -134,12 +138,12 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                     }
 
 
-                    if (f.isfollow.equals("0")){  //没有关注
+                    if (f.isfollow.equals("0")) {  //没有关注
 //                        h.follow.setBackgroundResource(R.mipmap.follow);
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.addfollow,
-                                MyNetRequestConfig.addfollow(mContext,uid,f.uid ),
+                                MyNetRequestConfig.addfollow(mContext, uid, f.uid),
                                 "teacher", new NetCallBack() {
                                     @Override
                                     public void onNetNoStart(String id) {
@@ -154,14 +158,14 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
+                                        if (netResponse != null) {
+                                            if (netResponse.bool == 1) {
                                                 f.isfollow = "1";
                                                 zhaoRen.teacher = datas;
-                                                AppShare.setZhaoRenList(mContext,zhaoRen);
+                                                AppShare.setZhaoRenList(mContext, zhaoRen);
                                                 notifyDataSetChanged();
-                                            }else {
-                                               ToastManager.getInstance(mContext).showText(netResponse.result);
+                                            } else {
+                                                ToastManager.getInstance(mContext).showText(netResponse.result);
                                             }
 
                                         }
@@ -169,13 +173,13 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                                     }
                                 });
 
-                    }else {
+                    } else {
 //                        if (f.isfollow.equals("0")){  //没有关注
 //                        h.follow.setBackgroundResource(R.mipmap.follow);
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.delfollow,
-                                MyNetRequestConfig.delfollow(mContext,uid,f.uid ),
+                                MyNetRequestConfig.delfollow(mContext, uid, f.uid),
                                 "delfollow", new NetCallBack() {
                                     @Override
                                     public void onNetNoStart(String id) {
@@ -190,11 +194,11 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
+                                        if (netResponse != null) {
+                                            if (netResponse.bool == 1) {
                                                 f.isfollow = "0";
                                                 notifyDataSetChanged();
-                                            }else {
+                                            } else {
                                                 ToastManager.getInstance(mContext).showText(netResponse.result);
                                             }
 
@@ -217,27 +221,63 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         // TODO Auto-generated method stub
-//        Xizuo f = getItem(arg2 - 1);
+        Teacher f = getItem(arg2 - 1);
 //
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
+        UserInfo userInfo = null;
+        if (AppShare.getIsLogin(mContext)) {
+             userInfo = AppShare.getUserInfo(mContext);
+            RestNetCallHelper.callNet(mContext,
+                    MyNetApiConfig.getUserPage,
+                    MyNetRequestConfig.getUserPage(mContext
+                            , f.uid, userInfo.uid),
+                    "getUserPage",
+                    new NetCallBack() {
+                        @Override
+                        public void onNetNoStart(String id) {
 
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
+                        }
+
+                        @Override
+                        public void onNetStart(String id) {
+
+                        }
+
+                        @Override
+                        public void onNetEnd(String id, int type, NetResponse netResponse) {
+                            if (TYPE_SUCCESS == type) {
+                                Gson gson = new Gson();
+                                HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                                Intent i = new Intent(mContext, StubActivity.class);
+                                i.putExtra("fragment", HomePageFragment.class.getName());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("data",homePage);
+                                i.putExtras(bundle);
+                                mContext.startActivity(i);
+                            }
+
+                        }
+                    });
+
+
+
+
+        } else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请您登录后在操作");
+            mContext.startActivity(i);
+        }
+
+
+
+
+
+
 
     }
 

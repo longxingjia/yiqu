@@ -14,6 +14,7 @@ import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
+import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SetPhoneFragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
@@ -123,7 +124,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     if (NetworkRestClient.isNetworkAvailable(mContext)) {
                         GetWechatUserInfoTask getWechatUserInfoTask = new GetWechatUserInfoTask(mContext,wechatAccessToken.access_token,wechatAccessToken.openid);
                         getWechatUserInfoTask.execute();
+
+
+
+
                     }
+
+
 
 
 
@@ -208,16 +215,40 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     Model.startNextAct(mContext, SetPhoneFragment.class.getName());
 
                                 }else {
-                                    AppShare.setIsLogin(mContext, true);
+
                                     Gson gson = new Gson();
                                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
-                                    AppShare.setUserInfo(mContext, userInfo);
-//                                    Model.startNextAct(mContext, Tab5Fragment.class.getName());
-//                                    finish();
 
-                                    Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
-                                    startActivity(intent);
+
+                                    RestNetCallHelper.callNet(mContext,
+                                            MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
+                                                    mContext, userInfo.uid), "getUserByPhoneUid",
+                                            new NetCallBack() {
+                                                @Override
+                                                public void onNetNoStart(String id) {
+
+                                                }
+
+                                                @Override
+                                                public void onNetStart(String id) {
+
+                                                }
+
+                                                @Override
+                                                public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+                                                    Gson gson = new Gson();
+                                                    UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+                                                    AppShare.setIsLogin(mContext, true);
+                                                    AppShare.setUserInfo(mContext, userInfo);
+                                                    Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+                                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
+                                                    startActivity(intent);
+                                                }
+                                            });
+
+
+
 
 
                                 }

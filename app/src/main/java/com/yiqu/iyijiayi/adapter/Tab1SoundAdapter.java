@@ -39,6 +39,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -135,19 +136,8 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
           //  LogUtils.LOGE(tag,f.soundpath);
 
 
-            if (f.tecimage!=null&&f.tecimage.contains("http://wx.qlogo.cn")){
-//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
-                Picasso.with(mContext).load( f.tecimage).placeholder(R.mipmap.menu_head).into(h.tea_header);
-            }else {
-                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.tecimage).placeholder(R.mipmap.menu_head).into(h.tea_header);
-            }
-
-            if (f.stuimage!=null&&f.stuimage.contains("http://wx.qlogo.cn")){
-//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
-                Picasso.with(mContext).load( f.stuimage).placeholder(R.mipmap.menu_head).into(h.stu_header);
-            }else {
-                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.stuimage).placeholder(R.mipmap.menu_head).into(h.stu_header);
-            }
+            PictureUtils.showPicture(mContext,f.tecimage,h.tea_header);
+            PictureUtils.showPicture(mContext,f.stuimage,h.stu_header);
 
             h.stu_listen.setOnClickListener(new View.OnClickListener() {
                 @Override

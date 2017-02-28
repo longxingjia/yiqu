@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public class Sound implements Serializable{
     public int sid;
-    public int stype;
-    public int type;
+    public int stype; //1问题 2习作
+    public int type;  //声乐1，播音2
     public int mid;
     public int isformulation; //是否艺考曲目
     public int fromuid;
