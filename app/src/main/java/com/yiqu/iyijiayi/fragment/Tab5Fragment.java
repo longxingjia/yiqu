@@ -2,9 +2,12 @@ package com.yiqu.iyijiayi.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fwrestnet.NetResponse;
@@ -19,6 +22,8 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PageCursorView;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 public class Tab5Fragment extends TabContentFragment implements View.OnClickListener {
 
@@ -27,8 +32,8 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     private UserInfo userInfo;
     private CircleImageView head;
     private MenuDialogPicHelper mMenuDialogPicHelper;
-    private LinearLayout llUserInfo;
-    private Button loginOutBt;
+    private RelativeLayout llUserInfo;
+    private Button logOutBt;
     private TextView menu_item_wodeyijiayizhuye;
     private TextView menu_item_wowen;
     private TextView menu_item_woting;
@@ -44,6 +49,9 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     private LinearLayout teacherOnly;
     private TextView menu_item_woping;
     private TextView menu_item_wodexizuo;
+    private LinearLayout ll_tabs;
+    private ImageView sex;
+    private TextView content;
 
     @Override
     protected int getTitleView() {
@@ -60,10 +68,14 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     protected void initView(View v) {
 
+
         Btlogin = (Button) v.findViewById(R.id.tab5_login);
-        loginOutBt = (Button) v.findViewById(R.id.logout);
-        head = (CircleImageView) v.findViewById(R.id.head);
-        llUserInfo = (LinearLayout) v.findViewById(R.id.userinfo);
+        logOutBt = (Button) v.findViewById(R.id.logout);
+
+        llUserInfo = (RelativeLayout) v.findViewById(R.id.userinfo);
+        ll_tabs = (LinearLayout) v.findViewById(R.id.ll_tabs);
+
+        InitHeadView(v);
 
         menu_item_wodeyijiayizhuye = (TextView) v.findViewById(R.id.menu_item_wodeyijiayizhuye);
         menu_item_wowen = (TextView) v.findViewById(R.id.menu_item_wowen);  //学生独有
@@ -78,22 +90,46 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         menu_item_jiesuanshuoming = (TextView) v.findViewById(R.id.menu_item_jiesuanshuoming);
 //        menu_item_bangzhu = (TextView) v.findViewById(R.id.menu_item_bangzhu);
         menu_item_guanyu = (TextView) v.findViewById(R.id.menu_item_guanyu);
-        username = (TextView) v.findViewById(R.id.username);
-        user_school = (TextView) v.findViewById(R.id.user_school);
-        user_desc = (TextView) v.findViewById(R.id.user_desc);
 
-        menu_item_wodeyijiayizhuye .setOnClickListener(this);
-        menu_item_wowen .setOnClickListener(this);
-        menu_item_woting .setOnClickListener(this);
 
-        menu_item_wodeyibi .setOnClickListener(this);
-        menu_item_shezhi .setOnClickListener(this);
-        menu_item_jiesuanshuoming .setOnClickListener(this);
+        menu_item_wodeyijiayizhuye.setOnClickListener(this);
+        menu_item_wowen.setOnClickListener(this);
+        menu_item_woting.setOnClickListener(this);
+
+        menu_item_wodeyibi.setOnClickListener(this);
+        menu_item_shezhi.setOnClickListener(this);
+        menu_item_jiesuanshuoming.setOnClickListener(this);
 //        menu_item_bangzhu.setOnClickListener(this);
-        menu_item_guanyu .setOnClickListener(this);
-        loginOutBt.setOnClickListener(this);
+        menu_item_guanyu.setOnClickListener(this);
+        logOutBt.setOnClickListener(this);
         menu_item_woping.setOnClickListener(this);
         menu_item_wodexizuo.setOnClickListener(this);
+    }
+
+    public void InitHeadView(View v) {
+
+        username = (TextView) v.findViewById(R.id.name);
+        head = (CircleImageView) v.findViewById(R.id.head);
+        user_desc = (TextView) v.findViewById(R.id.desc);
+        content = (TextView) v.findViewById(R.id.content);
+        sex = (ImageView) v.findViewById(R.id.sex);
+
+//        name = (TextView) v.findViewById(R.id.name);
+//
+//        price = (TextView) v.findViewById(R.id.price);
+//        questioncount = (TextView) v.findViewById(R.id.questioncount);
+//        totalincome = (TextView) v.findViewById(R.id.totalincome);
+//        tincome = (TextView) v.findViewById(R.id.tincome);
+//        questionincome = (TextView) v.findViewById(R.id.questionincome);
+//
+//
+//        dianping_tab = (LinearLayout) v.findViewById(R.id.dianping_tab);
+//        tiwen_tab = (LinearLayout) v.findViewById(R.id.tiwen_tab);
+//        tea = (LinearLayout) v.findViewById(R.id.tea);
+//        stu = (LinearLayout) v.findViewById(R.id.stu);
+//        xizuo_tab = (RelativeLayout) v.findViewById(R.id.xizuo_tab);
+
+
     }
 
     @Override
@@ -106,13 +142,13 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     protected void init(Bundle savedInstanceState) {
 
 
-        mMenuDialogPicHelper = new MenuDialogPicHelper(this, new MenuDialogPicHelper.BitmapListener() {
-            @Override
-            public void onBitmapUrl(String url) {
-                //headBase64 = url;
-            }
-        });
-      //  initUI();
+//        mMenuDialogPicHelper = new MenuDialogPicHelper(this, new MenuDialogPicHelper.BitmapListener() {
+//            @Override
+//            public void onBitmapUrl(String url) {
+//                //headBase64 = url;
+//            }
+//        });
+        //  initUI();
 
         Btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,28 +162,41 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     private void initUI() {
         boolean isLogin = AppShare.getIsLogin(getActivity());
-        if(isLogin){
+        if (isLogin) {
             Btlogin.setVisibility(View.GONE);
             userInfo = AppShare.getUserInfo(getActivity());
-            user_school.setText(userInfo.school);
-            user_desc.setText(userInfo.desc);
-           // LogUtils.LOGE(Tab5Fragment.class.getName(),userInfo.toString());
+            String descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
+            content.setText(descStr);
+            username.setText(userInfo.username);
+            content.setText(descStr);
+            if (!TextUtils.isEmpty(userInfo.desc)) {
+                user_desc.setText(userInfo.desc);
+            }
+            head.setOnClickListener(this);
+            PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
 
+            if (userInfo.sex.equals("0")) {
+                sex.setBackgroundResource(R.mipmap.sex_female);
+            } else {
+                sex.setBackgroundResource(R.mipmap.sex_male);
+            }
 
-            if(userInfo.type.equals("1")){  //1是学生
+            ll_tabs.setVisibility(View.VISIBLE);
+
+            if (userInfo.type.equals("1")) {  //1是学生
                 menu_item_wowen.setVisibility(View.VISIBLE);
                 teacherOnly.setVisibility(View.GONE);
-            }else {
+            } else {
                 menu_item_wowen.setVisibility(View.GONE);
                 teacherOnly.setVisibility(View.VISIBLE);
             }
 
             llUserInfo.setVisibility(View.VISIBLE);
-            head.setOnClickListener(this);
-//            LogUtils.LOGE(userInfo.toString());
-            username.setText(userInfo.username);
 
-        }else {
+            logOutBt.setVisibility(View.VISIBLE);
+        } else {
+            logOutBt.setVisibility(View.GONE);
+            ll_tabs.setVisibility(View.GONE);
             llUserInfo.setVisibility(View.GONE);
             Btlogin.setVisibility(View.VISIBLE);
         }
@@ -155,7 +204,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     @Override
     public void onResume() {
-     //   LogUtils.LOGE("hhhh");
+        //   LogUtils.LOGE("hhhh");
         initUI();
         super.onResume();
     }
@@ -198,21 +247,21 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.head:
 //                mMenuDialogPicHelper.show(v, head);
 
-                if (AppShare.getIsLogin(getActivity())){
+                if (AppShare.getIsLogin(getActivity())) {
                     Model.startNextAct(getActivity(),
                             InfoFragment.class.getName());
-                }else{
+                } else {
                     Model.startNextAct(getActivity(),
                             SelectLoginFragment.class.getName());
                 }
 
                 break;
             case R.id.logout:
-                AppShare.setIsLogin(getActivity(),false);
+                AppShare.setIsLogin(getActivity(), false);
                 initUI();
 
                 break;

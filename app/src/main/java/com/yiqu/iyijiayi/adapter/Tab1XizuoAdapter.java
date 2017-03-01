@@ -82,6 +82,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         TextView name;
         TextView content;
         ImageView icon;
+        ImageView musictype;
 
     }
 
@@ -96,13 +97,18 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.name = (TextView) v.findViewById(R.id.musicname);
                 h.content = (TextView) v.findViewById(R.id.desc);
                 h.icon = (ImageView) v.findViewById(R.id.header);
+                h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
             Xizuo f = getItem(position);
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
-          //  LogUtils.LOGE(tag,MyNetApiConfig.ImageServerAddr + f.stuimage);
+            if (f.type==1){
+                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+            }else {
+                h.musictype.setBackgroundResource(R.mipmap.boyin);
+            }
 
             PictureUtils.showPicture(mContext,f.stuimage,h.icon);
 

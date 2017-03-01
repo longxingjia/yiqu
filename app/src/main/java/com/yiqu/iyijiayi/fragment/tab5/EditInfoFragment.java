@@ -131,11 +131,11 @@ public class EditInfoFragment extends AbsAllFragment {
                 UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
 
                 AppShare.setUserInfo(getActivity(),userInfo);
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", InfoFragment.class.getName());
-//                    i.putExtra("fromLogin", "10");
+//                Intent i = new Intent(getActivity(), StubActivity.class);
+//                i.putExtra("fragment", InfoFragment.class.getName());
+////                    i.putExtra("fromLogin", "10");
                 getActivity().finish();
-                getActivity().startActivity(i);
+//                getActivity().startActivity(i);
 
 
             } else {

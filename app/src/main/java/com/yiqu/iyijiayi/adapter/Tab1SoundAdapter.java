@@ -103,6 +103,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         TextView tectitle;
         ImageView stu_header;
         ImageView tea_header;
+        ImageView musictype;
         TextView stu_listen;
 
     }
@@ -121,6 +122,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 h.tea_name = (TextView) v.findViewById(R.id.tea_name);
                 h.tectitle = (TextView) v.findViewById(R.id.tectitle);
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
@@ -135,6 +137,11 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.tectitle.setText(f.tectitle);
           //  LogUtils.LOGE(tag,f.soundpath);
 
+            if (f.type==1){
+                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+            }else {
+                h.musictype.setBackgroundResource(R.mipmap.boyin);
+            }
 
             PictureUtils.showPicture(mContext,f.tecimage,h.tea_header);
             PictureUtils.showPicture(mContext,f.stuimage,h.stu_header);

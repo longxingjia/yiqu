@@ -1,1 +1,1 @@
-include ':app', ':slidingMenuLibrary', ':byronFm10', ':badgeView'
+include ':app', ':slidingMenuLibrary', ':byronFm10', ':badgeView', ':permissiongen'

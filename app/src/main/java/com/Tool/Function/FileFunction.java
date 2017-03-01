@@ -40,7 +40,7 @@ public class FileFunction {
 //            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
             Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
         } else {
-            Variable.StorageDirectoryPath =application.getExternalCacheDir().getAbsolutePath()+"/music/";
+            Variable.StorageDirectoryPath =application.getExternalCacheDir().getAbsolutePath();
 //                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
         }
 

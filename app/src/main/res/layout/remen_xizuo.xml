@@ -32,11 +32,12 @@
                 android:text="今夜无人入睡"/>
 
             <ImageView
+                android:id="@+id/musictype"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="1dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/shengyue"/>
+                android:background="@mipmap/shengyue"/>
         </LinearLayout>
 
 

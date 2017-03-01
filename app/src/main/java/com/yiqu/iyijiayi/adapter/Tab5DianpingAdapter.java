@@ -127,7 +127,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
+
 
     }
 

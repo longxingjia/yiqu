@@ -15,6 +15,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -117,7 +118,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
                 File file = new File(fileUrl);
                 if (file.exists()) {
-                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file);
+                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.editUser.getPath(), params, file);
                     upLoaderTask.execute();
                 }
 
@@ -132,6 +133,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         private Map<String, String> params;
         private File file;
         private String mUrl;
+        private DialogHelper dialogHelper;
 
         public UpLoaderTask(String mUrl, Map<String, String> params, File file) {
             super();
@@ -144,7 +146,10 @@ public class UploadXizuoFragment extends AbsAllFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            if (dialogHelper==null){
+                dialogHelper = new DialogHelper(getActivity(), this);
+                dialogHelper.showProgressDialog();
+            }
         }
 
         @Override
@@ -166,7 +171,9 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
         @Override
         protected void onPostExecute(String result) {
-
+            if (dialogHelper != null) {
+                dialogHelper.dismissProgressDialog();
+            }
             if (!TextUtils.isEmpty(result)) {
 
                 LogUtils.LOGE(tag, result);

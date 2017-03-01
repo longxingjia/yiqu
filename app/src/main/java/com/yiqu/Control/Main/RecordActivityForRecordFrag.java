@@ -151,6 +151,10 @@ public class RecordActivityForRecordFrag extends Activity
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
         Tools.DB_PATH = Variable.StorageDirectoryPath;
+        File localFile = new File(Tools.DB_PATH, "/music/");
+        if(!localFile.exists()){
+            localFile.mkdirs();
+        }
         mRecorderUtil = new RecorderAndPlayUtil();
         recordTime = 0;
         recordVoiceButton.setOnClickListener(this);

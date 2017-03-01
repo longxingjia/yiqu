@@ -14,6 +14,9 @@ import com.ui.views.CircleImageView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
+import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
+import com.yiqu.iyijiayi.adapter.MenuDialogSelectPicHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogSexHelper;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -22,6 +25,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -45,6 +49,9 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     private RelativeLayout rl_edit_head;
     private UserInfo userInfo;
     private Intent in;
+    private CircleImageView edit_head;
+    private MenuDialogPicHelper menuDialogPicHelper;
+    private String tag = "InfoFragment";
 
     @Override
     protected int getTitleBarType() {
@@ -64,7 +71,6 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     @Override
     protected void initTitle() {
         setTitleText("修改资料");
-
     }
 
     @Override
@@ -89,7 +95,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         rl_edit_introduction = (RelativeLayout) v.findViewById(R.id.rl_edit_introduction);
         rl_edit_apply = (RelativeLayout) v.findViewById(R.id.rl_edit_apply);
 
-        CircleImageView edit_head = (CircleImageView) v.findViewById(R.id.edit_head);
+        edit_head = (CircleImageView) v.findViewById(R.id.edit_head);
         edit_name = (TextView) v.findViewById(R.id.edit_name);
         edit_title = (TextView) v.findViewById(R.id.edit_title);
         edit_sex = (TextView) v.findViewById(R.id.edit_sex);
@@ -110,8 +116,8 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     }
 
     @Override
-    protected void init(Bundle savedInstanceState) {
-
+    public void onResume() {
+        super.onResume();
         if (AppShare.getIsLogin(getActivity())) {
             userInfo = AppShare.getUserInfo(getActivity());
         } else {
@@ -132,14 +138,33 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
 
         edit_title.setText(userInfo.specialities);
 
+        PictureUtils.showPicture(getActivity(),userInfo.userimage,edit_head);
+    }
+
+    @Override
+    protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        menuDialogPicHelper.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_edit_head:
+                menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, new MenuDialogPicHelper.BitmapListener() {
+                    @Override
+                    public void onBitmapUrl(String url) {
 
+                        LogUtils.LOGE(tag, url);
+                    }
+                });
+                menuDialogPicHelper.show(v, edit_head);
 
                 break;
             case R.id.rl_edit_name:
@@ -147,13 +172,13 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 in.putExtra("fragment", EditInfoFragment.class.getName());
                 in.putExtra("data", "username");
                 getActivity().startActivity(in);
-                getActivity().finish();
+
                 break;
             case R.id.rl_edit_title:
                 in.putExtra("fragment", EditInfoFragment.class.getName());
                 in.putExtra("data", "specialities");
                 getActivity().startActivity(in);
-                getActivity().finish();
+
                 break;
             case R.id.rl_edit_sex:
                 MenuDialogSexHelper menuDialogSexHelper = new MenuDialogSexHelper(this, new MenuDialogSexHelper.SexListener() {
@@ -174,7 +199,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 in.putExtra("fragment", EditInfoFragment.class.getName());
                 in.putExtra("data", "school");
                 getActivity().startActivity(in);
-                getActivity().finish();
+
                 break;
             case R.id.rl_edit_background:
                 break;
@@ -184,13 +209,13 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 in.putExtra("fragment", EditInfoFragment.class.getName());
                 in.putExtra("data", "desc");
                 getActivity().startActivity(in);
-                getActivity().finish();
+
                 break;
             case R.id.rl_edit_apply:
                 in.putExtra("fragment", ApplyTeacherFragment.class.getName());
 
                 getActivity().startActivity(in);
-                getActivity().finish();
+
                 break;
         }
 
@@ -199,16 +224,16 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         if (type == NetCallBack.TYPE_SUCCESS) {
-         //   LogUtils.LOGE(tag,netResponse.result);
+            //   LogUtils.LOGE(tag,netResponse.result);
             Gson gson = new Gson();
-            UserInfo userInfo = gson.fromJson(netResponse.data,UserInfo.class);
-            AppShare.setUserInfo(getActivity(),userInfo);
+            UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
+            AppShare.setUserInfo(getActivity(), userInfo);
             if (userInfo.sex.equals("1")) {
                 edit_sex.setText("男");
             } else {
                 edit_sex.setText("女");
             }
-        }else if (type ==NetCallBack.TYPE_ERROR){
+        } else if (type == NetCallBack.TYPE_ERROR) {
             ToastManager.getInstance(getActivity()).showText(netResponse.result);
         }
 

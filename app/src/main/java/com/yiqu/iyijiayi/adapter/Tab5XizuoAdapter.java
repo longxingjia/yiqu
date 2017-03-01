@@ -24,21 +24,23 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
 public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Teacher> datas = new ArrayList<Teacher>();
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
-    private String uid ;
+    private String uid;
 
-    private  String tag="Tab5XizuoAdapter";
+    private String tag = "Tab5XizuoAdapter";
 
     public Tab5XizuoAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -46,12 +48,12 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
         this.uid = uid;
     }
 
-    public void setData(ArrayList<Teacher> list) {
+    public void setData(ArrayList<Sound> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Teacher> allDatas) {
+    public void addData(ArrayList<Sound> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -62,7 +64,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
     }
 
     @Override
-    public Teacher getItem(int position) {
+    public Sound getItem(int position) {
         return datas.get(position);
     }
 
@@ -73,10 +75,14 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     private class HoldChild {
 
-        TextView name;
-        TextView content;
-        ImageView icon;
-        ImageView follow;
+        TextView musicname;
+        TextView desc;
+        TextView soundtime;
+        TextView tea_name;
+        TextView tectitle;
+        ImageView stu_header;
+        ImageView tea_header;
+        TextView stu_listen;
     }
 
     @Override
@@ -86,107 +92,33 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.zhaoren, null);
-                h.name = (TextView) v.findViewById(R.id.name);
-                h.content = (TextView) v.findViewById(R.id.desc);
-                h.icon = (ImageView) v.findViewById(R.id.header);
-                h.follow = (ImageView) v.findViewById(R.id.add_follow);
+                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
+                h.tea_name = (TextView) v.findViewById(R.id.tea_name);
+                h.tectitle = (TextView) v.findViewById(R.id.tectitle);
+                h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
+                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
             }
+
             h = (HoldChild) v.getTag();
-           final Teacher f = getItem(position);
-            h.name.setText(f.username);
-            h.content.setText(f.title);
-            if (f.isfollow.equals("0")){  //没有关注
-                h.follow.setBackgroundResource(R.mipmap.follow);
+            Sound f = getItem(position);
+            h.musicname.setText(f.musicname);
+            h.desc.setText(f.desc);
+            h.soundtime.setText(f.soundtime + "\"");
+            h.tea_name.setText(f.tecname);
+            h.tectitle.setText(f.tectitle);
+            //  LogUtils.LOGE(tag,f.soundpath);
 
 
-            }else {
-                h.follow.setBackgroundResource(R.mipmap.followed);
-            }
-
-                if (f.userimage!=null&&f.userimage.contains("http://wx.qlogo.cn")){
-                    Picasso.with(mContext).load( f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-                }else {
-                    Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-                }
-
-            h.follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
+            PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
 
 
-                    if (f.isfollow.equals("0")){  //没有关注
-                        RestNetCallHelper.callNet(
-                                mContext,
-                                MyNetApiConfig.addfollow,
-                                MyNetRequestConfig.addfollow(mContext,uid,f.uid ),
-                                "teacher", new NetCallBack() {
-                                    @Override
-                                    public void onNetNoStart(String id) {
-
-                                    }
-
-                                    @Override
-                                    public void onNetStart(String id) {
-
-                                    }
-
-                                    @Override
-                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
-                                                f.isfollow = "1";
-                                                notifyDataSetChanged();
-                                            }else {
-                                               ToastManager.getInstance(mContext).showText(netResponse.result);
-                                            }
-
-                                        }
-
-                                    }
-                                });
-
-                    }else {
-//                        if (f.isfollow.equals("0")){  //没有关注
-//                        h.follow.setBackgroundResource(R.mipmap.follow);
-                        RestNetCallHelper.callNet(
-                                mContext,
-                                MyNetApiConfig.delfollow,
-                                MyNetRequestConfig.delfollow(mContext,uid,f.uid ),
-                                "delfollow", new NetCallBack() {
-                                    @Override
-                                    public void onNetNoStart(String id) {
-
-                                    }
-
-                                    @Override
-                                    public void onNetStart(String id) {
-
-                                    }
-
-                                    @Override
-                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
-                                                f.isfollow = "0";
-                                                notifyDataSetChanged();
-                                            }else {
-                                                ToastManager.getInstance(mContext).showText(netResponse.result);
-                                            }
-
-                                        }
-
-                                    }
-                                });
-                    }
-                }
-            });
-
-
-    } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return v;
@@ -195,7 +127,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
+
 
     }
 

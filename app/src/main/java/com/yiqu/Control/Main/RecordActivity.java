@@ -130,7 +130,12 @@ public class RecordActivity extends Activity
         music = (Music) intent.getSerializableExtra("music");
         LogUtils.LOGE(tag, music.toString());
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Variable.StorageDirectoryPath;
+        Tools.DB_PATH = Variable.StorageDirectoryPath ;
+        File localFile = new File(Tools.DB_PATH, "/music/");
+        if(!localFile.exists()){
+            localFile.mkdirs();
+        }
+
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
                 Url.lastIndexOf("/") + 1,

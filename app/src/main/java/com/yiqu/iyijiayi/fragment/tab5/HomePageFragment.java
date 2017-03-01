@@ -81,6 +81,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private TextView questionincome;
     private TextView tincome;
     public ArrayList<Sound> sound;
+    private TextView content;
 
     @Override
     protected int getTitleView() {
@@ -150,7 +151,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         listView.setOnItemClickListener(tab5DianpingAdapter);
         listView.setRefreshListListener(this);
         tab5DianpingAdapter.setData(sound);
-
     }
 
     /*
@@ -161,6 +161,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
         name = (TextView) v.findViewById(R.id.name);
         desc = (TextView) v.findViewById(R.id.desc);
+        content = (TextView) v.findViewById(R.id.content);
         price = (TextView) v.findViewById(R.id.price);
         questioncount = (TextView) v.findViewById(R.id.questioncount);
         totalincome = (TextView) v.findViewById(R.id.totalincome);
@@ -174,9 +175,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         stu = (LinearLayout) v.findViewById(R.id.stu);
         xizuo_tab = (RelativeLayout) v.findViewById(R.id.xizuo_tab);
 
-        dianping_tab.setOnClickListener(new txListener(0));
-        tiwen_tab.setOnClickListener(new txListener(1));
-        xizuo_tab.setOnClickListener(new txListener(2));
+
     }
 
 
@@ -184,32 +183,53 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         private int index = 0;
 
         public txListener(int i) {
+//            if (!userInfo.type.equals("2")) {
+//                index = i - 1;
+//            } else {
+//                index = i;
+//            }
             index = i;
-
+            type = index + "";
         }
 
         @Override
         public void onClick(View v) {
+
+            LogUtils.LOGE(tag, index + "");
+
             cursor.setPosition(index);
             switch (index) {
-                case 0:
-                    type = "2";
+                case 2:
+                    if (userInfo.type.equals("2")) {
+                        cursor.setPosition(index - 2);
+                    }
+
                     break;
                 case 1:
-                    type = "1";
+                    if (userInfo.type.equals("2")) {
+
+                    } else {
+                        cursor.setPosition(index - 1);
+                    }
                     break;
-                case 2:
-                    type = "3";
+                case 3:
+                    if (userInfo.type.equals("2")) {
+                        cursor.setPosition(index - 1);
+                    } else {
+                        cursor.setPosition(index - 2);
+                    }
+                    //    listView.setAdapter(tab5XizuoAdapter);
+
                     break;
 
             }
 
-//            RestNetCallHelper.callNet(getActivity(),
-//                    MyNetApiConfig.getUserPageSoundList,
-//                    MyNetRequestConfig.getUserPageSoundList(getActivity()
-//                            , uid, type, count, rows, userInfo.uid),
-//                    "getUserPageSoundList",
-//                    HomePageFragment.this);
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getUserPageSoundList,
+                    MyNetRequestConfig.getUserPageSoundList(getActivity()
+                            , type, userInfo.uid, count, rows, myUid),
+                    "getUserPageSoundList",
+                    HomePageFragment.this);
 
         }
     }
@@ -239,12 +259,19 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         }
         uid = userInfo.uid;
         name.setText(userInfo.username);
-        desc.setText(descStr);
+        content.setText(descStr);
+        if (!TextUtils.isEmpty(userInfo.desc)) {
+            desc.setText(userInfo.desc);
+        }
+
         if (userInfo.sex.equals("0")) {
             sex.setBackgroundResource(R.mipmap.sex_female);
         } else {
             sex.setBackgroundResource(R.mipmap.sex_male);
         }
+        dianping_tab.setOnClickListener(new txListener(2));
+        tiwen_tab.setOnClickListener(new txListener(1));
+        xizuo_tab.setOnClickListener(new txListener(3));
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
     }

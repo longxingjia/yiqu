@@ -6,134 +6,486 @@
 
 
     <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/menu_head"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/normal_color"-->
+        <!--android:orientation="vertical">-->
+
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:background="@mipmap/main_bg" />-->
+
+        <!--<com.ui.views.CircleImageView-->
+        <!--android:id="@+id/head"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:src="@mipmap/menu_head" />-->
+
+
+        <!--</RelativeLayout>-->
         <RelativeLayout
-            android:id="@+id/menu_head"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/normal_color">
-
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@mipmap/main_bg" />
+            android:layout_height="180dp"
+            android:background="@mipmap/home_bg">
 
             <com.ui.views.CircleImageView
                 android:id="@+id/head"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="60dp"
-                android:src="@mipmap/menu_head" />
+                android:layout_marginTop="20dp"
+                android:background="@mipmap/menu_head" />
 
 
-        </RelativeLayout>
 
-        <LinearLayout
-            android:background="@color/normal_color"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/tab5_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/red_box"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/login"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                android:visibility="gone" />
-
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/userinfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@+id/head"
+                android:layout_marginBottom="10dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="增员"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
 
-                    <TextView
-                        android:id="@+id/username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:gravity="center_vertical"
-                        android:text="高晓丽"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/user_school"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/sex"
+                    android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:gravity="center_vertical"
-                    android:text="湖南师范大学附属高级中学"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/name"
+                    android:background="@mipmap/sex_female" />
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center"
+                    android:text="未填写"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/tab5_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/red_box"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:layout_marginBottom="30dp"
+            android:paddingRight="15dp"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+         />
+
+        <LinearLayout
+            android:id="@+id/stu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/normal_color"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="总收入: " />
+
+                <TextView
+                    android:id="@+id/tincome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/redMain"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/user_desc"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:text="写下一段话介绍自己吧"
-                    android:textSize="16sp" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=" 元" />
 
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="小提示：收入90%归您，每夜结算，自动入库微信红包"
+                android:textColor="@color/dd_gray"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/userinfo"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/username"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="高晓丽"-->
+        <!--android:textSize="20sp" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="35dp" />-->
+        <!--</LinearLayout>-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/user_school"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="湖南师范大学附属高级中学"-->
+        <!--android:textSize="16sp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/user_desc"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:maxLines="2"-->
+        <!--android:text="写下一段话介绍自己吧"-->
+        <!--android:textSize="16sp" />-->
+
+        <!--</LinearLayout>-->
+
+
         <LinearLayout
-            android:orientation="vertical"
-            android:background="@color/normal_color"
+            android:id="@+id/tea"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/menu_item_wodeyijiayizhuye"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_home"
-            android:text="我的艺加艺主页" />
-
-
-        <LinearLayout
-
-            android:id="@+id/mine_teacher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="130dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:visibility="gone">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rectangle_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="像我提问需要支付￥" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/redMain"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=" 元" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/menu_item_wodexizuo"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="小提示：收入90%归您，每夜结算，自动入库微信红包"
+                android:textColor="@color/dd_gray"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="点评了" />
+
+                <TextView
+                    android:id="@+id/questioncount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/redMain"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="个习作，点评收入" />
+
+                <TextView
+                    android:id="@+id/questionincome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/redMain"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=" 元" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="总收入: " />
+
+                <TextView
+                    android:id="@+id/totalincome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/redMain"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=" 元" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/normal_color"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/menu_item_wodeyijiayizhuye"
+                    style="@style/textview_mine"
+                    android:drawableLeft="@mipmap/mine_home"
+                    android:text="我的艺加艺主页" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/tab_line_color" />
+
+                <LinearLayout
+
+                    android:id="@+id/mine_teacher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/menu_item_wodexizuo"
+                        style="@style/textview_mine"
+                        android:drawableLeft="@mipmap/mine_xizuo"
+                        android:text="我的习作" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/tab_line_color" />
+
+                    <TextView
+                        android:id="@+id/menu_item_woping"
+                        style="@style/textview_mine"
+                        android:drawableLeft="@mipmap/mine_wowen"
+                        android:text="我评" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/tab_line_color" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/menu_item_wowen"
+                    style="@style/textview_mine"
+                    android:drawableLeft="@mipmap/mine_wowen"
+                    android:text="我问" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/tab_line_color" />
+
+                <TextView
+                    android:id="@+id/menu_item_woting"
+                    style="@style/textview_mine"
+                    android:drawableLeft="@mipmap/mine_woting"
+                    android:text="我听" />
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/tab_line_color" />
+
+                <TextView
+                    android:id="@+id/menu_item_guanzhu"
+                    style="@style/textview_mine"
+                    android:drawableLeft="@mipmap/mine_guanzhu"
+                    android:text="关注" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/tab_line_color" />
+
+                <TextView
+                    android:id="@+id/menu_item_wodeyibi"
+                    style="@style/textview_mine"
+                    android:drawableLeft="@mipmap/mine_wodeyibi"
+                    android:text="我的艺币" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/tab_line_color" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/menu_item_shezhi"
                 style="@style/textview_mine"
-                android:drawableLeft="@mipmap/mine_xizuo"
-                android:text="我的习作" />
+                android:drawableLeft="@mipmap/mine_shez"
+                android:text="设置" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/tab_line_color" />
+
+
+            <TextView
+                android:id="@+id/menu_item_jiesuanshuoming"
+                style="@style/textview_mine"
+                android:drawableLeft="@mipmap/mine_jiesuan"
+                android:text="结算说明" />
+
 
             <ImageView
                 android:layout_width="match_parent"
@@ -143,10 +495,11 @@
                 android:background="@color/tab_line_color" />
 
             <TextView
-                android:id="@+id/menu_item_woping"
+                android:id="@+id/menu_item_guanyu"
                 style="@style/textview_mine"
-                android:drawableLeft="@mipmap/mine_wowen"
-                android:text="我评" />
+                android:drawableLeft="@mipmap/mine_about"
+                android:text="关于" />
+
 
             <ImageView
                 android:layout_width="match_parent"
@@ -157,103 +510,6 @@
 
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/menu_item_wowen"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_wowen"
-            android:text="我问" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_woting"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_woting"
-            android:text="我听" />
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_guanzhu"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_guanzhu"
-            android:text="关注" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_wodeyibi"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_wodeyibi"
-            android:text="我的艺币" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_shezhi"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_shez"
-            android:text="设置" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-
-        <TextView
-            android:id="@+id/menu_item_jiesuanshuoming"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_jiesuan"
-            android:text="结算说明" />
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        <TextView
-            android:id="@+id/menu_item_guanyu"
-            style="@style/textview_mine"
-            android:drawableLeft="@mipmap/mine_about"
-            android:text="关于" />
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/tab_line_color" />
-
-        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
