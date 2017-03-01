@@ -184,7 +184,7 @@ public class MenuDialogPicHelper {
                 break;
             case REQUEST_CODE_INITIAL_PIC_FROM_GALLERY:
                 try {
-                    upload(sdcardTempFile.getAbsolutePath());
+                    upload(sdcardTempFile.getAbsolutePath());   
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
