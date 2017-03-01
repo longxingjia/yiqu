@@ -13,7 +13,8 @@
     <string name="common_dialog_loading_data">请稍候&#8230;</string>
     <string name="start_recording">开始录制</string>
     <string name="download">已下载</string>
-    <!--<string name="desc">%s</string>-->
+
+    <string name="permission_white_external_hint">没有读写权限，无法开启这个功能，请开启权限</string>
 
 
     <string name="permision_available_camera">Camera Permission has been granted. Preview can now be opened.</string>
@@ -32,7 +33,7 @@
     <string name="permission_access_fine_location_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_ACCESS_FINE_LOCATION</string>
     <string name="permission_access_coarse_location_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_ACCESS_COARSE_LOCATION</string>
     <string name="permission_read_external_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_READ_EXTERNAL_STORAGE</string>
-    <string name="permission_white_external_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_WRITE_EXTERNAL_STORAGE</string>
+
     <string name="permission_recode_audio_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_RECORD_AUDIO</string>
 
 </resources>

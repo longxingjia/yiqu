@@ -60,8 +60,15 @@ public class WelcomePageActivity extends Activity {
             }
         };
 //        PermissionGen.needPermission(this, 200, Manifest.permission.CAMERA);
-        PermissionGen.needPermission(this, 100, Manifest.permission.CAMERA);
+
         CommonThreadPool.getThreadPool().addFixedTask(initialiseThread);
+    }
+
+    @Override
+    protected void onResume() {
+
+        PermissionGen.needPermission(this, 100, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        super.onResume();
     }
 
     @Override
@@ -108,19 +115,14 @@ public class WelcomePageActivity extends Activity {
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
-        Toast.makeText(this, "Contact permission is granted", Toast.LENGTH_SHORT).show();
+        begin();
     }
 
     @PermissionFail(requestCode = 100)
     public void failContact() {
-//        Intent intent = new Intent();
-//        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//        Log.e("", "getPackageName(): " + getPackageName());
-//        Uri uri = Uri.fromParts("package", getPackageName(), null);
-//        intent.setData(uri);
-//        startActivity(intent);
-        Toast.makeText(this, "Contact permission is not granted", Toast.LENGTH_SHORT).show();
-        PermissionUtils.openSettingActivity(this,"fsojfso");
+
+        Toast.makeText(this, getResources().getString(R.string.permission_white_external_hint), Toast.LENGTH_SHORT).show();
+        PermissionUtils.openSettingActivity(this);
 
     }
 

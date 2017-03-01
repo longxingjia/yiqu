@@ -73,7 +73,7 @@ public class PermissionUtils {
     }
 
 
-    public static void openSettingActivity(final Activity activity, String message) {
+    public static void openSettingActivity(final Activity activity) {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Log.e(TAG, "getPackageName(): " + activity.getPackageName());

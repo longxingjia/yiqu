@@ -59,14 +59,14 @@ public class CommonApplication extends Application {
 
             InitFunction.Initialise(this);
 
-            if (Constant.Debug) {
-                StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
-                        new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog();
-                StrictMode.VmPolicy.Builder vmPolicyBuilder =
-                        new StrictMode.VmPolicy.Builder().detectAll().penaltyLog();
-                StrictMode.setThreadPolicy(threadPolicyBuilder.build());
-                StrictMode.setVmPolicy(vmPolicyBuilder.build());
-            }
+//            if (Constant.Debug) {
+//                StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
+//                        new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog();
+//                StrictMode.VmPolicy.Builder vmPolicyBuilder =
+//                        new StrictMode.VmPolicy.Builder().detectAll().penaltyLog();
+//                StrictMode.setThreadPolicy(threadPolicyBuilder.build());
+//                StrictMode.setVmPolicy(vmPolicyBuilder.build());
+//            }
         }
     }
 

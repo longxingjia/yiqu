@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
@@ -25,7 +27,12 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+
+import kr.co.namee.permissiongen.PermissionFail;
+import kr.co.namee.permissiongen.PermissionGen;
+import kr.co.namee.permissiongen.PermissionSuccess;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -138,7 +145,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
 
         edit_title.setText(userInfo.specialities);
 
-        PictureUtils.showPicture(getActivity(),userInfo.userimage,edit_head);
+        PictureUtils.showPicture(getActivity(), userInfo.userimage, edit_head);
     }
 
     @Override
@@ -148,7 +155,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
+
         menuDialogPicHelper.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -157,14 +164,8 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_edit_head:
-                menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, new MenuDialogPicHelper.BitmapListener() {
-                    @Override
-                    public void onBitmapUrl(String url) {
+                PermissionGen.needPermission(this, 100, Manifest.permission.CAMERA);
 
-                        LogUtils.LOGE(tag, url);
-                    }
-                });
-                menuDialogPicHelper.show(v, edit_head);
 
                 break;
             case R.id.rl_edit_name:
@@ -238,5 +239,32 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         }
 
         super.onNetEnd(id, type, netResponse);
+    }
+
+    @PermissionSuccess(requestCode = 100)
+    public void openContact() {
+        menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, new MenuDialogPicHelper.BitmapListener() {
+            @Override
+            public void onBitmapUrl(String url) {
+
+                LogUtils.LOGE(tag, url);
+            }
+        });
+        menuDialogPicHelper.show(edit_head, edit_head);
+
+    }
+
+    @PermissionFail(requestCode = 100)
+    public void failContact() {
+
+        Toast.makeText(getActivity(), getResources().getString(R.string.permission_white_external_hint), Toast.LENGTH_SHORT).show();
+        PermissionUtils.openSettingActivity(getActivity());
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 }

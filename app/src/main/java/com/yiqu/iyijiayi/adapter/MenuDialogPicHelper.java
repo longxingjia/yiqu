@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -58,31 +59,18 @@ public class MenuDialogPicHelper {
     private ImageView photo;
     private BitmapListener mBitmapListener;
     private String uid;
+    private Context mContext;
 
     public MenuDialogPicHelper(Fragment f, String uid, BitmapListener mBitmapListener) {
         mFragment = f;
+        mContext = mFragment.getActivity();
         String[] items = new String[]{"拍照", "相册选取"};
         mMenuDialog = new MenuDialog(f.getActivity(), "修改头像", items, new OnMenuListener() {
             @Override
             public void onMenuClick(MenuDialog dialog, int which, String item) {
                 switch (which) {
                     case 0:
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mFragment.getContext(), Manifest.permission.CAMERA);
-                            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
-                                ActivityCompat.requestPermissions(mFragment.getActivity(),new String[]{Manifest.permission.CAMERA},222);
-                                return;
-                            }else{
-
-                                catchPicture();//调用具体方法
-                            }
-                        } else {
-
-                            catchPicture();//调用具体方法
-                        }
-
-
-
+                        catchPicture();//调用具体方法
                         break;
                     case 1:
                         selectPicture();
@@ -112,18 +100,28 @@ public class MenuDialogPicHelper {
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             getFile();
-            Intent getImageByCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;
 
             if (currentapiVersion<24){
+                Intent getImageByCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(sdcardTempFile));
                 mFragment.startActivityForResult(getImageByCamera, REQUEST_CODE_INITIAL_PIC_FROM_CAMERA);
             }else {
-                ContentValues contentValues = new ContentValues(1);
-                contentValues.put(MediaStore.Images.Media.DATA, sdcardTempFile.getAbsolutePath());
-                Uri uri = mFragment.getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
-                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                mFragment.startActivityForResult(getImageByCamera, REQUEST_CODE_INITIAL_PIC_FROM_CAMERA);
+//                ContentValues contentValues = new ContentValues(1);
+//                contentValues.put(MediaStore.Images.Media.DATA, sdcardTempFile.getAbsolutePath());
+//                Uri uri = mFragment.getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+//                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                mFragment.startActivityForResult(getImageByCamera, REQUEST_CODE_INITIAL_PIC_FROM_CAMERA);
+
+                Uri imageUri = FileProvider.getUriForFile(mContext, "com.yiqu.iyijiayi.fileprovider", sdcardTempFile);//通过FileProvider创建一个content类型的Uri
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将拍取的照片保存到指定URI
+                mFragment.startActivityForResult(intent, REQUEST_CODE_INITIAL_PIC_FROM_CAMERA);
+
+
             }
 
 
@@ -162,11 +160,11 @@ public class MenuDialogPicHelper {
     }
 
     /**
-     * 拍照
+     * 拍完后裁剪图片
      */
     private void cropPicture() {
         Intent intent;
-        intent = photoCrop(sdcardTempFile, PIC_PIXLS, PIC_PIXLS);
+        intent = photoCrop(mContext,sdcardTempFile, PIC_PIXLS, PIC_PIXLS);
         mFragment.startActivityForResult(intent, REQUEST_CODE_INITIAL_PIC_FROM_CROP);
     }
 
@@ -181,6 +179,7 @@ public class MenuDialogPicHelper {
 
         switch (requestCode) {
             case REQUEST_CODE_INITIAL_PIC_FROM_CAMERA:
+                LogUtils.LOGE("------",sdcardTempFile.getAbsolutePath());
                 cropPicture();
                 break;
             case REQUEST_CODE_INITIAL_PIC_FROM_GALLERY:
@@ -192,6 +191,7 @@ public class MenuDialogPicHelper {
                 break;
             case REQUEST_CODE_INITIAL_PIC_FROM_CROP:
                 try {
+
                     upload(sdcardTempFile.getAbsolutePath());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -356,9 +356,21 @@ public class MenuDialogPicHelper {
      * @comments 裁剪图片
      * @version 1.0
      */
-    public static Intent photoCrop(File tempFile, int outputX, int outputY) {
+    public static Intent photoCrop(Context context, File tempFile, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");//启动裁剪
-        intent.setDataAndType(Uri.fromFile(tempFile), "image/*");
+
+        Uri photoURI = FileProvider.getUriForFile(context, "com.yiqu.iyijiayi.fileprovider", tempFile);
+        LogUtils.LOGE("----",photoURI.toString());
+
+     /* 这句要记得写：这是申请权限，之前因为没有添加这个，打开裁剪页面时，一直提示“无法修改低于50*50像素的图片”，
+      开始还以为是图片的问题呢，结果发现是因为没有添加FLAG_GRANT_READ_URI_PERMISSION。
+      如果关联了源码，点开FileProvider的getUriForFile()看看（下面有），注释就写着需要添加权限。
+      */
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setDataAndType(photoURI, "image/*");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+//        intent.setDataAndType(Uri.fromFile(tempFile), "image/*");
         intent.putExtra("crop", "true");//是否裁剪
         intent.putExtra("aspectX", 1);// 裁剪框比例
         intent.putExtra("aspectY", 1);
@@ -372,6 +384,8 @@ public class MenuDialogPicHelper {
         intent.putExtra("noFaceDetection", true); // no face detection
         return intent;
     }
+
+
 
     public static Bitmap decodeUriAsBitmap(Context context, String path) {
         if (context == null || path == null) return null;

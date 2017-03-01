@@ -62,22 +62,22 @@ public class StubActivity extends AbsFragmentAct {
 		}
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		switch (requestCode) {
-			//就像onActivityResult一样这个地方就是判断你是从哪来的。
-			case 222:
-				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission Granted
-
-				} else {
-					// Permission Denied
-					Toast.makeText(StubActivity.this, "很遗憾你把相机权限禁用了。请务必开启相机权限享受我们提供的服务吧。", Toast.LENGTH_SHORT)
-							.show();
-				}
-				break;
-			default:
-				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		}
-	}
+//	@Override
+//	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//		switch (requestCode) {
+//			//就像onActivityResult一样这个地方就是判断你是从哪来的。
+//			case 222:
+//				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//					// Permission Granted
+//
+//				} else {
+//					// Permission Denied
+//					Toast.makeText(StubActivity.this, "很遗憾你把相机权限禁用了。请务必开启相机权限享受我们提供的服务吧。", Toast.LENGTH_SHORT)
+//							.show();
+//				}
+//				break;
+//			default:
+//				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//		}
+//	}
 }
