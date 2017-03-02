@@ -57,7 +57,6 @@ public class EditInfoFragment extends AbsAllFragment {
     protected void initTitle() {
         data = getActivity().getIntent().getStringExtra("data");
 
-
         switch (data) {
             case "username":
                 datastr = "名字";
@@ -96,7 +95,6 @@ public class EditInfoFragment extends AbsAllFragment {
         content = (EditText) v.findViewById(R.id.content);
         sumbit = (Button) v.findViewById(R.id.submit);
 
-
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
         } else {
@@ -120,7 +118,6 @@ public class EditInfoFragment extends AbsAllFragment {
                         "getLoginMessageCode", EditInfoFragment.this);
             }
         });
-
     }
 
     @Override

@@ -90,8 +90,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         super.init(savedInstanceState);
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
-        fileUrl = Variable.StorageDirectoryPath + composeVoice.voicename;
-
+        fileUrl = Variable.StorageMusicPath+ composeVoice.voicename;
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +117,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
                 File file = new File(fileUrl);
                 if (file.exists()) {
-                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.editUser.getPath(), params, file);
+                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file);
                     upLoaderTask.execute();
                 }
 
@@ -187,12 +186,12 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
                         String url = new JSONObject(data).getString("filepath");
                         composeVoice.soundpath = url;
-                        LogUtils.LOGE(tag,composeVoice.toString());
+//                        LogUtils.LOGE(tag,composeVoice.toString());
 
                         RestNetCallHelper.callNet(
                                 getActivity(),
                                 MyNetApiConfig.addSound,
-                                MyNetRequestConfig.addSound(getActivity(), "2", composeVoice),
+                                MyNetRequestConfig.addSound(getActivity(), "2","0", composeVoice),
                                 "addSound", UploadXizuoFragment.this);
 
                     } else {
@@ -203,16 +202,12 @@ public class UploadXizuoFragment extends AbsAllFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-//
-
             }
 
             if (isCancelled()) {
-
-
+                return;
             }
-            return;
+
         }
 
     }

@@ -1,5 +1,6 @@
 package com.yiqu.Control.Main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,6 +56,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.DensityUtil;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
@@ -63,10 +65,14 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kr.co.namee.permissiongen.PermissionFail;
+import kr.co.namee.permissiongen.PermissionGen;
+import kr.co.namee.permissiongen.PermissionSuccess;
+
 public class RecordActivityForRecordFrag extends Activity
         implements VoicePlayerInterface, View.OnClickListener {
     private boolean recordComFinish = false;
-    private String tag = "RecordActivity";
+    private String tag = "RecordActivityForRecordFrag";
     //    private int width;
 //    private int height;
     private int recordTime;
@@ -116,7 +122,9 @@ public class RecordActivityForRecordFrag extends Activity
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        init(R.layout.record_voice_fragment);
+
+        PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
+
     }
 
     private void init(int layoutId) {
@@ -150,11 +158,7 @@ public class RecordActivityForRecordFrag extends Activity
         rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
-        Tools.DB_PATH = Variable.StorageDirectoryPath;
-        File localFile = new File(Tools.DB_PATH, "/music/");
-        if(!localFile.exists()){
-            localFile.mkdirs();
-        }
+
         mRecorderUtil = new RecorderAndPlayUtil();
         recordTime = 0;
         recordVoiceButton.setOnClickListener(this);
@@ -170,6 +174,7 @@ public class RecordActivityForRecordFrag extends Activity
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
         dialog.setView(LayoutInflater.from(this).inflate(R.layout.popup_record, null));
         dialog.show();
+        dialog.setCancelable(false);
         dialog.getWindow().setContentView(R.layout.popup_record);
         dialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
         desc = (EditText) dialog.findViewById(R.id.desc);
@@ -193,7 +198,8 @@ public class RecordActivityForRecordFrag extends Activity
 
             @Override
             public void onClick(View arg0) {
-               finish();
+                dialog.dismiss();
+                finish();
             }
         });
     }
@@ -295,7 +301,8 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoice.musicname = musicName.getText().toString();
         composeVoice.musictype ="";
         composeVoice.chapter = "";
-        composeVoice.accompaniment ="";
+        composeVoice.desc = desc.getText().toString();
+        composeVoice.accompaniment = "";
         composeVoice.soundtime = mSecond;
         composeVoice.isformulation = "0";
         composeVoice.isopen = "1";
@@ -306,6 +313,7 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoice.commentpath = "";
         composeVoice.touid = 0;
         composeVoice.soundpath = "";
+
         composeVoice.voicename = mRecorderUtil.getRecorderPath().substring(
                 mRecorderUtil.getRecorderPath().lastIndexOf("/") + 1,
                 mRecorderUtil.getRecorderPath().length());
@@ -441,5 +449,24 @@ public class RecordActivityForRecordFrag extends Activity
 
     }
 
+    @PermissionSuccess(requestCode = 100)
+    public void openContact() {
+        init(R.layout.record_voice_fragment);
+    }
+
+    @PermissionFail(requestCode = 100)
+    public void failContact() {
+
+        Toast.makeText(this, getString(R.string.permission_record_hint), Toast.LENGTH_SHORT).show();
+        finish();
+        PermissionUtils.openSettingActivity(this);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
 
 }

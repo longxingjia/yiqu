@@ -106,10 +106,14 @@
                 style="@style/textview_edit_left"
                 android:text="背景" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/edit_background"
-                style="@style/textview_edit_right"
-                android:text="" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="20dp"
+                android:src="@mipmap/menu_head" />
 
         </RelativeLayout>
 

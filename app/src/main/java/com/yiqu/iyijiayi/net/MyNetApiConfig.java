@@ -292,7 +292,7 @@ public class MyNetApiConfig {
         }
 
     };
-    public static MyNetApi getSoundList = new MyNetApi() {
+    public static MyNetApi getFollowSoundList = new MyNetApi() {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/get-follow-sound-list";
@@ -368,6 +368,28 @@ public class MyNetApiConfig {
             return ServerAddr + "/sound/add-sound";
         }
 //        public static String uploadSounds = ServerAddr+"";
+
+    };
+    public static MyNetApi setPhoto = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/set-photo";
+        }
+//        public static String uploadSounds = ServerAddr+"";
+
+    };
+
+    public static MyNetApi getNewOrder = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/payment/get-new-order";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
 
     };
 

@@ -14,7 +14,8 @@ import android.util.Log;
 public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "yijiayi.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 5;
+
 
 
     public AbsDBHelper(Context context) {
@@ -26,12 +27,18 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
         executeBatch(version_1, db);
     }
 
+    /**
+     *
+     * @param db
+     * @param oldVersion 现在等于五
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion == 1) {
             executeBatch(new String[]{"DROP TABLE if exists "
-                    + DownloadMusicInfoDBHelper.TABLE_NAME}, db);
-
+                    + DownloadMusicInfoDBHelper.TABLE_NAME,"DROP TABLE if exists "
+                    + ComposeVoiceInfoDBHelper.TABLE_NAME}, db);
             executeBatch(version_1, db);
         }
         Log.w("onUpgrade", "oldVersion:" + oldVersion + ",newVersion:"
@@ -80,6 +87,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + ComposeVoiceInfoDBHelper.VOICENAME + " text , "
                     + ComposeVoiceInfoDBHelper.CREATETIME + " text , "
                     + ComposeVoiceInfoDBHelper.ISCOMPOSE + " text , "
+                    + ComposeVoiceInfoDBHelper.DESC + " text , "
                     + ComposeVoiceInfoDBHelper.ISOPEN + " text "
                     + ");"
 

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fwrestnet.NetRequest;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * @comments 接口的参数配置
@@ -119,7 +120,7 @@ public class MyNetRequestConfig {
     /**
      * 9、
      */
-    public static NetRequest editUser(Context c, String uid, String dataName,String dataValue) {
+    public static NetRequest editUser(Context c, String uid, String dataName, String dataValue) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam(dataName, dataValue);
@@ -130,7 +131,7 @@ public class MyNetRequestConfig {
      * 10、
      */
     public static NetRequest addTeacherApply(Context c, String uid, String username,
-                                         String school, String title,String desc) {
+                                             String school, String title, String desc) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam("username", username);
@@ -144,13 +145,13 @@ public class MyNetRequestConfig {
     /**
      * 20、获取热门/发现列表
      */
-    public static NetRequest getSoundList(Context c, String myuid, String arr,
-                                        int count, int rows, String orderby, String sort) {
+    public static NetRequest getFollowSoundList(Context c, String myuid, String arr,
+                                                int count, int rows, String orderby, String sort) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("myuid", myuid);
         r.addHttpParam("arr", arr);
-        r.addHttpParam("count", count+"");
-        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
         r.addHttpParam("orderby", orderby);
         r.addHttpParam("sort", sort);
 
@@ -160,10 +161,10 @@ public class MyNetRequestConfig {
     /**
      * 12、
      */
-    public static NetRequest getMusicList(Context c,  int count, int rows) {
+    public static NetRequest getMusicList(Context c, int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("count", count+"");
-        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
         return r;
     }
 
@@ -171,12 +172,11 @@ public class MyNetRequestConfig {
      * 参数：String token String shjhm //， string ztbh //
      * kchbh//课程编号,kchmch//课程名称,kchslt//课程缩略图,kchjj//简介
      * chjshj//创建时间,sdjf//所得积分,shfhdxhh//是否获得小红花 @
-     *
      */
 
 
     public static NetRequest getSoundDetail(Context c, String sid,
-                                           String uid) {
+                                            String uid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("sid", sid);
         r.addHttpParam("checkpay", uid);
@@ -186,31 +186,33 @@ public class MyNetRequestConfig {
 
     /**
      * 13、
+     *
      * @param stype 1问题 2习作
      */
-    public static NetRequest addSound(Context c,String stype, ComposeVoice composeVoice) {
+    public static NetRequest addSound(Context c, String stype, String isfree, ComposeVoice composeVoice) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("stype", stype);
-        r.addHttpParam("fromuid", composeVoice.fromuid);
-        r.addHttpParam("mid", composeVoice.mid+"");
         r.addHttpParam("type", composeVoice.type);
         r.addHttpParam("musicname", composeVoice.musicname);
         r.addHttpParam("musictype", composeVoice.musictype);
         r.addHttpParam("chapter", composeVoice.chapter);
         r.addHttpParam("accompaniment", composeVoice.accompaniment);
-        r.addHttpParam("soundtime", composeVoice.soundtime+"");
-        r.addHttpParam("soundpath", composeVoice.soundpath);
-        r.addHttpParam("isformulation", composeVoice.isformulation);
-        r.addHttpParam("touid", composeVoice.touid+"");
+        r.addHttpParam("fromuid", composeVoice.fromuid);
+        r.addHttpParam("mid", composeVoice.mid + "");
         r.addHttpParam("commentpath", composeVoice.commentpath);
         r.addHttpParam("commenttime", composeVoice.commenttime);
-        r.addHttpParam("questionprice", composeVoice.questionprice);
+        r.addHttpParam("soundtime", composeVoice.soundtime + "");
+        r.addHttpParam("isformulation", composeVoice.isformulation);
         r.addHttpParam("listenprice", composeVoice.listenprice);
         r.addHttpParam("isopen", composeVoice.isopen);
-        r.addHttpParam("status", composeVoice.status);
         r.addHttpParam("ispay", composeVoice.ispay);
         r.addHttpParam("isreply", composeVoice.isreply);
+        r.addHttpParam("status", composeVoice.status);
+        r.addHttpParam("touid", composeVoice.touid + "");
+        r.addHttpParam("questionprice", composeVoice.questionprice);
         r.addHttpParam("desc", composeVoice.desc);
+        r.addHttpParam("soundpath", composeVoice.soundpath);
+        r.addHttpParam("isfree", isfree);
         return r;
     }
 
@@ -218,7 +220,7 @@ public class MyNetRequestConfig {
 
      */
     public static NetRequest getUnfollowTeacherList(Context c, String myuid, String rows,
-                                         String count) {
+                                                    String count) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("myuid", myuid);
         r.addHttpParam("rows", rows);
@@ -227,7 +229,7 @@ public class MyNetRequestConfig {
     }
 
     public static NetRequest getFollowTeacherList(Context c, String myuid, String rows,
-                                                    String count) {
+                                                  String count) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("myuid", myuid);
         r.addHttpParam("rows", rows);
@@ -248,22 +250,21 @@ public class MyNetRequestConfig {
 
 
     /**
-     *
      * @param c
-     * @param type 2 点评,1 提问,@"3"]
-     * @param uid   个人页面对象的uid
+     * @param type     2 点评,1 提问,@"3"]
+     * @param uid      个人页面对象的uid
      * @param count
      * @param rows
      * @param checkpay 传当前用户UID
      * @return
      */
     public static NetRequest getUserPageSoundList(Context c, String type,
-                                           String uid, int count, int rows,String checkpay) {
+                                                  String uid, int count, int rows, String checkpay) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("type", type);
         r.addHttpParam("uid", uid);
-        r.addHttpParam("count", count+"");
-        r.addHttpParam("rows", rows+"");
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
         r.addHttpParam("checkpay", checkpay);
         return r;
     }
@@ -279,28 +280,28 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 18、获取活动列表的接口 String token//登录凭证,String shjhm //手机号
+     * 18、
      */
-    public static NetRequest findAllBbxdxx(Context c, String token,
-                                           String shjhm, String page, String pageSize) {
+    public static NetRequest setPhoto(Context c, String uid,
+                                      String image, String type) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("page", page);
-        r.addHttpParam("pageSize", pageSize);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("image", image);
+        r.addHttpParam("type", type);
         return r;
     }
 
     /**
-     * 19、获取当前用户所在班级人员的排行榜信息的接口 参数：String token//登录凭证,String shjhm
-     * //手机号,bjbh//班级编号
+     *
      */
-    public static NetRequest findXsbjph(Context c, String token, String shjhm,
-                                        String bjbh) {
+    public static NetRequest getNewOrder(Context c, String uid, String sid,
+                                         String price) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("bjbh", bjbh);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("price", price);
+        r.addHttpParam("type", "1");
+        r.addHttpParam("payment", "1");
         return r;
     }
 

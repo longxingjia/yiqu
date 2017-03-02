@@ -128,7 +128,7 @@ public class RecordActivity extends Activity
 
         Intent intent = getIntent();
         music = (Music) intent.getSerializableExtra("music");
-        LogUtils.LOGE(tag, music.toString());
+
         musicName.setText(music.musicname + "");
         Tools.DB_PATH = Variable.StorageDirectoryPath ;
         File localFile = new File(Tools.DB_PATH, "/music/");

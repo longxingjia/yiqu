@@ -129,17 +129,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 
                     }
-
-
-
-
-
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -218,34 +212,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                                     Gson gson = new Gson();
                                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+                                    AppShare.setIsLogin(mContext, true);
+                                    AppShare.setUserInfo(mContext, userInfo);
+                                    Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
+                                    startActivity(intent);
 
 
-                                    RestNetCallHelper.callNet(mContext,
-                                            MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
-                                                    mContext, userInfo.uid), "getUserByPhoneUid",
-                                            new NetCallBack() {
-                                                @Override
-                                                public void onNetNoStart(String id) {
-
-                                                }
-
-                                                @Override
-                                                public void onNetStart(String id) {
-
-                                                }
-
-                                                @Override
-                                                public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-                                                    Gson gson = new Gson();
-                                                    UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
-                                                    AppShare.setIsLogin(mContext, true);
-                                                    AppShare.setUserInfo(mContext, userInfo);
-                                                    Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
-                                                    startActivity(intent);
-                                                }
-                                            });
 
 
 

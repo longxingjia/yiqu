@@ -5,4 +5,6 @@ public class Variable {
 
     public static String StorageDirectoryPath;
     public static String ErrorFilePath;
+    public static String StorageMusicPath;
+    public static String StorageImagePath;
 }

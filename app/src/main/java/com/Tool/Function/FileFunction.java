@@ -45,6 +45,17 @@ public class FileFunction {
         }
 
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
+        Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
+        Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
+        File localFile = new File(Variable.StorageMusicPath);
+        if(!localFile.exists()){
+            localFile.mkdirs();
+        }
+        File localFile2 = new File(Variable.StorageImagePath);
+        if(!localFile2.exists()){
+            localFile2.mkdirs();
+        }
+
 
         CreateDirectory(Variable.StorageDirectoryPath);
     }

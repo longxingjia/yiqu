@@ -32,12 +32,19 @@
         <!--android:layout_marginTop="60dp"-->
         <!--android:src="@mipmap/menu_head" />-->
 
-
         <!--</RelativeLayout>-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@mipmap/home_bg">
+            android:layout_height="190dp"
+            >
+            <!--android:scaleType="centerCrop"-->
+            <ImageView
+                android:scaleType="center"
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/home_bg"
+                />
 
             <com.ui.views.CircleImageView
                 android:id="@+id/head"
@@ -46,8 +53,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:background="@mipmap/menu_head" />
-
-
 
 
             <RelativeLayout

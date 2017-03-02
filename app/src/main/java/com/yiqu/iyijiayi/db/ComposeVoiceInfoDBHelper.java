@@ -42,6 +42,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
     public static final String ISCOMPOSE = "isCompose";
     public static final String COMPOSE = "1";
     public static final String UNCOMPOSE = "2";
+    public static final String DESC = "desc";
 
     public ComposeVoiceInfoDBHelper(Context context) {
         super(context);
@@ -83,6 +84,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
                 music.ispay = c.getString(c.getColumnIndex(ISPAY));
                 music.isreply = c.getString(c.getColumnIndex(ISREPLY));
                 music.createtime = c.getLong(c.getColumnIndex(CREATETIME));
+                music.desc = c.getString(c.getColumnIndex(DESC));
                 ds.add(music);
                 c.moveToNext();
             }
@@ -194,6 +196,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(ISREPLY, cc.isreply);
             c.put(CREATETIME, cc.createtime);
             c.put(ISCOMPOSE, isCompose);
+            c.put(DESC, cc.desc);
 
             count = db.insert(TABLE_NAME, null, c);
         } catch (Exception e) {
@@ -231,6 +234,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(LISTENPRICE, cc.listenprice);
             c.put(STATUS, cc.status);
             c.put(ISOPEN, cc.isopen);
+            c.put(DESC, cc.desc);
 
             return db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
         } catch (Exception e) {

@@ -107,6 +107,18 @@ public class AppShare {
 
 
     /**
+     * 清除用户信息
+     * @param context
+     */
+    public static void clearShare(Context context) {
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor editor = p.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+
+    /**
      * 获取
      * @param context
      * @return

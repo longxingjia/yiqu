@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class ComposeVoice implements Serializable{
 
     public String fromuid;
-    public String type ;
+    public String type ;  //1声音 2 播音
     public int mid;
     public String musicname;
     public String musictype;

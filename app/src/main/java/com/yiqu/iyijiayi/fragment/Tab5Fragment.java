@@ -10,7 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.ui.views.CircleImageView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -20,6 +22,9 @@ import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
@@ -52,11 +57,12 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     private LinearLayout ll_tabs;
     private ImageView sex;
     private TextView content;
+    private ImageView background;
 
     @Override
     protected int getTitleView() {
 
-        return R.layout.titlebar_tab1;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -73,6 +79,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         logOutBt = (Button) v.findViewById(R.id.logout);
 
         llUserInfo = (RelativeLayout) v.findViewById(R.id.userinfo);
+        background = (ImageView) v.findViewById(R.id.background);
         ll_tabs = (LinearLayout) v.findViewById(R.id.ll_tabs);
 
         InitHeadView(v);
@@ -141,15 +148,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     protected void init(Bundle savedInstanceState) {
 
-
-//        mMenuDialogPicHelper = new MenuDialogPicHelper(this, new MenuDialogPicHelper.BitmapListener() {
-//            @Override
-//            public void onBitmapUrl(String url) {
-//                //headBase64 = url;
-//            }
-//        });
-        //  initUI();
-
         Btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,34 +160,14 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     private void initUI() {
         boolean isLogin = AppShare.getIsLogin(getActivity());
+
         if (isLogin) {
+            userInfo=AppShare.getUserInfo(getActivity());
             Btlogin.setVisibility(View.GONE);
-            userInfo = AppShare.getUserInfo(getActivity());
-            String descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
-            content.setText(descStr);
-            username.setText(userInfo.username);
-            content.setText(descStr);
-            if (!TextUtils.isEmpty(userInfo.desc)) {
-                user_desc.setText(userInfo.desc);
-            }
-            head.setOnClickListener(this);
-            PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
+                            getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this);
 
-            if (userInfo.sex.equals("0")) {
-                sex.setBackgroundResource(R.mipmap.sex_female);
-            } else {
-                sex.setBackgroundResource(R.mipmap.sex_male);
-            }
-
-            ll_tabs.setVisibility(View.VISIBLE);
-
-            if (userInfo.type.equals("1")) {  //1是学生
-                menu_item_wowen.setVisibility(View.VISIBLE);
-                teacherOnly.setVisibility(View.GONE);
-            } else {
-                menu_item_wowen.setVisibility(View.GONE);
-                teacherOnly.setVisibility(View.VISIBLE);
-            }
 
             llUserInfo.setVisibility(View.VISIBLE);
 
@@ -208,6 +186,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         initUI();
         super.onResume();
     }
+
 
     @Override
     public void onDestroy() {
@@ -243,6 +222,40 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
+
+        if (type == NetCallBack.TYPE_SUCCESS) {
+            Gson gson = new Gson();
+            userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
+            AppShare.setIsLogin(getActivity(), true);
+            AppShare.setUserInfo(getActivity(), userInfo);
+        }
+        String descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
+        content.setText(descStr);
+        username.setText(userInfo.username);
+        content.setText(descStr);
+        if (!TextUtils.isEmpty(userInfo.desc)) {
+            user_desc.setText(userInfo.desc);
+        }
+        head.setOnClickListener(this);
+        PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
+        PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, background);
+
+        if (userInfo.sex.equals("0")) {
+            sex.setBackgroundResource(R.mipmap.sex_female);
+        } else {
+            sex.setBackgroundResource(R.mipmap.sex_male);
+        }
+
+        ll_tabs.setVisibility(View.VISIBLE);
+        if (userInfo.type.equals("1")) {  //1是学生
+            menu_item_wowen.setVisibility(View.VISIBLE);
+            teacherOnly.setVisibility(View.GONE);
+        } else {
+            menu_item_wowen.setVisibility(View.GONE);
+            teacherOnly.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     @Override
@@ -262,6 +275,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
                 break;
             case R.id.logout:
                 AppShare.setIsLogin(getActivity(), false);
+                AppShare.clearShare(getActivity());
                 initUI();
 
                 break;

@@ -51,7 +51,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     private String fileUrl;
     private ComposeVoice composeVoice;
     private LinearLayout ll_select;
-    private static int requestCode =1;
+    private static int requestCode = 1;
     private TextView tea_name;
     private TextView tea_price;
     private Teacher teacher;
@@ -104,16 +104,15 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         super.init(savedInstanceState);
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
-        fileUrl = Variable.StorageDirectoryPath + composeVoice.voicename;
+        fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
 
-//        ll_select.setOnClickListener(this);
 //
         ll_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", TeacherListFragment.class.getName());
-                startActivityForResult(i,requestCode);
+                startActivityForResult(i, requestCode);
 
             }
         });
@@ -122,21 +121,20 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-           String  musicNameStr = musicName.getText().toString().trim();
-           String  contentStr = content.getText().toString().trim();
-           String  tea_nameStr = tea_name.getText().toString().trim();
+                String musicNameStr = musicName.getText().toString().trim();
+                String contentStr = content.getText().toString().trim();
+                String tea_nameStr = tea_name.getText().toString().trim();
 
-                if (musicNameStr.length() == 0 ||contentStr.length()==0) {
+                if (musicNameStr.length() == 0 || contentStr.length() == 0) {
                     ToastManager.getInstance(getActivity()).showText(
                             "请您填写您的问题");
                     return;
                 }
 
-                if (tea_nameStr.length()==0){
+                if (tea_nameStr.length() == 0) {
                     ToastManager.getInstance(getActivity()).showText(
                             "请您选择您的导师");
                     return;
-
                 }
 
                 composeVoice.questionprice = teacher.price;
@@ -156,7 +154,6 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                     UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file);
                     upLoaderTask.execute();
                 }
-
             }
         });
 
@@ -168,9 +165,9 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_OK:
-                Bundle b=data.getExtras(); //data为B中回传的Intent
+                Bundle b = data.getExtras(); //data为B中回传的Intent
                 //str即为回传的值
-                teacher = (Teacher)b.getSerializable("teacher");
+                teacher = (Teacher) b.getSerializable("teacher");
                 tea_name.setText(teacher.username);
                 tea_price.setText(teacher.price);
 
@@ -228,47 +225,37 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
             if (!TextUtils.isEmpty(result)) {
 
-                LogUtils.LOGE(tag, result);
-//                JsonObject jsonObject = new JsonObject();
                 try {
-                    JSONObject jsonObject =new JSONObject(result);
+                    JSONObject jsonObject = new JSONObject(result);
                     String bool = jsonObject.getString("bool");
                     String data = jsonObject.getString("data");
                     String re = jsonObject.getString("result");
-                    if (bool .equals("1") ) {
+                    if (bool.equals("1")) {
 
-                    String url = new JSONObject(data).getString("filepath");
-                    composeVoice.soundpath = url;
+                        String url = new JSONObject(data).getString("filepath");
+                        composeVoice.soundpath = url;
 
+                        RestNetCallHelper.callNet(
+                                getActivity(),
+                                MyNetApiConfig.addSound,
+                                MyNetRequestConfig.addSound(getActivity(), "1", "1", composeVoice),
+                                "addSound", AddQuestionFragment.this);
 
-                    RestNetCallHelper.callNet(
-                            getActivity(),
-                            MyNetApiConfig.addSound,
-                            MyNetRequestConfig.addSound(getActivity(),"1", composeVoice),
-                            "addSound", AddQuestionFragment.this);
-
-                } else {
-                    ToastManager.getInstance(getActivity()).showText(re);
-                }
-
+                    } else {
+                        ToastManager.getInstance(getActivity()).showText(re);
+                    }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-//
-
             }
-
-            Log.e(TAG, "下载完");
-
 
             if (isCancelled()) {
-
-
+                return;
             }
-            return;
+
         }
 
     }
@@ -276,11 +263,35 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        if (type == NetCallBack.TYPE_SUCCESS){
-           ToastManager.getInstance(getActivity()).showText("上传成功");
-            getActivity().finish();
+        if (id.equals("addSound")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                LogUtils.LOGE(tag+"---", netResponse.toString());
+//                ToastManager.getInstance(getActivity()).showText("上传成功");
+                try {
+                    JSONObject jsonObject = new JSONObject(netResponse.data);
+                    String sid = jsonObject.getString("sid");
+
+                    RestNetCallHelper.callNet(
+                            getActivity(),
+                            MyNetApiConfig.getNewOrder,
+                            MyNetRequestConfig.getNewOrder(getActivity(), composeVoice.fromuid, sid, teacher.price),
+                            "getNewOrder", AddQuestionFragment.this);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            }
+        } else if (id.equals("getNewOrder")) {
+            LogUtils.LOGE(tag,netResponse.toString());
+            if (type == NetCallBack.TYPE_SUCCESS) {
+             //  {result='array', data='{"order":{"oid":151,"order_number":"201703021722140000000151","type":"1","sid":"187","uid":"9","openid":null,"device_info":null,"payment":"1","payment_content":null,"price":"1","status":0,"created":1488446534,"edited":1488446534,"isincome":0,"isfree":0},"wx_arr":{"appid":"wx6926bd130c563b44","partnerid":"1385932802","prepayid":"wx20170302172157044966d28d0629078168","package":"Sign=WXPay","noncestr":"8czQ3fCtLfhdjnyD","timestamp":1488446535,"sign":"F805485C86B33EDFD25558E3147F1EF2"}}', bool='1'}
+
+            }
         }
-//            LogUtils.LOGE(tag, netResponse.toString());
+
 
     }
 }

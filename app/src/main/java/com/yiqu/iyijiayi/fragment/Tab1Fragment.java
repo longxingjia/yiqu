@@ -14,6 +14,8 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -55,9 +57,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             switch (msg.what)
             {
                 case REFRESH_COMPLETE:
-//                    mDatas.addAll(Arrays.asList("Lucene", "Canvas", "Bitmap"));
-//                    mAdapter.notifyDataSetChanged();
-                 //   vpSwipeRefreshLayout.setRefreshing(false);
+
                     break;
 
             }
@@ -70,6 +70,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;
     private Tab1SoundAdapter tab1SoundAdapter;
+    private TextView more_xizuo;
 
     @Override
     protected int getTitleView() {
@@ -84,11 +85,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     protected void initView(View v) {
         View headerView =  LayoutInflater.from(getActivity()).inflate(R.layout.tab1_fragment_header, null);
-        lvXizuo = (ListView) headerView.findViewById(R.id.lv_xizuo);
-        vp_spinner = (ViewPager) headerView.findViewById(R.id.vp_spinner);
-        lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
 
-        lvSound.setRefreshListListener(this);
+        initHeadView(headerView);
+
+        lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         lvSound.addFooterView(mLoadMoreView);
@@ -96,8 +96,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.setOnScrollListener(mLoadMoreView);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
+        lvSound.setRefreshListListener(this);
 
+    }
 
+    private void initHeadView(View v){
+        vp_spinner = (ViewPager) v.findViewById(R.id.vp_spinner);
+        lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
+        more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
+        more_xizuo.setOnClickListener(this);
     }
 
     @Override
@@ -121,7 +128,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         vp_spinner.setAdapter(new MyAdapter());
         vp_spinner.setCurrentItem(0);
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
-
         lvXizuo.setAdapter(tab1XizuoAdapter);
 
         tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
@@ -180,7 +186,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     }
 
     @Override
-    public void onClick(View arg0) {
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.more_xizuo:
+
+                break;
+        }
 
     }
 

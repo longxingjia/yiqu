@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     private CircleImageView edit_head;
     private MenuDialogPicHelper menuDialogPicHelper;
     private String tag = "InfoFragment";
+    private ImageView edit_background;
 
     @Override
     protected int getTitleBarType() {
@@ -101,7 +103,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         rl_edit_photo = (RelativeLayout) v.findViewById(R.id.rl_edit_photo);
         rl_edit_introduction = (RelativeLayout) v.findViewById(R.id.rl_edit_introduction);
         rl_edit_apply = (RelativeLayout) v.findViewById(R.id.rl_edit_apply);
-
+        edit_background = (ImageView) v.findViewById(R.id.edit_background);
         edit_head = (CircleImageView) v.findViewById(R.id.edit_head);
         edit_name = (TextView) v.findViewById(R.id.edit_name);
         edit_title = (TextView) v.findViewById(R.id.edit_title);
@@ -146,6 +148,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         edit_title.setText(userInfo.specialities);
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, edit_head);
+        PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, edit_background);
     }
 
     @Override
@@ -165,7 +168,6 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.rl_edit_head:
                 PermissionGen.needPermission(this, 100, Manifest.permission.CAMERA);
-
 
                 break;
             case R.id.rl_edit_name:
@@ -188,7 +190,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                         RestNetCallHelper.callNet(getActivity(),
                                 MyNetApiConfig.editUser, MyNetRequestConfig
                                         .editUser(getActivity(), userInfo.uid, "sex", sex),
-                                "sex", InfoFragment.this);
+                                "editUser", InfoFragment.this);
 
                     }
                 });
@@ -200,11 +202,12 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 in.putExtra("fragment", EditInfoFragment.class.getName());
                 in.putExtra("data", "school");
                 getActivity().startActivity(in);
-
                 break;
             case R.id.rl_edit_background:
+                PermissionGen.needPermission(this, 200, Manifest.permission.CAMERA);
                 break;
             case R.id.rl_edit_photo:
+
                 break;
             case R.id.rl_edit_introduction:
                 in.putExtra("fragment", EditInfoFragment.class.getName());
@@ -224,26 +227,35 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        if (type == NetCallBack.TYPE_SUCCESS) {
-            //   LogUtils.LOGE(tag,netResponse.result);
-            Gson gson = new Gson();
-            UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
-            AppShare.setUserInfo(getActivity(), userInfo);
-            if (userInfo.sex.equals("1")) {
-                edit_sex.setText("男");
-            } else {
-                edit_sex.setText("女");
+        if (id.equals("editUser")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                //   LogUtils.LOGE(tag,netResponse.result);
+                Gson gson = new Gson();
+                UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
+                AppShare.setUserInfo(getActivity(), userInfo);
+                if (userInfo.sex.equals("1")) {
+                    edit_sex.setText("男");
+                } else {
+                    edit_sex.setText("女");
+                }
+            } else if (type == NetCallBack.TYPE_ERROR) {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
             }
-        } else if (type == NetCallBack.TYPE_ERROR) {
-            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+        } else if (id.equals("setPhoto")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+
+                ToastManager.getInstance(getActivity()).showText(getString(R.string.net_success));
+            } else if (type == NetCallBack.TYPE_ERROR) {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            }
         }
 
         super.onNetEnd(id, type, netResponse);
     }
 
     @PermissionSuccess(requestCode = 100)
-    public void openContact() {
-        menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, new MenuDialogPicHelper.BitmapListener() {
+    public void openCamere() {
+        menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, "修改头像", MyNetApiConfig.editUser.getPath(), new MenuDialogPicHelper.BitmapListener() {
             @Override
             public void onBitmapUrl(String url) {
 
@@ -251,16 +263,39 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
             }
         });
         menuDialogPicHelper.show(edit_head, edit_head);
-
     }
 
     @PermissionFail(requestCode = 100)
-    public void failContact() {
-
+    public void failCamere() {
         Toast.makeText(getActivity(), getResources().getString(R.string.permission_white_external_hint), Toast.LENGTH_SHORT).show();
         PermissionUtils.openSettingActivity(getActivity());
-
     }
+
+    @PermissionSuccess(requestCode = 200)
+    public void openCamere2() {
+        menuDialogPicHelper = new MenuDialogPicHelper(this, userInfo.uid, "修改背景", MyNetApiConfig.uploadSounds.getPath(), new MenuDialogPicHelper.BitmapListener() {
+            @Override
+            public void onBitmapUrl(String url) {
+
+                LogUtils.LOGE(tag, url);
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.setPhoto, MyNetRequestConfig
+                                .setPhoto(getActivity(), userInfo.uid, url, "backgroundimage"),
+                        "setPhoto", InfoFragment.this);
+
+
+            }
+        });
+        menuDialogPicHelper.show(edit_head, edit_background);
+    }
+
+
+    @PermissionFail(requestCode = 200)
+    public void failCamere2() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.permission_white_external_hint), Toast.LENGTH_SHORT).show();
+        PermissionUtils.openSettingActivity(getActivity());
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,

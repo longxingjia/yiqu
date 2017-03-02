@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,14 +95,8 @@ public class LameUtil {
 		new Thread() {
 			@Override
 			public void run() {
-				String fileDir =  Variable.StorageDirectoryPath ;
 
-				File dir = new File(fileDir);
-				if (!dir.exists()) {
-					dir.mkdirs();
-				}
-
-				mFilePath = Variable.StorageDirectoryPath
+				mFilePath = Variable.StorageMusicPath
 						+ System.currentTimeMillis() + ".mp3";
 
 				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);

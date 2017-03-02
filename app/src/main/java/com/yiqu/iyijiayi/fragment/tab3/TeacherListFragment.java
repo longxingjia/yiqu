@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 public class TeacherListFragment extends AbsAllFragment  {
 
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
     private String tag = "TeacherListFragment";
     private ArrayList<Teacher> datas;
     private ArrayList<Teacher> datasUnfollow;
@@ -58,7 +57,6 @@ public class TeacherListFragment extends AbsAllFragment  {
     protected void initView(View v) {
         listView = (ListView) v.findViewById(R.id.listView);
         listView_unfollow = (ListView) v.findViewById(R.id.listView_unfollow);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
 
     }
 
@@ -75,8 +73,8 @@ public class TeacherListFragment extends AbsAllFragment  {
             uid = "0";
         }
 
-        selectTeacherAdapter = new SelectTeacherAdapter(getActivity(), mImageLoaderHm);
-        selectUnAdapter = new SelectTeacherAdapter(getActivity(), mImageLoaderHm);
+        selectTeacherAdapter = new SelectTeacherAdapter(getActivity());
+        selectUnAdapter = new SelectTeacherAdapter(getActivity());
         listView.setAdapter(selectTeacherAdapter);
         listView.setOnItemClickListener(selectTeacherAdapter);
 
@@ -101,7 +99,7 @@ public class TeacherListFragment extends AbsAllFragment  {
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
+
         super.onDestroy();
     }
 

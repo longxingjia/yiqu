@@ -98,7 +98,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
             h = (HoldChild) v.getTag();
             final ComposeVoice f = getItem(position);
             h.musicname.setText(f.musicname);
-            h.accompaniment.setText(f.accompaniment);
+            h.accompaniment.setText(f.desc);
             //  LogUtils.LOGE(tag,f.toString());
 //            if (f.image != null) {
 //                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.image, h.image);

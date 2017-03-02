@@ -26,6 +26,8 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
@@ -37,13 +39,12 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Activity mContext;
 
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
     private  String tag="SelectTeacherAdapter";
 
-    public SelectTeacherAdapter(Activity context, ImageLoaderHm<ImageView> m) {
+    public SelectTeacherAdapter(Activity context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
+
 
     }
 
@@ -98,9 +99,8 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
             h.name.setText(f.username);
             h.content.setText(f.title);
 
-            if (f.userimage!=null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.userimage, h.icon);
-            }
+            PictureUtils.showPicture(mContext,f.userimage,h.icon);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,7 +110,8 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        Teacher teacher =  getItem(arg2 - 1);
+        Teacher teacher =  getItem(arg2);
+
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("teacher",teacher);
