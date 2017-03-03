@@ -254,18 +254,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         } else {     //暂停，点击播放
                             if (!stufirst) {
 //                                init(mFile.toString());
-                                stuMediaPlayer.reset();
-                                try {
-                                    stuMediaPlayer.setDataSource(stuFile.getAbsolutePath());
-                                    stuMediaPlayer.prepare();// 准备
 
-                                } catch (IllegalArgumentException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalStateException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                
 
                                 //----------定时器记录播放进度---------//
                                 if (mTimer == null) {
