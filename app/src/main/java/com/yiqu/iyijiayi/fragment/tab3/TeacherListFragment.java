@@ -17,6 +17,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import org.json.JSONArray;
@@ -138,7 +139,7 @@ public class TeacherListFragment extends AbsAllFragment  {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 try {
-                    datas = parseList(netResponse.data.toString());
+                    datas = JsonUtils.parseTeacherList(netResponse.data);
                     selectTeacherAdapter.setData(datas);
 
                 } catch (JSONException e) {
@@ -153,7 +154,7 @@ public class TeacherListFragment extends AbsAllFragment  {
 //                ArrayList<FindAllPushMsg>  list = (ArrayList<FindAllPushMsg>) netResponse.body;
 //                mBeautifulAdapter.addData(list);
                 try {
-                    datasUnfollow = parseList(netResponse.data.toString());
+                    datasUnfollow = JsonUtils.parseTeacherList(netResponse.data);
                     selectUnAdapter.addData(datasUnfollow);
 
 
@@ -248,24 +249,6 @@ public class TeacherListFragment extends AbsAllFragment  {
 //
 //        }.execute();
 //    }
-
-    public ArrayList<Teacher> parseList(String data) throws JSONException {
-        ArrayList<Teacher> list = new ArrayList<Teacher>();
-        JSONArray js = new JSONArray(data);
-        for (int i = 0; i < js.length(); i++) {
-            JSONObject j = (JSONObject) js.get(i);
-            Gson gson = new Gson();
-            Teacher f = gson.fromJson(j.toString(), Teacher.class);
-
-            list.add(f);
-        }
-        return list;
-
-    }
-
-
-
-
 
 
 

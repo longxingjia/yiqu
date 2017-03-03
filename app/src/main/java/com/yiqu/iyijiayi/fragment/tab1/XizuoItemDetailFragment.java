@@ -46,7 +46,7 @@ import java.util.TimerTask;
  */
 
 public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnClickListener {
-    String tag = "SoundItemDetailFragment";
+    String tag = "SoundItemDetailFragmentbak";
     private ImageLoaderHm mImageLoaderHm;
     private TextView like;
     private TextView musicname;
@@ -203,7 +203,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                 if (!TextUtils.isEmpty(Tools.DB_PATH)) {
                     if (mFile.exists()) {
-                        Log.e(tag, "file " + mFile.getName() + " already exits!!");
+
 
                         if (ifplay){  //正在播放，点击暂停
                             if (mediaPlayer != null) {

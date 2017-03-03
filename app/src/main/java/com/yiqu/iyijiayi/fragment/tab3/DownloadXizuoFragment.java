@@ -111,7 +111,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
             File mFile = new File(Tools.DB_PATH, fileName);
             if (mFile.exists()) {
                 Log.d(tag, "file " + mFile.getName() + " already exits!!");
-//                mFile.delete();
+
                 nextPage();
             } else {
                 if (Tools.isNetworkAvailable(getActivity())){
@@ -213,8 +213,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
             // super.onPostExecute(result);
             submit.setClickable(true);
             submit.setEnabled(true);
-            Log.e(TAG, "下载完");
-
+            submit.setBackgroundResource(R.drawable.red_box);
             DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
             downloadMusicInfoDBHelper.insert(music);
 
@@ -249,7 +248,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 }
                 mOutputStream.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+            
                 e.printStackTrace();
             }
             return bytesCopied;

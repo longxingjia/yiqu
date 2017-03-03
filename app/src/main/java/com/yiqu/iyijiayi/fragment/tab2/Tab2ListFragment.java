@@ -23,6 +23,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import org.json.JSONArray;
@@ -140,7 +141,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 try {
-                    datas = parseList(netResponse.data.toString());
+                    datas = JsonUtils.parseTeacherList(netResponse.data);
                     tab2ListFragmetAdapter.setData(datas);
                     if (datas.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -158,7 +159,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    datas = parseList(netResponse.data.toString());
+                    datas = JsonUtils.parseTeacherList(netResponse.data);
                     tab2ListFragmetAdapter.addData(datas);
                     if (datas.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
@@ -257,19 +258,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         }.execute();
     }
 
-    public ArrayList<Teacher> parseList(String data) throws JSONException {
-        ArrayList<Teacher> list = new ArrayList<Teacher>();
-        JSONArray js = new JSONArray(data);
-        for (int i = 0; i < js.length(); i++) {
-            JSONObject j = (JSONObject) js.get(i);
-            Gson gson = new Gson();
-            Teacher f = gson.fromJson(j.toString(), Teacher.class);
 
-            list.add(f);
-        }
-        return list;
-
-    }
 
 
 }

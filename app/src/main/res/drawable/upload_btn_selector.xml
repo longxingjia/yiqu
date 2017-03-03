@@ -15,9 +15,9 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:drawable="@drawable/upload_pressed" android:state_focused="true"></item>
-    <item android:drawable="@drawable/upload_pressed" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/upload_pressed" android:state_selected="true"></item>
-    <item android:drawable="@drawable/upload_pressed" android:state_enabled="false"></item>
-    <item android:drawable="@drawable/upload"></item>
+    <item android:drawable="@drawable/bitmap_upload_pressed" android:state_focused="true"></item>
+    <item android:drawable="@drawable/bitmap_upload_pressed" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/bitmap_upload_pressed" android:state_selected="true"></item>
+    <item android:drawable="@drawable/bitmap_upload_pressed" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/bitmap_upload"></item>
 </selector>

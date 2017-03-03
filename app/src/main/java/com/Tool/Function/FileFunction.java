@@ -47,6 +47,7 @@ public class FileFunction {
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
+        Variable.StorageMusicCachPath = Variable.StorageDirectoryPath + "/musiccach/";
         File localFile = new File(Variable.StorageMusicPath);
         if(!localFile.exists()){
             localFile.mkdirs();
@@ -54,6 +55,10 @@ public class FileFunction {
         File localFile2 = new File(Variable.StorageImagePath);
         if(!localFile2.exists()){
             localFile2.mkdirs();
+        }
+        File localFile3 = new File(Variable.StorageMusicCachPath);
+        if(!localFile3.exists()){
+            localFile3.mkdirs();
         }
 
 

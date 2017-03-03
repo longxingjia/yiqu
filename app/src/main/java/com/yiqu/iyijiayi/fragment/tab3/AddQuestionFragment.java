@@ -15,6 +15,7 @@ import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.google.gson.JsonObject;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -265,7 +266,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         super.onNetEnd(id, type, netResponse);
         if (id.equals("addSound")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag+"---", netResponse.toString());
+
 //                ToastManager.getInstance(getActivity()).showText("上传成功");
                 try {
                     JSONObject jsonObject = new JSONObject(netResponse.data);
@@ -285,20 +286,31 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
             }
         } else if (id.equals("getNewOrder")) {
-            LogUtils.LOGE(tag,netResponse.toString());
+
             if (type == NetCallBack.TYPE_SUCCESS) {
-             //  {result='array', data='{"order":{"oid":151,"order_number":"201703021722140000000151","type":"1","sid":"187","uid":"9","openid":null,"device_info":null,"payment":"1","payment_content":null,"price":"1","status":0,"created":1488446534,"edited":1488446534,"isincome":0,"isfree":0},"wx_arr":{"appid":"wx6926bd130c563b44","partnerid":"1385932802","prepayid":"wx20170302172157044966d28d0629078168","package":"Sign=WXPay","noncestr":"8czQ3fCtLfhdjnyD","timestamp":1488446535,"sign":"F805485C86B33EDFD25558E3147F1EF2"}}', bool='1'}
-//03-02 17:30:50.848 17263-17263/com.yiqu.iyijiayi E/UploadXizuoFragment: NetResponse{result='array', data='{"order":{"oid":152,"order_number":"201703021731100000000152","type":"1","sid":"188","uid":"9","openid":null,"device_info":null,"payment":"1","payment_content":null,"price":0,"status":0,"created":1488447070,"edited":1488447070,"isincome":0,"isfree":1},"wx_arr":null}', bool='1'}
+//result='array', data='{"order":{"oid":152,"order_number":"201703021731100000000152","type":"1","sid":"188","uid":"9","openid":null,"device_info":null,"payment":"1","payment_content":null,"price":0,"status":0,"created":1488447070,"edited":1488447070,"isincome":0,"isfree":1},"wx_arr":null}', bool='1'}
 
-                RestNetCallHelper.callNet(
-                        getActivity(),
-                        MyNetApiConfig.getNewOrder,
-                        MyNetRequestConfig.getNewOrder(getActivity(), composeVoice.fromuid, sid, teacher.price),
-                        "getNewOrder", AddQuestionFragment.this);
-
+                try {
+                    JSONObject jsonObject = new JSONObject(netResponse.data);
+                    String order = jsonObject.getString("order");
+                    JSONObject j = new JSONObject(order);
+                    String order_number = j.getString("order_number");
+                    RestNetCallHelper.callNet(
+                            getActivity(),
+                            MyNetApiConfig.orderQuery,
+                            MyNetRequestConfig.orderQuery(getActivity(), order_number),
+                            "orderQuery", AddQuestionFragment.this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else if (id.equals("orderQuery")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                getActivity().finish();
+            }else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
             }
         }
-
-
     }
 }

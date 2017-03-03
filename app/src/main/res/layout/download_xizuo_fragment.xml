@@ -65,7 +65,6 @@
         android:background="@drawable/gray_box"
         android:textColor="@color/white"
         android:text="开始录制"
-
         android:textSize="18sp"
         android:gravity="center"/>
 

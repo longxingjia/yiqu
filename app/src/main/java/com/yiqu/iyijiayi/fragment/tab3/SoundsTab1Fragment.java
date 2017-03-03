@@ -19,6 +19,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.JsonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,7 +111,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         if (id.equals("getMusicList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
                 try {
-                    musics = parseList(netResponse.data.toString());
+                    musics = JsonUtils.parseMusicList(netResponse.data);
                     soundsTab1Adapter.setData(musics);
                     if (musics.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -128,7 +129,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    musics = parseList(netResponse.data.toString());
+                    musics = JsonUtils.parseMusicList(netResponse.data);
                     soundsTab1Adapter.addData(musics);
                     if (musics.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
@@ -190,18 +191,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         }.execute();
     }
 
-    public ArrayList<Music> parseList(String data) throws JSONException {
-        ArrayList<Music> list = new ArrayList<Music>();
-        JSONArray js = new JSONArray(data);
-        for (int i = 0; i < js.length(); i++) {
-            JSONObject j = (JSONObject) js.get(i);
-            Gson gson = new Gson();
-            Music f = gson.fromJson(j.toString(), Music.class);
-            list.add(f);
-        }
-        return list;
 
-    }
 
     @Override
     public void onNetNoStart(String id) {

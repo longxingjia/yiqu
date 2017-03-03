@@ -17,17 +17,18 @@ public class LoadMoreView extends RelativeLayout implements OnScrollListener{
 	private boolean mIsMoreing;
 	//回调函数
 	private OnMoreListener moreListener;
+	private View endLoading;
 
 	public LoadMoreView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		setVisibility(View.VISIBLE);
+
 	}
 
 	@Override
 	protected void onFinishInflate() {
-		// TODO Auto-generated method stub
 		footer = findViewById(R.id.footer);
+		endLoading = findViewById(R.id.endLoading);
 		super.onFinishInflate();
 		end();
 	}
@@ -42,17 +43,17 @@ public class LoadMoreView extends RelativeLayout implements OnScrollListener{
 	
 	//加载中
 	public void loading() {
-		// TODO Auto-generated method stub
 		//开始加载更多，变更相应标记
 		mIsMoreing = true;	
 		footer.setVisibility(View.VISIBLE);
+		endLoading.setVisibility(View.GONE);
 	}
 	//加载结束，需要发起者调用
 	public void end() {
-		// TODO Auto-generated method stub
 		//结束加载更多，变更相应标记
 		mIsMoreing = false;
 		footer.setVisibility(View.GONE);
+		endLoading.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -108,12 +109,10 @@ public class LoadMoreView extends RelativeLayout implements OnScrollListener{
 	 * @version 1.0
 	 */
 	public boolean isloading() {
-		// TODO Auto-generated method stub
 		return mIsMoreing;
 	}
 	
 	public boolean getMoreAble() {
-		// TODO Auto-generated method stub
 		return mIsMoreAble;
 	}
 	

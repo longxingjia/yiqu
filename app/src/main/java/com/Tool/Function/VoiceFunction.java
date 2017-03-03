@@ -43,7 +43,7 @@ public class VoiceFunction {
         return VoicePlayerEngine.getInstance().isPlaying();
     }
 
-    public synchronized static boolean IsPlayVoice(String fileUrl) {
+    private synchronized static boolean IsPlayVoice(String fileUrl) {
         if (CommonFunction.isEmpty(fileUrl)) {
             return false;
         }
@@ -51,6 +51,11 @@ public class VoiceFunction {
         return getPlayingUrl().equals(fileUrl);
     }
 
+    /**
+     *
+     * @param fileUrl 是否在播
+     * @return
+     */
     public synchronized static boolean IsPlayingVoice(String fileUrl) {
         if (IsPlayVoice(fileUrl)) {
             return VoicePlayerEngine.getInstance().isPlaying();
@@ -77,5 +82,11 @@ public class VoiceFunction {
         if (getPlayingUrl().equals(fileUrl)) {
             VoicePlayerEngine.getInstance().stopVoice();
         }
+    }
+    public synchronized static int pauseVoice(String fileUrl) {
+        if (getPlayingUrl().equals(fileUrl)) {
+          return  VoicePlayerEngine.getInstance().pauseVoice();
+        }
+        return 0;
     }
 }

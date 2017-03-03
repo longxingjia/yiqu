@@ -220,13 +220,6 @@ public class MyNetApiConfig {
         public String getPath() {
             return ServerAddr + "/user/del-follow";
         }
-//
-//		@Override
-//		public Object parseBody(String body) throws JSONException {
-//			// TODO Auto-generated method stub
-//			return FindAllBbxdxx.parseList(body);
-//		}
-
 
     };
     /**
@@ -237,13 +230,6 @@ public class MyNetApiConfig {
         public String getPath() {
             return ServerAddr + "/user/add-teacher-apply";
         }
-//
-//		@Override
-//		public Object parseBody(String body) throws JSONException {
-//			// TODO Auto-generated method stub
-//			return FindAllBbxdxx.parseList(body);
-//		}
-
 
     };
 
@@ -296,6 +282,18 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/get-follow-sound-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+    public static MyNetApi getSoundList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-sound-list";
         }
 
         @Override
@@ -383,6 +381,20 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/payment/get-new-order";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+
+    };
+
+    public static MyNetApi orderQuery = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/payment/order-query";
         }
 
         @Override

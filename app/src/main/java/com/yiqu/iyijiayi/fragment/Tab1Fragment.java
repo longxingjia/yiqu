@@ -1,6 +1,7 @@
 package com.yiqu.iyijiayi.fragment;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,8 +24,10 @@ import com.jauker.widget.BadgeView;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
+import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
@@ -87,7 +90,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         View headerView =  LayoutInflater.from(getActivity()).inflate(R.layout.tab1_fragment_header, null);
 
         initHeadView(headerView);
-
         lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
@@ -189,6 +191,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.more_xizuo:
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                i.putExtra("fragment", Tab1XizuoListFragment.class.getName());
+
+                getActivity().startActivity(i);
 
                 break;
         }

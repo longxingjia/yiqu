@@ -1,6 +1,7 @@
 package com.yiqu.iyijiayi.fragment.tab1;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,12 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Variable;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Sound;
@@ -45,7 +44,7 @@ import java.util.TimerTask;
  * Created by Administrator on 2017/2/20.
  */
 
-public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener ,VoicePlayerInterface {
+public class SoundItemDetailFragmentbak extends AbsAllFragment implements View.OnClickListener {
     String tag = "SoundItemDetailFragmentbak";
 
     private TextView like;
@@ -146,7 +145,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                             .getSoundDetail(getActivity(), sid, AppShare.getUserInfo(getActivity()).uid),
-                    "getSoundDetail", SoundItemDetailFragment.this);
+                    "getSoundDetail", SoundItemDetailFragmentbak.this);
 
         }
         musicname = (TextView) v.findViewById(R.id.musicname);
@@ -244,139 +243,128 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.stu_listen:
-
-                    if (stuFile.exists()) {
-                        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
-
-
-                        } else {     //暂停，点击播放
-                            if (!stufirst) {
-//                                init(mFile.toString());
-                                stuMediaPlayer.reset();
-                                try {
-                                    stuMediaPlayer.setDataSource(stuFile.getAbsolutePath());
-                                    stuMediaPlayer.prepare();// 准备
-
-                                } catch (IllegalArgumentException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalStateException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //----------定时器记录播放进度---------//
-                                if (mTimer == null) {
-                                    mTimer = new Timer();
-                                }
-                                if (mTimerTask == null) {
-                                    mTimerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            mHandler.sendEmptyMessage(0);
-
-                                        }
-                                    };
-                                    mTimer.schedule(mTimerTask, 1000, 1000);
-                                    stufirst = true;
-                                }
-
-                            }
-
-                            stuplay = true;
-                            stutotalTime = stuMediaPlayer.getDuration();
-                            stuMediaPlayer.start();
-
-                        }
-
-
-                    } else {
-                        String path = Variable.StorageMusicCachPath;
-                        DownLoaderTask task = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
-                        task.execute();
-                    }
-
-
-
-
-                break;
-            case R.id.tea_listen:
-
-                    if (teaFile.exists()) {
-                       // Log.e(tag, "file " + teaFile.getName() + " already exits!!");
-
-                        if (teaplay) {  //正在播放，点击暂停
-                            if (teaMediaPlayer != null) {
-                                stuPause();
-                            }
-                            teaplay = false;
-                        } else {     //暂停，点击播放
-                            if (!teafirst) {
-//                                init(mFile.toString());
-                                teaMediaPlayer.reset();
-                                try {
-                                    teaMediaPlayer.setDataSource(teaFile.getAbsolutePath());
-                                    teaMediaPlayer.prepare();// 准备
-
-                                } catch (IllegalArgumentException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalStateException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //----------定时器记录播放进度---------//
-                                if (mTimer == null) {
-                                    mTimer = new Timer();
-                                }
-                                if (mTimerTask == null) {
-                                    mTimerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            mHandler.sendEmptyMessage(1);
-
-                                        }
-                                    };
-                                    mTimer.schedule(mTimerTask, 1000, 1000);
-                                    teafirst = true;
-                                }
-
-                            }
-
-                            teaplay = true;
-                            teatotalTime = teaMediaPlayer.getDuration();
-                            teaMediaPlayer.start();
-
-                        }
-
-
-                    } else {
-
-                        DownLoaderTeaTask t = new DownLoaderTeaTask(teaUrl, Variable.StorageMusicCachPath, teafileName, getActivity());
-                        t.execute();
-                    }
-
-
-                break;
-        }
-    }
-
-    @Override
-    public void playVoiceBegin() {
-
-    }
-
-    @Override
-    public void playVoiceFail() {
-
-    }
-
-    @Override
-    public void playVoiceFinish() {
-
+//        switch (v.getId()) {
+//            case R.id.stu_listen:
+//
+//                    if (stuFile.exists()) {
+//                        Log.e(tag, "file " + stuFile.getName() + " already exits!!");
+//
+//                        if (stuplay) {  //正在播放，点击暂停
+//                            if (stuMediaPlayer != null) {
+//                                stuPause();
+//                            }
+//                            stuplay = false;
+//                        } else {     //暂停，点击播放
+//                            if (!stufirst) {
+////                                init(mFile.toString());
+//                                stuMediaPlayer.reset();
+//                                try {
+//                                    stuMediaPlayer.setDataSource(stuFile.getAbsolutePath());
+//                                    stuMediaPlayer.prepare();// 准备
+//
+//                                } catch (IllegalArgumentException e) {
+//                                    e.printStackTrace();
+//                                } catch (IllegalStateException e) {
+//                                    e.printStackTrace();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                                //----------定时器记录播放进度---------//
+//                                if (mTimer == null) {
+//                                    mTimer = new Timer();
+//                                }
+//                                if (mTimerTask == null) {
+//                                    mTimerTask = new TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            mHandler.sendEmptyMessage(0);
+//
+//                                        }
+//                                    };
+//                                    mTimer.schedule(mTimerTask, 1000, 1000);
+//                                    stufirst = true;
+//                                }
+//
+//                            }
+//
+//                            stuplay = true;
+//                            stutotalTime = stuMediaPlayer.getDuration();
+//                            stuMediaPlayer.start();
+//
+//                        }
+//
+//
+//                    } else {
+//                        String path = Variable.StorageMusicCachPath;
+//                        DownLoaderTask task = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
+//                        task.execute();
+//                    }
+//
+//
+//
+//
+//                break;
+//            case R.id.tea_listen:
+//
+//                    if (teaFile.exists()) {
+//                        Log.e(tag, "file " + teaFile.getName() + " already exits!!");
+//
+//                        if (teaplay) {  //正在播放，点击暂停
+//                            if (teaMediaPlayer != null) {
+//                                stuPause();
+//                            }
+//                            teaplay = false;
+//                        } else {     //暂停，点击播放
+//                            if (!teafirst) {
+////                                init(mFile.toString());
+//                                teaMediaPlayer.reset();
+//                                try {
+//                                    teaMediaPlayer.setDataSource(teaFile.getAbsolutePath());
+//                                    teaMediaPlayer.prepare();// 准备
+//
+//                                } catch (IllegalArgumentException e) {
+//                                    e.printStackTrace();
+//                                } catch (IllegalStateException e) {
+//                                    e.printStackTrace();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                                //----------定时器记录播放进度---------//
+//                                if (mTimer == null) {
+//                                    mTimer = new Timer();
+//                                }
+//                                if (mTimerTask == null) {
+//                                    mTimerTask = new TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            mHandler.sendEmptyMessage(1);
+//
+//                                        }
+//                                    };
+//                                    mTimer.schedule(mTimerTask, 1000, 1000);
+//                                    teafirst = true;
+//                                }
+//
+//                            }
+//
+//                            teaplay = true;
+//                            teatotalTime = teaMediaPlayer.getDuration();
+//                            teaMediaPlayer.start();
+//
+//                        }
+//
+//
+//                    } else {
+//
+//                        DownLoaderTeaTask t = new DownLoaderTeaTask(teaUrl, Variable.StorageMusicCachPath, teafileName, getActivity());
+//                        t.execute();
+//                    }
+//
+//
+//                break;
+//        }
     }
 
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
@@ -746,10 +734,32 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     }
 
+    //暂停音乐
+//    private void stuPause() {
+//        if (stuMediaPlayer != null && stuMediaPlayer.isPlaying()) {
+//            stuMediaPlayer.pause();
+//        }
+//    }
+//
+//    private void teaPause() {
+//        if (teaMediaPlayer != null && teaMediaPlayer.isPlaying()) {
+//            teaMediaPlayer.pause();
+//        }
+//    }
 
     @Override
     public void onDestroy() {
 
+//        if (stuMediaPlayer != null && stuMediaPlayer.isPlaying()) {
+//            stuMediaPlayer.stop();
+//            stuMediaPlayer.release();
+//            stuMediaPlayer = null;
+//        }
+//        if (teaMediaPlayer != null && teaMediaPlayer.isPlaying()) {
+//            teaMediaPlayer.stop();
+//            teaMediaPlayer.release();
+//            teaMediaPlayer = null;
+//        }
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;

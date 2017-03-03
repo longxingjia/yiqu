@@ -353,7 +353,6 @@ public class RecordActivity extends Activity
                                 case 0:
                                     Intent intent = new Intent(instance, StubActivity.class);
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
-
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
 
@@ -364,8 +363,6 @@ public class RecordActivity extends Activity
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
-
-
                                     break;
                             }
 

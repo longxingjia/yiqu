@@ -40,7 +40,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
     private Context mContext;
     private String uid;
 
-    private String tag = "Tab2ListFragmetAdapter";
+    private String tag = "Tab5DianpingAdapter";
 
     public Tab5DianpingAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -82,6 +82,8 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
         TextView tectitle;
         ImageView stu_header;
         ImageView tea_header;
+        TextView listener;
+        ImageView musictype;
         TextView stu_listen;
     }
 
@@ -98,6 +100,8 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                 h.soundtime = (TextView) v.findViewById(R.id.soundtime);
                 h.tea_name = (TextView) v.findViewById(R.id.tea_name);
                 h.tectitle = (TextView) v.findViewById(R.id.tectitle);
+                h.musictype = (ImageView) v.findViewById(R.id.musictype);
+                h.listener = (TextView) v.findViewById(R.id.listener);
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
@@ -109,9 +113,15 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
             h.soundtime.setText(f.soundtime + "\"");
+            h.listener.setText(f.views+"");
             h.tea_name.setText(f.tecname);
             h.tectitle.setText(f.tectitle);
             //  LogUtils.LOGE(tag,f.soundpath);
+            if (f.type==1){
+                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+            }else {
+                h.musictype.setBackgroundResource(R.mipmap.boyin);
+            }
 
 
             PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);

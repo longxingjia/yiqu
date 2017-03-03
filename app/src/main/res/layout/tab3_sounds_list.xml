@@ -50,7 +50,7 @@
 
         <Button
             android:id="@+id/add_question"
-            android:layout_width="30dp"
+            android:layout_width="40dp"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_height="40dp"
@@ -60,7 +60,7 @@
 
         <Button
             android:id="@+id/upload"
-            android:layout_width="30dp"
+            android:layout_width="40dp"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_height="40dp"

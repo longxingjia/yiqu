@@ -1,52 +1,45 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AbsListView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.MyFragmentPagerAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5TiwenAdapter;
-import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.NoScollViewPager;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class HomePageFragment extends AbsAllFragment implements RefreshList.IRefreshListViewListener, LoadMoreView.OnMoreListener {
 
@@ -63,25 +56,26 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private ImageView head;
     private RefreshList listView;
     private int count = 0;
-    private int rows = 10;
+    private int rows = 100;
     private LoadMoreView mLoadMoreView;
-    private String type = "1";
+    private int TYPE = 1;
     private String uid;
     private String myUid;
     private Tab5DianpingAdapter tab5DianpingAdapter;
-    private Tab5XizuoAdapter tab5XizuoAdapter;
-    private Tab5TiwenAdapter tab5TiwenAdapter;
+    private Tab1XizuoAdapter tab5XizuoAdapter;
+    //    private Tab1SoundAdapter tab1SoundAdapter;
     private Context mContext;
     private TextView price;
     private LinearLayout tea;
-
     private LinearLayout stu;
     private TextView questioncount;
     private TextView totalincome;
     private TextView questionincome;
     private TextView tincome;
-    public ArrayList<Sound> sound;
+    public ArrayList<Sound> sounds;
     private TextView content;
+    private ImageView background;
+    private HomePage homePage;
 
     @Override
     protected int getTitleView() {
@@ -114,12 +108,19 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     @Override
     protected void initTitle() {
 
-        setTitleText("我");
+        if (homePage==null){
+            setTitleText("我");
+        }else {
+
+            setTitleText(userInfo.username+"的主页");
+        }
+
+
     }
 
     @Override
     protected void initView(View v) {
-
+        homePage = (HomePage) getActivity().getIntent().getSerializableExtra("data");
         mContext = getActivity();
         listView = (RefreshList) v.findViewById(R.id.listView);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -135,22 +136,43 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         InitHeadView(headview);
 
 
-        HomePage homePage = (HomePage) getActivity().getIntent().getSerializableExtra("data");
         myUid = AppShare.getUserInfo(mContext).uid;
-        userInfo = homePage.user;
-        sound = homePage.sound;
-
-        LogUtils.LOGE(tag, homePage.toString());
-        initUI();
 
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab5TiwenAdapter = new Tab5TiwenAdapter(getActivity(), uid);
-        tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity(), uid);
+//        tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
+        tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
         listView.setAdapter(tab5DianpingAdapter);
         listView.setOnItemClickListener(tab5DianpingAdapter);
         listView.setRefreshListListener(this);
-        tab5DianpingAdapter.setData(sound);
+        if (homePage == null) {
+            userInfo = AppShare.getUserInfo(mContext);
+            if (userInfo.type.equals("2")) {
+                TYPE = 2;
+
+            } else {
+                TYPE = 1;
+            }
+
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getUserPageSoundList,
+                    MyNetRequestConfig.getUserPageSoundList(getActivity()
+                            , TYPE, userInfo.uid, count, rows, myUid),
+                    "getUserPageSoundList",
+                    HomePageFragment.this);
+
+        } else {
+            userInfo = homePage.user;
+            sounds = homePage.sound;
+            tab5DianpingAdapter.setData(sounds);
+            LogUtils.LOGE(tag, homePage.toString());
+        }
+
+
+        initUI();
+
+
+
     }
 
     /*
@@ -169,6 +191,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         questionincome = (TextView) v.findViewById(R.id.questionincome);
         sex = (ImageView) v.findViewById(R.id.sex);
         head = (ImageView) v.findViewById(R.id.head);
+        background = (ImageView) v.findViewById(R.id.background);
         dianping_tab = (LinearLayout) v.findViewById(R.id.dianping_tab);
         tiwen_tab = (LinearLayout) v.findViewById(R.id.tiwen_tab);
         tea = (LinearLayout) v.findViewById(R.id.tea);
@@ -183,51 +206,49 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         private int index = 0;
 
         public txListener(int i) {
-//            if (!userInfo.type.equals("2")) {
-//                index = i - 1;
-//            } else {
-//                index = i;
-//            }
             index = i;
-            type = index + "";
         }
 
         @Override
         public void onClick(View v) {
-
-            LogUtils.LOGE(tag, index + "");
-
-            cursor.setPosition(index);
-            switch (index) {
-                case 2:
-                    if (userInfo.type.equals("2")) {
-                        cursor.setPosition(index - 2);
-                    }
-
-                    break;
+            TYPE = index;
+            LogUtils.LOGE(tag, index + "---");
+            int i = index;
+            switch (TYPE) {
                 case 1:
                     if (userInfo.type.equals("2")) {
 
                     } else {
-                        cursor.setPosition(index - 1);
+                        i = index - 1;
                     }
+                    listView.setAdapter(tab5DianpingAdapter);
                     break;
+                case 2:
+                    if (userInfo.type.equals("2")) {
+                        i = index - 2;
+                    }
+                    listView.setAdapter(tab5DianpingAdapter);
+                    break;
+
                 case 3:
                     if (userInfo.type.equals("2")) {
-                        cursor.setPosition(index - 1);
+                        i = index - 1;
                     } else {
-                        cursor.setPosition(index - 2);
+                        i = index - 2;
                     }
-                    //    listView.setAdapter(tab5XizuoAdapter);
+                    listView.setAdapter(tab5XizuoAdapter);
 
                     break;
 
             }
+            count = 0;
+            cursor.setPosition(i);
+            LogUtils.LOGE(tag, i + "");
 
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserPageSoundList,
                     MyNetRequestConfig.getUserPageSoundList(getActivity()
-                            , type, userInfo.uid, count, rows, myUid),
+                            , TYPE, userInfo.uid, count, rows, myUid),
                     "getUserPageSoundList",
                     HomePageFragment.this);
 
@@ -240,7 +261,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             InitCursor(3);
             dianping_tab.setVisibility(View.VISIBLE);
             descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
-            type = "2";
+            TYPE = 2;
 
             tea.setVisibility(View.VISIBLE);
             stu.setVisibility(View.GONE);
@@ -254,7 +275,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             InitCursor(2);
             dianping_tab.setVisibility(View.GONE);
             descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.school, userInfo.followcount, userInfo.myfollowcount);
-            type = "1";
+            TYPE = 1;
             tincome.setText(userInfo.totalincome);
         }
         uid = userInfo.uid;
@@ -274,6 +295,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         xizuo_tab.setOnClickListener(new txListener(3));
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
+        PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, background);
     }
 
 
@@ -288,29 +310,48 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        LogUtils.LOGE(tag, netResponse.toString());
+
         if (id.equals("getUserPageSoundList")) {
+            LogUtils.LOGE(tag, netResponse.toString());
             if (type == NetCallBack.TYPE_SUCCESS) {
+                switch (TYPE) {
+                    case 2:
+//                        break;
+                    case 1:
+                        try {
+                            sounds = JsonUtils.parseSoundList(netResponse.data);
+                            tab5DianpingAdapter.setData(sounds);
+                            if (sounds.size() == rows) {
+                                mLoadMoreView.setMoreAble(true);
+                            }
+                            count += rows;
+                            resfreshOk();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                        break;
+                    case 3:
+                        try {
+                            ArrayList<Xizuo> xizuos = JsonUtils.parseXizuoList(netResponse.data);
+                            tab5XizuoAdapter.setData(xizuos);
+                            if (xizuos.size() == rows) {
+                                mLoadMoreView.setMoreAble(true);
+                            }
+                            count += rows;
+                            resfreshOk();
 
-//                try {
-//                    datas = parseList(netResponse.data.toString());
-//                    tab2ListFragmetAdapter.setData(datas);
-//                    if (datas.size() == rows) {
-//                        mLoadMoreView.setMoreAble(true);
-//                    }
-//                    count += rows;
-//                    resfreshOk();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
             } else {
                 resfreshFail();
             }
         } else if ("getUserPageSoundList_more".equals(id)) {
             if (TYPE_SUCCESS == type) {
-
+                LogUtils.LOGE(tag, netResponse.toString());
 //                try {
 //                    datas = parseList(netResponse.data.toString());
 //                    tab2ListFragmetAdapter.addData(datas);
@@ -338,7 +379,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getUserPageSoundList,
                 MyNetRequestConfig.getUserPageSoundList(getActivity()
-                        , uid, type, count, rows, userInfo.uid),
+                        , TYPE, uid, count, rows, userInfo.uid),
                 "getUserPageSoundList",
                 this);
 
@@ -353,10 +394,10 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                 mLoadMoreView.loading();
 
                 RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.get_follow_recommend_list,
-                        MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                                , uid, type, count, rows),
-                        "get_follow_recommend_list_more",
+                        MyNetApiConfig.getUserPageSoundList,
+                        MyNetRequestConfig.getUserPageSoundList(getActivity()
+                                , TYPE, uid, count, rows, userInfo.uid),
+                        "getUserPageSoundList_more",
                         this);
 
             }

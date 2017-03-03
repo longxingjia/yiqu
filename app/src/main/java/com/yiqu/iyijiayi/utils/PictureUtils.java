@@ -29,7 +29,7 @@ public class PictureUtils {
                         .placeholder(R.mipmap.menu_head).into(icon);
             } else {
                 Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
-                        .placeholder(R.mipmap.menu_head).into(icon);
+                       .into(icon);
             }
         }
     }

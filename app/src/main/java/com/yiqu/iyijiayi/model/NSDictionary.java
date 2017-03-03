@@ -11,5 +11,6 @@ public class NSDictionary {
     public String ispay;
     public String isreply;
     public String status;
+    public String stype;
 
 }

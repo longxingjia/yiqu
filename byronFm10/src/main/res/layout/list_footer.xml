@@ -2,14 +2,24 @@
 <com.ui.views.LoadMoreView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:clickable="true" >
+
+    <TextView
+        android:id="@+id/endLoading"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#EDEDED"
+        android:text="已经全部加载完毕"
+        android:textColor="#878787"
+        android:textSize="12dp" />
 
     <LinearLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:gravity="center"
+        android:background="#ffffff"
         android:orientation="horizontal" >
 
         <ProgressBar

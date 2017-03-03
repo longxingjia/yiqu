@@ -94,6 +94,38 @@ public class VoicePlayerEngine {
         prepareMusic(voiceUrl);
     }
 
+    public void playVoice(String voiceUrl, VoicePlayerInterface voicePlayerInterface, int time) {
+        if (CommonFunction.isEmpty(voiceUrl)) {
+            UpdateFunction.ShowToastFromThread("不存在语音文件");
+            return;
+        }
+
+        stopVoice();
+
+        this.voicePlayerInterface = voicePlayerInterface;
+
+        prepareMusic(voiceUrl, time);
+    }
+
+    private synchronized void prepareMusic(String voiceUrl, int time) {
+        playingUrl = voiceUrl;
+
+        musicPlayerState = MusicData.MusicPlayerState.preparing;
+
+        try {
+            voicePlayer.reset();
+            voicePlayer.setDataSource(voiceUrl);
+            voicePlayer.prepareAsync();
+
+            voicePlayer.seekTo(time);
+        } catch (Exception e) {
+            playFail();
+
+            UpdateFunction.ShowToastFromThread("播放语音文件失败");
+            LogFunction.error("播放语音异常", e);
+        }
+    }
+
     private synchronized void prepareMusic(String voiceUrl) {
         playingUrl = voiceUrl;
 
@@ -107,7 +139,6 @@ public class VoicePlayerEngine {
             playFail();
 
             UpdateFunction.ShowToastFromThread("播放语音文件失败");
-
             LogFunction.error("播放语音异常", e);
         }
     }
@@ -166,6 +197,26 @@ public class VoicePlayerEngine {
                 reset();
                 break;
         }
+    }
+
+    public int pauseVoice() {
+        if (musicPlayerState == MusicData.MusicPlayerState.playing) {
+            if (!voicePlayer.isPlaying()) {
+                return 0;
+            }
+            playingUrl = null;
+            voicePlayer.pause();
+            musicPlayerState = MusicData.MusicPlayerState.pausing;
+
+            if (voicePlayerInterface != null) {
+                voicePlayerInterface.playVoiceFinish();
+            }
+            return voicePlayer.getCurrentPosition();
+        } else if (musicPlayerState == MusicData.MusicPlayerState.preparing) {
+            reset();
+            return 0;
+        }
+        return 0;
     }
 
     public String getPlayingUrl() {

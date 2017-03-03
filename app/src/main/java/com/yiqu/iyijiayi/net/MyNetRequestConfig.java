@@ -154,7 +154,19 @@ public class MyNetRequestConfig {
         r.addHttpParam("rows", rows + "");
         r.addHttpParam("orderby", orderby);
         r.addHttpParam("sort", sort);
-
+        return r;
+    }
+    /**
+     * 20、获取热门/发现列表
+     */
+    public static NetRequest getSoundList(Context c,  String arr,
+                                                int count, int rows, String orderby, String sort) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("arr", arr);
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
+        r.addHttpParam("orderby", orderby);
+        r.addHttpParam("sort", sort);
         return r;
     }
 
@@ -251,17 +263,17 @@ public class MyNetRequestConfig {
 
     /**
      * @param c
-     * @param type     2 点评,1 提问,@"3"]
+     * @param type     2 点评,1 提问,3:习作
      * @param uid      个人页面对象的uid
      * @param count
      * @param rows
      * @param checkpay 传当前用户UID
      * @return
      */
-    public static NetRequest getUserPageSoundList(Context c, String type,
+    public static NetRequest getUserPageSoundList(Context c, int type,
                                                   String uid, int count, int rows, String checkpay) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("type", type);
+        r.addHttpParam("type", type+"");
         r.addHttpParam("uid", uid);
         r.addHttpParam("count", count + "");
         r.addHttpParam("rows", rows + "");
@@ -305,10 +317,15 @@ public class MyNetRequestConfig {
         return r;
     }
 
+    public static NetRequest orderQuery(Context c, String out_trade_no) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("out_trade_no", out_trade_no);
+        return r;
+    }
     /**
      * 20、获取当前用户所有的学习历史统计的接口 参数：String token//登录凭证,String shjhm //手机号
      */
-    public static NetRequest findCUXxjl(Context c, String token, String shjhm) {
+    public static NetRequest orderQuery(Context c, String token, String shjhm) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("token", token);
         r.addHttpParam("shjhm", shjhm);

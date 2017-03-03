@@ -29,6 +29,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import org.json.JSONArray;
@@ -162,7 +163,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
             if (type == NetCallBack.TYPE_SUCCESS) {
                 LogUtils.LOGE(tag,netResponse.toString());
                 try {
-                    discoveries = parseList(netResponse.data.toString());
+                    discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
                     LogUtils.LOGE(tag,discoveries.toString());
                     tab4Adapter.setData(discoveries);
                     if (discoveries.size() == rows) {
@@ -181,7 +182,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    discoveries = parseList(netResponse.data.toString());
+                    discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
                     tab4Adapter.addData(discoveries);
                     if (discoveries.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
@@ -281,18 +282,6 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
         }.execute();
     }
 
-    public ArrayList<Discovery> parseList(String data) throws JSONException {
-        ArrayList<Discovery> list = new ArrayList<Discovery>();
-        JSONArray js = new JSONArray(data);
-        for (int i = 0; i < js.length(); i++) {
-            JSONObject j = (JSONObject) js.get(i);
-            Gson gson = new Gson();
-            Discovery f = gson.fromJson(j.toString(), Discovery.class);
 
-            list.add(f);
-        }
-        return list;
-
-    }
 
 }
