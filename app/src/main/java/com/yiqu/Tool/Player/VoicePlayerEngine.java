@@ -117,7 +117,7 @@ public class VoicePlayerEngine {
             voicePlayer.setDataSource(voiceUrl);
             voicePlayer.prepareAsync();
 
-            voicePlayer.seekTo(time);
+
         } catch (Exception e) {
             playFail();
 

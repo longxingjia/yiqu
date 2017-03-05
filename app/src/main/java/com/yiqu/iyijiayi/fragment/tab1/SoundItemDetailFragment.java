@@ -45,7 +45,7 @@ import java.util.TimerTask;
  * Created by Administrator on 2017/2/20.
  */
 
-public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener ,VoicePlayerInterface {
+public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface {
     String tag = "SoundItemDetailFragmentbak";
 
     private TextView like;
@@ -186,8 +186,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 like.setText(sound.like + "");
 
 
-                PictureUtils.showPicture(getActivity(),sound.tecimage,tea_header);
-                PictureUtils.showPicture(getActivity(),sound.stuimage,stu_header);
+                PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
+                PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
 
                 String2TimeUtils string2TimeUtils = new String2TimeUtils();
@@ -247,107 +247,110 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.stu_listen:
 
-                    if (stuFile.exists()) {
-                        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
-
-
-                        } else {     //暂停，点击播放
-                            if (!stufirst) {
-//                                init(mFile.toString());
-
-                                
-
-                                //----------定时器记录播放进度---------//
-                                if (mTimer == null) {
-                                    mTimer = new Timer();
-                                }
-                                if (mTimerTask == null) {
-                                    mTimerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            mHandler.sendEmptyMessage(0);
-
-                                        }
-                                    };
-                                    mTimer.schedule(mTimerTask, 1000, 1000);
-                                    stufirst = true;
-                                }
-
-                            }
-
-                            stuplay = true;
-                            stutotalTime = stuMediaPlayer.getDuration();
-                            stuMediaPlayer.start();
-
+                if (stuFile.exists()) {
+                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
+                        stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
+                        if (mTimer == null) {
+                            mTimer.cancel();
+                            mTimer = null;
+                        }
+                        if (mTimerTask == null) {
+                            mTimerTask.cancel();
+                            mTimerTask = null;
                         }
 
+                    } else {     //暂停，点击播放
+//                            if (!stufirst) {
+//                                init(mFile.toString());
+                        //----------定时器记录播放进度---------//
+                        if (mTimer == null) {
+                            mTimer = new Timer();
+                        }
+                        if (mTimerTask == null) {
+                            mTimerTask = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    mHandler.sendEmptyMessage(0);
 
-                    } else {
-                        String path = Variable.StorageMusicCachPath;
-                        DownLoaderTask task = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
-                        task.execute();
+                                }
+                            };
+                            mTimer.schedule(mTimerTask, 1000, 1000);
+                            stufirst = true;
+                        }
+
+//                            }
+
+//                            stuplay = true;
+                        //    stutotalTime = stuMediaPlayer.getDuration();
+                        // stuMediaPlayer.start();
+
                     }
 
 
+                } else {
+                    String path = Variable.StorageMusicCachPath;
+                    DownLoaderTask task = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
+                    task.execute();
+                }
 
 
                 break;
             case R.id.tea_listen:
 
-                    if (teaFile.exists()) {
-                       // Log.e(tag, "file " + teaFile.getName() + " already exits!!");
-
-                        if (teaplay) {  //正在播放，点击暂停
-                            if (teaMediaPlayer != null) {
-                                stuPause();
-                            }
-                            teaplay = false;
-                        } else {     //暂停，点击播放
-                            if (!teafirst) {
-//                                init(mFile.toString());
-                                teaMediaPlayer.reset();
-                                try {
-                                    teaMediaPlayer.setDataSource(teaFile.getAbsolutePath());
-                                    teaMediaPlayer.prepare();// 准备
-
-                                } catch (IllegalArgumentException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalStateException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //----------定时器记录播放进度---------//
-                                if (mTimer == null) {
-                                    mTimer = new Timer();
-                                }
-                                if (mTimerTask == null) {
-                                    mTimerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            mHandler.sendEmptyMessage(1);
-
-                                        }
-                                    };
-                                    mTimer.schedule(mTimerTask, 1000, 1000);
-                                    teafirst = true;
-                                }
-
-                            }
-
-                            teaplay = true;
-                            teatotalTime = teaMediaPlayer.getDuration();
-                            teaMediaPlayer.start();
-
-                        }
-
-
-                    } else {
-
-                        DownLoaderTeaTask t = new DownLoaderTeaTask(teaUrl, Variable.StorageMusicCachPath, teafileName, getActivity());
-                        t.execute();
-                    }
+//                    if (teaFile.exists()) {
+//                       // Log.e(tag, "file " + teaFile.getName() + " already exits!!");
+//
+//                        if (teaplay) {  //正在播放，点击暂停
+//                            if (teaMediaPlayer != null) {
+//                                stuPause();
+//                            }
+//                            teaplay = false;
+//                        } else {     //暂停，点击播放
+//                            if (!teafirst) {
+////                                init(mFile.toString());
+//                                teaMediaPlayer.reset();
+//                                try {
+//                                    teaMediaPlayer.setDataSource(teaFile.getAbsolutePath());
+//                                    teaMediaPlayer.prepare();// 准备
+//
+//                                } catch (IllegalArgumentException e) {
+//                                    e.printStackTrace();
+//                                } catch (IllegalStateException e) {
+//                                    e.printStackTrace();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                                //----------定时器记录播放进度---------//
+//                                if (mTimer == null) {
+//                                    mTimer = new Timer();
+//                                }
+//                                if (mTimerTask == null) {
+//                                    mTimerTask = new TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            mHandler.sendEmptyMessage(1);
+//
+//                                        }
+//                                    };
+//                                    mTimer.schedule(mTimerTask, 1000, 1000);
+//                                    teafirst = true;
+//                                }
+//
+//                            }
+//
+//                            teaplay = true;
+//                            teatotalTime = teaMediaPlayer.getDuration();
+//                            teaMediaPlayer.start();
+//
+//                        }
+//
+//
+//                    } else {
+//
+//                        DownLoaderTeaTask t = new DownLoaderTeaTask(teaUrl, Variable.StorageMusicCachPath, teafileName, getActivity());
+//                        t.execute();
+//                    }
 
 
                 break;

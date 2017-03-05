@@ -73,6 +73,15 @@ public class VoiceFunction {
                     .playVoice(fileUrl, voicePlayerInterface);
         }
     }
+    public synchronized static void PlayToggleVoice(String fileUrl,
+                                                    VoicePlayerInterface voicePlayerInterface,int time) {
+        if (IsPlayVoice(fileUrl)) {
+            VoicePlayerEngine.getInstance().stopVoice();
+        } else {
+            VoicePlayerEngine.getInstance()
+                    .playVoice(fileUrl, voicePlayerInterface);
+        }
+    }
 
     public synchronized static void StopVoice() {
         VoicePlayerEngine.getInstance().stopVoice();
