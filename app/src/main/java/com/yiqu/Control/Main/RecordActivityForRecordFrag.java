@@ -216,6 +216,11 @@ public class RecordActivityForRecordFrag extends Activity
     }
 
     @Override
+    public void playVoicePause() {
+
+    }
+
+    @Override
     public void playVoiceFinish() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
     }

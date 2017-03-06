@@ -162,7 +162,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         boolean isLogin = AppShare.getIsLogin(getActivity());
 
         if (isLogin) {
-            userInfo=AppShare.getUserInfo(getActivity());
+            userInfo = AppShare.getUserInfo(getActivity());
             Btlogin.setVisibility(View.GONE);
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
@@ -238,7 +238,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         }
         head.setOnClickListener(this);
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
-        PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, background);
+        PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
 
         if (userInfo.sex.equals("0")) {
             sex.setBackgroundResource(R.mipmap.sex_female);

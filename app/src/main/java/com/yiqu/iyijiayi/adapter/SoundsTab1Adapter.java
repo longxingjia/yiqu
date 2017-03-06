@@ -96,7 +96,7 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
             Music f = getItem(position);
             h.musicname.setText(f.musicname);
             h.accompaniment.setText(f.accompaniment);
-            //  LogUtils.LOGE(tag,f.toString());
+
             if (f.image != null) {
                 mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.image, h.image);
             }

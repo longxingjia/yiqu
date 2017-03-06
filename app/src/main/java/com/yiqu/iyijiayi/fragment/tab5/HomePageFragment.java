@@ -295,9 +295,8 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         xizuo_tab.setOnClickListener(new txListener(3));
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
-        PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, background);
+        PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
     }
-
 
     /*
      * 初始化图片的位移像素

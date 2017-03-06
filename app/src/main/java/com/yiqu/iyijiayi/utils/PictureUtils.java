@@ -16,20 +16,33 @@ public class PictureUtils {
 
     public static void showPicture(Context context, String url, ImageView icon) {
 
-//        if (url!=null&&url.contains("http://wx.qlogo.cn")){
-////                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
-//            Picasso.with(context).load(url).placeholder(R.mipmap.menu_head).into(icon);
-//        }else {
-//            Picasso.with(context).load(MyNetApiConfig.ImageServerAddr +url).placeholder(R.mipmap.menu_head).into(icon);
-//        }
         if (url != null) {
             if (url.contains("http://wx.qlogo.cn")) {
-//                mImageLoaderHm.DisplayImage(f.userimage, h.icon);
                 Picasso.with(context).load(url)
+                        .resize(DensityUtil.dip2px(context,50), DensityUtil.dip2px(context,50))
+                        .centerCrop()
                         .placeholder(R.mipmap.menu_head).into(icon);
             } else {
                 Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
-                       .into(icon);
+                        .resize(DensityUtil.dip2px(context,50), DensityUtil.dip2px(context,50))
+                        .centerCrop()
+                        .placeholder(R.mipmap.menu_head).into(icon);
+            }
+        }
+    }
+
+    public static void showBackgroudPicture(Context context, String url, ImageView icon) {
+
+        if (url != null) {
+            if (url.contains("http://wx.qlogo.cn")) {
+                Picasso.with(context).load(url)
+                        .resize(DensityUtil.dip2px(context,50), DensityUtil.dip2px(context,50))
+                        .centerCrop()
+                        .placeholder(R.mipmap.home_bg).into(icon);
+            } else {
+                Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
+
+                        .placeholder(R.mipmap.home_bg).into(icon);
             }
         }
     }

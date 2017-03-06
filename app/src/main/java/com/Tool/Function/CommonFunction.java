@@ -16,20 +16,20 @@ import com.Tool.Common.CommonApplication;
  * Created by zhengtongyu on 16/5/23.
  */
 public class CommonFunction {
-    public static String FormatRecordTime(int recordTime) {
-        int minute = recordTime / 60;
-        int second = recordTime % 60;
-
-        String formatRecordTime = "";
-
-        if (minute != 0) {
-            formatRecordTime += String.valueOf(minute) + "′";
-        }
-
-        formatRecordTime += String.valueOf(second) + "″";
-
-        return formatRecordTime;
-    }
+//    public static String FormatRecordTime(int recordTime) {
+//        int minute = recordTime / 60;
+//        int second = recordTime % 60;
+//
+//        String formatRecordTime = "";
+//
+//        if (minute != 0) {
+//            formatRecordTime += String.valueOf(minute) + "′";
+//        }
+//
+//        formatRecordTime += String.valueOf(second) + "″";
+//
+//        return formatRecordTime;
+//    }
 
     public static String GetDate() {
         long time = System.currentTimeMillis();

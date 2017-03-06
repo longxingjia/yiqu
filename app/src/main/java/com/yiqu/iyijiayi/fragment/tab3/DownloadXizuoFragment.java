@@ -98,7 +98,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         music = (Music) intent.getSerializableExtra("music");
 
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Variable.StorageDirectoryPath;
+
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
@@ -107,27 +107,25 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         fileName = music.musicname + "_" + fileName;
 //        AppShare
 
-        if (!TextUtils.isEmpty(Tools.DB_PATH)) {
-            File mFile = new File(Tools.DB_PATH, fileName);
-            if (mFile.exists()) {
-                Log.d(tag, "file " + mFile.getName() + " already exits!!");
 
-                nextPage();
-            } else {
-                if (Tools.isNetworkAvailable(getActivity())){
-                    DownLoaderTask task = new DownLoaderTask(Url, Tools.DB_PATH, fileName, getActivity());
-                    task.execute();
-                }
-
+        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        if (mFile.exists()) {
+            Log.d(tag, "file " + mFile.getName() + " already exits!!");
+            nextPage();
+        } else {
+            if (Tools.isNetworkAvailable(getActivity())) {
+                DownLoaderTask task = new DownLoaderTask(Url, Variable.StorageMusicCachPath, fileName, getActivity());
+                task.execute();
             }
         }
+
         super.init(savedInstanceState);
 
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               nextPage();
+                nextPage();
             }
         });
 
@@ -217,7 +215,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
             DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
             downloadMusicInfoDBHelper.insert(music);
 
-            if (isCancelled()){
+            if (isCancelled()) {
                 mFile.delete();
                 submit.setClickable(false);
             }
@@ -234,7 +232,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                     Log.d(TAG, "file " + mFile.getName() + " already exits!!");
                     mFile.delete();
                 }
-                File directory = new File(Tools.DB_PATH);
+                File directory = new File(Variable.StorageMusicCachPath);
                 if (null != directory && !directory.exists()) {
                     directory.mkdir();
                 }
@@ -248,7 +246,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 }
                 mOutputStream.close();
             } catch (IOException e) {
-            
+
                 e.printStackTrace();
             }
             return bytesCopied;

@@ -232,6 +232,13 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi getTeacherApply = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/get-teacher-apply";
+        }
+
+    };
 
     /**
      * 67、获取推荐关注接口

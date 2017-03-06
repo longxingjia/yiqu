@@ -33,7 +33,7 @@ public class Sound implements Serializable{
     public String musictype;
     public String accompaniment;
     public String chapter;
-    public String soundtime;
+    public int soundtime;
     public String soundpath;
     public String commentpath;
     public long created;

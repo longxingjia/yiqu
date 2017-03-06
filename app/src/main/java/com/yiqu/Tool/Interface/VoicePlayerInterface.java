@@ -5,5 +5,6 @@ public interface VoicePlayerInterface {
 
     public void playVoiceFail();
 
+    public void playVoicePause();
     public void playVoiceFinish();
 }

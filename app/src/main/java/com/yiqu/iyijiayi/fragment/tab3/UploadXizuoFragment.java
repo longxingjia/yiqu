@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
@@ -27,6 +28,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ import java.util.Map;
 public class UploadXizuoFragment extends AbsAllFragment {
 
     private EditText content;
-    private EditText musicName;
+    private TextView musicName;
     private Button submit;
     private String tag = "UploadXizuoFragment";
     private Music music;
@@ -79,7 +81,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
     @Override
     protected void initView(View v) {
-        musicName = (EditText) v.findViewById(R.id.musicname);
+        musicName = (TextView) v.findViewById(R.id.musicname);
         content = (EditText) v.findViewById(R.id.content);
         submit = (Button) v.findViewById(R.id.submit);
 
@@ -91,6 +93,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
         fileUrl = Variable.StorageMusicPath+ composeVoice.voicename;
+        musicName.setText(composeVoice.musicname);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

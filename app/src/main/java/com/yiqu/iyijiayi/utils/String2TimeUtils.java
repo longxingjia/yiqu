@@ -61,7 +61,7 @@ public class String2TimeUtils {
 		mFormatBuilder.setLength(0);
 
 		if (months>0){
-			return mFormatter.format("%d:", months).toString()+"天";
+			return mFormatter.format("%d", months).toString()+"月";
 		}else if(weeks >0){
 			return mFormatter.format("%d", weeks).toString()+"星期";
 

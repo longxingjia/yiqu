@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.Tool.Global.Variable;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -178,14 +179,14 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         long time = currentTimeMillis - xizuo.edited;
         created.setText(string2TimeUtils.long2Time(time) + "前");
-        Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_MUSIC).toString();
+//        Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_MUSIC).toString();
 
         url = MyNetApiConfig.ImageServerAddr + xizuo.soundpath;
         fileName = url.substring(
                 url.lastIndexOf("/") + 1,
                 url.length());
         fileName = xizuo.musicname + "_" + fileName;
-        mFile = new File(Tools.DB_PATH, fileName);
+        mFile = new File(Variable.StorageMusicCachPath, fileName);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -201,7 +202,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.stu_listen:
 
-                if (!TextUtils.isEmpty(Tools.DB_PATH)) {
+
                     if (mFile.exists()) {
 
 
@@ -252,10 +253,10 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
 
                     }else {
-                        DownLoaderTask task = new DownLoaderTask(url, Tools.DB_PATH, fileName, getActivity());
+                        DownLoaderTask task = new DownLoaderTask(url, Variable.StorageMusicCachPath, fileName, getActivity());
                         task.execute();
                     }
-                }
+
 
                 break;
         }
@@ -385,7 +386,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                     Log.d(TAG, "file " + mFile.getName() + " already exits!!");
                     mFile.delete();
                 }
-                File directory = new File(Tools.DB_PATH);
+                File directory = new File(Variable.StorageMusicCachPath);
                 if (null != directory && !directory.exists()) {
                     directory.mkdir();
                 }
@@ -399,7 +400,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                 }
                 mOutputStream.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             }
             return bytesCopied;

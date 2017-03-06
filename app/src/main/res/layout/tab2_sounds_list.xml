@@ -31,8 +31,7 @@
             <TextView
                 android:id="@+id/musicname"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="25dp"
                 android:text="jin"
                 android:textSize="18sp" />
 
@@ -40,7 +39,7 @@
                 android:id="@+id/accompaniment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="3dp"
+                android:gravity="center_vertical"
                 android:singleLine="true"
                 android:text="今夜无人夜无人夜无人"
                 android:textColor="@color/dd_gray"

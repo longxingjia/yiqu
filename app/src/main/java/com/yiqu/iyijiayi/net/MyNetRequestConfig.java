@@ -323,12 +323,11 @@ public class MyNetRequestConfig {
         return r;
     }
     /**
-     * 20、获取当前用户所有的学习历史统计的接口 参数：String token//登录凭证,String shjhm //手机号
+     * 20、
      */
-    public static NetRequest orderQuery(Context c, String token, String shjhm) {
+    public static NetRequest getTeacherApply(Context c, String uid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
+        r.addHttpParam("uid", uid);
         return r;
     }
 

@@ -2,23 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background_color_rating_grey"
-    tools:context=".MainActivity"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <EditText
-    android:id="@+id/musicname"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="30dp"
-    android:textSize="18dp"
-    android:hint="请输入名字"
-    android:paddingLeft="10dp"
-    android:background="@drawable/white_box"
-    />
+    <TextView
+        android:id="@+id/musicname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/white_box"
+        android:gravity="center_vertical"
+        android:hint="请输入名字"
+        android:paddingLeft="10dp"
+        android:textSize="18dp" />
 
     <LinearLayout
         android:id="@+id/ll_select"
@@ -27,44 +27,41 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
-        android:clickable="true"
         android:background="@drawable/white_box"
-        android:orientation="horizontal"
-        >
+        android:clickable="true"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tea_name"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:hint="点击选择导师"
             android:gravity="center_vertical"
+            android:hint="点击选择导师"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="20dp"
 
             />
 
         <TextView
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:text="￥"
+            android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
+            android:text="￥"
             android:textColor="@color/redMain"
-            />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tea_price"
-            android:drawableRight="@mipmap/arrow"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:text="0"
+            android:drawableRight="@mipmap/arrow"
             android:gravity="center_vertical"
+            android:paddingRight="10dp"
+            android:text="0"
             android:textColor="@color/redMain"
-            />
+            android:textSize="20dp" />
 
 
     </LinearLayout>
@@ -73,31 +70,28 @@
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="240dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
-        android:textSize="16dp"
-        android:hint="请填写您的问题详情"
+        android:background="@drawable/white_box"
         android:gravity="top"
+        android:hint="请填写您的问题详情"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="@drawable/white_box"
-        />
-
+        android:textSize="16dp" />
 
 
     <Button
         android:id="@+id/submit"
-        android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_margin="30dp"
         android:background="@drawable/red_box"
-        android:textColor="@color/white"
+        android:gravity="center"
         android:text="免费提问"
-        android:textSize="18sp"
-        android:gravity="center"/>
-
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
 
 </LinearLayout>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
+    android:minHeight="65dp"
     android:layout_height="55dp">
 
     <com.ui.views.CircleImageView
@@ -24,13 +25,14 @@
             android:id="@+id/name"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="27dp"
             android:textSize="18sp"
             android:text="今夜无人入睡"/>
 
         <TextView
-            android:layout_marginTop="3dp"
+
             android:id="@+id/desc"
+            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:singleLine="true"

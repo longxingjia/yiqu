@@ -8,6 +8,7 @@ import com.Tool.Function.UpdateFunction;
 
 import com.yiqu.Tool.Data.MusicData;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -16,6 +17,7 @@ public class VoicePlayerEngine {
     private int musicPlayerState;
 
     private String playingUrl;
+    private int currentTime;
 
     private VoicePlayerInterface voicePlayerInterface;
 
@@ -32,6 +34,9 @@ public class VoicePlayerEngine {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 start();
+                if (currentTime>0){
+                    seekTo(currentTime);
+                }
             }
         });
 
@@ -109,6 +114,7 @@ public class VoicePlayerEngine {
 
     private synchronized void prepareMusic(String voiceUrl, int time) {
         playingUrl = voiceUrl;
+        currentTime = time;
 
         musicPlayerState = MusicData.MusicPlayerState.preparing;
 
@@ -177,7 +183,7 @@ public class VoicePlayerEngine {
         musicPlayerState = MusicData.MusicPlayerState.pausing;
 
         if (voicePlayerInterface != null) {
-            voicePlayerInterface.playVoiceFinish();
+            voicePlayerInterface.playVoicePause();
         }
     }
 
@@ -199,6 +205,16 @@ public class VoicePlayerEngine {
         }
     }
 
+    public void seekTo(int time) {
+
+        if (musicPlayerState == MusicData.MusicPlayerState.playing) {
+            if (!voicePlayer.isPlaying()) {
+                return ;
+            }
+            voicePlayer.seekTo(time);
+        }
+    }
+
     public int pauseVoice() {
         if (musicPlayerState == MusicData.MusicPlayerState.playing) {
             if (!voicePlayer.isPlaying()) {
@@ -209,7 +225,7 @@ public class VoicePlayerEngine {
             musicPlayerState = MusicData.MusicPlayerState.pausing;
 
             if (voicePlayerInterface != null) {
-                voicePlayerInterface.playVoiceFinish();
+                voicePlayerInterface.playVoicePause();
             }
             return voicePlayer.getCurrentPosition();
         } else if (musicPlayerState == MusicData.MusicPlayerState.preparing) {

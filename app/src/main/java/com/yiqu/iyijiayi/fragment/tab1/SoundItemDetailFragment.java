@@ -35,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -60,14 +61,12 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TextView views;
     private ImageView stu_header;
     private ImageView tea_header;
-
     private int time;
     private int teatotalTime;
     private int stutotalTime;
     private int stucurrentTime;
     private int teacurrentTime;
     private boolean teafirst = false;
-    private boolean stufirst = false;
 
     private String stufileName;
     private String teafileName;
@@ -88,16 +87,20 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             switch (msg.what) {
                 case 0:
                     //更新进度
-
-//                    stucurrentTime = stuMediaPlayer.getCurrentPosition();
-//                    if (stucurrentTime<0){
-//                        stucurrentTime =0;
-//                    }
-////                    LogUtils.LOGE(tag,stucurrentTime+"--"+stutotalTime);
-//                    int leftTime = ( stutotalTime -  stucurrentTime) / 1000;
-//                    soundtime.setText(leftTime + "\"");
+                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {
+                        soundtime.setText(--stutotalTime + "\"");
+                        if (stutotalTime == 0) {
+                            stutotalTime = 1;
+                        }
+                    } else if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {
+                        commenttime.setText(--teatotalTime + "\"");
+                        if (teatotalTime == 0) {
+                            teatotalTime = 1;
+                        }
+                    }
                     break;
                 default:
+
                     break;
             }
 
@@ -105,6 +108,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     };
     private TextView tea_listen;
     private Sound sound;
+    private DownLoaderTask taskS;
+    private DownLoaderTeaTask taskT;
 
 
     @Override
@@ -174,17 +179,16 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
-
                 desc.setText(sound.desc);
                 soundtime.setText(sound.soundtime + "\"");
+
                 tea_name.setText(sound.tecname);
                 musicname.setText(sound.musicname);
                 tectitle.setText(sound.tectitle);
                 commenttime.setText(sound.commenttime + "\"");
-//        created.setText(sound.created);
+                soundtime.setText(sound.soundtime + "\"");
                 views.setText(sound.views + "");
                 like.setText(sound.like + "");
-
 
                 PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
                 PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
@@ -224,21 +228,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         stu_listen.setOnClickListener(this);
         tea_listen.setOnClickListener(this);
 
-//        stuMediaPlayer = new MediaPlayer();
-//        teaMediaPlayer = new MediaPlayer();
-//        teaMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                stuplay = false;
-//            }
-//        });
-//        stuMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                stuplay = false;
-//            }
-//        });
-
         super.init(savedInstanceState);
     }
 
@@ -248,113 +237,131 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             case R.id.stu_listen:
 
                 if (stuFile.exists()) {
-                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
-                        stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
-                        if (mTimer == null) {
-                            mTimer.cancel();
-                            mTimer = null;
-                        }
-                        if (mTimerTask == null) {
-                            mTimerTask.cancel();
-                            mTimerTask = null;
-                        }
-
-                    } else {     //暂停，点击播放
-//                            if (!stufirst) {
-//                                init(mFile.toString());
-                        //----------定时器记录播放进度---------//
-                        if (mTimer == null) {
-                            mTimer = new Timer();
-                        }
-                        if (mTimerTask == null) {
-                            mTimerTask = new TimerTask() {
-                                @Override
-                                public void run() {
-                                    mHandler.sendEmptyMessage(0);
-
-                                }
-                            };
-                            mTimer.schedule(mTimerTask, 1000, 1000);
-                            stufirst = true;
-                        }
-
-//                            }
-
-//                            stuplay = true;
-                        //    stutotalTime = stuMediaPlayer.getDuration();
-                        // stuMediaPlayer.start();
-
-                    }
+                    palyStudentVoice();
 
 
                 } else {
                     String path = Variable.StorageMusicCachPath;
-                    DownLoaderTask task = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
-                    task.execute();
+                    taskS = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
+                    taskS.execute();
                 }
 
 
                 break;
             case R.id.tea_listen:
 
-//                    if (teaFile.exists()) {
-//                       // Log.e(tag, "file " + teaFile.getName() + " already exits!!");
-//
-//                        if (teaplay) {  //正在播放，点击暂停
-//                            if (teaMediaPlayer != null) {
-//                                stuPause();
-//                            }
-//                            teaplay = false;
-//                        } else {     //暂停，点击播放
-//                            if (!teafirst) {
-////                                init(mFile.toString());
-//                                teaMediaPlayer.reset();
-//                                try {
-//                                    teaMediaPlayer.setDataSource(teaFile.getAbsolutePath());
-//                                    teaMediaPlayer.prepare();// 准备
-//
-//                                } catch (IllegalArgumentException e) {
-//                                    e.printStackTrace();
-//                                } catch (IllegalStateException e) {
-//                                    e.printStackTrace();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                                //----------定时器记录播放进度---------//
-//                                if (mTimer == null) {
-//                                    mTimer = new Timer();
-//                                }
-//                                if (mTimerTask == null) {
-//                                    mTimerTask = new TimerTask() {
-//                                        @Override
-//                                        public void run() {
-//                                            mHandler.sendEmptyMessage(1);
-//
-//                                        }
-//                                    };
-//                                    mTimer.schedule(mTimerTask, 1000, 1000);
-//                                    teafirst = true;
-//                                }
-//
-//                            }
-//
-//                            teaplay = true;
-//                            teatotalTime = teaMediaPlayer.getDuration();
-//                            teaMediaPlayer.start();
-//
-//                        }
-//
-//
-//                    } else {
-//
-//                        DownLoaderTeaTask t = new DownLoaderTeaTask(teaUrl, Variable.StorageMusicCachPath, teafileName, getActivity());
-//                        t.execute();
-//                    }
+                if (teaFile.exists()) {
+                    palyTeacherVoice();
+
+                } else {
+                    String path = Variable.StorageMusicCachPath;
+                    taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
+                    taskT.execute();
+                }
 
 
                 break;
         }
+    }
+
+    private void palyStudentVoice() {
+
+        teacurrentTime = 0;
+
+        stutotalTime = sound.soundtime;
+        teatotalTime = sound.commenttime;
+        commenttime.setText(teatotalTime + "\"");
+
+        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
+            stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
+            }
+            if (mTimerTask != null) {
+                mTimerTask.cancel();
+                mTimerTask = null;
+            }
+
+        } else {     //暂停，点击播放
+
+            if (mTimer == null) {
+                mTimer = new Timer();
+            }
+            if (mTimerTask == null) {
+                mTimerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        mHandler.sendEmptyMessage(0);
+                        LogUtils.LOGE(tag, "000");
+
+                    }
+                };
+                mTimer.schedule(mTimerTask, 1000, 1000);
+
+            }
+
+            if (stucurrentTime > 0) {
+
+
+                stutotalTime = sub(sound.soundtime, stucurrentTime);
+                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, stucurrentTime);
+            } else {
+                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, 0);
+            }
+
+        }
+    }
+
+    private void palyTeacherVoice() {
+        stucurrentTime = 0;
+        teatotalTime = sound.commenttime;
+        stutotalTime = sound.soundtime;
+        soundtime.setText(stutotalTime + "\"");
+
+
+        if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {  //正在播放，点击暂停
+            teacurrentTime = VoiceFunction.pauseVoice(teaFile.getAbsolutePath());
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
+            }
+            if (mTimerTask != null) {
+                mTimerTask.cancel();
+                mTimerTask = null;
+            }
+
+        } else {     //暂停，点击播放
+
+
+            if (mTimer == null) {
+                mTimer = new Timer();
+            }
+            if (mTimerTask == null) {
+                mTimerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        mHandler.sendEmptyMessage(0);
+
+                    }
+                };
+                mTimer.schedule(mTimerTask, 1000, 1000);
+
+            }
+            if (teacurrentTime > 0) {
+                teatotalTime = sub(sound.commenttime, teacurrentTime);
+                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, teacurrentTime);
+            } else {
+                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, 0);
+            }
+        }
+    }
+
+    public static int sub(int totalTime, int currentTime) {
+        BigDecimal b1 = new BigDecimal(Double.valueOf(totalTime));
+        BigDecimal b2 = new BigDecimal(Double.valueOf(currentTime) / 1000);
+        return b1.subtract(b2).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
     @Override
@@ -368,7 +375,35 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     }
 
     @Override
+    public void playVoicePause() {
+//        LogUtils.LOGE(tag, "----");
+
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//            mTimer = null;
+//        }
+//        if (mTimerTask != null) {
+//            mTimerTask.cancel();
+//            mTimerTask = null;
+//        }
+    }
+
+    @Override
     public void playVoiceFinish() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+
+        stucurrentTime = 0;
+        teacurrentTime = 0;
+        LogUtils.LOGE(tag, stucurrentTime + "----" + teacurrentTime);
+        commenttime.setText(sound.commenttime + "\"");
+        soundtime.setText(sound.soundtime + "\"");
 
     }
 
@@ -411,8 +446,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         @Override
         protected void onProgressUpdate(Integer... values) {
 
-//            if (mDialog == null)
-//                return;
+
             if (values.length > 1) {
                 contentLength = values[1];
                 if (contentLength == -1) {
@@ -437,48 +471,14 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         @Override
         protected void onPostExecute(Long result) {
-            // super.onPostExecute(result);
-
-            //	Log.e(TAG, "下载完");
-
-            if (!stufirst) {
-//                                init(mFile.toString());
-//                stuMediaPlayer.reset();
-//                try {
-//                    stuMediaPlayer.setDataSource(mFile.getAbsolutePath());
-//                    stuMediaPlayer.prepare();// 准备
-
-//                } catch (IllegalArgumentException e) {
-//                    e.printStackTrace();
-//                } catch (IllegalStateException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-                //----------定时器记录播放进度---------//
-                if (mTimer == null) {
-                    mTimer = new Timer();
-                }
-                if (mTimerTask == null) {
-                    mTimerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            mHandler.sendEmptyMessage(0);
-                        }
-                    };
-                    mTimer.schedule(mTimerTask, 1000, 1000);
-                    stufirst = true;
-                }
-            }
-
-            stuplay = true;
-//            stutotalTime = stuMediaPlayer.getDuration();
-//            stuMediaPlayer.start();
-
-            if (isCancelled())
+            super.onPostExecute(result);
+            if (isCancelled()) {
                 mFile.delete();
-            return;
+                return;
+            }
+            palyStudentVoice();
+
+
         }
 
         private long download() {
@@ -583,7 +583,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         protected void onPreExecute() {
             super.onPreExecute();
 //            progressBar.setProgress(0);
-            stu_listen.setText("");
+            tea_listen.setText("");
 //
         }
 
@@ -595,17 +595,12 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         @Override
         protected void onProgressUpdate(Integer... values) {
 
-//            if (mDialog == null)
-//                return;
             if (values.length > 1) {
                 contentLength = values[1];
                 if (contentLength == -1) {
-//                    progressBar.setIndeterminate(true);
                 } else {
-//                    progressBar.setMax(contentLength);
                 }
             } else {
-//                progressBar.setProgress(values[0].intValue());
                 if (contentLength == -1) {
 
                 } else {
@@ -623,46 +618,12 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         protected void onPostExecute(Long result) {
             // super.onPostExecute(result);
 
-            //	Log.e(TAG, "下载完");
-
-            if (!teafirst) {
-//                                init(mFile.toString());
-//                teaMediaPlayer.reset();
-                try {
-//                    teaMediaPlayer.setDataSource(mFile.getAbsolutePath());
-//                    teaMediaPlayer.prepare();// 准备
-
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                //----------定时器记录播放进度---------//
-                if (mTimer == null) {
-                    mTimer = new Timer();
-                }
-                if (mTimerTask == null) {
-                    mTimerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            mHandler.sendEmptyMessage(1);
-                        }
-                    };
-                    mTimer.schedule(mTimerTask, 1000, 1000);
-                    teafirst = true;
-                }
-            }
-
-            teaplay = true;
-//            teatotalTime = teaMediaPlayer.getDuration();
-//            teaMediaPlayer.start();
-
-            if (isCancelled())
+            if (isCancelled()) {
                 mFile.delete();
-            return;
+                return;
+            }
+            palyTeacherVoice();
+
         }
 
         private long download() {
@@ -743,11 +704,22 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     public void onDestroy() {
 
+        VoiceFunction.StopVoice();
+        stucurrentTime = 0;
+        teacurrentTime = 0;
+
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
             mTimerTask.cancel();
             mTimerTask = null;
+        }
+
+        if (taskT != null && taskT.getStatus() == AsyncTask.Status.RUNNING) {
+            taskT.cancel(true); // 如果Task还在运行，则先取消它
+        }
+        if (taskS != null && taskS.getStatus() == AsyncTask.Status.RUNNING) {
+            taskS.cancel(true); // 如果Task还在运行，则先取消它
         }
         super.onDestroy();
     }

@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 public class AddQuestionFragment extends AbsAllFragment implements View.OnClickListener {
 
     private EditText content;
-    private EditText musicName;
+    private TextView musicName;
     private Button submit;
     private String tag = "UploadXizuoFragment";
     private Music music;
@@ -90,13 +90,12 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
     @Override
     protected void initView(View v) {
-        musicName = (EditText) v.findViewById(R.id.musicname);
+        musicName = (TextView) v.findViewById(R.id.musicname);
         tea_name = (TextView) v.findViewById(R.id.tea_name);
         tea_price = (TextView) v.findViewById(R.id.tea_price);
         content = (EditText) v.findViewById(R.id.content);
         submit = (Button) v.findViewById(R.id.submit);
         ll_select = (LinearLayout) v.findViewById(R.id.ll_select);
-//       v.findViewById(R.id.rl_select).setOnClickListener(this);
 
     }
 
@@ -106,8 +105,9 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
         fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
+        LogUtils.LOGE(tag,composeVoice.toString());
+        musicName.setText(composeVoice.musicname);
 
-//
         ll_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,7 +288,6 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         } else if (id.equals("getNewOrder")) {
 
             if (type == NetCallBack.TYPE_SUCCESS) {
-//result='array', data='{"order":{"oid":152,"order_number":"201703021731100000000152","type":"1","sid":"188","uid":"9","openid":null,"device_info":null,"payment":"1","payment_content":null,"price":0,"status":0,"created":1488447070,"edited":1488447070,"isincome":0,"isfree":1},"wx_arr":null}', bool='1'}
 
                 try {
                     JSONObject jsonObject = new JSONObject(netResponse.data);

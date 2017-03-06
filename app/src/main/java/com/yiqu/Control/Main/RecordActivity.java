@@ -66,10 +66,8 @@ public class RecordActivity extends Activity
     private String decodeFileUrl;
     private String composeVoiceUrl;
 
-    private TextView recordHintTextView;
-    private TextView recordDurationView;
+    //    private TextView recordHintTextView;
     private ProgressBar composeProgressBar;
-
     private static RecordActivity instance;
     private Music music;
     private RelativeLayout rlHint;
@@ -78,6 +76,7 @@ public class RecordActivity extends Activity
     private Animation rotate;
     private String fileNameCom;
     private ComposeVoice composeVoice;
+    private String2TimeUtils string2TimeUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,8 +100,8 @@ public class RecordActivity extends Activity
     }
 
     public void bindView() {
-        recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
-        recordDurationView = (TextView) findViewById(R.id.musictime);
+
+     
         rlHint = (RelativeLayout) findViewById(R.id.hint);
 
         musicName = (TextView) findViewById(R.id.musicname);
@@ -130,61 +129,53 @@ public class RecordActivity extends Activity
         music = (Music) intent.getSerializableExtra("music");
 
         musicName.setText(music.musicname + "");
-        Tools.DB_PATH = Variable.StorageDirectoryPath ;
-        File localFile = new File(Tools.DB_PATH, "/music/");
-        if(!localFile.exists()){
-            localFile.mkdirs();
-        }
+
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
                 Url.lastIndexOf("/") + 1,
                 Url.length());
         fileName = music.musicname + "_" + fileName;
-        String2TimeUtils string2TimeUtils = new String2TimeUtils();
+        string2TimeUtils = new String2TimeUtils();
         musictime.setText(string2TimeUtils.stringForTimeS(music.time));
 
-        if (!TextUtils.isEmpty(Tools.DB_PATH)) {
-            File mFile = new File(Tools.DB_PATH, fileName);
-            if (mFile.exists()) {
-//                Log.e(tag, "file " + mFile.getName() + " already exits!!");
-                musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
-                recordTime = 0;
-                tempVoicePcmUrl = Tools.DB_PATH + music.musicname + "_tempVoice.pcm";
-                LogUtils.LOGE(tag, tempVoicePcmUrl);
-                musicFileUrl = mFile.getAbsolutePath();
-                decodeFileUrl = Tools.DB_PATH + music.musicname + "_decodeFile.pcm";
-                fileNameCom = music.musicname + "_composeVoice.mp3";
-                composeVoiceUrl = Tools.DB_PATH + fileNameCom;
-                recordVoiceButton.setOnClickListener(this);
-            }
+        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        if (mFile.exists()) {
+            musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
+            recordTime = 0;
+            tempVoicePcmUrl = Variable.StorageMusicCachPath + music.musicname + "_tempVoice.pcm";
+            LogUtils.LOGE(tag, tempVoicePcmUrl);
+            musicFileUrl = mFile.getAbsolutePath();
+            decodeFileUrl = Variable.StorageMusicCachPath + music.musicname + "_decodeFile.pcm";
+            fileNameCom = music.musicname + "_composeVoice.mp3";
+            composeVoiceUrl = Variable.StorageMusicCachPath + fileNameCom;
+            recordVoiceButton.setOnClickListener(this);
         }
 
-        recordHintTextView.setText("按下开始录音");
+
     }
 
 
     private void goRecordSuccessState() {
         recordVoiceBegin = false;
 
-        recordDurationView.setText(CommonFunction.FormatRecordTime(actualRecordTime));
+        musictime.setText(string2TimeUtils.stringForTimeS(music.time - actualRecordTime));
 
-        recordHintTextView.setText("完成录音");
     }
 
     private void goRecordFailState() {
         recordVoiceBegin = false;
 
-        recordDurationView.setVisibility(View.INVISIBLE);
+        musictime.setVisibility(View.INVISIBLE);
 
         recordVoiceButton.setEnabled(true);
 
-        recordHintTextView.setText("点击开始录音");
+
     }
 
     private void compose() {
         composeProgressBar.setProgress(0);
-        recordHintTextView.setText("合成开始");
+
         composeProgressBar.setVisibility(View.VISIBLE);
         AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
                 actualRecordTime + Constant.MusicCutEndOffset, this);
@@ -199,9 +190,9 @@ public class RecordActivity extends Activity
 
             recordTime = 0;
 
-            recordDurationView.setText(CommonFunction.FormatRecordTime(recordTime));
+            musictime.setText(string2TimeUtils.stringForTimeS(music.time -recordTime));
 
-            recordDurationView.setVisibility(View.VISIBLE);
+            musictime.setVisibility(View.VISIBLE);
         }
     }
 
@@ -209,8 +200,16 @@ public class RecordActivity extends Activity
     public void recordVoiceStateChanged(int volume, long recordDuration) {
         if (recordDuration > 0) {
             recordTime = (int) (recordDuration / Constant.OneSecond);
+            int leftTime = music.time-recordTime;
+            musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
 
-            recordDurationView.setText(CommonFunction.FormatRecordTime(recordTime));
+            LogUtils.LOGE(tag,leftTime+"");
+            if (leftTime<=0){
+                VoiceFunction.StopVoice();
+                VoiceFunction.StopRecordVoice();
+                compose();
+            }
+
         }
     }
 
@@ -259,6 +258,11 @@ public class RecordActivity extends Activity
     }
 
     @Override
+    public void playVoicePause() {
+
+    }
+
+    @Override
     public void playVoiceFinish() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
     }
@@ -282,7 +286,7 @@ public class RecordActivity extends Activity
 
     @Override
     public void decodeFail() {
-        recordHintTextView.setText("解码失败,请您检查网络后，再次尝试");
+
 
         composeProgressBar.setVisibility(View.GONE);
     }
@@ -296,7 +300,7 @@ public class RecordActivity extends Activity
 
     @Override
     public void composeSuccess() {
-        recordHintTextView.setText("合成成功，可播放合成语音");
+
         composeProgressBar.setVisibility(View.GONE);
         VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
         CommonFunction.showToast("合成成功", className);
@@ -327,13 +331,13 @@ public class RecordActivity extends Activity
         composeVoice.createtime = System.currentTimeMillis();
 
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
-        composeVoiceInfoDBHelper.insert(composeVoice,ComposeVoiceInfoDBHelper.COMPOSE);
+        composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.COMPOSE);
         composeVoiceInfoDBHelper.close();
     }
 
     @Override
     public void composeFail() {
-        recordHintTextView.setText("合成失败");
+
         composeProgressBar.setVisibility(View.GONE);
         CommonFunction.showToast("合成失败", className);
     }
@@ -380,7 +384,7 @@ public class RecordActivity extends Activity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                recordHintTextView.setText("已结束录音");
+
 //                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                                 VoiceFunction.StopVoice();
                                 VoiceFunction.StopRecordVoice();
@@ -431,7 +435,6 @@ public class RecordActivity extends Activity
                             VoiceFunction.StopRecordVoice();
                             clearAnimation();
                             recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-                            recordHintTextView.setText("按下开始录音");
 
                             break;
                         case 1:

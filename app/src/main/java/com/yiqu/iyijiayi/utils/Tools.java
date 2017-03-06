@@ -31,7 +31,7 @@ public class Tools {
 
 	public static String SD_PATH = null;
 	public static final String PACKAGE_NAME = "com.yiqu.iyijiayi";
-	public static String DB_PATH = null;
+
 
 
 //	public static boolean isNetworkConnected(Context context) {
@@ -119,7 +119,7 @@ public class Tools {
 			myOutput.close();
 
 			File zipFile = new File(strOutPath + "/" + fileName);
-			unzip(zipFile, fileName);
+//			unzip(zipFile, fileName);
 			zipFile.delete();
 
 			return true;
@@ -152,49 +152,49 @@ public class Tools {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static long unzip(File mInput, String gamePackage) {
-		long extractedSize = 0L;
-		Enumeration<ZipEntry> entries;
-		ZipFile zip = null;
-		try {
-			zip = new ZipFile(mInput);
-
-			entries = (Enumeration<ZipEntry>) zip.entries();
-			while (entries.hasMoreElements()) {
-				ZipEntry entry = entries.nextElement();
-				if (entry.isDirectory()) {
-					continue;
-				}
-				File destination = new File(new File(DB_PATH),
-						entry.getName().replace(entry.getName().substring(0, entry.getName().indexOf("/")),
-								gamePackage)
-						);
-				if (!destination.getParentFile().exists()) {
-					destination.getParentFile().mkdirs();
-				}
-				FileOutputStream outStream = new FileOutputStream(destination);
-				extractedSize += copy(zip.getInputStream(entry), outStream);
-				outStream.close();
-				
-			}
-		} catch (ZipException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if(null != zip)
-					zip.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return extractedSize;
-	}
+//	public static long unzip(File mInput, String gamePackage) {
+//		long extractedSize = 0L;
+//		Enumeration<ZipEntry> entries;
+//		ZipFile zip = null;
+//		try {
+//			zip = new ZipFile(mInput);
+//
+//			entries = (Enumeration<ZipEntry>) zip.entries();
+//			while (entries.hasMoreElements()) {
+//				ZipEntry entry = entries.nextElement();
+//				if (entry.isDirectory()) {
+//					continue;
+//				}
+//				File destination = new File(new File(DB_PATH),
+//						entry.getName().replace(entry.getName().substring(0, entry.getName().indexOf("/")),
+//								gamePackage)
+//						);
+//				if (!destination.getParentFile().exists()) {
+//					destination.getParentFile().mkdirs();
+//				}
+//				FileOutputStream outStream = new FileOutputStream(destination);
+//				extractedSize += copy(zip.getInputStream(entry), outStream);
+//				outStream.close();
+//
+//			}
+//		} catch (ZipException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if(null != zip)
+//					zip.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		return extractedSize;
+//	}
 
 	public static int copy(InputStream input, OutputStream output) {
 		byte[] buffer = new byte[1024 * 8];

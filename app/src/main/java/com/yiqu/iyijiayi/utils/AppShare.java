@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.model.Remen;
+import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.TeacherApply;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.WechatUserInfo;
 import com.yiqu.iyijiayi.model.ZhaoRen;
@@ -22,6 +24,7 @@ public class AppShare {
     private static final String ZHAOREN = "zhaoren";
     private static final String REMEN = "remen";
     private static final String IS_LOGIN = "is_login";
+    private static final String TEACHERAPPLY_INFO = "teacherapply_info";
     /**
      * 获取是否登录
      * @param c
@@ -103,6 +106,22 @@ public class AppShare {
         SharedPreferences.Editor editor = p.edit();
         editor.putString(USERINFO_INFO, new Gson().toJson(userInfo));
         editor.commit();
+    }
+    public static void setTeacherApplyInfo(Context context, TeacherApply teacherApply) {
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putString(TEACHERAPPLY_INFO, new Gson().toJson(teacherApply));
+        editor.commit();
+    }
+
+    public static TeacherApply getTeacherApplyInfo(Context context) {
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        String tmp = p.getString(TEACHERAPPLY_INFO, "");
+        TeacherApply result = null;
+        if (tmp != null && tmp.length() > 0) {
+            result = new Gson().fromJson(tmp, TeacherApply.class);
+        }
+        return result;
     }
 
 

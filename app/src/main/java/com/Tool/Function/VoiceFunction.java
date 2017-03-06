@@ -79,7 +79,7 @@ public class VoiceFunction {
             VoicePlayerEngine.getInstance().stopVoice();
         } else {
             VoicePlayerEngine.getInstance()
-                    .playVoice(fileUrl, voicePlayerInterface);
+                    .playVoice(fileUrl, voicePlayerInterface,time);
         }
     }
 
@@ -98,4 +98,7 @@ public class VoiceFunction {
         }
         return 0;
     }
+//    public synchronized static void seekTo(int time) {
+//        VoicePlayerEngine.getInstance().seekTo(time);
+//    }
 }

@@ -72,7 +72,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="10dp"
-                    android:text="增员"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp" />
 
