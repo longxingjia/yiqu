@@ -1,242 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="5dp">
+    android:layout_height="250dp"
+    android:orientation="vertical">
 
 
-    <RelativeLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/tab_bg_color" />
 
-        android:layout_marginTop="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
 
-
-        <LinearLayout
-            android:gravity="center_vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/musicname"
-                android:gravity="center"
-                android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="今夜无人入睡"
-                android:textSize="18sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/musictype"
-                android:layout_marginLeft="8dp"
+                <TextView
+                    android:id="@+id/musicname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="今夜无人入睡"
+                    android:textSize="18sp" />
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/shengyue"/>
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/musictype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@mipmap/shengyue"
+                    android:gravity="center" />
+            </LinearLayout>
 
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:drawableRight="@mipmap/arrow_detail"
+                android:gravity="center"
+                android:text="查看详情"
+                android:textColor="@color/dd_gray"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
 
         <TextView
-            android:layout_width="70dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:drawableRight="@mipmap/arrow_detail"
-            android:gravity="center"
-            android:text="查看详情"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/text_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text=""
             android:textColor="@color/dd_gray"
             android:textSize="13sp" />
 
-    </RelativeLayout>
 
-    <TextView
-        android:layout_marginTop="1dp"
-        android:id="@+id/desc"
-        android:padding="2dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textColor="@color/dd_gray"
-        android:text="今夜无人夜无人夜无人夜无人夜无人夜无人夜无人夜无人入睡"
-        android:textSize="13sp"/>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/soundtime"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="260"
-            android:layout_marginLeft="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/stu_voice"/>
-
-        <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-           android:layout_gravity="center"
-            android:background="@drawable/stu_voice"
-            >
-            <ProgressBar
-                android:id="@+id/pb_stu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/stu_voice"
-                android:progressDrawable="@drawable/progressbar_stu"
-                style="?android:attr/progressBarStyleHorizontal"
-                 />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal">
 
             <TextView
-                android:id="@+id/stu_listen"
+                android:id="@+id/soundtime"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
                 android:gravity="center"
-                android:layout_width="match_parent"
-                android:background="@color/transparent"
-                android:layout_height="match_parent"
-                android:text="我也要听"
-                android:textSize="22sp"
-                android:textColor="@color/white"/>
-        </RelativeLayout>
+                android:text=""
+                android:textColor="@color/stu_voice"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="172dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/stu_voice">
+
+                <ProgressBar
+                    android:id="@+id/pb_stu"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/stu_voice"
+                    android:progressDrawable="@drawable/progressbar_stu" />
+
+                <TextView
+                    android:id="@+id/stu_listen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/transparent"
+                    android:gravity="center"
+                    android:text="我也要听"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/bofang_left" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp">
+
+                <com.ui.views.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/head_bg" />
+
+                <com.ui.views.CircleImageView
+                    android:id="@+id/stu_header"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/menu_head" />
+
+            </RelativeLayout>
 
 
-        <com.ui.views.CircleImageView
-            android:id="@+id/stu_header"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="2dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/menu_head" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="28dp">
-
-        <TextView
-            android:id="@+id/tea_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:textSize="18sp"
-          />
-
-        <TextView
-            android:layout_centerVertical="true"
-            android:id="@+id/tectitle"
-            android:maxLines="1"
-            android:text=""
-            android:layout_width="160dp"
-            android:layout_height="20dp"
-            android:ellipsize="end"
-            android:layout_toRightOf="@id/tea_name"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            />
-
-        <TextView
-            android:layout_width="60dp"
-            android:layout_height="20dp"
-            android:textSize="13sp"
-            android:drawableRight="@mipmap/arrow"
-            android:layout_centerVertical="true"
-            android:text="已点评"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:textColor="@color/dd_gray"
-
-            />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-
-        <com.ui.views.CircleImageView
-            android:id="@+id/tea_header"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="2dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/menu_head" />
+        </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_gravity="center"
-            android:layout_height="40dp"
-            android:background="@mipmap/tea_voice"
-            >
-            <ProgressBar
-                android:id="@+id/pb_tea"
-                android:layout_width="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/tea_name"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@mipmap/tea_voice"
-                android:progressDrawable="@drawable/progressbar_stu"
-                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tectitle"
+                android:layout_width="160dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tea_name"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/dd_gray"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="已点评"
+                android:textColor="@color/dd_gray"
+                android:textSize="15sp"
+
                 />
 
-            <TextView
-                android:id="@+id/tea_listen"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:background="@color/transparent"
-                android:layout_height="match_parent"
-                android:text="一元偷偷听"
-                android:textSize="20sp"
-                android:textColor="@color/white"/>
-
-
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/listener"
-           android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_marginLeft="20dp"
-            android:background="@color/transparent"
-            android:layout_height="match_parent"
-            android:text="228"
-            android:textSize="10sp"
-            android:textColor="@color/redMain"/>
-
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:background="@color/transparent"
-            android:layout_height="match_parent"
-            android:text=" 听过"
-            android:textSize="10sp"
-            android:textColor="@color/dd_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
 
+            <RelativeLayout
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp">
+
+                <com.ui.views.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/head_bg"
+                    android:padding="24dp" />
+
+                <com.ui.views.CircleImageView
+                    android:id="@+id/tea_header"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerInParent="true"
+                    android:padding="24dp"
+                    android:src="@mipmap/menu_head" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="172dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/tea_voice">
+
+                <ProgressBar
+                    android:id="@+id/pb_tea"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/tea_voice"
+                    android:progressDrawable="@drawable/progressbar_stu" />
+
+                <TextView
+                    android:id="@+id/tea_listen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/transparent"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/bofang_right" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/listener"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text="228"
+                android:textColor="@color/redMain"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:gravity="center_vertical"
+                android:text=" 听过"
+                android:textColor="@color/dd_gray"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>

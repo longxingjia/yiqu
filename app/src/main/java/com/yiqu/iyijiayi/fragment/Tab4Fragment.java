@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -44,7 +45,6 @@ import java.util.List;
 public class Tab4Fragment extends TabContentFragment implements OnMoreListener, IRefreshListViewListener {
 
 
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
 
     //分页
     private LoadMoreView mLoadMoreView;
@@ -56,7 +56,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
     private RefreshList listView;
     private Tab4Adapter tab4Adapter;
     private String uid;
-    private ImageView loadErr;
+    private RelativeLayout loadErr;
     private String arr;
     private ArrayList<Discovery> discoveries;
 
@@ -73,8 +73,8 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
     @Override
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.listView);
-        loadErr = (ImageView) v.findViewById(R.id.loading_error);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
+        loadErr = (RelativeLayout) v.findViewById(R.id.loading_error);
+
         tab4Adapter = new Tab4Adapter(getActivity());
         listView.setAdapter(tab4Adapter);
         listView.setOnItemClickListener(tab4Adapter);
@@ -84,6 +84,10 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
+
+        listView.setFooterDividersEnabled(false);
+        listView.setHeaderDividersEnabled(false);
+
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
 
@@ -100,6 +104,21 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
     protected void init(Bundle savedInstanceState) {
         setSlidingMenuEnable(false);
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (count>0){
+            loadErr.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }else {
+            loadErr.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+
+        count = 0;
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
             NSDictionary nsDictionary = new NSDictionary();
@@ -116,7 +135,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                     getActivity(),
                     MyNetApiConfig.getFollowSoundList,
                     MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-                    "getSoundList", Tab4Fragment.this);
+                    "getSoundList", Tab4Fragment.this,false,true);
         } else {
             loadErr.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
@@ -127,8 +146,6 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
-
         super.onDestroy();
     }
 
@@ -158,13 +175,12 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-
+        LogUtils.LOGE(tag,netResponse.toString());
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag,netResponse.toString());
+
                 try {
                     discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
-                    LogUtils.LOGE(tag,discoveries.toString());
                     tab4Adapter.setData(discoveries);
                     if (discoveries.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -176,11 +192,13 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                 }
 
             } else {
+                loadErr.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.GONE);
                 resfreshFail();
+
             }
         } else if ("getSoundList_more".equals(id)) {
             if (TYPE_SUCCESS == type) {
-
                 try {
                     discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
                     tab4Adapter.addData(discoveries);
@@ -195,6 +213,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                 }
 
             }else {
+                mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
         }
@@ -214,7 +233,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                         getActivity(),
                         MyNetApiConfig.getFollowSoundList,
                         MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-                        "getSoundList_more", Tab4Fragment.this);
+                        "getSoundList_more", Tab4Fragment.this,false,true);
 
             }
         }
@@ -232,7 +251,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
                 getActivity(),
                 MyNetApiConfig.getFollowSoundList,
                 MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-                "getSoundList", Tab4Fragment.this);
+                "getSoundList", Tab4Fragment.this,false,true);
 
 
     }

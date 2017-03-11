@@ -106,15 +106,15 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Xizuo f = datas.get(position-1);
-                if (AppShare.getIsLogin(mContext)){
+
+                Xizuo f = datas.get(position - 1);
+                if (AppShare.getIsLogin(mContext)) {
                     Intent i = new Intent(mContext, StubActivity.class);
                     i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
-                    Bundle b = new Bundle();
-                    b.putSerializable("data",f);
-                    i.putExtras(b);
+
+                    i.putExtra("data", f.sid + "");
                     mContext.startActivity(i);
-                }else {
+                } else {
                     Intent i = new Intent(mContext, StubActivity.class);
                     i.putExtra("fragment", SelectLoginFragment.class.getName());
                     ToastManager.getInstance(mContext).showText("请登录后再试");
@@ -155,20 +155,21 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     protected void initTitle() {
 
-        setTitleText("习作");
+        setTitleText(getString(R.string.zuopin));
 
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        LogUtils.LOGE(tag, netResponse.toString());
-
+        //   LogUtils.LOGE(tag, netResponse.toString());
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 try {
+
                     datas = JsonUtils.parseXizuoList(netResponse.data);
+                //    LogUtils.LOGE(tag,datas.toString());
                     tab1XizuoAdapter.setData(datas);
                     if (datas.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -185,8 +186,9 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    datas = JsonUtils.parseXizuoList(netResponse.data);
-                    tab1XizuoAdapter.addData(datas);
+                    datas.addAll(JsonUtils.parseXizuoList(netResponse.data));
+                  //  LogUtils.LOGE(tag+"1",JsonUtils.parseXizuoList(netResponse.data).toString());
+                   // tab1XizuoAdapter.addData(JsonUtils.parseXizuoList(netResponse.data));
                     if (datas.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
                     }
@@ -197,6 +199,9 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                     e.printStackTrace();
                 }
 
+            }else {
+                mLoadMoreView.end();
+                mLoadMoreView.setMoreAble(false);
             }
         }
         super.onNetEnd(id, type, netResponse);
@@ -212,7 +217,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 getActivity(),
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
-                "getSoundList", Tab1XizuoListFragment.this);
+                "getSoundList", Tab1XizuoListFragment.this,false,true);
 
     }
 
@@ -228,7 +233,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                         getActivity(),
                         MyNetApiConfig.getSoundList,
                         MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
-                        "getSoundList_more", Tab1XizuoListFragment.this);
+                        "getSoundList_more", Tab1XizuoListFragment.this,false,true);
 
             }
         }
@@ -281,7 +286,6 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
 
         }.execute();
     }
-
 
 
 }

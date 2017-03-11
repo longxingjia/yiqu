@@ -4,13 +4,16 @@
    <color name="fm_list_item_bg_press">#888888</color>
    <color name="fm_list_item_bg">#ffffff</color>
    <color name="fm_page_bg">#ffffff</color>
-   
+ <color name="green">#0BE3A8</color>
+ <color name="redMain">#F94E62</color>
    <!-- #1898c4 179cfb-->
     <!-- page -->
     <color name="page_bg_color">#ffffff</color>
     <color name="page_set_bg_color">#f1eef9</color>
     <color name="menu_bg_color">#f1f0f8</color>
-    
+    <color name="dd_gray">#878787</color>
+    <color name="lightgrey">#ff737373</color>
+    <color name="launch_image_bg_gray">#F5F4F4</color>
    
     <!-- title next text -->
     <color name="title_next_txt_eable_color">#ffffff</color>
@@ -21,7 +24,7 @@
     <color name="menu_text_disable_color">#cecece</color>
     
     <!-- tab  -->
-    <color name="tab_bg_color">#f8f8f8</color>
+    <color name="tab_bg_color">#f2f2f2</color>
     <color name="tab_txt_eable_color">#ff0000</color>
     <color name="tab_txt_disable_color">#b3b3b3</color>
     

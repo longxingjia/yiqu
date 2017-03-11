@@ -8,9 +8,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
 
 
     <application
@@ -20,7 +20,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/fm_full_AppBaseTheme">
-        <activity android:name="com.Control.Start.WelcomePageActivity">
+        <activity
+            android:name="com.Control.Start.WelcomePageActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +40,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">>
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
@@ -50,20 +52,33 @@
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+          />
+
+
         <activity android:name=".fragment.tab3.Tab3Activity"></activity>
+
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yiqu.iyijiayi.fileprovider"
-            android:grantUriPermissions="true"
             android:exported="false"
-            >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
 
 
     </application>

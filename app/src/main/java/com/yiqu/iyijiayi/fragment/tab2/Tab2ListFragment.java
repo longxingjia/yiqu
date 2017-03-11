@@ -83,13 +83,13 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         } else {
             uid = "0";
         }
-        LogUtils.LOGE(tag,uid+"");
+       // LogUtils.LOGE(tag,uid+"");
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.get_follow_recommend_list,
                 MyNetRequestConfig.get_follow_recommend_list(getActivity()
                         ,uid,type,count,rows),
                 "get_follow_recommend_list",
-                this);
+                this,false,true);
         tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(),uid);
         listView.setAdapter(tab2ListFragmetAdapter);
         listView.setOnItemClickListener(tab2ListFragmetAdapter);
@@ -171,6 +171,9 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                     e.printStackTrace();
                 }
 
+            }else {
+                mLoadMoreView.setMoreAble(false);
+                mLoadMoreView.end();
             }
         }
         super.onNetEnd(id, type, netResponse);
@@ -187,7 +190,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                 MyNetRequestConfig.get_follow_recommend_list(getActivity()
                         ,uid,type,count,rows),
                 "get_follow_recommend_list",
-                this);
+                this,false,true);
 
     }
 

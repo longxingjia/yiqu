@@ -1,5 +1,6 @@
 package com.yiqu.Control.Main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.Tool.Function.AudioFunction;
 import com.Tool.Function.CommonFunction;
@@ -43,8 +45,13 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tools;
+
+import kr.co.namee.permissiongen.PermissionFail;
+import kr.co.namee.permissiongen.PermissionGen;
+import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class RecordActivity extends Activity
         implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface, VoiceRecorderOperateInterface, View.OnClickListener {
@@ -65,7 +72,7 @@ public class RecordActivity extends Activity
     private String musicFileUrl;
     private String decodeFileUrl;
     private String composeVoiceUrl;
-
+    private TextView recordHintTextView;
     //    private TextView recordHintTextView;
     private ProgressBar composeProgressBar;
     private static RecordActivity instance;
@@ -84,7 +91,7 @@ public class RecordActivity extends Activity
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        init(R.layout.record_xizuo_fragment);
+       // init(R.layout.record_xizuo_fragment);
     }
 
     private void init(int layoutId) {
@@ -93,7 +100,7 @@ public class RecordActivity extends Activity
         bindView();
         initView();
         initData();
-
+        PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
         className = getClass().getSimpleName();
 
         instance = this;
@@ -103,7 +110,7 @@ public class RecordActivity extends Activity
 
      
         rlHint = (RelativeLayout) findViewById(R.id.hint);
-
+        recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
         musicName = (TextView) findViewById(R.id.musicname);
         musictime = (TextView) findViewById(R.id.musictime);
         musicSize = (TextView) findViewById(R.id.musicSize);
@@ -127,9 +134,7 @@ public class RecordActivity extends Activity
 
         Intent intent = getIntent();
         music = (Music) intent.getSerializableExtra("music");
-
         musicName.setText(music.musicname + "");
-
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         String fileName = Url.substring(
@@ -139,16 +144,16 @@ public class RecordActivity extends Activity
         string2TimeUtils = new String2TimeUtils();
         musictime.setText(string2TimeUtils.stringForTimeS(music.time));
 
-        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        File mFile = new File(Variable.StorageMusicPath, fileName);
         if (mFile.exists()) {
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
-            tempVoicePcmUrl = Variable.StorageMusicCachPath + music.musicname + "_tempVoice.pcm";
+            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
             LogUtils.LOGE(tag, tempVoicePcmUrl);
             musicFileUrl = mFile.getAbsolutePath();
-            decodeFileUrl = Variable.StorageMusicCachPath + music.musicname + "_decodeFile.pcm";
+            decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_decodeFile.pcm";
             fileNameCom = music.musicname + "_composeVoice.mp3";
-            composeVoiceUrl = Variable.StorageMusicCachPath + fileNameCom;
+            composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
 
@@ -160,6 +165,8 @@ public class RecordActivity extends Activity
         recordVoiceBegin = false;
 
         musictime.setText(string2TimeUtils.stringForTimeS(music.time - actualRecordTime));
+        recordHintTextView.setVisibility(View.VISIBLE);
+        recordHintTextView.setText("录音完成，正在合成");
 
     }
 
@@ -305,6 +312,8 @@ public class RecordActivity extends Activity
         VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
         CommonFunction.showToast("合成成功", className);
         recordVoiceButton.setText("完成");
+        recordHintTextView.setVisibility(View.INVISIBLE);
+
         recordComFinish = true;
         clearAnimation();
         composeVoice = new ComposeVoice();
@@ -359,6 +368,7 @@ public class RecordActivity extends Activity
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
+                                    VoiceFunction.StopVoice();
 
                                     break;
                                 case 1:
@@ -367,6 +377,7 @@ public class RecordActivity extends Activity
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
+                                    VoiceFunction.StopVoice();
                                     break;
                             }
 
@@ -470,6 +481,26 @@ public class RecordActivity extends Activity
     private void clearAnimation() {
         image_anim.clearAnimation();
 
+    }
+
+    @PermissionSuccess(requestCode = 100)
+    public void openContact() {
+        init(R.layout.record_xizuo_fragment);
+    }
+
+    @PermissionFail(requestCode = 100)
+    public void failContact() {
+
+        Toast.makeText(this, getString(R.string.permission_record_hint), Toast.LENGTH_SHORT).show();
+        finish();
+        PermissionUtils.openSettingActivity(this);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
 

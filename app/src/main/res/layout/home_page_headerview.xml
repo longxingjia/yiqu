@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:drawablePadding="5dp"
-                android:text="习作"
+                android:text="@string/zuopin"
                 android:textColor="#000000"
                 android:textSize="15dp" />
         </RelativeLayout>
@@ -290,7 +290,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="个习作，点评收入" />
+                android:text="个作品，点评收入" />
 
             <TextView
                 android:id="@+id/questionincome"

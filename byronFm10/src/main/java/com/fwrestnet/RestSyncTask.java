@@ -116,7 +116,7 @@ public class RestSyncTask extends AbsRestSyncTask {
                     return false;
                 }
             });
-            //监听对话框取消事件，把对话框取消视作为接口的取消
+//            //监听对话框取消事件，把对话框取消视作为接口的取消
             p.setOnCancelListener(new OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
                     if (isCanceled) {
@@ -133,7 +133,7 @@ public class RestSyncTask extends AbsRestSyncTask {
                     }
                 }
             });
-            //监听对话框停止事件，把对话框停止视作为接口的取消
+//            //监听对话框停止事件，把对话框停止视作为接口的取消
             p.setOnDismissListener(new OnDismissListener() {
                 public void onDismiss(DialogInterface arg0) {
                     if (isCanceled) {
@@ -154,7 +154,7 @@ public class RestSyncTask extends AbsRestSyncTask {
             p.setContentView(mNetApi.getShowUIResource());
             p.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             TextView t = (TextView) p.findViewById(mNetApi.getShowUITextID());
-            //设置对话框描述文字为接口的语言配置
+          //  设置对话框描述文字为接口的语言配置
             t.setText(mNetApi.getMsg());
 
         } catch (Exception e) {

@@ -36,18 +36,25 @@ import android.os.Bundle;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
-    private IWXAPI api;
     private Context mContext;
     private String code;
+    public static final String APP_ID = Constant.APP_ID;
+    private IWXAPI api;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.act_wxentry);
+        setContentView(R.layout.progress_overlay);
         mContext = this;
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         api.handleIntent(getIntent(), this);
+
+        regTowx();
+        SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wechat_sdk";
+        api.sendReq(req);
     }
 
     @Override
@@ -61,6 +68,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     public void onReq(BaseReq baseReq) {
 
     }
+    private void regTowx() {
+        api = WXAPIFactory.createWXAPI(this, APP_ID, true);
+        api.registerApp(APP_ID);
+    }
+
 
     public void onResp(BaseResp resp) {
         switch (resp.errCode) {
@@ -73,7 +85,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     LoginTask loginTask = new LoginTask();
                     loginTask.execute();
                 }
-
 
 
                 break;
@@ -122,11 +133,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     WechatAccessToken wechatAccessToken = new Gson().fromJson(result, WechatAccessToken.class);
 
                     if (NetworkRestClient.isNetworkAvailable(mContext)) {
-                        GetWechatUserInfoTask getWechatUserInfoTask = new GetWechatUserInfoTask(mContext,wechatAccessToken.access_token,wechatAccessToken.openid);
+                        GetWechatUserInfoTask getWechatUserInfoTask = new GetWechatUserInfoTask(mContext, wechatAccessToken.access_token, wechatAccessToken.openid);
                         getWechatUserInfoTask.execute();
-
-
-
 
                     }
                 }
@@ -185,11 +193,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 
             if (vo != null) {
-                 //   LogUtils.LOGE(vo.toString());
-                AppShare.setWechatUserInfo(mContext,vo);
+                //   LogUtils.LOGE(vo.toString());
+                AppShare.setWechatUserInfo(mContext, vo);
                 RestNetCallHelper.callNet(mContext,
                         MyNetApiConfig.loginFromWechat, MyNetRequestConfig
-                                .loginFromWechat(mContext,vo.openid,vo.nickname,vo.headimgurl,vo.sex ),
+                                .loginFromWechat(mContext, vo.openid, vo.nickname, vo.headimgurl, vo.sex),
                         "loginFromWechat", new NetCallBack() {
                             @Override
                             public void onNetNoStart(String id) {
@@ -204,24 +212,19 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             @Override
                             public void onNetEnd(String id, int type, NetResponse netResponse) {
 //                                LogUtils.LOGE(netResponse.toString());
-                                if (netResponse.bool==0){
+                                if (netResponse.bool == 0) {
                                     //新用户
                                     Model.startNextAct(mContext, SetPhoneFragment.class.getName());
 
-                                }else {
+                                } else {
 
                                     Gson gson = new Gson();
                                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                                     AppShare.setIsLogin(mContext, true);
                                     AppShare.setUserInfo(mContext, userInfo);
                                     Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                                    intent.putExtra("fragmentName",Tab5Fragment.class.getName());
+                                    intent.putExtra("fragmentName", Tab5Fragment.class.getName());
                                     startActivity(intent);
-
-
-
-
-
 
 
                                 }

@@ -64,6 +64,8 @@ public class RefreshList extends ListView implements OnScrollListener {
 		mScroller = new Scroller(context);
 		mHeaderView = new ListHeader(context);
 		addHeaderView(mHeaderView, null, false);
+		setHeaderDividersEnabled(false);
+
 		
 		mHeaderViewContent = (RelativeLayout) mHeaderView.findViewById(R.id.xlistview_header_content);
 		mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(

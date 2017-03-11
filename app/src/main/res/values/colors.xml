@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-
-
     <!-- 标题栏背景 -->
     <color name="main_color">#ffffff</color>
     <!-- 底部tab线的颜色 -->
@@ -15,8 +12,10 @@
     <!-- 灰色 -->
     <color name="gray">#ababab</color>
     <color name="dark_gray">#AAAAAA</color>
-    <color name="dd_gray">#878787</color>
+
     <color name="navpage">#FFE1E8EB</color>
+    <color name="head_bg">#f5f5f5</color>
+    <color name="text_bg">#f7f7f7</color>
 
     <color name="book_selection_bg_color">#9087cdfa</color>
 
@@ -28,14 +27,14 @@
     <color name="normal_color">#ffffff</color>
     <color name="grey">#ff58616d</color>
     <color name="darkgray">#8b8b8b</color>
-    <color name="lightgrey">#ff737373</color>
+
     <color name="apk_category_color">#a6a6a6</color>
     <color name="appinfo_down_item_gray">#ff999999</color>
     <color name="dialog_btn_pressed">#ffe0e0e0</color>
     <color name="dialog_btn_normal">#fff7f7f7</color>
     <color name="line_top_title">#ffcccccc</color>
     <color name="background_gray">#DCDCDC</color>
-    <color name="launch_image_bg_gray">#F5F4F4</color>
+
     <color name="top_bar_search_select_bg_color">#662d3037</color>
     <color name="black_overlay">#66000000</color>
     <color name="diver_color">#E0E0E0</color>
@@ -81,7 +80,7 @@
     <color name="red">#ffff0101</color>
     <color name="text_input_limit_warn">#fff00000</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="redMain">#F94E62</color>
+
     <color name="tag_color_orange">#ffa500</color>
     <color name="popup_windows_bg_blue">#5d7b3d</color>
     <color name="popup_windows_bg_blue_dark">#3b5b31</color>
@@ -104,7 +103,7 @@
     <color name="foot_bar_bg_color">#00cdcd</color>
     <color name="talk_room_tv_green">#ff79ffc5</color>
     <color name="stu_voice">#0BE3A8</color>
-    <color name="green">#0BE3A8</color>
+
 
     <color name="gc_installed_game_show_all">#ff576b95</color>
     <color name="invite_btn_text_color">#ff04539c</color>

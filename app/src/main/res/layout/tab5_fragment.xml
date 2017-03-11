@@ -300,7 +300,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="个习作，点评收入" />
+                    android:text="个作品，点评收入" />
 
                 <TextView
                     android:id="@+id/questionincome"
@@ -392,7 +392,7 @@
                         android:id="@+id/menu_item_wodexizuo"
                         style="@style/textview_mine"
                         android:drawableLeft="@mipmap/mine_xizuo"
-                        android:text="我的习作" />
+                        android:text="@string/mine_zuopin" />
 
                     <ImageView
                         android:layout_width="match_parent"

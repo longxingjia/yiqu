@@ -2,6 +2,7 @@ package com.yiqu.iyijiayi.fragment;
 
 
 import android.content.Intent;
+import android.net.Network;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,10 +37,13 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.view.VpSwipeRefreshLayout;
+
 import java.util.ArrayList;
 
-public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener,OnClickListener ,RefreshList.IRefreshListViewListener {
+public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener, OnClickListener, RefreshList.IRefreshListViewListener {
 
     private static final int TAB_1 = 1;
     //	List<>
@@ -53,18 +57,17 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private ArrayList<View> views;
     private static final int REFRESH_COMPLETE = 0X110;
 
-    private Handler mHandler = new Handler()
-    {
-        public void handleMessage(android.os.Message msg)
-        {
-            switch (msg.what)
-            {
+    private Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
                 case REFRESH_COMPLETE:
 
                     break;
 
             }
-        };
+        }
+
+        ;
     };
     private String uid;
     private ArrayList<Sound> sound;
@@ -87,7 +90,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected void initView(View v) {
-        View headerView =  LayoutInflater.from(getActivity()).inflate(R.layout.tab1_fragment_header, null);
+        View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab1_fragment_header, null);
 
         initHeadView(headerView);
         lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
@@ -96,13 +99,34 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.addFooterView(mLoadMoreView);
         lvSound.addHeaderView(headerView);
         lvSound.setOnScrollListener(mLoadMoreView);
+        //   lvSound.setHeaderDividersEnabled(false);
+        lvSound.setFooterDividersEnabled(false);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         lvSound.setRefreshListListener(this);
 
     }
 
-    private void initHeadView(View v){
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
+            Remen remen = AppShare.getRemenList(getActivity());
+            if (remen != null) {
+                tab1XizuoAdapter.setData(remen.xizuo);
+                tab1SoundAdapter.setData(remen.sound);
+            }
+        }else {
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.remen,
+                    MyNetRequestConfig.remen(getActivity(), uid),
+                    "Remen", Tab1Fragment.this, false, true);
+        }
+
+    }
+
+    private void initHeadView(View v) {
         vp_spinner = (ViewPager) v.findViewById(R.id.vp_spinner);
         lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
@@ -136,30 +160,18 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
-        if (AppShare.getIsLogin(getActivity())){
+        if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
-        }else{
+        } else {
             uid = "0";
         }
-        Remen remen = AppShare.getRemenList(getActivity());
-        if (remen==null){
-            RestNetCallHelper.callNet(
-                    getActivity(),
-                    MyNetApiConfig.remen,
-                    MyNetRequestConfig.remen(getActivity(),uid),
-                    "Remen", Tab1Fragment.this);
-        }else {
-            tab1XizuoAdapter.setData(remen.xizuo);
-            tab1SoundAdapter.setData(remen.sound);
 
-        }
 
     }
 
     @Override
     public void onDestroy() {
 
-//        mImageLoaderHm.
         super.onDestroy();
     }
 
@@ -184,16 +196,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected void initTitle() {
-        	setTitleText("热门");
+        setTitleText("热门");
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.more_xizuo:
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", Tab1XizuoListFragment.class.getName());
-
                 getActivity().startActivity(i);
 
                 break;
@@ -204,19 +215,20 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (netResponse!=null&&"Remen".equals(id)) {
+        if (netResponse != null && "Remen".equals(id)) {
 
-            if(netResponse.bool==1){
+            if (netResponse.bool == 1) {
                 Gson gson = new Gson();
-                Remen remen = gson.fromJson(netResponse.data,Remen.class);
-                AppShare.setRemenList(getActivity(),remen);
+                Remen remen = gson.fromJson(netResponse.data, Remen.class);
+                AppShare.setRemenList(getActivity(), remen);
                 sound = remen.sound;
                 xizuo = remen.xizuo;
                 tab1XizuoAdapter.setData(xizuo);
+                LogUtils.LOGE("1", sound.toString());
                 tab1SoundAdapter.setData(sound);
                 mLoadMoreView.setMoreAble(false);
                 resfreshOk();
-            }else {
+            } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
                 resfreshFail();
             }
@@ -236,8 +248,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.remen,
-                MyNetRequestConfig.remen(getActivity(),uid),
-                "Remen", Tab1Fragment.this);
+                MyNetRequestConfig.remen(getActivity(), uid),
+                "Remen", Tab1Fragment.this, false, true);
 
     }
 
@@ -267,51 +279,52 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         return false;
     }
 
-    // PagerAdapter是object的子类
-    class MyAdapter extends PagerAdapter {
+// PagerAdapter是object的子类
+class MyAdapter extends PagerAdapter {
 
-        /**
-         * PagerAdapter管理数据大小
-         */
-        @Override
-        public int getCount() {
-            return views.size();
-        }
-
-        /**
-         * 关联key 与 obj是否相等，即是否为同一个对象
-         */
-        @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj; // key
-        }
-
-        /**
-         * 销毁当前page的相隔2个及2个以上的item时调用
-         */
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
-        }
-
-        /**
-         * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
-         */
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-
-            View view = views.get(position);
-            // 如果访问网络下载图片，此处可以进行异步加载
-            ImageView img = (ImageView) view.findViewById(R.id.spinner);
-//            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
-            img.setBackgroundResource(imgIdArray[position]);
-            container.addView(view);
-            return views.get(position); // 返回该view对象，作为key
-        }
+    /**
+     * PagerAdapter管理数据大小
+     */
+    @Override
+    public int getCount() {
+        return views.size();
     }
 
+    /**
+     * 关联key 与 obj是否相等，即是否为同一个对象
+     */
+    @Override
+    public boolean isViewFromObject(View view, Object obj) {
+        return view == obj; // key
+    }
 
-    public void resfreshOk(){
+    /**
+     * 销毁当前page的相隔2个及2个以上的item时调用
+     */
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
+    }
+
+    /**
+     * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
+     */
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+
+        View view = views.get(position);
+        // 如果访问网络下载图片，此处可以进行异步加载
+        ImageView img = (ImageView) view.findViewById(R.id.spinner);
+//            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
+        img.setBackgroundResource(imgIdArray[position]);
+        container.addView(view);
+        return views.get(position); // 返回该view对象，作为key
+    }
+
+}
+
+
+    public void resfreshOk() {
         lvSound.refreshOk();
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... params) {
@@ -334,7 +347,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     }
 
-    public void resfreshFail(){
+    public void resfreshFail() {
         lvSound.refreshFail();
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... params) {

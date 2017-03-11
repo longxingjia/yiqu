@@ -39,6 +39,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
@@ -116,16 +117,11 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
 
-                if (f.userimage!=null&&f.userimage.contains("http://wx.qlogo.cn")){
-                    Picasso.with(mContext).load( f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-                }else {
-                    Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-                }
+            PictureUtils.showPicture(mContext,f.userimage,h.icon,50);
 
             h.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                     if (f.isfollow.equals("0")){  //没有关注
                         RestNetCallHelper.callNet(

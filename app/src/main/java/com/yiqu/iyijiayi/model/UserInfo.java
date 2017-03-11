@@ -24,11 +24,11 @@ public class UserInfo implements Serializable {
     public String specialities;//学生专业
     public String follow;//
     public String price;// 老师提问价格
-    public String coin_apple;//艺币
+    public int coin_apple;//
     public String coin_android;//艺币
-    public int free_question;//艺币
-    public String wallet;//艺币
-    public String wallet_lock;//艺币
+    public int free_question;//
+    public String wallet;//
+    public String wallet_lock;//
     public String totalincome;// 总收入
     public String questionincome;// 提问收入
     public String listenincome;// 听答案收入

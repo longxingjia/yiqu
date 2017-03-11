@@ -8,6 +8,7 @@
 package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
@@ -24,11 +25,16 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -137,6 +143,28 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        if (arg2<2){
+            return;
+        }
+        Sound f = getItem(arg2-2);//加了头部
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
+        if (AppShare.getIsLogin(mContext)){
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            i.putExtra("data",f.sid+"");
+
+            mContext.startActivity(i);
+        }else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
+
+        }
 
 
     }

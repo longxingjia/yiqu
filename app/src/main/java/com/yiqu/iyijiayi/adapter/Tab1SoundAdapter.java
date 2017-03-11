@@ -24,13 +24,16 @@ import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragmentbak;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener {
 
@@ -38,7 +41,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
 
-    private String tag ="Tab1SoundAdapter";
+    private String tag = "Tab1SoundAdapter";
 
     public Tab1SoundAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -84,6 +87,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         ImageView musictype;
         TextView stu_listen;
         TextView listener;
+        TextView tea_listen;
 
     }
 
@@ -103,6 +107,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.listener = (TextView) v.findViewById(R.id.listener);
+                h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
                 v.setTag(h);
@@ -112,20 +117,34 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime+"\"");
+            h.soundtime.setText(f.soundtime + "\"");
             h.tea_name.setText(f.tecname);
-            h.listener.setText(f.views+"");
+            h.listener.setText(f.views + "");
             h.tectitle.setText(f.tectitle);
-          //  LogUtils.LOGE(tag,f.soundpath);
 
-            if (f.type==1){
+            long time = System.currentTimeMillis() / 1000 - f.created;
+//            LogUtils.LOGE(tag,time+"");
+
+            if (time < 2 * 24 * 60 * 60 && time > 0) {
+                h.tea_listen.setText("限时免费听");
+            } else {
+                if (f.listen == 1) {
+                    h.tea_listen.setText("已付费");
+                } else {
+                    h.tea_listen.setText("1元偷偷听");
+                }
+
+            }
+
+
+            if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            }else {
+            } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 
-            PictureUtils.showPicture(mContext,f.tecimage,h.tea_header);
-            PictureUtils.showPicture(mContext,f.stuimage,h.stu_header);
+            PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
+            PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
 
             h.stu_listen.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -135,7 +154,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             });
 
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,23 +161,25 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     }
 
 
-
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-        Sound f = getItem(arg2-2);//加了头部
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        };
-        if (AppShare.getIsLogin(mContext)){
+        if (arg2 < 2) {
+            return;
+        }
+        Sound f = getItem(arg2 - 2);//加了头部
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
+        ;
+        if (AppShare.getIsLogin(mContext)) {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-            i.putExtra("data",f.sid+"");
+            i.putExtra("data", f.sid + "");
 
             mContext.startActivity(i);
-        }else {
+        } else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());
             ToastManager.getInstance(mContext).showText("请登录后再试");

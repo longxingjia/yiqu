@@ -1,7 +1,9 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
+import android.content.Intent;
 import android.view.View;
 
+import com.base.utils.ToastManager;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -9,6 +11,8 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
+import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 /**
  * Created by Administrator on 2017/2/9.
@@ -16,8 +20,7 @@ import com.yiqu.iyijiayi.model.Model;
 
 public class SelectLoginFragment extends AbsAllFragment {
 
-    public static final String APP_ID = Constant.APP_ID;
-    private IWXAPI api;
+
 
     @Override
     protected int getTitleView() {
@@ -51,23 +54,20 @@ public class SelectLoginFragment extends AbsAllFragment {
 
     }
 
-    private void regTowx() {
-        api = WXAPIFactory.createWXAPI(getActivity(), APP_ID, true);
-        api.registerApp(APP_ID);
-    }
 
     @Override
     protected void initView(View v) {
-        regTowx();
+
         v.findViewById(R.id.wechat_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk";
-//                req.state = "wechat_sdk_demo_test";
-                api.sendReq(req);
-             //   getActivity().finish();
+
+                if (AppAvilibleUtils.isWeixinAvilible(getActivity())){
+                    Intent intent = new Intent(getActivity(), WXEntryActivity.class);
+                    startActivity(intent);
+                }else {
+                    ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                }
 
 
             }

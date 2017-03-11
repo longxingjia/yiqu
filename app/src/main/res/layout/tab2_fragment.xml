@@ -45,15 +45,9 @@
                     android:layout_marginRight="10dp"
                     android:drawableRight="@mipmap/arrow_red"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="13dp"
                     android:text="加载更多导师"
                     android:textColor="@color/redMain" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
 
 
                 <View
@@ -84,17 +78,16 @@
                     android:layout_height="40dp"
                     android:drawableRight="@mipmap/arrow_red"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="13dp"
                     android:layout_marginRight="10dp"
                     android:text="加载更多学生"
                     android:textColor="@color/redMain" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="1dp"
                     android:background="@color/background_color_rating_grey"
                     />
-
 
             </LinearLayout>
         </ScrollView>

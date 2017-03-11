@@ -14,6 +14,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 
 public class PictureUtils {
 
+
     public static void showPicture(Context context, String url, ImageView icon) {
 
         if (url != null) {
@@ -28,6 +29,28 @@ public class PictureUtils {
                         .centerCrop()
                         .placeholder(R.mipmap.menu_head).into(icon);
             }
+        }else {
+            Picasso.with(context).load(R.mipmap.menu_head).into(icon);
+        }
+    }
+
+
+    public static void showPicture(Context context, String url, ImageView icon,int sizedp) {
+
+        if (url != null) {
+            if (url.contains("http://wx.qlogo.cn")) {
+                Picasso.with(context).load(url)
+                        .resize(DensityUtil.dip2px(context,sizedp), DensityUtil.dip2px(context,sizedp))
+                        .centerCrop()
+                        .placeholder(R.mipmap.menu_head).into(icon);
+            } else {
+                Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
+                        .resize(DensityUtil.dip2px(context,sizedp), DensityUtil.dip2px(context,sizedp))
+                        .centerCrop()
+                        .placeholder(R.mipmap.menu_head).into(icon);
+            }
+        }else {
+            Picasso.with(context).load(R.mipmap.menu_head).into(icon);
         }
     }
 
@@ -36,7 +59,7 @@ public class PictureUtils {
         if (url != null) {
             if (url.contains("http://wx.qlogo.cn")) {
                 Picasso.with(context).load(url)
-                        .resize(DensityUtil.dip2px(context,50), DensityUtil.dip2px(context,50))
+                        .resize(DensityUtil.dip2px(context,150), DensityUtil.dip2px(context,50))
                         .centerCrop()
                         .placeholder(R.mipmap.home_bg).into(icon);
             } else {
@@ -44,6 +67,8 @@ public class PictureUtils {
 
                         .placeholder(R.mipmap.home_bg).into(icon);
             }
+        }else {
+            Picasso.with(context).load(R.mipmap.home_bg).into(icon);
         }
     }
 }

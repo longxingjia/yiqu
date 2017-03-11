@@ -33,7 +33,7 @@ public class MenuDialogSelectTeaHelper {
 	TeaListener teaListener;
 
 	public MenuDialogSelectTeaHelper(Context context,final TeaListener teaListener){
-		String[] items = new String[]{"找导师请教","免费上传习作"};
+		String[] items = new String[]{"找导师请教","免费上传作品"};
 		mMenuDialog = new MenuDialog(context, "找个导师点评一下吗？",items , new OnMenuListener() {
 			@Override
 			public void onMenuClick(MenuDialog dialog, int which, String item) {

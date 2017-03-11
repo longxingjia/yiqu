@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="176dp"
+    android:minHeight="176dp"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:paddingLeft="13dp"
+    android:paddingRight="13dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp">
 
-        <com.ui.views.CircleImageView
-            android:id="@+id/header"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:padding="2dp"
-            android:src="@mipmap/menu_head" />
+        <RelativeLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <com.ui.views.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/head_bg"
+                android:padding="24dp" />
+
+            <com.ui.views.CircleImageView
+                android:id="@+id/header"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_centerInParent="true"
+                android:padding="24dp"
+                android:src="@mipmap/menu_head" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -30,10 +44,10 @@
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="jin"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/title"
@@ -43,7 +57,7 @@
                 android:singleLine="true"
                 android:text="今夜无人夜无人夜无人"
                 android:textColor="@color/dd_gray"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -51,7 +65,6 @@
             android:id="@+id/pl"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="评论了" />
@@ -60,9 +73,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="28dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="10dp">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -74,16 +88,15 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="今夜无人入睡"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/musictype"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="1dp"
-                android:background="@mipmap/shengyue" />
+                android:layout_marginLeft="10dp"
+                android:background="@mipmap/shengyue"
+                android:gravity="center" />
         </LinearLayout>
 
 
@@ -92,33 +105,33 @@
     <TextView
         android:id="@+id/desc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="1dp"
-        android:padding="5dp"
+        android:layout_height="25dp"
+        android:paddingLeft="10dp"
+        android:layout_marginRight="28dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
         android:singleLine="true"
-        android:text=""
+        android:background="@drawable/text_bg"
         android:textColor="@color/dd_gray"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp">
+        android:layout_height="13dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
             android:text=""
             android:textColor="@color/dd_gray"
-            android:textSize="13sp"
-             />
+            android:textSize="11sp" />
 
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
 
@@ -126,13 +139,13 @@
             android:gravity="center"
             android:text="听过"
             android:textColor="@color/dd_gray"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
 
         <TextView
             android:id="@+id/views"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
@@ -140,7 +153,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/redMain"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
     </RelativeLayout>
 

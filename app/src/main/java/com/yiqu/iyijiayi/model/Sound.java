@@ -6,32 +6,32 @@ import java.io.Serializable;
  * Created by Administrator on 2017/2/13.
  */
 public class Sound implements Serializable{
-    public int sid;
+    public int sid; //我问ID
     public int stype; //1问题 2习作
     public int type;  //声乐1，播音2
-    public int mid;
+    public int mid; //伴奏歌曲ID
     public int isformulation; //是否艺考曲目
-    public int fromuid;
+    public int fromuid; //提问人
     public int touid;
     public int commenttime;// 评论时长
-    public int questionprice;
+    public int questionprice;  //问题价格
     public int views;// 浏览量
     public int like;  //点赞量
-    public int isopen;
-    public int listenprice;
-    public int ispay;
-    public int isreply;
-    public int status;
+    public int isopen; //1：公开 0：不公开
+    public int listenprice; //偷听价格
+    public int ispay; //0:未支付，1：支付成功
+    public int isreply; // 导师是否已回复 1:已回复 0:未回复
+    public int status; //状态，1：上线 2：下线
     public int oid;
-    public int isnew;
-    public int isnewreply;
+    public int isnew; //是否可以追问
+    public int isnewreply; //是否有新追问(导师) 1:有 0:没有
     public String followcount;
     public int isnewread;
-    public int listen;
+    public int listen; //0,1 是否不用支付试听
     public String desc;
     public String musicname;
     public String musictype;
-    public String accompaniment;
+    public String accompaniment;//伴奏乐器
     public String chapter;
     public int soundtime;
     public String soundpath;

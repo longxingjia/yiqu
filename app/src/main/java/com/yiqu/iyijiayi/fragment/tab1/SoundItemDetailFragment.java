@@ -1,6 +1,10 @@
 package com.yiqu.iyijiayi.fragment.tab1;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,18 +16,26 @@ import android.widget.TextView;
 
 import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Variable;
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.ui.views.DialogUtil;
+import com.ui.views.DialogView;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.fragment.Tab5Fragment;
+import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -48,7 +60,6 @@ import java.util.TimerTask;
 
 public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface {
     String tag = "SoundItemDetailFragmentbak";
-
     private TextView like;
     private TextView musicname;
     private TextView desc;
@@ -61,24 +72,22 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TextView views;
     private ImageView stu_header;
     private ImageView tea_header;
-    private int time;
     private int teatotalTime;
     private int stutotalTime;
     private int stucurrentTime;
     private int teacurrentTime;
-    private boolean teafirst = false;
-
     private String stufileName;
     private String teafileName;
     private String stuUrl;
     private String teaUrl;
     private File stuFile;
     private File teaFile;
-    private boolean stuplay = false;
-    private boolean teaplay = false;
-
     private Timer mTimer;
     private TimerTask mTimerTask;
+    private TextView tea_listen;
+    private Sound sound;
+    private DownLoaderTask taskS;
+    private DownLoaderTeaTask taskT;
 
 
     Handler mHandler = new Handler() {
@@ -106,10 +115,10 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         }
     };
-    private TextView tea_listen;
-    private Sound sound;
-    private DownLoaderTask taskS;
-    private DownLoaderTeaTask taskT;
+    private ImageView musictype;
+    private AlertDialog dialog;
+    private UserInfo userInfo;
+    private String sid;
 
 
     @Override
@@ -145,12 +154,13 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     protected void initView(View v) {
 
-        String sid = getActivity().getIntent().getExtras().getString("data");
+        sid = getActivity().getIntent().getExtras().getString("data");
 
         if (AppShare.getIsLogin(getActivity())) {
+            userInfo = AppShare.getUserInfo(getActivity());
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getSoundDetail, MyNetRequestConfig
-                            .getSoundDetail(getActivity(), sid, AppShare.getUserInfo(getActivity()).uid),
+                            .getSoundDetail(getActivity(), sid, userInfo.uid),
                     "getSoundDetail", SoundItemDetailFragment.this);
 
         }
@@ -165,17 +175,30 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         commenttime = (TextView) v.findViewById(R.id.commenttime);
         created = (TextView) v.findViewById(R.id.created);
         views = (TextView) v.findViewById(R.id.views);
-
         stu_header = (ImageView) v.findViewById(R.id.stu_header);
         tea_header = (ImageView) v.findViewById(R.id.tea_header);
+        musictype = (ImageView) v.findViewById(R.id.musictype);
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        if (id.equals("getSoundDetail")) {
+        if (id.equals("eavesdrop")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag, netResponse.toString());
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                                .getSoundDetail(getActivity(), sid, userInfo.uid),
+                        "getSoundDetail", SoundItemDetailFragment.this);
+                userInfo.coin_apple --;
+                AppShare.setUserInfo(getActivity(),userInfo);
+            }
+
+            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+
+        } else if (id.equals("getSoundDetail")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+
+                LogUtils.LOGE(tag,netResponse.toString());
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
@@ -189,16 +212,31 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 soundtime.setText(sound.soundtime + "\"");
                 views.setText(sound.views + "");
                 like.setText(sound.like + "");
+                if (sound.type == 1) {
+                    musictype.setImageResource(R.mipmap.shengyue);
+                } else {
+                    musictype.setImageResource(R.mipmap.boyin);
+                }
+
+                long t = System.currentTimeMillis() / 1000 - sound.created;
+                if (t < 2 * 24 * 60 * 60 && t > 0) {
+                    tea_listen.setText("限时免费听");
+                } else {
+                    if (sound.listen == 1) {
+                        tea_listen.setText("已付费");
+                    } else {
+                        tea_listen.setText("1元偷偷听");
+                    }
+                }
 
                 PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
                 PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
-
 
                 String2TimeUtils string2TimeUtils = new String2TimeUtils();
                 long currentTimeMillis = System.currentTimeMillis() / 1000;
 
                 long time = currentTimeMillis - sound.edited;
-                created.setText(string2TimeUtils.long2Time(time) + "前");
+                created.setText(string2TimeUtils.long2Time(time));
 
                 stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
 
@@ -239,7 +277,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 if (stuFile.exists()) {
                     palyStudentVoice();
 
-
                 } else {
                     String path = Variable.StorageMusicCachPath;
                     taskS = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
@@ -249,20 +286,69 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                 break;
             case R.id.tea_listen:
+                long t = System.currentTimeMillis() / 1000 - sound.created;
 
-                if (teaFile.exists()) {
-                    palyTeacherVoice();
 
+                if (t < 2 * 24 * 60 * 60 && t > 0) {
+                    if (teaFile.exists()) {
+                        palyTeacherVoice();
+
+                    } else {
+                        String path = Variable.StorageMusicCachPath;
+                        taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
+                        taskT.execute();
+                    }
                 } else {
-                    String path = Variable.StorageMusicCachPath;
-                    taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
-                    taskT.execute();
-                }
+                    if (sound.listen == 1) {
+                        if (teaFile.exists()) {
+                            palyTeacherVoice();
 
+                        } else {
+                            String path = Variable.StorageMusicCachPath;
+                            taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
+                            taskT.execute();
+                        }
+                    } else {
+                        String desc = "";
+                        if (userInfo.coin_apple > 1) {
+                            desc = "支付";
+                        } else {
+                            desc = "去充值";
+                        }
+
+                        dialog = DialogUtil.showMyDialog(getActivity(), "使用艺币支付", "偷听需支付100艺币，当前余额"
+                                + userInfo.coin_apple + "00艺币", "取消", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialog.dismiss();
+                            }
+                        }, desc, new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                if (userInfo.coin_apple >= 1) {
+
+                                    RestNetCallHelper.callNet(getActivity(),
+                                            MyNetApiConfig.eavesdrop, MyNetRequestConfig
+                                                    .eavesdrop(getActivity(), userInfo.uid, sound.sid),
+                                            "eavesdrop", SoundItemDetailFragment.this);
+                                } else {
+                                    Model.startNextAct(getActivity(),
+                                            PayforYBFragment.class.getName());
+                                }
+                                dialog.dismiss();
+
+                            }
+                        });
+                    }
+                }
 
                 break;
         }
     }
+
+
 
     private void palyStudentVoice() {
 
@@ -294,7 +380,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                     public void run() {
 
                         mHandler.sendEmptyMessage(0);
-                        LogUtils.LOGE(tag, "000");
 
                     }
                 };
@@ -304,8 +389,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             if (stucurrentTime > 0) {
 
-
-                stutotalTime = sub(sound.soundtime, stucurrentTime);
+                stutotalTime = MathUtils.sub(sound.soundtime, stucurrentTime);
                 VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, stucurrentTime);
             } else {
                 VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, 0);
@@ -350,7 +434,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             }
             if (teacurrentTime > 0) {
-                teatotalTime = sub(sound.commenttime, teacurrentTime);
+                teatotalTime = MathUtils.sub(sound.commenttime, teacurrentTime);
                 VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, teacurrentTime);
             } else {
                 VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, 0);
@@ -358,11 +442,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         }
     }
 
-    public static int sub(int totalTime, int currentTime) {
-        BigDecimal b1 = new BigDecimal(Double.valueOf(totalTime));
-        BigDecimal b2 = new BigDecimal(Double.valueOf(currentTime) / 1000);
-        return b1.subtract(b2).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-    }
 
     @Override
     public void playVoiceBegin() {

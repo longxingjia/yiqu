@@ -28,6 +28,7 @@ import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 
@@ -99,12 +100,12 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
             if (f.type==1){
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+                h.musictype.setImageResource(R.mipmap.shengyue);
             }else {
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
+                h.musictype.setImageResource(R.mipmap.boyin);
             }
 
-            PictureUtils.showPicture(mContext,f.stuimage,h.icon);
+            PictureUtils.showPicture(mContext,f.stuimage,h.icon,47);
 
 
         } catch (Exception e) {
@@ -117,13 +118,17 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Xizuo f = getItem(position);
 //
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
         if (AppShare.getIsLogin(mContext)){
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+            i.putExtra("data",f.sid+"");
+            LogUtils.LOGE(tag,f.sid+"");
 
-            Bundle b = new Bundle();
-            b.putSerializable("data",f);
-            i.putExtras(b);
             mContext.startActivity(i);
         }else {
             Intent i = new Intent(mContext, StubActivity.class);
@@ -132,7 +137,6 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             mContext.startActivity(i);
 
         }
-//
     }
 
 

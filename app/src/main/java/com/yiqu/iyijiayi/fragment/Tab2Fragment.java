@@ -79,7 +79,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     protected void initView(View v) {
         swipeRe = (SwipeRefreshLayout) v.findViewById(R.id.swipeRe);
         swipeRe.setOnRefreshListener(this);
-        View footView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
+        View student_headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_header, null);
 
         loadMoreTeacher = (TextView) v.findViewById(R.id.loadmore_teacher);
@@ -91,12 +91,9 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
         lvTeacher.addHeaderView(headView);
 
-
         lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
 
-
-
-        lvStudent.addHeaderView(footView);
+        lvStudent.addHeaderView(student_headView);
 
 
     }
@@ -154,8 +151,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
         if (netResponse != null) {
             if (netResponse.bool == 1) {
-                loadMoreTeacher.setVisibility(View.VISIBLE);
-                loadMoreStudent.setVisibility(View.VISIBLE);
+
                 Gson gson = new Gson();
                 ZhaoRen zhaoRen = gson.fromJson(netResponse.data, ZhaoRen.class);
                 AppShare.setZhaoRenList(getActivity(), zhaoRen);
@@ -165,6 +161,8 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
                 tab2TeacherAdapter.setData(zhaoRen);
                 setListViewHeightBasedOnChildren(lvTeacher);
                 tab2StudentAdapter.setData(zhaoRen);
+                loadMoreTeacher.setVisibility(View.VISIBLE);
+                loadMoreStudent.setVisibility(View.VISIBLE);
 //            resfreshOk();
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);

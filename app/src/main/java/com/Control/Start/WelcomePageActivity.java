@@ -67,7 +67,9 @@ public class WelcomePageActivity extends Activity {
     @Override
     protected void onResume() {
 
-        PermissionGen.needPermission(this, 100,new String []{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
+        PermissionGen.needPermission(this, 100,new String []{ Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,
+        });
 
         super.onResume();
     }

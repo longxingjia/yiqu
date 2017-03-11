@@ -48,7 +48,7 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
         mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        soundsTab1Adapter = new SoundsTab1Adapter(getActivity(), mImageLoaderHm);
+        soundsTab1Adapter = new SoundsTab1Adapter(getActivity());
         listView.setAdapter(soundsTab1Adapter);
         listView.setOnItemClickListener(soundsTab1Adapter);
         listView.setRefreshListListener(this);

@@ -112,7 +112,6 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
             h = (HoldChild) v.getTag();
            final Student f = getItem(position);
 
-
             h.name.setText(f.username);
             h.content.setText(f.title);
 
@@ -120,14 +119,8 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
 
             PictureUtils.showPicture(mContext,f.userimage,h.icon);
 
-
-//            if (f.userimage!=null) {
-//                Picasso.with(mContext).load(MyNetApiConfig.ImageServerAddr + f.userimage).placeholder(R.mipmap.menu_head).into(h.icon);
-//            }
-
             if (f.isfollow.equals("0")){  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);
-
 
             }else {
                 h.follow.setBackgroundResource(R.mipmap.followed);
@@ -183,8 +176,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                                 });
 
                     }else {
-//                        if (f.isfollow.equals("0")){  //没有关注
-//                        h.follow.setBackgroundResource(R.mipmap.follow);
+
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.delfollow,
@@ -229,6 +221,9 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        if (arg2 <1){
+            return;
+        }
         Student f = getItem(arg2 - 1);
 //
         if (!isNetworkConnected(mContext)) {

@@ -74,6 +74,8 @@ public class RestNetCallHelper {
 		}
 		return null;
 	}
+
+
 	/**
 	 * @comments 判断网络是否连接
 	 * @param context

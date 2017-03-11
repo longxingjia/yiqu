@@ -8,8 +8,10 @@
 package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +22,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -101,45 +110,28 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
                 v.setTag(h);
             }
 
-
             h = (HoldChild) v.getTag();
             Discovery f = getItem(position);
 
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
 
-//            if (TextUtils.isEmpty(f.stuname)) {
-//                h.name.setText(f.tecname);
-//            } else {
-//                h.name.setText(f.stuname);
-//            }
-//            if (TextUtils.isEmpty(f.stuschool)) {
-//                h.title.setText(f.tecschool);
-//            } else {
-//                h.title.setText(f.stuschool);
-//            }
-//
-//            if (TextUtils.isEmpty(f.stuimage)) {
-//                PictureUtils.showPicture(mContext, f.tecimage, h.header);
-//            } else {
-//                PictureUtils.showPicture(mContext, f.stuimage, h.header);
-//            }
-            if (f.type==1){
+            if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            }else {
+            } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 
 
-            if (f.stype == 1) {   //老师
+            if (f.stype == 1) {   //
                 h.name.setText(f.tecname);
                 h.title.setText(f.tecschool);
-                PictureUtils.showPicture(mContext, f.tecimage, h.header);
+                PictureUtils.showPicture(mContext, f.tecimage, h.header,40);
 
                 h.pl.setText("评论了");
             } else {
                 h.title.setText(f.stuschool);
-                PictureUtils.showPicture(mContext, f.stuimage, h.header);
+                PictureUtils.showPicture(mContext, f.stuimage, h.header,40);
                 h.name.setText(f.stuname);
                 h.pl.setText("录制了");
             }
@@ -151,7 +143,7 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
             long currentTimeMillis = System.currentTimeMillis() / 1000;
 
             long time = currentTimeMillis - f.edited;
-            h.time.setText(string2TimeUtils.long2Time(time) + "前");
+            h.time.setText(string2TimeUtils.long2Time(time));
 
 
         } catch (Exception e) {
@@ -164,30 +156,47 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
+        Discovery f = getItem(arg2 - 1);
 
-        // TODO Auto-generated method stub
-//        Discovery f = getItem(arg2 - 1);
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
 
-//
-//        if (!isNetworkConnected(mContext)) {
-//            ToastManager.getInstance(mContext).showText(
-//                    R.string.fm_net_call_no_network);
-//            return;
-//        }.
 
-//        if ("1".equals(f.type)) {
-//            //1表示资讯类信息
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulTextFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        } else {
-//            //2.美丽园区
-//            Intent i = new Intent(mContext, StubActivity.class);
-//            i.putExtra("fragment", BeautifulWebFragment.class.getName());
-//            i.putExtra("data", f);
-//            mContext.startActivity(i);
-//        }
+
+        if (AppShare.getIsLogin(mContext)){
+
+            if (f.stype == 1) {   //
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+                i.putExtra("data",f.sid+"");
+
+                mContext.startActivity(i);
+
+//            h.pl.setText("评论了");
+            } else {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                i.putExtra("data",f.sid+"");
+                mContext.startActivity(i);
+
+//                Bundle b = new Bundle();
+//                b.putSerializable("data",f);
+//                i.putExtras(b);
+
+//                mContext.startActivity(i);
+//            h.pl.setText("录制了");
+            }
+
+        }else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
+
+        }
 
     }
 

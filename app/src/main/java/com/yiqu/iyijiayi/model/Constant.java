@@ -18,6 +18,7 @@ public class Constant {
 	// APP_ID 替换为你的应用从官方网站申请到的合法appId
 	public static final String APP_ID = "wx6926bd130c563b44";
 	public static final String AppSecret="988af2a73db57256efd94f55a44284b7";
+	public static final int FINISH= 0x123;
 
 	public static class ShowMsgActivity {
 		public static final String STitle = "showmsg_title";

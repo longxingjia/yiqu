@@ -2,66 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:orientation="vertical">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp">
-
+        android:layout_marginTop="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/musicname"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text=""
                 android:textSize="18sp" />
 
             <ImageView
+                android:id="@+id/musictype"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
                 android:src="@mipmap/shengyue" />
         </LinearLayout>
 
     </RelativeLayout>
 
     <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/isformulation"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="1dp"
             android:padding="5dp"
             android:singleLine="true"
             android:text="艺考规定曲目"
             android:textColor="@color/dd_gray"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/musictype"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="1dp"
             android:padding="5dp"
             android:singleLine="true"
             android:text="钢琴伴奏"
             android:textColor="@color/dd_gray"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -69,18 +71,20 @@
         android:id="@+id/desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/text_bg"
+        android:padding="10dp"
         android:text=""
         android:textColor="@color/dd_gray"
-        android:textSize="13sp" />
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="12dp">
 
         <TextView
             android:id="@+id/soundtime"
@@ -88,14 +92,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="30dp"
             android:gravity="center"
             android:text=""
             android:textColor="@color/stu_voice"
             android:textSize="20sp" />
 
         <RelativeLayout
-            android:layout_width="200dp"
+            android:layout_width="172dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:background="@drawable/stu_voice">
@@ -117,40 +121,51 @@
                 android:gravity="center"
                 android:text="我也要听"
                 android:textColor="@color/white"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:background="@mipmap/bofang_left"
                 android:layout_alignParentRight="true"
-                />
+                android:layout_margin="5dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/bofang_left" />
         </RelativeLayout>
 
 
-        <com.ui.views.CircleImageView
-            android:id="@+id/stu_header"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:padding="2dp"
-            android:src="@mipmap/menu_head" />
+        <RelativeLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp">
+
+            <com.ui.views.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/head_bg" />
+
+            <com.ui.views.CircleImageView
+                android:id="@+id/stu_header"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/menu_head" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:padding="5dp"
-        android:singleLine="true"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/tab_bg_color"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
         android:text="导师回答"
         android:textColor="@color/dd_gray"
-        android:textSize="13sp" />
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -160,18 +175,21 @@
         <TextView
             android:id="@+id/tea_name"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
             android:text=""
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tectitle"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/tea_name"
             android:gravity="center"
             android:text=""
+            android:textColor="@color/dd_gray"
             android:textSize="14sp" />
 
     </RelativeLayout>
@@ -179,8 +197,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:visibility="gone"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/followcount"
@@ -216,23 +234,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="56dp"
         android:layout_gravity="center"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
-        <com.ui.views.CircleImageView
-            android:id="@+id/tea_header"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
+        <RelativeLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:padding="2dp"
-            android:src="@mipmap/menu_head" />
+            android:layout_marginRight="10dp">
+
+            <com.ui.views.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/head_bg"
+                android:padding="24dp" />
+
+            <com.ui.views.CircleImageView
+                android:id="@+id/tea_header"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:padding="24dp"
+                android:src="@mipmap/menu_head" />
+        </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="200dp"
+            android:layout_width="172dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:background="@mipmap/tea_voice">
@@ -252,15 +283,16 @@
                 android:layout_gravity="center_vertical"
                 android:background="@color/transparent"
                 android:gravity="center"
-                android:text="一元偷偷听"
+                android:text=""
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:background="@mipmap/bofang_right" />
+                android:scaleType="centerInside"
+                android:src="@mipmap/bofang_right" />
 
         </RelativeLayout>
 
@@ -269,7 +301,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:text=""
@@ -280,7 +312,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -288,9 +321,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/transparent"
             android:gravity="center"
             android:text=""
+            android:textColor="@color/dd_gray"
             android:textSize="14sp" />
 
         <View
@@ -301,28 +336,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
             android:background="@color/transparent"
             android:gravity="center"
             android:text="听过"
-
+            android:textColor="@color/dd_gray"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/views"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="10dp"
             android:background="@color/transparent"
             android:gravity="center"
-            android:text="228"
-            android:layout_marginLeft="2dp"
+            android:text=""
             android:textColor="@color/redMain"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <!--<View-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1" />-->
 
         <TextView
             android:id="@+id/like"
@@ -333,9 +368,9 @@
             android:background="@color/transparent"
             android:gravity="center_vertical"
             android:text="226"
-            android:visibility="gone"
             android:textColor="@color/redMain"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="gone" />
 
 
     </LinearLayout>

@@ -19,6 +19,7 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
+import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -121,21 +122,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         content = (TextView) v.findViewById(R.id.content);
         sex = (ImageView) v.findViewById(R.id.sex);
 
-//        name = (TextView) v.findViewById(R.id.name);
-//
-//        price = (TextView) v.findViewById(R.id.price);
-//        questioncount = (TextView) v.findViewById(R.id.questioncount);
-//        totalincome = (TextView) v.findViewById(R.id.totalincome);
-//        tincome = (TextView) v.findViewById(R.id.tincome);
-//        questionincome = (TextView) v.findViewById(R.id.questionincome);
-//
-//
-//        dianping_tab = (LinearLayout) v.findViewById(R.id.dianping_tab);
-//        tiwen_tab = (LinearLayout) v.findViewById(R.id.tiwen_tab);
-//        tea = (LinearLayout) v.findViewById(R.id.tea);
-//        stu = (LinearLayout) v.findViewById(R.id.stu);
-//        xizuo_tab = (RelativeLayout) v.findViewById(R.id.xizuo_tab);
-
 
     }
 
@@ -166,11 +152,10 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             Btlogin.setVisibility(View.GONE);
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
-                            getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this);
+                            getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this,false,true);
 
 
             llUserInfo.setVisibility(View.VISIBLE);
-
             logOutBt.setVisibility(View.VISIBLE);
         } else {
             logOutBt.setVisibility(View.GONE);
@@ -229,14 +214,30 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             AppShare.setIsLogin(getActivity(), true);
             AppShare.setUserInfo(getActivity(), userInfo);
         }
-        String descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
-        content.setText(descStr);
+        String descStr = "";
+        if (userInfo.type.equals("2")) {
+            if (TextUtils.isEmpty(userInfo.title)) {
+                descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
+            } else {
+                descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
+            }
+
+        } else {
+            if (TextUtils.isEmpty(userInfo.school)) {
+                descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
+            } else {
+                descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.school, userInfo.followcount, userInfo.myfollowcount);
+            }
+        }
         username.setText(userInfo.username);
         content.setText(descStr);
         if (!TextUtils.isEmpty(userInfo.desc)) {
             user_desc.setText(userInfo.desc);
+        }else {
+            user_desc.setText("未填写");
         }
         head.setOnClickListener(this);
+      //  LogUtils.LOGE("---",userInfo.userimage);
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
         PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
 
@@ -276,13 +277,21 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             case R.id.logout:
                 AppShare.setIsLogin(getActivity(), false);
                 AppShare.clearShare(getActivity());
+                head.setImageResource(R.mipmap.menu_head);
+                background.setImageResource(R.mipmap.home_bg);
                 initUI();
+
 
                 break;
             case R.id.menu_item_wodeyijiayizhuye:
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", HomePageFragment.class.getName());
-                getActivity().startActivity(i);
+
+                Model.startNextAct(getActivity(),
+                        HomePageFragment.class.getName());
+                break;
+
+            case R.id.menu_item_wodeyibi:
+                Model.startNextAct(getActivity(),
+                        PayforYBFragment.class.getName());
                 break;
         }
 

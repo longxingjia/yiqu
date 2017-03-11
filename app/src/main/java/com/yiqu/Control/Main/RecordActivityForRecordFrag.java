@@ -243,6 +243,7 @@ public class RecordActivityForRecordFrag extends Activity
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
+                                    VoiceFunction.StopVoice();
 
                                     break;
                                 case 1:
@@ -251,6 +252,7 @@ public class RecordActivityForRecordFrag extends Activity
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
+                                    VoiceFunction.StopVoice();
 
                                     break;
                             }

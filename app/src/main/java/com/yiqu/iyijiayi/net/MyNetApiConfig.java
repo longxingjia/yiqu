@@ -411,6 +411,32 @@ public class MyNetApiConfig {
 
 
     };
+    public static MyNetApi getNewCoinOrder = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/payment/get-new-coin-order";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+
+    };
+    public static MyNetApi eavesdrop = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/eavesdrop";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.POST;
+        }
+
+
+    };
 
 
 }

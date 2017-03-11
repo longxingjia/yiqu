@@ -5,23 +5,22 @@
     android:orientation="vertical"
     >
 
-    <View
+      <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/background_color_rating_grey"/>
+        android:layout_height="10dp"
+        android:background="@color/tab_bg_color"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
-        android:paddingLeft="10dp"
         android:textSize="18sp"
         android:text="推荐的导师"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/background_color_rating_grey"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/tab_bg_color"/>-->
 
 </LinearLayout>

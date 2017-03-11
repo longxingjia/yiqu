@@ -25,6 +25,7 @@ import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
@@ -33,13 +34,11 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
     private LayoutInflater mLayoutInflater;
     private ArrayList<Music> datas = new ArrayList<Music>();
     private Context mContext;
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
     private String tag = "SoundsTab1Adapter";
 
-    public SoundsTab1Adapter(Context context, ImageLoaderHm<ImageView> m) {
+    public SoundsTab1Adapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mImageLoaderHm = m;
     }
 
 
@@ -97,9 +96,7 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
             h.musicname.setText(f.musicname);
             h.accompaniment.setText(f.accompaniment);
 
-            if (f.image != null) {
-                mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + f.image, h.image);
-            }
+         //   PictureUtils.showPicture(mContext,f.image,h.image);
 
         } catch (Exception e) {
             e.printStackTrace();

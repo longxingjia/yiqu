@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener, NetCallBack {
 
-    private ImageLoaderHm<ImageView> mImageLoaderHm;
     private LoadMoreView mLoadMoreView;
     private int count = 0;
     private int rows = 10;
@@ -56,8 +55,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
 
         //  listView = (RefreshList) v.findViewById(R.id.listView);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
-        soundsTab1Adapter = new SoundsTab1Adapter(getActivity(), mImageLoaderHm);
+        soundsTab1Adapter = new SoundsTab1Adapter(getActivity());
         listView.setAdapter(soundsTab1Adapter);
         listView.setOnItemClickListener(soundsTab1Adapter);
         listView.setRefreshListListener(this);
@@ -72,7 +70,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getMusicList, MyNetRequestConfig
                         .getMusicList(getActivity(), count, rows),
-                "getMusicList", SoundsTab1Fragment.this);
+                "getMusicList", SoundsTab1Fragment.this,false,true);
 
     }
 
@@ -87,7 +85,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getMusicList, MyNetRequestConfig
                                 .getMusicList(getActivity(), count, rows),
-                        "getMusicList_more", SoundsTab1Fragment.this);
+                        "getMusicList_more", SoundsTab1Fragment.this,false,true);
             }
         }
         return false;
@@ -102,7 +100,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getMusicList, MyNetRequestConfig
                         .getMusicList(getActivity(), count, rows),
-                "getMusicList", SoundsTab1Fragment.this);
+                "getMusicList", SoundsTab1Fragment.this,false,true);
     }
 
     @Override
@@ -205,7 +203,6 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
 
     @Override
     public void onDestroy() {
-        mImageLoaderHm.stop();
         super.onDestroy();
     }
 }

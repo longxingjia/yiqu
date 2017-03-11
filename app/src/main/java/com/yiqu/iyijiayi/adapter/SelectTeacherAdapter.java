@@ -22,9 +22,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
@@ -39,7 +41,7 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Activity mContext;
 
-    private  String tag="SelectTeacherAdapter";
+    private String tag = "SelectTeacherAdapter";
 
     public SelectTeacherAdapter(Activity context) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -95,11 +97,11 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-           final Teacher f = getItem(position);
+            final Teacher f = getItem(position);
             h.name.setText(f.username);
             h.content.setText(f.title);
 
-            PictureUtils.showPicture(mContext,f.userimage,h.icon);
+            PictureUtils.showPicture(mContext, f.userimage, h.icon);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,14 +112,19 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        Teacher teacher =  getItem(arg2);
+        Teacher teacher = getItem(arg2);
+        if (teacher.uid.equals(AppShare.getUserInfo(mContext).uid)){
+            ToastManager.getInstance(mContext).showText("不能向自己提问噢");
+        }else {
 
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("teacher",teacher);
-        intent.putExtras(bundle);
-        mContext.setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-        mContext.finish();//此处一定要调用finish()方法
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("teacher", teacher);
+            intent.putExtras(bundle);
+            mContext.setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+            mContext.finish();//此处一定要调用finish()方法
+        }
+
     }
 
     public boolean isNetworkConnected(Context context) {

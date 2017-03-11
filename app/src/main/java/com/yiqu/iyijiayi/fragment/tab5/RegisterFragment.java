@@ -1,6 +1,7 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,8 +24,10 @@ import com.yiqu.iyijiayi.model.YzmKey;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +71,7 @@ public class RegisterFragment extends AbsAllFragment {
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_back;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -83,6 +86,18 @@ public class RegisterFragment extends AbsAllFragment {
 
         btn01 = (TextView) v.findViewById(R.id.btn01);
         btn02 = (Button) v.findViewById(R.id.btn02);
+
+        v.findViewById(R.id.wechat_login).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AppAvilibleUtils.isWeixinAvilible(getActivity())){
+                    Intent intent = new Intent(getActivity(), WXEntryActivity.class);
+                    startActivity(intent);
+                }else {
+                    ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                }
+            }
+        });
 
 
         btn01.setOnClickListener(new OnClickListener() {

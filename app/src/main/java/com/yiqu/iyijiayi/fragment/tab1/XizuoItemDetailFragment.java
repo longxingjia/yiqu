@@ -14,17 +14,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Variable;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
@@ -36,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -46,9 +53,8 @@ import java.util.TimerTask;
  * Created by Administrator on 2017/2/20.
  */
 
-public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnClickListener {
+public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface {
     String tag = "SoundItemDetailFragmentbak";
-    private ImageLoaderHm mImageLoaderHm;
     private TextView like;
     private TextView musicname;
     private TextView desc;
@@ -58,11 +64,9 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TextView views;
     private ImageView stu_header;
     private Xizuo xizuo;
-    private MediaPlayer mediaPlayer;
-    private int time;
+
     private int totalTime;
     private int currentTime;
-    private boolean iffirst = false;
     //处理进度条更新
     Handler mHandler = new Handler() {
         @Override
@@ -70,12 +74,10 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             switch (msg.what) {
                 case 0:
                     //更新进度
-                    currentTime = mediaPlayer.getCurrentPosition();
-                    if (currentTime<0){
-                        currentTime =0;
+                    soundtime.setText(--totalTime + "\"");
+                    if (totalTime == 0) {
+                        totalTime = 1;
                     }
-                    int leftTime = (totalTime - currentTime) / 1000;
-                    soundtime.setText(leftTime + "\"");
                     break;
                 default:
                     break;
@@ -90,6 +92,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     private boolean ifDownload = false;
     private Timer mTimer;
     private TimerTask mTimerTask;
+    private DownLoaderTask task;
+    private ImageView musictype;
 
     @Override
     protected int getTitleBarType() {
@@ -124,8 +128,15 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     protected void initView(View v) {
 
+        String sid = getActivity().getIntent().getExtras().getString("data");
 
-        xizuo = (Xizuo) getActivity().getIntent().getExtras().getSerializable("data");
+        if (AppShare.getIsLogin(getActivity())) {
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                            .getSoundDetail(getActivity(), sid, AppShare.getUserInfo(getActivity()).uid),
+                    "getSoundDetail", XizuoItemDetailFragment.this);
+
+        }
 
         musicname = (TextView) v.findViewById(R.id.musicname);
         like = (TextView) v.findViewById(R.id.like);
@@ -134,8 +145,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         stu_listen = (TextView) v.findViewById(R.id.stu_listen);
         created = (TextView) v.findViewById(R.id.created);
         views = (TextView) v.findViewById(R.id.views);
-        mImageLoaderHm = new ImageLoaderHm<ImageView>(getActivity(), 300);
         stu_header = (ImageView) v.findViewById(R.id.stu_header);
+        musictype = (ImageView) v.findViewById(R.id.musictype);
         stu_listen.setOnClickListener(this);
 
     }
@@ -146,14 +157,39 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         super.onNetEnd(id, type, netResponse);
         if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag, netResponse.toString());
-                Gson gson = new Gson();
-                Sound sound = gson.fromJson(netResponse.data, Sound.class);
 
+                Gson gson = new Gson();
+                 xizuo = gson.fromJson(netResponse.data, Xizuo.class);
+                desc.setText(xizuo.desc);
+                soundtime.setText(xizuo.soundtime + "\"");
+                musicname.setText(xizuo.musicname);
+
+                views.setText(xizuo.views + "");
+                like.setText(xizuo.like + "");
+                if (xizuo.type==1){
+                    musictype.setImageResource(R.mipmap.shengyue);
+                }else {
+                    musictype.setImageResource(R.mipmap.boyin);
+                }
+
+
+                PictureUtils.showPicture(getActivity(), xizuo.stuimage, stu_header);
+
+                String2TimeUtils string2TimeUtils = new String2TimeUtils();
+                long currentTimeMillis = System.currentTimeMillis() / 1000;
+
+                long time = currentTimeMillis - xizuo.edited;
+                created.setText(string2TimeUtils.long2Time(time));
+
+                url = MyNetApiConfig.ImageServerAddr + xizuo.soundpath;
+                fileName = url.substring(
+                        url.lastIndexOf("/") + 1,
+                        url.length());
+                fileName = xizuo.musicname + "_" + fileName;
+                mFile = new File(Variable.StorageMusicCachPath, fileName);
 
             } else {
                 getActivity().finish();
-
             }
         }
 
@@ -162,38 +198,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        desc.setText(xizuo.desc);
-        soundtime.setText(xizuo.soundtime + "\"");
-        musicname.setText(xizuo.musicname);
 
-//        created.setText(sound.created);
-        views.setText(xizuo.views + "");
-        like.setText(xizuo.like + "");
 
-        time = xizuo.soundtime;
-        if (xizuo.stuimage != null) {
-            mImageLoaderHm.DisplayImage(MyNetApiConfig.ImageServerAddr + xizuo.stuimage, stu_header);
-        }
-        String2TimeUtils string2TimeUtils = new String2TimeUtils();
-        long currentTimeMillis = System.currentTimeMillis() / 1000;
-
-        long time = currentTimeMillis - xizuo.edited;
-        created.setText(string2TimeUtils.long2Time(time) + "前");
-//        Tools.DB_PATH = Tools.getCacheDirectory(getActivity(), Environment.DIRECTORY_MUSIC).toString();
-
-        url = MyNetApiConfig.ImageServerAddr + xizuo.soundpath;
-        fileName = url.substring(
-                url.lastIndexOf("/") + 1,
-                url.length());
-        fileName = xizuo.musicname + "_" + fileName;
-        mFile = new File(Variable.StorageMusicCachPath, fileName);
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                ifplay = false;
-            }
-        });
         super.init(savedInstanceState);
     }
 
@@ -202,64 +208,46 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.stu_listen:
 
-
-                    if (mFile.exists()) {
-
-
-                        if (ifplay){  //正在播放，点击暂停
-                            if (mediaPlayer != null) {
-                                pause();
-                            }
-                            ifplay = false;
-                        }else {     //暂停，点击播放
-                            if (!iffirst) {
-//                                init(mFile.toString());
-                                mediaPlayer.reset();
-                                try {
-                                    mediaPlayer.setDataSource(mFile.getAbsolutePath());
-                                    mediaPlayer.prepare();// 准备
-
-                                } catch (IllegalArgumentException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalStateException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                //----------定时器记录播放进度---------//
-                                if (mTimer == null) {
-                                    mTimer = new Timer();
-                                }
-                                if (mTimerTask == null) {
-                                    mTimerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            mHandler.sendEmptyMessage(0);
-
-                                        }
-                                    };
-                                    mTimer.schedule(mTimerTask, 1000, 1000);
-                                    iffirst=true;
-                                }
-
-                            }
-
-                            ifplay = true;
-                            totalTime = mediaPlayer.getDuration();
-                            mediaPlayer.start();
-
-                        }
-
-
-                    }else {
-                        DownLoaderTask task = new DownLoaderTask(url, Variable.StorageMusicCachPath, fileName, getActivity());
-                        task.execute();
-                    }
-
-
+                if (mFile.exists()) {
+                    palyVoice();
+                } else {
+                    task = new DownLoaderTask(url, Variable.StorageMusicCachPath, fileName, getActivity());
+                    task.execute();
+                }
                 break;
         }
+    }
+
+    @Override
+    public void playVoiceBegin() {
+
+    }
+
+    @Override
+    public void playVoiceFail() {
+
+    }
+
+    @Override
+    public void playVoicePause() {
+
+    }
+
+    @Override
+    public void playVoiceFinish() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+
+        currentTime = 0;
+
+        soundtime.setText(xizuo.soundtime + "\"");
+
     }
 
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
@@ -330,50 +318,11 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         @Override
         protected void onPostExecute(Long result) {
-            // super.onPostExecute(result);
-
-            //	Log.e(TAG, "下载完");
-//            init(mFile.toString());
-//            play();
-
-            if (!iffirst) {
-//                                init(mFile.toString());
-                mediaPlayer.reset();
-                try {
-                    mediaPlayer.setDataSource(mFile.getAbsolutePath());
-                    mediaPlayer.prepare();// 准备
-
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //----------定时器记录播放进度---------//
-                if (mTimer == null) {
-                    mTimer = new Timer();
-                }
-                if (mTimerTask == null) {
-                    mTimerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            mHandler.sendEmptyMessage(0);
-                        }
-                    };
-                    mTimer.schedule(mTimerTask, 1000, 1000);
-                    iffirst=true;
-                }
+            if (isCancelled()) {
+                return;
             }
+            palyVoice();
 
-            ifplay = true;
-            totalTime = mediaPlayer.getDuration();
-            mediaPlayer.start();
-
-            if (isCancelled())
-                mFile.delete();
-            return;
         }
 
         private long download() {
@@ -419,7 +368,6 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                 }
                 out.flush();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
                 try {
@@ -457,53 +405,69 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     }
 
 
-    //初始化音乐播放
-    void init(String path) {
-//进入Idle
+    private void palyVoice() {
 
-        try {
-//初始化
-            mediaPlayer.setDataSource(path);
+        totalTime = xizuo.soundtime;
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            // prepare 通过异步的方式装载媒体资源
-            mediaPlayer.prepareAsync();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-    }
-
-
-    //测试播放音乐
-    void play() {
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-                ifplay = true;
-                totalTime = mediaPlayer.getDuration();
+        if (VoiceFunction.IsPlayingVoice(mFile.getAbsolutePath())) {  //正在播放，点击暂停
+            currentTime = VoiceFunction.pauseVoice(mFile.getAbsolutePath());
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
             }
-        });
-    }
+            if (mTimerTask != null) {
+                mTimerTask.cancel();
+                mTimerTask = null;
+            }
 
-    //暂停音乐
-    private void pause() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
+        } else {     //暂停，点击播放
+
+            if (mTimer == null) {
+                mTimer = new Timer();
+            }
+            if (mTimerTask == null) {
+                mTimerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        mHandler.sendEmptyMessage(0);
+                        LogUtils.LOGE(tag, "000");
+
+                    }
+                };
+                mTimer.schedule(mTimerTask, 1000, 1000);
+
+            }
+
+            if (currentTime > 0) {
+
+
+                totalTime = sub(xizuo.soundtime, currentTime);
+                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, currentTime);
+            } else {
+                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, 0);
+            }
+
         }
     }
+
+    public static int sub(int totalTime, int currentTime) {
+        BigDecimal b1 = new BigDecimal(Double.valueOf(totalTime));
+        BigDecimal b2 = new BigDecimal(Double.valueOf(currentTime) / 1000);
+        return b1.subtract(b2).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+    }
+
 
     @Override
     public void onDestroy() {
 
-        mImageLoaderHm.stop();
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
+        VoiceFunction.StopVoice();
+        currentTime = 0;
+
+        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
+            task.cancel(true); // 如果Task还在运行，则先取消它
         }
+
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;

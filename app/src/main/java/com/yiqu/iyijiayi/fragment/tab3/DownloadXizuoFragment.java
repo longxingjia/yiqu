@@ -68,7 +68,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     @Override
     protected void initTitle() {
 //
-        setTitleText("录制习作");
+        setTitleText(getString(R.string.record_zuopin));
     }
 
     @Override
@@ -108,13 +108,13 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 //        AppShare
 
 
-        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        File mFile = new File(Variable.StorageMusicPath, fileName);
         if (mFile.exists()) {
             Log.d(tag, "file " + mFile.getName() + " already exits!!");
             nextPage();
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
-                DownLoaderTask task = new DownLoaderTask(Url, Variable.StorageMusicCachPath, fileName, getActivity());
+                DownLoaderTask task = new DownLoaderTask(Url, Variable.StorageMusicPath, fileName, getActivity());
                 task.execute();
             }
         }
@@ -232,7 +232,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                     Log.d(TAG, "file " + mFile.getName() + " already exits!!");
                     mFile.delete();
                 }
-                File directory = new File(Variable.StorageMusicCachPath);
+                File directory = new File(Variable.StorageMusicPath);
                 if (null != directory && !directory.exists()) {
                     directory.mkdir();
                 }

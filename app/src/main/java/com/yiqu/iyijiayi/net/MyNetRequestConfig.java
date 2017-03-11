@@ -156,11 +156,12 @@ public class MyNetRequestConfig {
         r.addHttpParam("sort", sort);
         return r;
     }
+
     /**
      * 20、获取热门/发现列表
      */
-    public static NetRequest getSoundList(Context c,  String arr,
-                                                int count, int rows, String orderby, String sort) {
+    public static NetRequest getSoundList(Context c, String arr,
+                                          int count, int rows, String orderby, String sort) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("arr", arr);
         r.addHttpParam("count", count + "");
@@ -199,9 +200,10 @@ public class MyNetRequestConfig {
     /**
      * 13、
      *
-     * @param stype 1问题 2习作
+     * @param stype  1问题 2习作
+     * @param isfree 1 免费
      */
-    public static NetRequest addSound(Context c, String stype, String isfree, ComposeVoice composeVoice) {
+    public static NetRequest addSound(Context c, String uid, String stype, String isfree, ComposeVoice composeVoice) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("stype", stype);
         r.addHttpParam("type", composeVoice.type);
@@ -209,7 +211,7 @@ public class MyNetRequestConfig {
         r.addHttpParam("musictype", composeVoice.musictype);
         r.addHttpParam("chapter", composeVoice.chapter);
         r.addHttpParam("accompaniment", composeVoice.accompaniment);
-        r.addHttpParam("fromuid", composeVoice.fromuid);
+        r.addHttpParam("fromuid", uid);
         r.addHttpParam("mid", composeVoice.mid + "");
         r.addHttpParam("commentpath", composeVoice.commentpath);
         r.addHttpParam("commenttime", composeVoice.commenttime);
@@ -273,7 +275,7 @@ public class MyNetRequestConfig {
     public static NetRequest getUserPageSoundList(Context c, int type,
                                                   String uid, int count, int rows, String checkpay) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("type", type+"");
+        r.addHttpParam("type", type + "");
         r.addHttpParam("uid", uid);
         r.addHttpParam("count", count + "");
         r.addHttpParam("rows", rows + "");
@@ -322,6 +324,7 @@ public class MyNetRequestConfig {
         r.addHttpParam("out_trade_no", out_trade_no);
         return r;
     }
+
     /**
      * 20、
      */
@@ -332,31 +335,34 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 21、我的老师接口 String token//登录凭证,String shjhm //手机号，String bjbh//班级编号
+     * @param c
+     * @param uid
+     * @param type    apple:苹果 android:安桌
+     * @param payment 1:微信支付  price 价格
+     * @return
      */
-    public static NetRequest myTeacher(Context c, String token, String shjhm,
-                                       String bjbh) {
+    public static NetRequest getNewCoinOrder(Context c, String uid, String type,
+                                             String payment, String price) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("bjbh", bjbh);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("type", type);
+        r.addHttpParam("payment", payment);
+        r.addHttpParam("price", price);
         return r;
     }
 
     /**
-     * 22、我的学生列表接口 参数：String token//登录凭证,String shjhm //手机号,String bjbh//班级编号
+     * 22、
      */
-    public static NetRequest myStudent(Context c, String token, String shjhm,
-                                       String bjbh) {
+    public static NetRequest eavesdrop(Context c, String uid, int sid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("bjbh", bjbh);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("sid", String.valueOf(sid));
         return r;
     }
 
     /**
-     * 23、推送信息列表接口 String token//登录凭证,String shjhm //手机号
+     * 23、
      */
     public static NetRequest findAllPushMsg(Context c, String token,
                                             String shjhm, String page, String pageSize) {
