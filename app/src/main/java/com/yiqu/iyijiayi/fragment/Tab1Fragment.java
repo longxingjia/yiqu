@@ -224,7 +224,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 sound = remen.sound;
                 xizuo = remen.xizuo;
                 tab1XizuoAdapter.setData(xizuo);
-                LogUtils.LOGE("1", sound.toString());
+
                 tab1SoundAdapter.setData(sound);
                 mLoadMoreView.setMoreAble(false);
                 resfreshOk();

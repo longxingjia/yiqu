@@ -1,5 +1,6 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.adapter.UploaderTask;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -93,8 +95,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
 
-        fileUrl = Variable.StorageMusicPath+ composeVoice.voicename;
-        LogUtils.LOGE(tag,fileUrl);
+        fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
 
         musicName.setText(composeVoice.musicname);
 
@@ -119,9 +120,9 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
                 File file = new File(fileUrl);
                 if (file.exists()) {
-                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file);
+                    UpTask upLoaderTask = new UpTask(getActivity(),MyNetApiConfig.uploadSounds.getPath(), params, file);
                     upLoaderTask.execute();
-                }else {
+                } else {
                     ToastManager.getInstance(getActivity()).showText("文件已经损坏，请您重新录制");
                 }
 
@@ -130,45 +131,32 @@ public class UploadXizuoFragment extends AbsAllFragment {
 
     }
 
-    private class UpLoaderTask extends AsyncTask<Void, Integer, String> {
+    private class UpTask extends UploaderTask {
 
-        private final String TAG = "UpLoaderTask";
-        private Map<String, String> params;
-        private File file;
-        private String mUrl;
         private DialogHelper dialogHelper;
 
-        public UpLoaderTask(String mUrl, Map<String, String> params, File file) {
-            super();
-            this.params = params;
-            this.file = file;
-            this.mUrl = mUrl;
-
+        public UpTask(Context context, String RequestURL, Map<String, String> params, File file) {
+            super(context, RequestURL, params, file);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (dialogHelper==null){
-                dialogHelper = new DialogHelper(getActivity(), this);
+            if (dialogHelper == null) {
+                dialogHelper = new DialogHelper(getActivity(), this, 100);
                 dialogHelper.showProgressDialog();
             }
         }
 
         @Override
         protected String doInBackground(Void... p) {
-
-            final String request = UploadImage.uploadFile(mUrl, params, file);
-            if (TextUtils.isEmpty(request)) {
-                return "";
-            } else {
-                return request;
-            }
-
+            return super.doInBackground(p);
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
+            dialogHelper.setProgress(values[0]);
+            super.onProgressUpdate(values);
 
         }
 
@@ -183,31 +171,15 @@ public class UploadXizuoFragment extends AbsAllFragment {
             }
             if (!TextUtils.isEmpty(result)) {
 
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String bool = jsonObject.getString("bool");
-                    String data = jsonObject.getString("data");
-                    String re = jsonObject.getString("result");
-                    if (bool.equals("1")) {
+                composeVoice.soundpath = result;
 
-                        String url = new JSONObject(data).getString("filepath");
-                        composeVoice.soundpath = url;
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.addSound,
+                        MyNetRequestConfig.addSound(getActivity(), AppShare.getUserInfo(getActivity()).uid, "2", "0", composeVoice),
+                        "addSound", UploadXizuoFragment.this);
 
-                        RestNetCallHelper.callNet(
-                                getActivity(),
-                                MyNetApiConfig.addSound,
-                                MyNetRequestConfig.addSound(getActivity(), AppShare.getUserInfo(getActivity()).uid,"2","0", composeVoice),
-                                "addSound", UploadXizuoFragment.this);
-
-                    } else {
-                        ToastManager.getInstance(getActivity()).showText(re);
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }else {
+            } else{
                 ToastManager.getInstance(getActivity()).showText(getString(R.string.net_error));
 
             }
@@ -219,11 +191,10 @@ public class UploadXizuoFragment extends AbsAllFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        LogUtils.LOGE(tag,netResponse.toString());
         if (type == NetCallBack.TYPE_SUCCESS) {
             ToastManager.getInstance(getActivity()).showText("上传成功");
             getActivity().finish();
-        }else {
+        } else {
             ToastManager.getInstance(getActivity()).showText(netResponse.result);
         }
 //            LogUtils.LOGE(tag, netResponse.toString());

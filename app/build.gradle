@@ -2,10 +2,28 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            storeFile file('D:/iyijiayi.jks')
+        debugConfig  {
+            storeFile file('D:/iyijiayi/iyijiayi.jks')
+            keyAlias 'iyijiayi'
+            keyPassword 'iyijiayi'
+            storePassword 'iyijiayi'
+
+            v2SigningEnabled false
+            //   v1SigningEnabled false
         }
+
+        releaseConfig   {
+            storeFile file('D:/iyijiayi/iyijiayi.jks')
+            keyAlias 'iyijiayi'
+            keyPassword 'iyijiayi'
+            storePassword 'iyijiayi'
+
+            v2SigningEnabled false
+            //   v1SigningEnabled false
+        }
+
     }
+
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
@@ -22,6 +40,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+        debug {
+            signingConfig signingConfigs.debugConfig
         }
     }
 
@@ -53,6 +75,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/rxjava-1.1.0.jar')
     compile files('libs/android-async-http-1.4.6.jar')
-
     compile project(path: ':permissiongen')
 }

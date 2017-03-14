@@ -12,5 +12,7 @@ public class NSDictionary {
     public String isreply;
     public String status;
     public String stype;
+    public String touid;
+    public String fromuid;
 
 }

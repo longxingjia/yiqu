@@ -1,11 +1,11 @@
-package com.yiqu.iyijiayi.fragment.tab2;
+package com.yiqu.iyijiayi.fragment.tab5;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ImageView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -14,30 +14,25 @@ import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
-import com.yiqu.iyijiayi.fragment.Tab4Fragment;
-import com.yiqu.iyijiayi.model.Discovery;
-import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.adapter.Tab5WopingAdapter;
+import com.yiqu.iyijiayi.model.NSDictionary;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
+public class Tab5WopingListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
-    private Tab2ListFragmetAdapter tab2ListFragmetAdapter;
-    private String tag = "Tab2ListFragment";
-    private ArrayList<Teacher> datas;
+    private Tab5WopingAdapter tab5WopingAdapter;
+    private String tag = "Tab5WopingListFragment";
+    private ArrayList<Sound> datas;
+    private Context mContext;
 
     //分页
     private LoadMoreView mLoadMoreView;
@@ -46,8 +41,8 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     //刷新
     private RefreshList listView;
-    private String uid;
-    private String type;
+    private String arr;
+    private UserInfo userInfo;
 
     @Override
     protected int getTitleView() {
@@ -56,17 +51,20 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     protected int getBodyView() {
-        return R.layout.tab2_list_fragment;
+        return R.layout.tab1_fragment;
     }
 
     @Override
     protected void initView(View v) {
-        listView = (RefreshList) v.findViewById(R.id.listView);
+        mContext = getActivity();
+        listView = (RefreshList) v.findViewById(R.id.lv_sound);
 
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
+
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
+
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
     }
@@ -77,23 +75,33 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        NSDictionary nsDictionary = new NSDictionary();
+        nsDictionary.isopen = "1";
+        nsDictionary.ispay = "1";
+        nsDictionary.status = "1";
+        nsDictionary.stype = "1";
+        userInfo = AppShare.getUserInfo(mContext);
+        nsDictionary.touid = userInfo.uid;
+        Gson gson = new Gson();
+        arr = gson.toJson(nsDictionary);
+        count = 0;
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc",userInfo.uid),
+                "getSoundList", Tab5WopingListFragment.this,false,true);
+    }
+
+    @Override
     protected void init(Bundle savedInstanceState) {
-        if (AppShare.getIsLogin(getActivity())) {
-            uid = AppShare.getUserInfo(getActivity()).uid;
-        } else {
-            uid = "0";
-        }
-       // LogUtils.LOGE(tag,uid+"");
-        RestNetCallHelper.callNet(getActivity(),
-                MyNetApiConfig.get_follow_recommend_list,
-                MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                        ,uid,type,count,rows),
-                "get_follow_recommend_list",
-                this,false,true);
-        tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(),uid);
-        listView.setAdapter(tab2ListFragmetAdapter);
-        listView.setOnItemClickListener(tab2ListFragmetAdapter);
+
+        tab5WopingAdapter = new Tab5WopingAdapter(getActivity());
+        listView.setAdapter(tab5WopingAdapter);
         listView.setRefreshListListener(this);
+        listView.setOnItemClickListener(tab5WopingAdapter);
 
     }
 
@@ -105,14 +113,11 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT|FLAG_BACK;
+        return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
     protected boolean onPageBack() {
-//        if (mOnFragmentListener != null) {
-//            mOnFragmentListener.onFragmentBack(this);
-//        }
         return false;
     }
 
@@ -124,56 +129,47 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     protected void initTitle() {
-        type = getActivity().getIntent().getStringExtra("data");
-        if (type.equals("2")){
-            setTitleText("老师");
-        }else {
-            setTitleText("学生");
-        }
-
+        setTitleText(getString(R.string.dianping));
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-
-        if (id.equals("get_follow_recommend_list")) {
+        if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 try {
-                    datas = JsonUtils.parseTeacherList(netResponse.data);
-                    tab2ListFragmetAdapter.setData(datas);
+                    datas=JsonUtils.parseSoundList(netResponse.data);
+                    tab5WopingAdapter.setData(datas);
                     if (datas.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
                     }
                     count += rows;
                     resfreshOk();
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } else {
                 resfreshFail();
             }
-        } else if ("get_follow_recommend_list_more".equals(id)) {
+        } else if ("getSoundList_more".equals(id)) {
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    datas = JsonUtils.parseTeacherList(netResponse.data);
-                    tab2ListFragmetAdapter.addData(datas);
+//                    datas.addAll(JsonUtils.parseXizuoList(netResponse.data));
                     if (datas.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
                     }
                     count += rows;
                     mLoadMoreView.end();
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }else {
-                mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
+                mLoadMoreView.setMoreAble(false);
             }
         }
         super.onNetEnd(id, type, netResponse);
@@ -185,12 +181,11 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
-        RestNetCallHelper.callNet(getActivity(),
-                MyNetApiConfig.get_follow_recommend_list,
-                MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                        ,uid,type,count,rows),
-                "get_follow_recommend_list",
-                this,false,true);
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc",userInfo.uid),
+                "getSoundList", Tab5WopingListFragment.this,false,true);
 
     }
 
@@ -202,12 +197,11 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
             } else {
                 mLoadMoreView.loading();
 
-                RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.get_follow_recommend_list,
-                        MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                                ,uid,type,count,rows),
-                        "get_follow_recommend_list_more",
-                        this,false,true);
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.getSoundList,
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc",userInfo.uid),
+                        "getSoundList_more", Tab5WopingListFragment.this,false,true);
 
             }
         }
@@ -260,8 +254,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
         }.execute();
     }
-
-
 
 
 }

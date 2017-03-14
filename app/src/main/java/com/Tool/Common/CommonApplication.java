@@ -15,7 +15,6 @@ import com.Tool.Global.Constant;
 import com.ui.App;
 
 /**
- * Created by 郑童宇 on 2016/05/24.
  */
 public class CommonApplication extends Application {
 

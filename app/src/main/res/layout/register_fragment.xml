@@ -15,13 +15,14 @@
         android:drawableLeft="@mipmap/ic_iphone"
         android:drawablePadding="5dp"
         android:hint="手机号"
+        android:gravity="center_vertical"
         android:inputType="phone"
         android:maxLength="11"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="18539343936"
         android:singleLine="true"
-        android:textSize="13dp" />
+        android:textSize="16dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,13 +35,14 @@
             android:layout_height="42dp"
             android:drawablePadding="5dp"
             android:hint="验证码"
+            android:gravity="center_vertical"
             android:background="@drawable/edit_bg"
-            android:maxLength="10"
+            android:maxLength="8"
             android:paddingLeft="15dp"
             android:text="000000"
             android:paddingRight="150dp"
             android:singleLine="true"
-            android:textSize="13dp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/btn01"

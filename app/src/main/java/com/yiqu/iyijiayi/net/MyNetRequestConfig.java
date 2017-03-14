@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fwrestnet.NetRequest;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
@@ -168,6 +169,20 @@ public class MyNetRequestConfig {
         r.addHttpParam("rows", rows + "");
         r.addHttpParam("orderby", orderby);
         r.addHttpParam("sort", sort);
+        return r;
+    }
+    /**
+     * 20、获取热门/发现列表
+     */
+    public static NetRequest getSoundList(Context c, String arr,
+                                          int count, int rows, String orderby, String sort,String uid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("arr", arr);
+        r.addHttpParam("count", count + "");
+        r.addHttpParam("rows", rows + "");
+        r.addHttpParam("orderby", orderby);
+        r.addHttpParam("sort", sort);
+        r.addHttpParam("checkpay", uid);
         return r;
     }
 
@@ -364,26 +379,24 @@ public class MyNetRequestConfig {
     /**
      * 23、
      */
-    public static NetRequest findAllPushMsg(Context c, String token,
-                                            String shjhm, String page, String pageSize) {
+    public static NetRequest refuseReply(Context c, String sid,
+                                            String touid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("page", page);
-        r.addHttpParam("pageSize", pageSize);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("touid", touid);
         return r;
     }
 
     /**
-     * 24、根据消息ID取得推送信息详情接口 参数：String token//登录凭证,String shjhm //手机号,String
-     * pushMsgId//消息ID
      */
-    public static NetRequest findPushMsg(Context c, String token, String shjhm,
-                                         String pushMsgId) {
+    public static NetRequest soundReply(Context c, String sid, String touid,
+                                        String commentpath, String commenttime, String isnew) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("pushMsgId", pushMsgId);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("touid", touid);
+        r.addHttpParam("commentpath", commentpath);
+        r.addHttpParam("commenttime", commenttime);
+        r.addHttpParam("isnew", isnew);
         return r;
     }
 

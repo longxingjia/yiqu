@@ -17,10 +17,15 @@ import com.ui.views.CircleImageView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
+import com.yiqu.iyijiayi.adapter.Tab4Adapter;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
+import com.yiqu.iyijiayi.fragment.tab5.JiesuanshuomingFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.fragment.tab5.Tab5AboutFragment;
+import com.yiqu.iyijiayi.fragment.tab5.Tab5WoWenListFragment;
+import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingListFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -86,7 +91,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         InitHeadView(v);
 
         menu_item_wodeyijiayizhuye = (TextView) v.findViewById(R.id.menu_item_wodeyijiayizhuye);
-        menu_item_wowen = (TextView) v.findViewById(R.id.menu_item_wowen);  //学生独有
+        menu_item_wowen = (TextView) v.findViewById(R.id.menu_item_wowen);
         teacherOnly = (LinearLayout) v.findViewById(R.id.mine_teacher);
         menu_item_woping = (TextView) v.findViewById(R.id.menu_item_woping);
         menu_item_wodexizuo = (TextView) v.findViewById(R.id.menu_item_wodexizuo);
@@ -152,7 +157,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             Btlogin.setVisibility(View.GONE);
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
-                            getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this,false,true);
+                            getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this, false, true);
 
 
             llUserInfo.setVisibility(View.VISIBLE);
@@ -233,11 +238,11 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         content.setText(descStr);
         if (!TextUtils.isEmpty(userInfo.desc)) {
             user_desc.setText(userInfo.desc);
-        }else {
+        } else {
             user_desc.setText("未填写");
         }
         head.setOnClickListener(this);
-      //  LogUtils.LOGE("---",userInfo.userimage);
+        //  LogUtils.LOGE("---",userInfo.userimage);
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
         PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
 
@@ -249,10 +254,10 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
         ll_tabs.setVisibility(View.VISIBLE);
         if (userInfo.type.equals("1")) {  //1是学生
-            menu_item_wowen.setVisibility(View.VISIBLE);
+
             teacherOnly.setVisibility(View.GONE);
         } else {
-            menu_item_wowen.setVisibility(View.GONE);
+
             teacherOnly.setVisibility(View.VISIBLE);
         }
 
@@ -281,7 +286,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
                 background.setImageResource(R.mipmap.home_bg);
                 initUI();
 
-
                 break;
             case R.id.menu_item_wodeyijiayizhuye:
 
@@ -292,6 +296,24 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             case R.id.menu_item_wodeyibi:
                 Model.startNextAct(getActivity(),
                         PayforYBFragment.class.getName());
+                break;
+            case R.id.menu_item_woping:
+                Model.startNextAct(getActivity(),
+                        Tab5WopingListFragment.class.getName());
+                break;
+            case R.id.menu_item_jiesuanshuoming:
+
+                Model.startNextAct(getActivity(),
+                        JiesuanshuomingFragment.class.getName());
+                break;
+            case R.id.menu_item_wowen:
+
+                Model.startNextAct(getActivity(),
+                        Tab5WoWenListFragment.class.getName());
+                break;
+            case R.id.menu_item_guanyu:
+                Model.startNextAct(getActivity(),
+                        Tab5AboutFragment.class.getName());
                 break;
         }
 

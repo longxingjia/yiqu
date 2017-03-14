@@ -64,7 +64,7 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
             soundsTab1Adapter.setData(musics);
         }
 
-        LogUtils.LOGE(tag, musics.toString());
+
     }
 
     @Override
@@ -73,6 +73,9 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
         if (musics!=null&&musics.size()>0){
             soundsTab1Adapter.setData(musics);
             resfreshOk();
+        }else {
+            resfreshFail();
+            ToastManager.getInstance(getActivity()).showText("没有数据");
         }
 
     }

@@ -1,8 +1,14 @@
 package com.yiqu.iyijiayi.net;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
+import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.BufferedReader;
@@ -31,9 +37,9 @@ public class UploadImage {
     private static final String TAG = "uploadFile";
     private static final int TIME_OUT = 10 * 1000; // 超时时间
     private static final String CHARSET = "utf-8"; // 设置编码
+//    private static ProgressDialog prDialog;
 
-
-    public static String uploadFile(String RequestURL, Map<String, String> params, File file) {
+    public static String uploadFile( String RequestURL, Map<String, String> params, File file) {
         String result = null;
         String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
         String PREFIX = "--", LINE_END = "\r\n";
@@ -67,7 +73,12 @@ public class UploadImage {
             DataOutputStream outStream = new DataOutputStream(conn.getOutputStream());
             outStream.write(sb.toString().getBytes());
 
+
+
             if (file != null) {
+
+                //设置对话框描述文字为接口的语言配置
+
                 /**
                  * 当文件不为空，把文件包装并且上传
                  */
@@ -88,8 +99,18 @@ public class UploadImage {
                 InputStream is = new FileInputStream(file);
                 byte[] bytes = new byte[1024];
                 int len = 0;
+                LogUtils.LOGE("total",file.length()+"");
+                long progress = 0;
                 while ((len = is.read(bytes)) != -1) {
                     dos.write(bytes, 0, len);
+                    progress =progress+ 1024;
+
+                    long percent = progress*100/file.length();
+                    if (percent>100){
+                        percent=100;
+                    }
+                    LogUtils.LOGE("progress",percent+"");
+
                 }
                 is.close();
                 dos.write(LINE_END.getBytes());

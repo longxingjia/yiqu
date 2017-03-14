@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.yiqu.iyijiayi.R;
+
 
 public class PageCursorView extends View {
 
-	private int color = 0xffcb72e0;
+	private int color = getResources().getColor(R.color.redMain);
 	private int count;
 	private Paint paint;
 	private RectF r;

@@ -175,7 +175,7 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        LogUtils.LOGE(tag,netResponse.toString());
+
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 

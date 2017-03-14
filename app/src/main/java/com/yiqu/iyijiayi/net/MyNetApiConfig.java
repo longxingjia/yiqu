@@ -49,6 +49,14 @@ public class MyNetApiConfig {
 
     };
 
+    public static MyNetApi refuseReply = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/refuse-reply";
+        }
+
+    };
+
 
     /**
      * 3、添加用户
@@ -363,6 +371,14 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/upload-sound";
+        }
+//        public static String uploadSounds = ServerAddr+"";
+
+    };
+    public static MyNetApi soundReply = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/sound-reply";
         }
 //        public static String uploadSounds = ServerAddr+"";
 

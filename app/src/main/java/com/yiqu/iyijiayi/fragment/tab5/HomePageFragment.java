@@ -78,7 +78,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private TextView totalincome;
     private TextView questionincome;
     private TextView tincome;
-    public ArrayList<Sound> sounds;
+    private ArrayList<Sound> sounds;
     private TextView content;
     private ImageView background;
     private HomePage homePage;
@@ -86,7 +86,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected int getTitleView() {
-
         return R.layout.titlebar_tab5;
     }
 
@@ -97,7 +96,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected int getTitleBarType() {
-
         return FLAG_BACK | FLAG_TXT;
     }
 
@@ -108,21 +106,16 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected boolean onPageNext() {
-
         return false;
     }
 
     @Override
     protected void initTitle() {
-
         if (homePage == null) {
             setTitleText("我");
         } else {
-
             setTitleText(userInfo.username + "的主页");
         }
-
-
     }
 
     @Override
@@ -141,25 +134,24 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         mLoadMoreView.setMoreAble(false);
 
         InitHeadView(headview);
-
-
         myUid = AppShare.getUserInfo(mContext).uid;
-
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
         tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
         tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
-        listView.setAdapter(tab5DianpingAdapter);
-        listView.setOnItemClickListener(tab5DianpingAdapter);
+
         listView.setRefreshListListener(this);
         if (homePage == null) {
             userInfo = AppShare.getUserInfo(mContext);
             if (userInfo.type.equals("2")) {
+                listView.setAdapter(tab5DianpingAdapter);
+                listView.setOnItemClickListener(tab5DianpingAdapter);
                 TYPE = 2;
             } else {
+                listView.setAdapter(tab1SoundAdapter);
+                listView.setOnItemClickListener(tab1SoundAdapter);
                 TYPE = 1;
             }
-
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserPageSoundList,
                     MyNetRequestConfig.getUserPageSoundList(getActivity()
@@ -171,10 +163,14 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             userInfo = homePage.user;
             sounds = homePage.sound;
             if (userInfo.type.equals("2")) {
+
+                listView.setAdapter(tab5DianpingAdapter);
+                listView.setOnItemClickListener(tab5DianpingAdapter);
                 tab5DianpingAdapter.setData(sounds);
             } else {
                 listView.setAdapter(tab1SoundAdapter);
                 tab1SoundAdapter.setData(sounds);
+                listView.setOnItemClickListener(tab1SoundAdapter);
             }
 
         }
@@ -188,7 +184,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
  */
     public void InitHeadView(View v) {
         cursor = (PageCursorView) v.findViewById(R.id.cursor);
-
         name = (TextView) v.findViewById(R.id.name);
         desc = (TextView) v.findViewById(R.id.desc);
         content = (TextView) v.findViewById(R.id.content);
@@ -313,6 +308,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
         PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
+
     }
 
     /*
@@ -328,8 +324,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
 
         if (id.equals("getUserPageSoundList")) {
-            LogUtils.LOGE(tag, TYPE + "");
-            LogUtils.LOGE(tag, netResponse.toString());
+
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 switch (TYPE) {
@@ -390,10 +385,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                                 if (AppShare.getIsLogin(mContext)) {
                                     Intent i = new Intent(mContext, StubActivity.class);
                                     i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
-
-                                    Bundle b = new Bundle();
-                                    b.putSerializable("data", xizuo);
-                                    i.putExtras(b);
+                                    i.putExtra("data",xizuo.sid+"");
                                     mContext.startActivity(i);
                                 } else {
                                     Intent i = new Intent(mContext, StubActivity.class);

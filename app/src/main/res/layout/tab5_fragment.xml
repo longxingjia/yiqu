@@ -380,43 +380,6 @@
                     android:layout_marginRight="5dp"
                     android:background="@color/tab_line_color" />
 
-                <LinearLayout
-
-                    android:id="@+id/mine_teacher"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/menu_item_wodexizuo"
-                        style="@style/textview_mine"
-                        android:drawableLeft="@mipmap/mine_xizuo"
-                        android:text="@string/mine_zuopin" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@color/tab_line_color" />
-
-                    <TextView
-                        android:id="@+id/menu_item_woping"
-                        style="@style/textview_mine"
-                        android:drawableLeft="@mipmap/mine_wowen"
-                        android:text="我评" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@color/tab_line_color" />
-
-                </LinearLayout>
-
-
                 <TextView
                     android:id="@+id/menu_item_wowen"
                     style="@style/textview_mine"
@@ -429,6 +392,47 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@color/tab_line_color" />
+
+                <LinearLayout
+
+                    android:id="@+id/mine_teacher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/menu_item_wodexizuo"
+                        style="@style/textview_mine"
+                        android:visibility="gone"
+                        android:drawableLeft="@mipmap/mine_xizuo"
+                        android:text="@string/mine_zuopin" />
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/tab_line_color" />
+
+                    <TextView
+                        android:id="@+id/menu_item_woping"
+                        style="@style/textview_mine"
+                        android:drawableLeft="@mipmap/mine_woping"
+                        android:text="我评" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/tab_line_color" />
+
+                </LinearLayout>
+
+
+
 
                 <TextView
                     android:id="@+id/menu_item_woting"

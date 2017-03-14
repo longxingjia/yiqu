@@ -19,12 +19,14 @@ public class AppShare {
      * xml文件名
      */
     private static final String FILE_NAME = "config";
+    private static final String GLOBAL_BFILE_NAME = "global_config";
     private static final String WECHAT_ACCOUNT_INFO = "wechat_account_info";
     private static final String USERINFO_INFO = "userinfo_info";
     private static final String ZHAOREN = "zhaoren";
     private static final String REMEN = "remen";
     private static final String IS_LOGIN = "is_login";
     private static final String TEACHERAPPLY_INFO = "teacherapply_info";
+    private static final String LAST_LOGIN_PHONE = "last_login_phone";
     /**
      * 获取是否登录
      * @param c
@@ -45,6 +47,29 @@ public class AppShare {
         SharedPreferences p = c.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
         SharedPreferences.Editor e = p.edit();
         e.putBoolean(IS_LOGIN, login);
+        e.commit();
+    }
+
+    /**
+     * 获取上次登录手机号码
+     * @param c
+     * @return
+     */
+    public static String getLastLoginPhone(Context c){
+        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME,Context.MODE_APPEND);
+        return p.getString(LAST_LOGIN_PHONE, "");
+    }
+
+
+    /**
+     * 保存上次登录手机号码
+     * @param c
+
+     */
+    public static void setLastLoginPhone(Context c, String loginPhone){
+        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor e = p.edit();
+        e.putString(LAST_LOGIN_PHONE, loginPhone);
         e.commit();
     }
 

@@ -30,7 +30,6 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -162,14 +161,12 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        //   LogUtils.LOGE(tag, netResponse.toString());
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 try {
 
                     datas = JsonUtils.parseXizuoList(netResponse.data);
-                //    LogUtils.LOGE(tag,datas.toString());
                     tab1XizuoAdapter.setData(datas);
                     if (datas.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
@@ -187,8 +184,6 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
 
                 try {
                     datas.addAll(JsonUtils.parseXizuoList(netResponse.data));
-                  //  LogUtils.LOGE(tag+"1",JsonUtils.parseXizuoList(netResponse.data).toString());
-                   // tab1XizuoAdapter.addData(JsonUtils.parseXizuoList(netResponse.data));
                     if (datas.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
                     }

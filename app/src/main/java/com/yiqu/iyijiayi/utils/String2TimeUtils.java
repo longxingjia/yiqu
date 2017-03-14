@@ -82,9 +82,9 @@ public class String2TimeUtils {
         }
     }
 
-    public static String longToString(long currentTime)
+    public static String longToString(long currentTime,String formatType)
             throws ParseException {
-        String formatType = "MM月dd日 HH:mm";
+
         Date date = longToDate(currentTime, formatType); // long类型转成Date类型
         String strTime = dateToString(date, formatType); // date类型转成String
         return strTime;

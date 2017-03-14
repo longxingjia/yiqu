@@ -91,15 +91,13 @@ public class RecordActivity extends Activity
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-       // init(R.layout.record_xizuo_fragment);
+        init(R.layout.record_xizuo_fragment);
     }
 
     private void init(int layoutId) {
         setContentView(layoutId);
 
-        bindView();
-        initView();
-        initData();
+
         PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
         className = getClass().getSimpleName();
 
@@ -485,7 +483,9 @@ public class RecordActivity extends Activity
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
-        init(R.layout.record_xizuo_fragment);
+        bindView();
+        initView();
+        initData();
     }
 
     @PermissionFail(requestCode = 100)

@@ -1,5 +1,6 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.SumPathEffect;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.adapter.UploaderTask;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.model.Order;
@@ -196,7 +198,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             case R.id.payfor:
 
                 if (file.exists()) {
-                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file, "0");
+                    UTask upLoaderTask = new UTask(getActivity(),MyNetApiConfig.uploadSounds.getPath(), params, file, "0");
                     upLoaderTask.execute();
                 } else {
                     ToastManager.getInstance(getActivity()).showText("文件已经损坏，请您重新录制");
@@ -205,8 +207,8 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
             case R.id.submit:
                 if (file.exists()) {
-                    UpLoaderTask upLoaderTask = new UpLoaderTask(MyNetApiConfig.uploadSounds.getPath(), params, file, "1");
-                    upLoaderTask.execute();
+                    UTask uTask = new UTask(getActivity(),MyNetApiConfig.uploadSounds.getPath(), params, file, "1");
+                    uTask.execute();
                 } else {
                     ToastManager.getInstance(getActivity()).showText("文件已经损坏，请您重新录制");
                 }
@@ -215,29 +217,24 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
     }
 
-    private class UpLoaderTask extends AsyncTask<Void, Integer, String> {
+    private class UTask extends UploaderTask {
 
-        private final String TAG = "UpLoaderTask";
-        private Map<String, String> params;
-        private File file;
-        private String mUrl;
+        private final String TAG = "uTask";
+
         private String isfree;
         private DialogHelper dialogHelper;
 
-        public UpLoaderTask(String mUrl, Map<String, String> params, File file, String isfree) {
-            super();
-            this.params = params;
-            this.file = file;
-            this.mUrl = mUrl;
-            this.isfree = isfree;
 
+        public UTask(Context context, String RequestURL, Map<String, String> params, File file,String isfree) {
+            super(context, RequestURL, params, file);
+            this.isfree = isfree;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             if (dialogHelper == null) {
-                dialogHelper = new DialogHelper(getActivity(), this);
+                dialogHelper = new DialogHelper(getActivity(), this,100);
                 dialogHelper.showProgressDialog();
             }
 
@@ -245,60 +242,38 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
         @Override
         protected String doInBackground(Void... p) {
-
-            final String request = UploadImage.uploadFile(mUrl, params, file);
-            if (TextUtils.isEmpty(request)) {
-                return "";
-            } else {
-                return request;
-            }
-
+            return super.doInBackground(p);
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-
+            dialogHelper.setProgress(values[0]);
+            super.onProgressUpdate(values);
         }
 
         @Override
         protected void onPostExecute(String result) {
+
             if (dialogHelper != null) {
                 dialogHelper.dismissProgressDialog();
             }
+
             if (isCancelled()) {
                 return;
             }
-
             if (!TextUtils.isEmpty(result)) {
+                composeVoice.soundpath = result;
 
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String bool = jsonObject.getString("bool");
-                    String data = jsonObject.getString("data");
-                    String re = jsonObject.getString("result");
-                    if (bool.equals("1")) {
-                        String url = new JSONObject(data).getString("filepath");
-                        composeVoice.soundpath = url;
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.addSound,
+                        MyNetRequestConfig.addSound(getActivity(), userInfo.uid, "1", isfree, composeVoice),
+                        "addSound", AddQuestionFragment.this);
 
-                        RestNetCallHelper.callNet(
-                                getActivity(),
-                                MyNetApiConfig.addSound,
-                                MyNetRequestConfig.addSound(getActivity(), userInfo.uid, "1", isfree, composeVoice),
-                                "addSound", AddQuestionFragment.this);
-
-                    } else {
-                        ToastManager.getInstance(getActivity()).showText(re);
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
+            } else{
                 ToastManager.getInstance(getActivity()).showText(getString(R.string.net_error));
-            }
 
+            }
 
         }
 

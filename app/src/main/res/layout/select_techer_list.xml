@@ -2,21 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:minHeight="86dp"
+    android:layout_height="86dp">
 
-    <com.ui.views.CircleImageView
-        android:id="@+id/header"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/menu_head" />
+    <RelativeLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp">
+
+        <com.ui.views.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/head_bg" />
+
+        <com.ui.views.CircleImageView
+            android:id="@+id/header"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/menu_head" />
+
+    </RelativeLayout>
+
+    <!--<com.ui.views.CircleImageView-->
+        <!--android:id="@+id/header"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:padding="5dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:src="@mipmap/menu_head" />-->
     <LinearLayout
         android:layout_marginLeft="10dp"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -24,7 +47,7 @@
             android:id="@+id/name"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="今夜无人入睡"/>
 
@@ -32,7 +55,7 @@
             android:layout_marginTop="3dp"
             android:id="@+id/desc"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:singleLine="true"
             android:textColor="@color/dd_gray"
             android:text="今夜无人夜无人夜无人"

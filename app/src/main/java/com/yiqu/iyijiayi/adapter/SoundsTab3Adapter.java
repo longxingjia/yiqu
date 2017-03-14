@@ -36,7 +36,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     private ArrayList<ComposeVoice> datas = new ArrayList<ComposeVoice>();
     private Context mContext;
 
-    private String tag = "SoundsTab1Adapter";
+    private String tag = "SoundsTab3Adapter";
 
     public SoundsTab3Adapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -101,9 +101,8 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
             final ComposeVoice f = getItem(position);
             h.musicname.setText(f.musicname);
             String2TimeUtils string2TimeUtils = new String2TimeUtils();
-            LogUtils.LOGE(tag,(int)f.createtime+"");
-            LogUtils.LOGE(tag,f.createtime+"");
-            h.record_time.setText(String2TimeUtils.longToString(f.createtime));
+
+            h.record_time.setText(String2TimeUtils.longToString(f.createtime,"MM月dd日 HH:mm"));
 
             h.upload.setOnClickListener(new View.OnClickListener() {
                 @Override

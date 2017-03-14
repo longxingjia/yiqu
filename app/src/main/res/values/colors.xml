@@ -38,7 +38,7 @@
     <color name="top_bar_search_select_bg_color">#662d3037</color>
     <color name="black_overlay">#66000000</color>
     <color name="diver_color">#E0E0E0</color>
-    <color name="background_color_rating_grey">#ffe9e9e9</color>
+    <color name="background_color_rating_grey">#f2f2f2</color>
     <color name="about_separate_line_bg">#ffdddddd</color>
     <color name="search_bar_txt">#ff757985</color>
     <color name="search_navigation_txt">#ff1d1d1d</color>

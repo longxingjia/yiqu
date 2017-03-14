@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,38 +22,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
-import com.fwrestnet.NetResponse;
-import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingDetailFragment;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
 
-public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
-    private String uid;
+    private String tag = "tab5WowenAdapter";
 
-    private String tag = "Tab5DianpingAdapter";
-
-    public Tab5DianpingAdapter(Context context, String uid) {
+    public Tab5WowenAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        this.uid = uid;
     }
+
 
     public void setData(ArrayList<Sound> list) {
         datas = list;
@@ -80,18 +72,12 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
     }
 
     private class HoldChild {
-
-        TextView musicname;
-        TextView desc;
-        TextView soundtime;
-        TextView tea_name;
-        TextView tectitle;
-        ImageView stu_header;
-        ImageView tea_header;
-        TextView listener;
+        TextView name;
+        TextView status;
         ImageView musictype;
-        TextView stu_listen;
-        TextView tea_listen;
+        TextView desc;
+        TextView created;
+
     }
 
     @Override
@@ -101,53 +87,43 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
-                h.musicname = (TextView) v.findViewById(R.id.musicname);
-                h.desc = (TextView) v.findViewById(R.id.desc);
-                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
-                h.tea_name = (TextView) v.findViewById(R.id.tea_name);
-                h.tectitle = (TextView) v.findViewById(R.id.tectitle);
+                v = mLayoutInflater.inflate(R.layout.tab5_wowen, null);
+                h.name = (TextView) v.findViewById(R.id.name);
+                h.status = (TextView) v.findViewById(R.id.status);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
-                h.listener = (TextView) v.findViewById(R.id.listener);
-                h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
-                h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
-                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.created = (TextView) v.findViewById(R.id.created);
+
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
             Sound f = getItem(position);
-            h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime + "\"");
-            h.listener.setText(f.views+"");
-            h.tea_name.setText(f.tecname);
-            h.tectitle.setText(f.tectitle);
-            //  LogUtils.LOGE(tag,f.soundpath);
-            if (f.type==1){
+            h.name.setText(f.musicname);
+
+            h.created.setText(String2TimeUtils.longToString(f.created*1000, "yyyy-MM-dd HH:mm"));
+
+
+            if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            }else {
+            } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 
-            long time = System.currentTimeMillis() / 1000 - f.created;
-//            LogUtils.LOGE(tag,time+"");
+            if (f.isreply == 0) {//待点评
+                h.status.setText("待点评");
+                h.status.setTextColor(mContext.getResources().getColor(R.color.stu_voice));
 
-            if (time < 2 * 24 * 60 * 60 && time > 0) {
-                h.tea_listen.setText("限时免费听");
-            } else {
-                if (f.listen == 1) {
-                    h.tea_listen.setText("已付费");
-                } else {
-                    h.tea_listen.setText("1元偷偷听");
-                }
+            } else if (f.isreply == 1) {//已点评
+                h.status.setTextColor(mContext.getResources().getColor(R.color.redMain));
+                 h.status.setText("已点评");
 
+            } else if (f.isreply == -1) {//被拒绝
+
+                h.status.setText("被拒绝");
+                h.status.setTextColor(mContext.getResources().getColor(R.color.dd_gray));
             }
-
-
-            PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
-            PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
 
 
         } catch (Exception e) {
@@ -156,29 +132,24 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
         return v;
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (arg2<2){
+        if (arg2 < 1) {
             return;
         }
-        Sound f = getItem(arg2-2);//加了头部
+        Sound f = getItem(arg2 - 1);//加了头部
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
-        if (AppShare.getIsLogin(mContext)){
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-            i.putExtra("data",f.sid+"");
+        if (f.isreply == 1) {//问题
+            Intent intent = new Intent(mContext, StubActivity.class);
+            intent.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            intent.putExtra("data",f.sid+"");
 
-            mContext.startActivity(i);
-        }else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请登录后再试");
-            mContext.startActivity(i);
-
+            mContext.startActivity(intent);
         }
 
 

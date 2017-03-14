@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
@@ -69,6 +70,9 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
         if (composeVoices !=null&& composeVoices.size()>0){
             soundsTab3Adapter.setData(composeVoices);
             resfreshOk();
+        }else {
+            resfreshFail();
+            ToastManager.getInstance(getActivity()).showText("没有数据");
         }
 
     }

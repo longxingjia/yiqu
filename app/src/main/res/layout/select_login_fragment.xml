@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@mipmap/logo" />
+        android:src="@mipmap/logo" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,12 +46,12 @@
         android:textSize="20sp" />
 
     <Button
-        android:padding="5dp"
         android:id="@+id/phone_login"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:background="@drawable/green_box"
+        android:padding="5dp"
         android:text="手机注册登录"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -64,7 +64,7 @@
         android:layout_marginTop="2dp"
         android:text="注册表明你同意《艺加艺用户协议》"
         android:textColor="@color/dark_gray"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 
 
 </LinearLayout>

@@ -110,7 +110,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
         File mFile = new File(Variable.StorageMusicPath, fileName);
         if (mFile.exists()) {
-            Log.d(tag, "file " + mFile.getName() + " already exits!!");
+         //   Log.d(tag, "file " + mFile.getName() + " already exits!!");
             nextPage();
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {

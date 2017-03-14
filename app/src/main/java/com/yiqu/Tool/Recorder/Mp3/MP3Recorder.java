@@ -115,6 +115,7 @@ public class MP3Recorder {
     public boolean stopRecordVoice() {
         if (recordThread != null) {
             recordThread.stopRecordVoice();
+
         }
 
         return true;
@@ -188,6 +189,7 @@ public class MP3Recorder {
 
                     try {
                         audioRecord.startRecording();
+
                     } catch (Exception e) {
                         NoRecordPermission();
                         continue;

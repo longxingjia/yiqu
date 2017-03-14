@@ -3,23 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tab_line_color"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/tab_line_color"/>
+        android:background="@color/tab_line_color" />
 
 
     <com.ui.views.RefreshList
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fadingEdgeLength="0dp"
 
-        android:minHeight="100dp"
         android:background="#ffffff"
         android:cacheColorHint="#00000000"
-        android:id="@+id/listView"
+        android:fadingEdgeLength="0dp"
+        android:minHeight="100dp"
 
         />
 

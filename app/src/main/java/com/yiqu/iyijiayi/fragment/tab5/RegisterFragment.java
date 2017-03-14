@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -60,9 +61,6 @@ public class RegisterFragment extends AbsAllFragment {
         @Override
         public void onTick(long millisUntilFinished) {
             btn01.setEnabled(false);
-
-//			String tr = getResources().getString(
-//					R.string.resend_verification_code);
             btn01.setText("已发送" +
                     millisUntilFinished / 1000 + "s");
         }
@@ -83,9 +81,13 @@ public class RegisterFragment extends AbsAllFragment {
     protected void initView(View v) {
         txt01 = (EditText) v.findViewById(R.id.txt01);
         txt02 = (EditText) v.findViewById(R.id.txt02);
-
         btn01 = (TextView) v.findViewById(R.id.btn01);
         btn02 = (Button) v.findViewById(R.id.btn02);
+
+        if(!TextUtils.isEmpty(AppShare.getLastLoginPhone(getActivity()))){
+            txt01.setText(AppShare.getLastLoginPhone(getActivity()));
+        }
+
 
         v.findViewById(R.id.wechat_login).setOnClickListener(new OnClickListener() {
             @Override
@@ -198,8 +200,6 @@ public class RegisterFragment extends AbsAllFragment {
                             MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
                                     getActivity(), userInfo.uid), "getUserByPhoneUid",
                             RegisterFragment.this);
-                    userInfo = null;
-
 
                 }
 
@@ -208,11 +208,11 @@ public class RegisterFragment extends AbsAllFragment {
                 if (netResponse.bool == 0) {
                     ToastManager.getInstance(getActivity()).showText(netResponse.result);
                 } else {
-                    LogUtils.LOGE(tag, netResponse.toString());
                     Gson gson = new Gson();
                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                     AppShare.setIsLogin(getActivity(), true);
                     AppShare.setUserInfo(getActivity(), userInfo);
+                    AppShare.setLastLoginPhone(getActivity(),phonenum);
                     getActivity().finish();
                 }
             }
@@ -223,25 +223,23 @@ public class RegisterFragment extends AbsAllFragment {
 
     @Override
     protected int getTitleBarType() {
-        // TODO Auto-generated method stub
         return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
     protected boolean onPageBack() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     protected boolean onPageNext() {
-        // TODO Auto-generated method stub
+
         return false;
     }
 
     @Override
     protected void initTitle() {
-        // TODO Auto-generated method stub
+
         setTitleText("登 录");
     }
 
@@ -251,9 +249,6 @@ public class RegisterFragment extends AbsAllFragment {
         if (mMyCount != null) {
             mMyCount.cancel();
         }
-//        if (content != null) {
-//            getActivity().getContentResolver().unregisterContentObserver(content);
-//        }
 
         super.onDestroy();
     }

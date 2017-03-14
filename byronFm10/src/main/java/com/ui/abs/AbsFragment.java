@@ -39,33 +39,33 @@ public abstract class AbsFragment extends Fragment {
 					R.string.fm_indeterminism_error);
 			e.printStackTrace();
 		}
-		Log.i(tag, "onCreateView");
+//		Log.i(tag, "onCreateView");
 		return v;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.i(tag, "onActivityCreated");
+//		Log.i(tag, "onActivityCreated");
 		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
-		Log.i(tag, "onAttach");
+//		Log.i(tag, "onAttach");
 		super.onAttach(activity);
 	}
 
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		Log.i(tag, "onResume");
+//		Log.i(tag, "onResume");
 		super.onResume();
 	}
 
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
-		Log.i(tag, "onStart");
+//		Log.i(tag, "onStart");
 		super.onStart();
 	}
 
@@ -81,14 +81,14 @@ public abstract class AbsFragment extends Fragment {
 	@Override
 	public View getView() {
 		// TODO Auto-generated method stub
-		Log.i(tag, "getView");
+//		Log.i(tag, "getView");
 		return super.getView();
 	}
 
 	@Override
 	public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
 		// TODO Auto-generated method stub
-		Log.i(tag, "onCreateAnimation");
+//		Log.i(tag, "onCreateAnimation");
 		return super.onCreateAnimation(transit, enter, nextAnim);
 	}
 
@@ -96,7 +96,7 @@ public abstract class AbsFragment extends Fragment {
 	public void onInflate(Activity activity, AttributeSet attrs,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.i(tag, "onInflate");
+//		Log.i(tag, "onInflate");
 		super.onInflate(activity, attrs, savedInstanceState);
 	}
 

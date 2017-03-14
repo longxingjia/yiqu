@@ -75,7 +75,6 @@ public class RecordActivityForRecordFrag extends Activity
     private String tag = "RecordActivityForRecordFrag";
     //    private int width;
 //    private int height;
-    private int recordTime;
 
     private TextView tv_record;
     private TextView musicName;
@@ -110,7 +109,6 @@ public class RecordActivityForRecordFrag extends Activity
                 case POPUPWINDOW:
                     initPopuptWindow();
                     // 这里是位置显示方式,在屏幕的左侧
-
                     break;
             }
         }
@@ -160,7 +158,7 @@ public class RecordActivityForRecordFrag extends Activity
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
         mRecorderUtil = new RecorderAndPlayUtil();
-        recordTime = 0;
+
         recordVoiceButton.setOnClickListener(this);
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         recordHintTextView.setText("按下开始录音");
@@ -333,7 +331,6 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.UNCOMPOSE);
         composeVoiceInfoDBHelper.close();
 
-
         if (mTimer != null) {
             mTimer.cancel();
             mTimerTask.cancel();
@@ -341,7 +338,7 @@ public class RecordActivityForRecordFrag extends Activity
         mRecorderUtil.stopRecording();
         mIsRecording = false;
         mSecond = 0;
-        mRecorderUtil.getRecorderPath();
+      //  mRecorderUtil.getRecorderPath();
     }
 
     @Override
@@ -350,7 +347,6 @@ public class RecordActivityForRecordFrag extends Activity
             initRecording();
         }
         VoiceFunction.StopVoice();
-//        VoiceFunction.StopRecordVoice();
         super.onDestroy();
     }
 
@@ -436,7 +432,6 @@ public class RecordActivityForRecordFrag extends Activity
                         @Override
                         public void run() {
                             // 录音结束
-
                             mTimer.cancel();
                             mTimerTask.cancel();
                             mIsRecording = false;
