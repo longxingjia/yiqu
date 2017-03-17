@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="65dp"
+    android:orientation="horizontal">
+
+    <!--<com.ui.views.CircleImageView-->
+    <!--android:id="@+id/header"-->
+    <!--android:layout_width="55dp"-->
+    <!--android:layout_height="55dp"-->
+    <!--android:padding="2dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:src="@mipmap/menu_head" />-->
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp">
+
+        <com.ui.views.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/head_bg"
+            android:padding="24dp" />
+
+        <com.ui.views.CircleImageView
+            android:id="@+id/header"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerInParent="true"
+            android:padding="24dp"
+            android:src="@mipmap/menu_head" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text=""
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

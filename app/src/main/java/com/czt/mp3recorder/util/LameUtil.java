@@ -128,7 +128,7 @@ public class LameUtil {
 					}
 					return;
 				}
-				LameUtil.init(sampleRate, 1, sampleRate, 32, Constant.LameMp3Quality);
+				LameUtil.init(sampleRate, 1, sampleRate, Constant.LameBehaviorBitRate, Constant.LameMp3Quality);
 				isRecording = true; // 录音状态
 				isPause = false; // 录音状态
 				try {
@@ -324,7 +324,10 @@ public class LameUtil {
 	 *            2 near-best quality, not too slow<br />
 	 *            5 good quality, fast<br />
 	 *            7 ok quality, really fast
+	 *              /**
+	 * 初始化录制参数  :0=很好很慢 9=很差很快
 	 */
+
 	public native static void init(int inSamplerate, int inChannel,
 			int outSamplerate, int outBitrate, int quality);
 
@@ -345,6 +348,7 @@ public class LameUtil {
 	 *         -2: malloc() problem<br />
 	 *         -3: lame_init_params() not called<br />
 	 *         -4: psycho acoustic problems
+	 *         音频数据编码(PCM左进,PCM右进,MP3输出)
 	 */
 	public native static int encode(short[] bufferLeft, short[] bufferRight,
 			int samples, byte[] mp3buf);
@@ -366,6 +370,7 @@ public class LameUtil {
 	 *            result encoded MP3 stream. You must specified at least 7200
 	 *            bytes.
 	 * @return number of bytes output to mp3buf. Can be 0.
+	 *  刷干净缓冲区
 	 */
 	public native static int flush(byte[] mp3buf);
 

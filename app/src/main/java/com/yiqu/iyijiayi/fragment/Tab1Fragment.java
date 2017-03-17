@@ -28,7 +28,9 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
+import com.yiqu.iyijiayi.fragment.tab1.FindAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
@@ -80,7 +82,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab1;
     }
 
     @Override
@@ -177,7 +179,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BTN;
     }
 
     @Override
@@ -190,7 +192,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
-        pageNextComplete();
+       // pageNextComplete();
+        Model.startNextAct(getActivity(),
+                FindAllFragment.class.getName());
         return true;
     }
 

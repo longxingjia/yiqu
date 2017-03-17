@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        debugConfig  {
+        debugConfig {
             storeFile file('D:/iyijiayi/iyijiayi.jks')
             keyAlias 'iyijiayi'
             keyPassword 'iyijiayi'
@@ -12,7 +12,7 @@ android {
             //   v1SigningEnabled false
         }
 
-        releaseConfig   {
+        releaseConfig {
             storeFile file('D:/iyijiayi/iyijiayi.jks')
             keyAlias 'iyijiayi'
             keyPassword 'iyijiayi'
@@ -47,7 +47,6 @@ android {
         }
     }
 
-
     // rest of your app's logic
     splits {
         abi {
@@ -62,6 +61,7 @@ android {
 
 
 
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -69,11 +69,11 @@ dependencies {
     })
     compile project(path: ':byronFm10')
     compile files('libs/gson-2.2.4.jar')
+    compile files('libs/rxjava-1.1.0.jar')
+    compile files('libs/android-async-http-1.4.6.jar')
+    compile project(path: ':permissiongen')
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile files('libs/rxjava-1.1.0.jar')
-    compile files('libs/android-async-http-1.4.6.jar')
-    compile project(path: ':permissiongen')
 }

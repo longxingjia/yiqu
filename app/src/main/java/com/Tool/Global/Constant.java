@@ -17,12 +17,13 @@ public class Constant {
             RecordSampleRate * RecordByteNumber * RecordChannelNumber;
     // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
     public static final int BehaviorSampleRate = 44100; // 采样率
-    public static final int LameMp3Quality = 7; // Lame Default Settings
+
+    public static final int LameMp3Quality = 0; // Lame Default Settings，0=很好很慢 9=很差很快
     public static final int LameBehaviorChannelNumber = RecordChannelNumber;
     // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
-    public static final int LameBehaviorBitRate = 128;
+    public static final int LameBehaviorBitRate = 256;
 
     public static final int MusicCutEndOffset = 2;
 

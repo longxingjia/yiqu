@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.TeacherApply;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.WechatUserInfo;
 import com.yiqu.iyijiayi.model.ZhaoRen;
+
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/5/6.
@@ -23,27 +27,30 @@ public class AppShare {
     private static final String WECHAT_ACCOUNT_INFO = "wechat_account_info";
     private static final String USERINFO_INFO = "userinfo_info";
     private static final String ZHAOREN = "zhaoren";
+    private static final String LIKE = "like";
     private static final String REMEN = "remen";
     private static final String IS_LOGIN = "is_login";
     private static final String TEACHERAPPLY_INFO = "teacherapply_info";
     private static final String LAST_LOGIN_PHONE = "last_login_phone";
+
     /**
      * 获取是否登录
+     *
      * @param c
      * @return
      */
-    public static boolean getIsLogin(Context c){
-        SharedPreferences p = c.getSharedPreferences(FILE_NAME,Context.MODE_APPEND);
+    public static boolean getIsLogin(Context c) {
+        SharedPreferences p = c.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
         return p.getBoolean(IS_LOGIN, false);
     }
 
 
     /**
      * 保存是否登录
+     *
      * @param c
-
      */
-    public static void setIsLogin(Context c, boolean login){
+    public static void setIsLogin(Context c, boolean login) {
         SharedPreferences p = c.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
         SharedPreferences.Editor e = p.edit();
         e.putBoolean(IS_LOGIN, login);
@@ -52,21 +59,22 @@ public class AppShare {
 
     /**
      * 获取上次登录手机号码
+     *
      * @param c
      * @return
      */
-    public static String getLastLoginPhone(Context c){
-        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME,Context.MODE_APPEND);
+    public static String getLastLoginPhone(Context c) {
+        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME, Context.MODE_APPEND);
         return p.getString(LAST_LOGIN_PHONE, "");
     }
 
 
     /**
      * 保存上次登录手机号码
+     *
      * @param c
-
      */
-    public static void setLastLoginPhone(Context c, String loginPhone){
+    public static void setLastLoginPhone(Context c, String loginPhone) {
         SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME, Context.MODE_APPEND);
         SharedPreferences.Editor e = p.edit();
         e.putString(LAST_LOGIN_PHONE, loginPhone);
@@ -75,6 +83,7 @@ public class AppShare {
 
     /**
      * 获取微信的信息
+     *
      * @param context
      * @return
      */
@@ -92,6 +101,7 @@ public class AppShare {
 
     /**
      * 保存微信信息
+     *
      * @param context
      * @param accountVo
      */
@@ -105,6 +115,7 @@ public class AppShare {
 
     /**
      * 获取用户信息
+     *
      * @param context
      * @return
      */
@@ -123,6 +134,7 @@ public class AppShare {
 
     /**
      * 保存用户信息
+     *
      * @param context
      * @param userInfo
      */
@@ -132,6 +144,7 @@ public class AppShare {
         editor.putString(USERINFO_INFO, new Gson().toJson(userInfo));
         editor.commit();
     }
+
     public static void setTeacherApplyInfo(Context context, TeacherApply teacherApply) {
         SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
         SharedPreferences.Editor editor = p.edit();
@@ -152,6 +165,7 @@ public class AppShare {
 
     /**
      * 清除用户信息
+     *
      * @param context
      */
     public static void clearShare(Context context) {
@@ -164,6 +178,7 @@ public class AppShare {
 
     /**
      * 获取
+     *
      * @param context
      * @return
      */
@@ -175,12 +190,12 @@ public class AppShare {
         if (tmp != null && tmp.length() > 0) {
             result = new Gson().fromJson(tmp, ZhaoRen.class);
         }
-//        LogUtils.LOGE("..sh.."+tmp);
         return result;
     }
 
     /**
      * 保存
+     *
      * @param context
      * @param zhaoRen
      */
@@ -191,10 +206,35 @@ public class AppShare {
         editor.commit();
     }
 
+    public static ArrayList<Like> getLikeList(Context context) {
+
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        String tmp = p.getString(LIKE, "");
+        ArrayList<Like> result = null;
+        if (tmp != null && tmp.length() > 0) {
+            result = new Gson().fromJson(tmp, new TypeToken<ArrayList<Like>>() {
+            }.getType());
+        }
+        return result;
+    }
+
+    /**
+     * 保存
+     *
+     * @param context
+     * @param likes
+     */
+    public static void setLikeList(Context context, ArrayList<Like> likes) {
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putString(LIKE, new Gson().toJson(likes));
+        editor.commit();
+    }
 
 
     /**
      * 获取
+     *
      * @param context
      * @return
      */
@@ -212,6 +252,7 @@ public class AppShare {
 
     /**
      * 保存
+     *
      * @param context
      * @param remen
      */
@@ -221,7 +262,6 @@ public class AppShare {
         editor.putString(REMEN, new Gson().toJson(remen));
         editor.commit();
     }
-
 
 
 }

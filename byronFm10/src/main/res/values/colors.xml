@@ -5,7 +5,7 @@
    <color name="fm_list_item_bg">#ffffff</color>
    <color name="fm_page_bg">#ffffff</color>
  <color name="green">#0BE3A8</color>
- <color name="redMain">#F94E62</color>
+ <color name="redMain">#fe465b</color>
    <!-- #1898c4 179cfb-->
     <!-- page -->
     <color name="page_bg_color">#ffffff</color>
@@ -25,6 +25,7 @@
     
     <!-- tab  -->
     <color name="tab_bg_color">#f2f2f2</color>
+   <color name="text_bg">#f7f7f7</color>
     <color name="tab_txt_eable_color">#ff0000</color>
     <color name="tab_txt_disable_color">#b3b3b3</color>
     

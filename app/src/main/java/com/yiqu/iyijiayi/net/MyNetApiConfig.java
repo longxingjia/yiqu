@@ -249,6 +249,17 @@ public class MyNetApiConfig {
     };
 
     /**
+     * 根据关键字全局搜索
+     */
+    public static MyNetApi searchByText = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/search/search-by-text";
+        }
+
+    };
+
+    /**
      * 67、获取推荐关注接口
      */
     public static MyNetApi follow_recommend = new MyNetApi() {
@@ -464,6 +475,19 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/site/check-update";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+
+    };
+    public static MyNetApi getComments = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/comment/getcomments";
         }
 
         @Override

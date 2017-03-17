@@ -44,6 +44,7 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import kr.co.namee.permissiongen.PermissionFail;
@@ -153,7 +154,6 @@ public class RecordActivity extends Activity
 
     private void goRecordSuccessState() {
         recordVoiceBegin = false;
-
         musictime.setText(string2TimeUtils.stringForTimeS(music.time - actualRecordTime));
         recordHintTextView.setVisibility(View.VISIBLE);
         recordHintTextView.setText("录音完成，正在合成");
@@ -165,15 +165,16 @@ public class RecordActivity extends Activity
 
         musictime.setVisibility(View.INVISIBLE);
 
-        recordVoiceButton.setEnabled(true);
 
 
     }
 
     private void compose() {
         composeProgressBar.setProgress(0);
-
         composeProgressBar.setVisibility(View.VISIBLE);
+        recordVoiceButton.setEnabled(false);
+
+
         AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
                 actualRecordTime + Constant.MusicCutEndOffset, this);
     }
@@ -199,6 +200,7 @@ public class RecordActivity extends Activity
             recordTime = (int) (recordDuration / Constant.OneSecond);
             int leftTime = music.time-recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
+
 
 
             if (leftTime<=0){
@@ -297,7 +299,7 @@ public class RecordActivity extends Activity
 
     @Override
     public void composeSuccess() {
-
+        recordVoiceButton.setEnabled(true);
         composeProgressBar.setVisibility(View.GONE);
         VoiceFunction.PlayToggleVoice(composeVoiceUrl, instance);
         CommonFunction.showToast("合成成功", className);
@@ -336,7 +338,7 @@ public class RecordActivity extends Activity
 
     @Override
     public void composeFail() {
-
+        recordVoiceButton.setEnabled(true);
         composeProgressBar.setVisibility(View.GONE);
         CommonFunction.showToast("合成失败", className);
     }
@@ -346,6 +348,8 @@ public class RecordActivity extends Activity
         switch (v.getId()) {
             case R.id.recordVoiceButton:
                 if (recordComFinish) {
+
+
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
                     MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
@@ -375,8 +379,12 @@ public class RecordActivity extends Activity
                     });
                     menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else {
+
+
                     rlHint.setVisibility(View.INVISIBLE);
                     if (recordVoiceBegin) {
+
+
                         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("完成录制");
                         builder.setMessage("当前伴奏还没有结束，确定要提前完成录制吗？");
@@ -384,23 +392,19 @@ public class RecordActivity extends Activity
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-
 //                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                                 VoiceFunction.StopVoice();
                                 VoiceFunction.StopRecordVoice();
                                 compose();
-
                                 dialog.dismiss();
                             }
                         });
                         builder.show();
 
                     } else {
+
                         startAnimation();
-//
-                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl,
-                                instance);
+                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl,instance);
                         VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
                         recordVoiceButton.setText("完成录制");
                     }

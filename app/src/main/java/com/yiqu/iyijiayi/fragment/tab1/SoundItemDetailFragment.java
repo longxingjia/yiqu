@@ -528,6 +528,9 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     };
 
 
+
+
+
     private void palyStudentVoice() {
 
         teacurrentTime = 0;

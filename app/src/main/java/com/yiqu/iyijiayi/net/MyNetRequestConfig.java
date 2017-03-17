@@ -78,6 +78,11 @@ public class MyNetRequestConfig {
         r.addHttpParam("checkpay", checkpay);
         return r;
     }
+    public static NetRequest searchByText(Context c, String text) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("text", text);
+        return r;
+    }
 
     /**
      * 6、
@@ -196,11 +201,6 @@ public class MyNetRequestConfig {
         return r;
     }
 
-    /**
-     * 参数：String token String shjhm //， string ztbh //
-     * kchbh//课程编号,kchmch//课程名称,kchslt//课程缩略图,kchjj//简介
-     * chjshj//创建时间,sdjf//所得积分,shfhdxhh//是否获得小红花 @
-     */
 
 
     public static NetRequest getSoundDetail(Context c, String sid,
@@ -209,6 +209,10 @@ public class MyNetRequestConfig {
         r.addHttpParam("sid", sid);
         r.addHttpParam("checkpay", uid);
 
+        return r;
+    }   public static NetRequest getComments(Context c, String sid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("sid", sid);
         return r;
     }
 

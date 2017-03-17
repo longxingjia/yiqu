@@ -5,7 +5,7 @@ package com.yiqu.iyijiayi.model;
  */
 
 public class Like {
-    public int sid;
+    public String sid;
     public int islike;
 
 }
