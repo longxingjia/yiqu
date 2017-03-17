@@ -1,6 +1,7 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.WechatUserInfo;
 import com.yiqu.iyijiayi.model.YzmKey;
@@ -25,6 +28,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +72,7 @@ public class SetPhoneFragment extends AbsAllFragment {
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_back;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -139,7 +143,7 @@ public class SetPhoneFragment extends AbsAllFragment {
               //  LogUtils.LOGE(phonenum + "--" + key + "--" + code);//key --
 
                 WechatUserInfo wechatUserInfo = AppShare.getWechatUserInfo(getActivity());
-//                LogUtils.LOGE(wechatUserInfo.toString());
+
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.loginPhoneCheck, MyNetRequestConfig.loginPhoneCheck(
                                 getActivity(), wechatUserInfo.openid,
@@ -156,7 +160,7 @@ public class SetPhoneFragment extends AbsAllFragment {
 
 
         if ("getLoginMessageCode".equals(id)) {
-            mMyCount = new Count(60000 * 5, 1000);
+            mMyCount = new Count(60000 * 1, 1000);
             mMyCount.start();
             ToastManager.getInstance(getActivity()).showText("发送成功");
 
@@ -170,14 +174,18 @@ public class SetPhoneFragment extends AbsAllFragment {
 
 //            LogUtils.LOGE(netResponse.toString());
             if (netResponse.bool == 0) {
-
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
             } else {
                 AppShare.setIsLogin(getActivity(), true);
                 Gson gson = new Gson();
                 UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                 AppShare.setUserInfo(getActivity(), userInfo);
-               // LogUtils.LOGE(userInfo.created + "_" + userInfo.toString());
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("fragmentName", Tab5Fragment.class.getName());
+                startActivity(intent);
+                getActivity().finish();
+
 
             }
 
@@ -208,7 +216,7 @@ public class SetPhoneFragment extends AbsAllFragment {
     @Override
     protected void initTitle() {
         // TODO Auto-generated method stub
-        setTitleText("登 录");
+        setTitleText("绑定手机号");
     }
 
     @Override

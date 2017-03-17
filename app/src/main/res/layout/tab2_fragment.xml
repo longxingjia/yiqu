@@ -29,6 +29,7 @@
                     android:divider="@color/background_color_rating_grey"
                     android:dividerHeight="1dp"
                     android:minHeight="255dp"
+                    android:listSelector="#00000000"
                     android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
 
@@ -60,6 +61,7 @@
                     android:id="@+id/lv_student"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:listSelector="#00000000"
                     android:divider="@color/background_color_rating_grey"
                     android:dividerHeight="1dp"
                     android:minHeight="255dp"

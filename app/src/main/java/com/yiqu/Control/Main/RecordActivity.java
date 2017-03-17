@@ -44,11 +44,8 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.utils.Tools;
-
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -73,7 +70,6 @@ public class RecordActivity extends Activity
     private String decodeFileUrl;
     private String composeVoiceUrl;
     private TextView recordHintTextView;
-    //    private TextView recordHintTextView;
     private ProgressBar composeProgressBar;
     private static RecordActivity instance;
     private Music music;
@@ -96,11 +92,8 @@ public class RecordActivity extends Activity
 
     private void init(int layoutId) {
         setContentView(layoutId);
-
-
         PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
         className = getClass().getSimpleName();
-
         instance = this;
     }
 
@@ -142,19 +135,18 @@ public class RecordActivity extends Activity
         string2TimeUtils = new String2TimeUtils();
         musictime.setText(string2TimeUtils.stringForTimeS(music.time));
 
-        File mFile = new File(Variable.StorageMusicPath, fileName);
+        File mFile = new File(Variable.StorageMusicCachPath, fileName);
         if (mFile.exists()) {
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
             tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
-            LogUtils.LOGE(tag, tempVoicePcmUrl);
+
             musicFileUrl = mFile.getAbsolutePath();
             decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_decodeFile.pcm";
             fileNameCom = music.musicname + "_composeVoice.mp3";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
-
 
     }
 
@@ -208,7 +200,7 @@ public class RecordActivity extends Activity
             int leftTime = music.time-recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
 
-            LogUtils.LOGE(tag,leftTime+"");
+
             if (leftTime<=0){
                 VoiceFunction.StopVoice();
                 VoiceFunction.StopRecordVoice();

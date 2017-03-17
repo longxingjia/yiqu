@@ -3,10 +3,17 @@ package com.yiqu.iyijiayi.fragment.tab1;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -27,9 +34,11 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
+import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -53,13 +62,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2017/2/20.
  */
 
 public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface {
-    String tag = "SoundItemDetailFragmentbak";
+    String tag = "SoundItemDetailFragment";
     private TextView like;
     private TextView musicname;
     private TextView desc;
@@ -86,9 +99,16 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TimerTask mTimerTask;
     private TextView tea_listen;
     private Sound sound;
-    private DownLoaderTask taskS;
-    private DownLoaderTeaTask taskT;
+    private ImageView musictype;
+    private AlertDialog dialog;
+    private UserInfo userInfo;
+    private String sid;
+    private DownloadManager downloadManager;
 
+    ScheduledExecutorService scheduledExecutorService;
+    Future<?> future;
+    private long downloadTeaId = -1;
+    private long downloadStuId = -1;
 
     Handler mHandler = new Handler() {
         @Override
@@ -108,6 +128,72 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         }
                     }
                     break;
+                case Constant.QUERY_STUDENT:
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterById(downloadStuId);//筛选下载任务，传入任务ID，可变参数
+                    Cursor cursor = downloadManager.query(query);
+
+                    if (cursor != null && cursor.moveToFirst()) {
+                        //此处直接查询文件大小
+                        int bytesDLIdx =
+                                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                        int bytesDL = cursor.getInt(bytesDLIdx);
+
+                        //获取文件下载总大小
+                        long fileTotalSize = cursor.getLong(cursor.getColumnIndex(
+                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+                        cursor.close();
+
+//                        Log.w(tag, "downloaded size: " + bytesDL);
+//                        Log.w(tag, "total size: " + fileTotalSize);
+
+                        if (fileTotalSize != 0) {
+                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
+                            stu_listen.setText(percentage + "%");
+//                            statusBar.setProgress(percentage);
+//                            statusText.setText(percentage + "%");
+                        }
+
+                        //终止轮询task
+//                        if (fileTotalSize == bytesDL)
+//                            future.cancel(true);
+                    }
+                    break;
+                case Constant.QUERY_TEACHER:
+
+                    DownloadManager.Query q = new DownloadManager.Query();
+                    q.setFilterById(downloadTeaId);//筛选下载任务，传入任务ID，可变参数
+                    Cursor c = downloadManager.query(q);
+
+                    if (c != null && c.moveToFirst()) {
+                        //此处直接查询文件大小
+                        int bytesDLIdx =
+                                c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                        int bytesDL = c.getInt(bytesDLIdx);
+
+                        //获取文件下载总大小
+                        long fileTotalSize = c.getLong(c.getColumnIndex(
+                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+                        c.close();
+
+//                        Log.w(tag, "downloaded size: " + bytesDL);
+//                        Log.w(tag, "total size: " + fileTotalSize);
+
+                        if (fileTotalSize != 0) {
+                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
+                            tea_listen.setText(percentage + "%");
+//                            statusBar.setProgress(percentage);
+//                            statusText.setText(percentage + "%");
+                        }
+
+                        //终止轮询task
+//                        if (fileTotalSize == bytesDL)
+//                            future.cancel(true);
+                    }
+                    break;
+
                 default:
 
                     break;
@@ -115,10 +201,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         }
     };
-    private ImageView musictype;
-    private AlertDialog dialog;
-    private UserInfo userInfo;
-    private String sid;
 
 
     @Override
@@ -154,16 +236,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     protected void initView(View v) {
 
-        sid = getActivity().getIntent().getExtras().getString("data");
 
-        if (AppShare.getIsLogin(getActivity())) {
-            userInfo = AppShare.getUserInfo(getActivity());
-            RestNetCallHelper.callNet(getActivity(),
-                    MyNetApiConfig.getSoundDetail, MyNetRequestConfig
-                            .getSoundDetail(getActivity(), sid, userInfo.uid),
-                    "getSoundDetail", SoundItemDetailFragment.this);
-
-        }
         musicname = (TextView) v.findViewById(R.id.musicname);
         like = (TextView) v.findViewById(R.id.like);
         desc = (TextView) v.findViewById(R.id.desc);
@@ -189,8 +262,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
                         "getSoundDetail", SoundItemDetailFragment.this);
-                userInfo.coin_apple --;
-                AppShare.setUserInfo(getActivity(),userInfo);
+                userInfo.coin_apple--;
+                AppShare.setUserInfo(getActivity(), userInfo);
             }
 
             ToastManager.getInstance(getActivity()).showText(netResponse.result);
@@ -198,60 +271,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-                LogUtils.LOGE(tag,netResponse.toString());
+
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
-                desc.setText(sound.desc);
-                soundtime.setText(sound.soundtime + "\"");
-
-                tea_name.setText(sound.tecname);
-                musicname.setText(sound.musicname);
-                tectitle.setText(sound.tectitle);
-                commenttime.setText(sound.commenttime + "\"");
-                soundtime.setText(sound.soundtime + "\"");
-                views.setText(sound.views + "");
-                like.setText(sound.like + "");
-                if (sound.type == 1) {
-                    musictype.setImageResource(R.mipmap.shengyue);
-                } else {
-                    musictype.setImageResource(R.mipmap.boyin);
-                }
-
-                long t = System.currentTimeMillis() / 1000 - sound.created;
-                if (t < 2 * 24 * 60 * 60 && t > 0) {
-                    tea_listen.setText("限时免费听");
-                } else {
-                    if (sound.listen == 1) {
-                        tea_listen.setText("已付费");
-                    } else {
-                        tea_listen.setText("1元偷偷听");
-                    }
-                }
-
-                PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
-                PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
-
-                String2TimeUtils string2TimeUtils = new String2TimeUtils();
-                long currentTimeMillis = System.currentTimeMillis() / 1000;
-
-                long time = currentTimeMillis - sound.edited;
-                created.setText(string2TimeUtils.long2Time(time));
-
-                stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
-
-                stufileName = stuUrl.substring(
-                        stuUrl.lastIndexOf("/") + 1,
-                        stuUrl.length());
-                stufileName = sound.musicname + "_" + stufileName;
-                stuFile = new File(Variable.StorageMusicCachPath, stufileName);
-
-                teaUrl = MyNetApiConfig.ImageServerAddr + sound.commentpath;
-                teafileName = teaUrl.substring(
-                        teaUrl.lastIndexOf("/") + 1,
-                        teaUrl.length());
-                teafileName = sound.musicname + "_" + teafileName;
-                teaFile = new File(Variable.StorageMusicCachPath, teafileName);
+                initData();
 
             } else {
                 getActivity().finish();
@@ -261,10 +285,82 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     }
 
+    private void initData() {
+        desc.setText(sound.desc);
+        soundtime.setText(sound.soundtime + "\"");
+
+        tea_name.setText(sound.tecname);
+        musicname.setText(sound.musicname);
+        tectitle.setText(sound.tectitle);
+        commenttime.setText(sound.commenttime + "\"");
+        soundtime.setText(sound.soundtime + "\"");
+        views.setText(sound.views + "");
+        like.setText(sound.like + "");
+        if (sound.type == 1) {
+            musictype.setImageResource(R.mipmap.shengyue);
+        } else {
+            musictype.setImageResource(R.mipmap.boyin);
+        }
+
+        long t = System.currentTimeMillis() / 1000 - sound.created;
+        if (t < 2 * 24 * 60 * 60 && t > 0) {
+            tea_listen.setText("限时免费听");
+        } else {
+            if (sound.listen == 1) {
+                tea_listen.setText("已付费");
+            } else {
+                tea_listen.setText("1元偷偷听");
+            }
+        }
+
+        PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
+        PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
+
+        String2TimeUtils string2TimeUtils = new String2TimeUtils();
+        long currentTimeMillis = System.currentTimeMillis() / 1000;
+
+        long time = currentTimeMillis - sound.edited;
+        created.setText(string2TimeUtils.long2Time(time));
+
+        stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
+
+        stufileName = stuUrl.substring(
+                stuUrl.lastIndexOf("/") + 1,
+                stuUrl.length());
+        stufileName = sound.musicname + "_" + stufileName;
+        stuFile = new File(Variable.StorageMusicCachPath, stufileName);
+
+        teaUrl = MyNetApiConfig.ImageServerAddr + sound.commentpath;
+        teafileName = teaUrl.substring(
+                teaUrl.lastIndexOf("/") + 1,
+                teaUrl.length());
+        teafileName = sound.musicname + "_" + teafileName;
+        teaFile = new File(Variable.StorageMusicCachPath, teafileName);
+    }
+
     @Override
     protected void init(Bundle savedInstanceState) {
         stu_listen.setOnClickListener(this);
         tea_listen.setOnClickListener(this);
+
+        sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
+        userInfo = AppShare.getUserInfo(getActivity());
+
+        if (sound == null) {
+            sid = getActivity().getIntent().getExtras().getString("data");
+
+            if (AppShare.getIsLogin(getActivity())) {
+
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                                .getSoundDetail(getActivity(), sid, userInfo.uid),
+                        "getSoundDetail", SoundItemDetailFragment.this);
+
+            }
+        } else {
+            initData();
+        }
+
 
         super.init(savedInstanceState);
     }
@@ -278,9 +374,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                     palyStudentVoice();
 
                 } else {
-                    String path = Variable.StorageMusicCachPath;
-                    taskS = new DownLoaderTask(stuUrl, path, stufileName, getActivity());
-                    taskS.execute();
+
+                    downloadStuId = dowoload(stuUrl, stufileName, 0);
                 }
 
 
@@ -288,15 +383,12 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             case R.id.tea_listen:
                 long t = System.currentTimeMillis() / 1000 - sound.created;
 
-
                 if (t < 2 * 24 * 60 * 60 && t > 0) {
                     if (teaFile.exists()) {
                         palyTeacherVoice();
 
                     } else {
-                        String path = Variable.StorageMusicCachPath;
-                        taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
-                        taskT.execute();
+                        downloadTeaId = dowoload(teaUrl, teafileName, 1);
                     }
                 } else {
                     if (sound.listen == 1) {
@@ -304,9 +396,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                             palyTeacherVoice();
 
                         } else {
-                            String path = Variable.StorageMusicCachPath;
-                            taskT = new DownLoaderTeaTask(teaUrl, path, teafileName, getActivity());
-                            taskT.execute();
+                            downloadTeaId = dowoload(teaUrl, teafileName, 1);
                         }
                     } else {
                         String desc = "";
@@ -315,9 +405,13 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         } else {
                             desc = "去充值";
                         }
+                        String coin = "0";
+                        if (userInfo.coin_apple > 0) {
+                            coin = userInfo.coin_apple + "00";
+                        }
 
                         dialog = DialogUtil.showMyDialog(getActivity(), "使用艺币支付", "偷听需支付100艺币，当前余额"
-                                + userInfo.coin_apple + "00艺币", "取消", new View.OnClickListener() {
+                                + coin + "艺币", "取消", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
@@ -348,6 +442,90 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        /** 注册下载完成接收广播 **/
+        getActivity().registerReceiver(downloadCompleteReceiver,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    @Override
+    public void onPause() {
+        getActivity().unregisterReceiver(downloadCompleteReceiver);
+        if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
+            future.cancel(true);
+            scheduledExecutorService.shutdown();
+            scheduledExecutorService = null;
+
+        }
+        super.onPause();
+    }
+
+
+    private long dowoload(String downloadUrl, String fileName, final int tag) {
+        downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        //downloadUrl为下载地址
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
+
+        //设置文件下载目录和文件名
+        //   request.setDestinationInExternalPublicDir("Android/data/com.yiqu.iyijiayi/cache/musiccach", fileName);
+        request.setDestinationInExternalFilesDir(getActivity(), Environment.DIRECTORY_DOWNLOADS, fileName);
+
+        //设置下载中通知栏提示的标题
+        request.setTitle(fileName);
+
+        //设置下载中通知栏提示的介绍
+        request.setDescription(fileName);
+        // 设置为可见和可管理
+        request.setVisibleInDownloadsUi(false);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+
+        scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+        future = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = mHandler.obtainMessage();
+                if (tag == 0) {
+                    msg.what = Constant.QUERY_STUDENT;
+                } else {
+                    msg.what = Constant.QUERY_TEACHER;
+                }
+
+                mHandler.sendMessage(msg);
+            }
+        }, 500, 300, TimeUnit.MILLISECONDS);
+
+        return downloadManager.enqueue(request);
+
+    }
+
+    BroadcastReceiver downloadCompleteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+            if (completeDownloadId == downloadTeaId) {
+                tea_listen.setText("100%");
+                downloadTeaId = -1;
+                palyTeacherVoice();
+            }
+            if (completeDownloadId == downloadStuId) {
+                stu_listen.setText("100%");
+                downloadStuId = -1;
+                palyStudentVoice();
+
+            }
+            if (downloadTeaId == -1 && downloadTeaId == -1) {
+                if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
+                    future.cancel(true);
+                    scheduledExecutorService.shutdown();
+                    scheduledExecutorService = null;
+                }
+            }
+        }
+    };
 
 
     private void palyStudentVoice() {
@@ -455,16 +633,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     public void playVoicePause() {
-//        LogUtils.LOGE(tag, "----");
 
-//        if (mTimer != null) {
-//            mTimer.cancel();
-//            mTimer = null;
-//        }
-//        if (mTimerTask != null) {
-//            mTimerTask.cancel();
-//            mTimerTask = null;
-//        }
     }
 
     @Override
@@ -480,305 +649,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         stucurrentTime = 0;
         teacurrentTime = 0;
-        LogUtils.LOGE(tag, stucurrentTime + "----" + teacurrentTime);
+
         commenttime.setText(sound.commenttime + "\"");
         soundtime.setText(sound.soundtime + "\"");
 
     }
-
-    public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
-
-        private final String TAG = "DownLoaderTask";
-        private URL mUrl;
-        private File mFile;
-        private int mProgress = 0;
-        private ProgressReportingOutputStream mOutputStream;
-        private Activity mContext = null;
-        private int contentLength = 1;
-
-        public DownLoaderTask(String downloadPath, String out, String fileName, Activity context) {
-            super();
-            mContext = context;
-            try {
-                mUrl = new URL(downloadPath);
-
-                mFile = new File(out, fileName);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            progressBar.setProgress(0);
-            stu_listen.setText("");
-//
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-            return download();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-
-            if (values.length > 1) {
-                contentLength = values[1];
-                if (contentLength == -1) {
-//                    progressBar.setIndeterminate(true);
-                } else {
-//                    progressBar.setMax(contentLength);
-                }
-            } else {
-//                progressBar.setProgress(values[0].intValue());
-                if (contentLength == -1) {
-
-                } else {
-                    stu_listen.setText(values[0].intValue() * 100 / contentLength + "%");
-                }
-            }
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            super.onPostExecute(result);
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-            palyStudentVoice();
-
-
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length() */) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output,
-                    1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends
-                FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
-
-    }
-
-    public class DownLoaderTeaTask extends AsyncTask<Void, Integer, Long> {
-
-        private final String TAG = "DownLoaderTask";
-        private URL mUrl;
-        private File mFile;
-        private int mProgress = 0;
-        private ProgressReportingOutputStream mOutputStream;
-        private Activity mContext = null;
-        private int contentLength = 1;
-
-        public DownLoaderTeaTask(String downloadPath, String out, String fileName, Activity context) {
-            super();
-            mContext = context;
-            try {
-                mUrl = new URL(downloadPath);
-
-                mFile = new File(out, fileName);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            progressBar.setProgress(0);
-            tea_listen.setText("");
-//
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-            return download();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-            if (values.length > 1) {
-                contentLength = values[1];
-                if (contentLength == -1) {
-                } else {
-                }
-            } else {
-                if (contentLength == -1) {
-
-                } else {
-                    tea_listen.setText(values[0].intValue() * 100 / contentLength + "%");
-                }
-            }
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            // super.onPostExecute(result);
-
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-            palyTeacherVoice();
-
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length() */) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output,
-                    1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends
-                FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
-
-    }
-
 
     @Override
     public void onDestroy() {
@@ -794,12 +669,16 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             mTimerTask = null;
         }
 
-        if (taskT != null && taskT.getStatus() == AsyncTask.Status.RUNNING) {
-            taskT.cancel(true); // 如果Task还在运行，则先取消它
+        if (downloadManager != null ){
+            if (downloadTeaId!=-1){
+                downloadManager.remove(downloadTeaId);
+            }
+            if (downloadStuId!=-1){
+                downloadManager.remove(downloadStuId);
+            }
+
         }
-        if (taskS != null && taskS.getStatus() == AsyncTask.Status.RUNNING) {
-            taskS.cancel(true); // 如果Task还在运行，则先取消它
-        }
+
         super.onDestroy();
     }
 }

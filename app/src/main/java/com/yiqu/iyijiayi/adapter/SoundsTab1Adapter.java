@@ -41,7 +41,6 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
         mContext = context;
     }
 
-
     public void setData(ArrayList<Music> list) {
         datas = list;
         notifyDataSetChanged();
@@ -104,7 +103,6 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
         return v;
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         Music m = getItem(arg2 - 1);
@@ -114,7 +112,6 @@ public class SoundsTab1Adapter extends BaseAdapter implements OnItemClickListene
         bundle.putSerializable("music", m);
         i.putExtras(bundle);
         mContext.startActivity(i);
-
     }
 
 }

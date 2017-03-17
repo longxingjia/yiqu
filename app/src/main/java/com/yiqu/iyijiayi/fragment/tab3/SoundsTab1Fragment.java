@@ -51,10 +51,9 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
 
     @Override
     protected void initView(View v) {
+
 //        ToastManager.getInstance(getActivity()).showText("1");
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
-
-        //  listView = (RefreshList) v.findViewById(R.id.listView);
         soundsTab1Adapter = new SoundsTab1Adapter(getActivity());
         listView.setAdapter(soundsTab1Adapter);
         listView.setOnItemClickListener(soundsTab1Adapter);

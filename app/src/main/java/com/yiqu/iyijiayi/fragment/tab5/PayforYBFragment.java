@@ -94,7 +94,12 @@ public class PayforYBFragment extends AbsAllFragment implements View.OnClickList
         } else {
             return;
         }
-        mine_yibi.setText(userInfo.coin_apple + "00");
+        String coin = "0";
+        if (userInfo.coin_apple > 0) {
+            coin = userInfo.coin_apple + "00";
+        }
+
+        mine_yibi.setText(coin);
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 

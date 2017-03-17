@@ -51,13 +51,13 @@ public class StubActivity extends AbsFragmentAct {
 	public void onBackPressed() {
 
 		if (f != null) {
-			LogUtils.LOGE(tag,"1");
+
 			if (!f.onBackPressed()) {
-				LogUtils.LOGE(tag,"2");
+
 				super.onBackPressed();
 			}
 		} else {
-			LogUtils.LOGE(tag,"f");
+
 			super.onBackPressed();
 		}
 	}

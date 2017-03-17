@@ -401,36 +401,21 @@ public class MyNetRequestConfig {
     }
 
     /**
-     * 25、老师对自己班级学生进行审核的接口 参数：String token//登录凭证 ,String shjhm //当前登录用户手机号
-     * ,String xsshjhm//学生的手机号 , String type //操作类型（1，踢出操作；2，同意操作）
      */
-    public static NetRequest updateCheckStatus(Context c, String token,
-                                               String shjhm, String xsshjhm, String type) {
+    public static NetRequest checkUpdate(Context c) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
-        r.addHttpParam("xsshjhm", xsshjhm);
-        r.addHttpParam("type", type);
+        r.addHttpParam("type", "2");
         return r;
     }
 
-    /**
-     * ,String xsshjhm//学生的手机号 , String type //操作类型（1，踢出操作；2，同意操作）
-     */
+
 
     /**
-     * 26、获取软件更新版本信息的接口 参数
-     *
-     * @param c
-     * @param token 登录凭证
-     * @param shjhm 当前登录用户手机号
-     * @return 状态码：statusCode：0表示数据库访问异常，1表示成功。2表示token失效 。验证安全凭证：token,1小时失效
      */
-    public static NetRequest updateApp(Context c, String token, String shjhm
-    ) {
+    public static NetRequest like(Context c, String uid, String sid) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("token", token);
-        r.addHttpParam("shjhm", shjhm);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("sid", sid);
         return r;
     }
 }

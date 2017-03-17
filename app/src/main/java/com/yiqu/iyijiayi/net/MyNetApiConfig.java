@@ -399,6 +399,13 @@ public class MyNetApiConfig {
 //        public static String uploadSounds = ServerAddr+"";
 
     };
+    public static MyNetApi like = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/like";
+        }
+
+    };
 
     public static MyNetApi getNewOrder = new MyNetApi() {
         @Override
@@ -449,6 +456,19 @@ public class MyNetApiConfig {
         @Override
         public NetMethod getNetMethod() {
             return NetMethod.POST;
+        }
+
+
+    };
+    public static MyNetApi checkUpdate = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/site/check-update";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
         }
 
 

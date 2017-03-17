@@ -126,9 +126,9 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         if (AppShare.getIsLogin(mContext)){
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
-            i.putExtra("data",f.sid+"");
-            LogUtils.LOGE(tag,f.sid+"");
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("xizuo",f);
+            i.putExtras(bundle);
             mContext.startActivity(i);
         }else {
             Intent i = new Intent(mContext, StubActivity.class);

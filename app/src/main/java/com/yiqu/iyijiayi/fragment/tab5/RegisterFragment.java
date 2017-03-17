@@ -94,6 +94,7 @@ public class RegisterFragment extends AbsAllFragment {
             public void onClick(View v) {
                 if (AppAvilibleUtils.isWeixinAvilible(getActivity())){
                     Intent intent = new Intent(getActivity(), WXEntryActivity.class);
+                    intent.putExtra("data","login");
                     startActivity(intent);
                 }else {
                     ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");

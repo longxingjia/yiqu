@@ -39,15 +39,17 @@ public class FileFunction {
         if (!FileFunction.IsExitsSdcard()) {
 //            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
             Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
+
         } else {
             Variable.StorageDirectoryPath =application.getExternalCacheDir().getAbsolutePath();
+
 //                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
         }
 
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
-        Variable.StorageMusicCachPath = Variable.StorageDirectoryPath + "/musiccach/"; //audio
+        Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
         File localFile = new File(Variable.StorageMusicPath);
         if(!localFile.exists()){
             localFile.mkdirs();

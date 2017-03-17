@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 public class Tools {
 
@@ -152,7 +153,7 @@ public class Tools {
 	}
 
 	@SuppressWarnings("unchecked")
-//	public static long unzip(File mInput, String gamePackage) {
+//	public static long unzip(File mInput,String path,String name) {
 //		long extractedSize = 0L;
 //		Enumeration<ZipEntry> entries;
 //		ZipFile zip = null;
@@ -165,9 +166,9 @@ public class Tools {
 //				if (entry.isDirectory()) {
 //					continue;
 //				}
-//				File destination = new File(new File(DB_PATH),
+//				File destination = new File(new File(path),
 //						entry.getName().replace(entry.getName().substring(0, entry.getName().indexOf("/")),
-//								gamePackage)
+//								name)
 //						);
 //				if (!destination.getParentFile().exists()) {
 //					destination.getParentFile().mkdirs();
@@ -196,7 +197,45 @@ public class Tools {
 //		return extractedSize;
 //	}
 
-	public static int copy(InputStream input, OutputStream output) {
+    /**
+     * DeCompress the ZIP to the path
+     * @param zipFileString  name of ZIP
+     * @param outPathString   path to be unZIP
+     * @throws Exception
+     */
+    public static void UnZipFolder(String zipFileString, String outPathString) throws Exception {
+        ZipInputStream inZip = new ZipInputStream(new FileInputStream(zipFileString));
+        ZipEntry zipEntry;
+        String szName = "";
+        while ((zipEntry = inZip.getNextEntry()) != null) {
+            szName = zipEntry.getName();
+            if (zipEntry.isDirectory()) {
+                // get the folder name of the widget
+                szName = szName.substring(0, szName.length() - 1);
+
+                File folder = new File(outPathString + File.separator + szName);
+                folder.mkdirs();
+            } else {
+				LogUtils.LOGE("tools",szName);
+                File file = new File(outPathString + File.separator + szName);
+                file.createNewFile();
+                // get the output stream of the file
+                FileOutputStream out = new FileOutputStream(file);
+                int len;
+                byte[] buffer = new byte[1024];
+                // read (len) bytes into buffer
+                while ((len = inZip.read(buffer)) != -1) {
+                    // write (len) byte from buffer at the position 0
+                    out.write(buffer, 0, len);
+                    out.flush();
+                }
+                out.close();
+            }
+        }
+        inZip.close();
+    }
+
+    public static int copy(InputStream input, OutputStream output) {
 		byte[] buffer = new byte[1024 * 8];
 		BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
 		BufferedOutputStream out = new BufferedOutputStream(output, 1024 * 8);

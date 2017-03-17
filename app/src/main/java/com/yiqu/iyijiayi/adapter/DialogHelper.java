@@ -151,11 +151,13 @@ public class DialogHelper {
 
         progress.setMax(max);
 
-
     }
 
     public void setProgress(int p) {
         progress.setProgress(p);
+    }
+    public void setMax(int max) {
+        progress.setMax(max);
     }
 
 }

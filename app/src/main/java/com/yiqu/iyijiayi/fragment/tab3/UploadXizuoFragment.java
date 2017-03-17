@@ -156,6 +156,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         @Override
         protected void onProgressUpdate(Integer... values) {
             dialogHelper.setProgress(values[0]);
+         //   LogUtils.LOGE(tag,values[0]+"");
             super.onProgressUpdate(values);
 
         }

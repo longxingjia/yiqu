@@ -114,13 +114,13 @@ public class RecordActivityForRecordFrag extends Activity
         }
     };
     private EditText desc;
+    private TextView content;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
 
     }
@@ -143,6 +143,7 @@ public class RecordActivityForRecordFrag extends Activity
         musictime = (TextView) findViewById(R.id.musictime);
 //        musicSize = (TextView) findViewById(R.id.musicSize);
         tv_record = (TextView) findViewById(R.id.tv_record);
+        content = (TextView) findViewById(R.id.content);
         recordVoiceButton = (TextView) findViewById(R.id.recordVoiceButton);
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
@@ -184,11 +185,13 @@ public class RecordActivityForRecordFrag extends Activity
             @Override
             public void onClick(View arg0) {
                 String str = name.getText().toString().trim();
+                String con = desc.getText().toString().trim();
                 if (TextUtils.isEmpty(str)) {
                     ToastManager.getInstance(instance).showText("输入内如不能为空");
                 } else {
                     dialog.dismiss();
                     musicName.setText(str);
+                    content.setText(con);
                 }
             }
         });
@@ -412,7 +415,7 @@ public class RecordActivityForRecordFrag extends Activity
         mIsRecording = true;
         mIsLittleTime = true;
         mTimerTask = new TimerTask() {
-            int i = 2000;
+            int i = 300;
 
             @Override
             public void run() {

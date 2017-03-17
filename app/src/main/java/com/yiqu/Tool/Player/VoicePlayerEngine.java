@@ -10,6 +10,8 @@ import com.yiqu.Tool.Data.MusicData;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
+import java.io.File;
+
 /**
  * Created by zhengtongyu on 16/5/29.
  */
@@ -104,18 +106,14 @@ public class VoicePlayerEngine {
             UpdateFunction.ShowToastFromThread("不存在语音文件");
             return;
         }
-
         stopVoice();
-
         this.voicePlayerInterface = voicePlayerInterface;
-
         prepareMusic(voiceUrl, time);
     }
 
     private synchronized void prepareMusic(String voiceUrl, int time) {
         playingUrl = voiceUrl;
         currentTime = time;
-
         musicPlayerState = MusicData.MusicPlayerState.preparing;
 
         try {
@@ -123,11 +121,12 @@ public class VoicePlayerEngine {
             voicePlayer.setDataSource(voiceUrl);
             voicePlayer.prepareAsync();
 
-
         } catch (Exception e) {
-            playFail();
 
-            UpdateFunction.ShowToastFromThread("播放语音文件失败");
+            File file = new File(playingUrl);
+            file.delete();
+            playFail();
+            UpdateFunction.ShowToastFromThread("播放语音文件失败,点击重新下载");
             LogFunction.error("播放语音异常", e);
         }
     }
@@ -143,6 +142,8 @@ public class VoicePlayerEngine {
             voicePlayer.prepareAsync();
         } catch (Exception e) {
             playFail();
+
+
 
             UpdateFunction.ShowToastFromThread("播放语音文件失败");
             LogFunction.error("播放语音异常", e);

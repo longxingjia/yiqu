@@ -121,7 +121,6 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         rl_edit_photo.setOnClickListener(this);
         rl_edit_introduction.setOnClickListener(this);
         rl_edit_apply.setOnClickListener(this);
-
     }
 
     @Override

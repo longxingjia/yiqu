@@ -39,12 +39,18 @@
         android:layout_gravity="center"
         android:layout_marginRight="2dp"
         android:background="@drawable/question_btn_selector"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:padding="10dp" />
 
     <Button
         android:id="@+id/upload"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_gravity="center"
         android:layout_marginRight="7dp"
         android:background="@drawable/upload_btn_selector"

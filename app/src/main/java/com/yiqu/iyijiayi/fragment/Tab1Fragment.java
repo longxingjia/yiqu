@@ -116,7 +116,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 tab1XizuoAdapter.setData(remen.xizuo);
                 tab1SoundAdapter.setData(remen.sound);
             }
-        }else {
+        } else {
             RestNetCallHelper.callNet(
                     getActivity(),
                     MyNetApiConfig.remen,
@@ -216,7 +216,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
         if (netResponse != null && "Remen".equals(id)) {
-
             if (netResponse.bool == 1) {
                 Gson gson = new Gson();
                 Remen remen = gson.fromJson(netResponse.data, Remen.class);
@@ -279,49 +278,49 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         return false;
     }
 
-// PagerAdapter是object的子类
-class MyAdapter extends PagerAdapter {
+    // PagerAdapter是object的子类
+    class MyAdapter extends PagerAdapter {
 
-    /**
-     * PagerAdapter管理数据大小
-     */
-    @Override
-    public int getCount() {
-        return views.size();
-    }
+        /**
+         * PagerAdapter管理数据大小
+         */
+        @Override
+        public int getCount() {
+            return views.size();
+        }
 
-    /**
-     * 关联key 与 obj是否相等，即是否为同一个对象
-     */
-    @Override
-    public boolean isViewFromObject(View view, Object obj) {
-        return view == obj; // key
-    }
+        /**
+         * 关联key 与 obj是否相等，即是否为同一个对象
+         */
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj; // key
+        }
 
-    /**
-     * 销毁当前page的相隔2个及2个以上的item时调用
-     */
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
-    }
+        /**
+         * 销毁当前page的相隔2个及2个以上的item时调用
+         */
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
+        }
 
-    /**
-     * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
-     */
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+        /**
+         * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
+         */
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
 
-        View view = views.get(position);
-        // 如果访问网络下载图片，此处可以进行异步加载
-        ImageView img = (ImageView) view.findViewById(R.id.spinner);
+            View view = views.get(position);
+            // 如果访问网络下载图片，此处可以进行异步加载
+            ImageView img = (ImageView) view.findViewById(R.id.spinner);
 //            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
-        img.setBackgroundResource(imgIdArray[position]);
-        container.addView(view);
-        return views.get(position); // 返回该view对象，作为key
-    }
+            img.setBackgroundResource(imgIdArray[position]);
+            container.addView(view);
+            return views.get(position); // 返回该view对象，作为key
+        }
 
-}
+    }
 
 
     public void resfreshOk() {

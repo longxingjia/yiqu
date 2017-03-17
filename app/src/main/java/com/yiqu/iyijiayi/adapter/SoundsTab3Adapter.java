@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
@@ -41,7 +42,6 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     public SoundsTab3Adapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-
     }
 
 
@@ -139,13 +139,14 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//        Music m = getItem(arg2 - 1);
-//        Intent i = new Intent(mContext, StubActivity.class);
-//        i.putExtra("fragment", DownloadXizuoFragment.class.getName());
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("music", m);
-//        i.putExtras(bundle);
-//        mContext.startActivity(i);
+        ComposeVoice m = getItem(arg2 - 1);
+        LogUtils.LOGE(tag+"6",m.toString()+"44444444444");
+
+        Intent intent = new Intent(mContext, PlayActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("data", m);
+        intent.putExtras(b);
+        mContext.startActivity(intent);
 
     }
 

@@ -26,12 +26,14 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.NetworkRestClient;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
@@ -50,11 +52,16 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         api.handleIntent(getIntent(), this);
 
-        regTowx();
-        SendAuth.Req req = new SendAuth.Req();
-        req.scope = "snsapi_userinfo";
-        req.state = "wechat_sdk";
-        api.sendReq(req);
+        String login = getIntent().getStringExtra("data");
+
+        if (!TextUtils.isEmpty(login)) {
+            regTowx();
+            SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = "wechat_sdk";
+            api.sendReq(req);
+        }
+
     }
 
     @Override
@@ -68,6 +75,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     public void onReq(BaseReq baseReq) {
 
     }
+
     private void regTowx() {
         api = WXAPIFactory.createWXAPI(this, APP_ID, true);
         api.registerApp(APP_ID);
@@ -211,11 +219,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                             @Override
                             public void onNetEnd(String id, int type, NetResponse netResponse) {
-//                                LogUtils.LOGE(netResponse.toString());
+
                                 if (netResponse.bool == 0) {
                                     //新用户
                                     Model.startNextAct(mContext, SetPhoneFragment.class.getName());
-
                                 } else {
 
                                     Gson gson = new Gson();
@@ -225,7 +232,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
                                     intent.putExtra("fragmentName", Tab5Fragment.class.getName());
                                     startActivity(intent);
-
 
                                 }
                                 finish();

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,7 +124,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.tectitle.setText(f.tectitle);
 
             long time = System.currentTimeMillis() / 1000 - f.created;
-//            LogUtils.LOGE(tag,time+"");
 
             if (time < 2 * 24 * 60 * 60 && time > 0) {
                 h.tea_listen.setText("限时免费听");
@@ -172,12 +172,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                     R.string.fm_net_call_no_network);
             return;
         }
-        ;
+
         if (AppShare.getIsLogin(mContext)) {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-            i.putExtra("data", f.sid + "");
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Sound",f);
+            i.putExtras(bundle);
             mContext.startActivity(i);
         } else {
             Intent i = new Intent(mContext, StubActivity.class);

@@ -43,7 +43,10 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/white_box"
-            android:hint="请输入一个名称" />
+            android:hint="请输入一个名称"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -65,13 +68,16 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/white_box"
             android:gravity="top"
-            android:hint="请输入本次录音内容(选填)" />
+            android:hint="请输入本次录音内容(选填)"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="20dp"
-            android:background="@color/lightgrey" />
+            android:background="@color/title_next_txt_disable_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +97,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/lightgrey" />
+                android:background="@color/title_next_txt_disable_color" />
 
             <TextView
                 android:id="@+id/btn_cancel"

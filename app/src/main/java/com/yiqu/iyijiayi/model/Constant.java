@@ -19,6 +19,9 @@ public class Constant {
 	public static final String APP_ID = "wx6926bd130c563b44";
 	public static final String AppSecret="988af2a73db57256efd94f55a44284b7";
 	public static final int FINISH= 0x123;
+	public static final int QUERY= 0x124;
+	public static final int QUERY_STUDENT= 0x125;
+	public static final int QUERY_TEACHER= 0x126;
 
 	public static class ShowMsgActivity {
 		public static final String STitle = "showmsg_title";

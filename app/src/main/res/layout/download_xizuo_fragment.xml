@@ -30,7 +30,7 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="8dp"
         android:max="100"
-        android:progress="80"
+        android:progress="0"
         android:progressDrawable="@drawable/progressbar_download"
         android:visibility="visible" />
 

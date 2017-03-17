@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
+import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
@@ -29,7 +31,7 @@ import java.util.zip.Inflater;
  * Created by Administrator on 2017/2/15.
  */
 
-public class RecordFragment extends AbsFragment implements View.OnClickListener,RefreshList.IRefreshListViewListener {
+public class RecordFragment extends AbsFragment implements View.OnClickListener, RefreshList.IRefreshListViewListener {
 
 
     private TextView buttonOne;
@@ -60,7 +62,7 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
 
     @Override
     protected void initView(View v) {
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        final LayoutInflater inflater = LayoutInflater.from(getActivity());
         View headView = inflater.inflate(R.layout.header_view_record, null);
 
         buttonOne = (TextView) headView.findViewById(R.id.buttonOne);
@@ -78,10 +80,21 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         });
         buttonTwo.setOnClickListener(this);
 
-        soundsTab3Adapter = new SoundsTab3Adapter( getActivity());
+        soundsTab3Adapter = new SoundsTab3Adapter(getActivity());
         listView.setAdapter(soundsTab3Adapter);
-        listView.setOnItemClickListener(soundsTab3Adapter);
         listView.setRefreshListListener(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(getActivity(), PlayActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("data", voice.get(position-2));
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -98,10 +111,10 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         ComposeVoiceInfoDBHelper com = new ComposeVoiceInfoDBHelper(getActivity());
         voice = com.getAll(ComposeVoiceInfoDBHelper.UNCOMPOSE);
         com.close();
-        if (voice.size()==0){
+        if (voice.size() == 0) {
             rl_no_record.setVisibility(View.VISIBLE);
             rl_have_record.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             rl_no_record.setVisibility(View.INVISIBLE);
             rl_have_record.setVisibility(View.VISIBLE);
             soundsTab3Adapter.setData(voice);
@@ -119,10 +132,10 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         ComposeVoiceInfoDBHelper com = new ComposeVoiceInfoDBHelper(getActivity());
         voice = com.getAll(ComposeVoiceInfoDBHelper.UNCOMPOSE);
         com.close();
-        if (voice.size()==0){
+        if (voice.size() == 0) {
             rl_no_record.setVisibility(View.VISIBLE);
             rl_have_record.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             rl_no_record.setVisibility(View.INVISIBLE);
             rl_have_record.setVisibility(View.VISIBLE);
             soundsTab3Adapter.setData(voice);
