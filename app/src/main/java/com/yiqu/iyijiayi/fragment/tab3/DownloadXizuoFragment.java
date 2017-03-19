@@ -171,7 +171,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 //        AppShare
 
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
-        LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
+       // LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
 
         if (mFile.exists()) {
          //   Log.d(tag, "file " + mFile.getName() + " already exits!!");

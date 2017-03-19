@@ -215,6 +215,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:drawableLeft="@mipmap/comment"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
             android:text="评论"
             android:textColor="@color/redMain"
             android:textSize="16sp" />

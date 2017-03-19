@@ -22,6 +22,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
 import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
+import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
 import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Student;
@@ -57,7 +58,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab1;
     }
 
     @Override
@@ -157,16 +158,15 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
                 AppShare.setZhaoRenList(getActivity(), zhaoRen);
                 teacher = zhaoRen.teacher;
                 student = zhaoRen.student;
-//                LogUtils.LOGE(student.toString());
+
                 tab2TeacherAdapter.setData(zhaoRen);
                 setListViewHeightBasedOnChildren(lvTeacher);
                 tab2StudentAdapter.setData(zhaoRen);
                 loadMoreTeacher.setVisibility(View.VISIBLE);
                 loadMoreStudent.setVisibility(View.VISIBLE);
-//            resfreshOk();
+
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
-//            resfreshFail();
             }
         }
         super.onNetEnd(id, type, netResponse);
@@ -174,7 +174,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT ;
+        return FLAG_TXT |FLAG_BTN;
     }
 
     @Override
@@ -187,7 +187,12 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected boolean onPageNext() {
-        pageNextComplete();
+       // pageNextComplete();
+        Intent intent = new Intent(getActivity(), StubActivity.class);
+        intent.putExtra("fragment", SearchFragment.class.getName());
+        intent.putExtra("data","search_user");
+        getActivity().startActivity(intent);
+
         return true;
     }
 

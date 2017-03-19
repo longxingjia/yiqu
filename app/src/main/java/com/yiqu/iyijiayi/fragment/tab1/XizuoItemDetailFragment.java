@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -19,8 +21,10 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.Tool.Function.VoiceFunction;
@@ -209,8 +213,10 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         musictype = (ImageView) v.findViewById(R.id.musictype);
         listview = (ListView) v.findViewById(R.id.listview);
         stu_listen.setOnClickListener(this);
+
         tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity());
         likes = AppShare.getLikeList(getActivity());
+
         listview.setAdapter(tab1CommentsAdapter);
         xizuo = (Xizuo) getActivity().getIntent().getSerializableExtra("xizuo");
         if (xizuo == null) {
@@ -324,8 +330,22 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                         "like", XizuoItemDetailFragment.this, false, true);
                 break;
             case R.id.comment:
-//                Intent intent = new Intent(getActivity(), CommentActivity.class);
-//                getActivity().startActivity(intent);
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+//                Bundle bundle = new Bundle();
+
+                intent.putExtra("sid",sid+"");
+                intent.putExtra("fromuid",AppShare.getUserInfo(getActivity()).uid+"");
+
+                intent.putExtra("touid",xizuo.fromuid+"");
+                getActivity().startActivity(intent);
+
+//                View popupView = getActivity().getLayoutInflater().inflate(R.layout.activity_comment, null);
+//
+//                PopupWindow mPopupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+//                mPopupWindow.setTouchable(true);
+//                mPopupWindow.setOutsideTouchable(true);
+//                mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+//                mPopupWindow.showAsDropDown(v);
 
                 break;
         }

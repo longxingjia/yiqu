@@ -258,6 +258,34 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi searchMusic = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/search/search-music";
+        }
+
+    };
+    public static MyNetApi searchUser = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/search/search-users";
+        }
+
+    };
+    public static MyNetApi searchSoundByText = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/search/search-sound-by-text";
+        }
+
+    };
+    public static MyNetApi searchByMusicName = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/search/search-by-music-name";
+        }
+
+    };
 
     /**
      * 67、获取推荐关注接口
@@ -495,6 +523,13 @@ public class MyNetApiConfig {
             return NetMethod.GET;
         }
 
+
+    };
+    public static MyNetApi addComment = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/comment/addcomment";
+        }
 
     };
 

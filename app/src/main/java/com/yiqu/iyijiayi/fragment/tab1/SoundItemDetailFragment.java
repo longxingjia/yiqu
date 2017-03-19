@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.Tool.Function.VoiceFunction;
@@ -27,14 +29,19 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ui.views.DialogUtil;
 import com.ui.views.DialogView;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
+import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
+import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -60,6 +67,7 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -201,6 +209,12 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         }
     };
+    private ArrayList<Like> likes;
+    private ListView listview;
+    private Tab1CommentsAdapter tab1CommentsAdapter;
+    private TextView no_comments;
+    private TextView comment;
+    private int likesIndex = -1;
 
 
     @Override
@@ -251,6 +265,22 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         stu_header = (ImageView) v.findViewById(R.id.stu_header);
         tea_header = (ImageView) v.findViewById(R.id.tea_header);
         musictype = (ImageView) v.findViewById(R.id.musictype);
+        listview = (ListView) v.findViewById(R.id.listview);
+        no_comments = (TextView) v.findViewById(R.id.no_comments);
+
+        likes = AppShare.getLikeList(getActivity());
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity());
+        listview.setAdapter(tab1CommentsAdapter);
+        comment = (TextView) v.findViewById(R.id.comment);
+        like.setOnClickListener(this);
+        comment.setOnClickListener(this);
+        likes = AppShare.getLikeList(getActivity());
+    }
+
+    private void initDianZan() {
+        Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed);
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        like.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
     }
 
     @Override
@@ -281,7 +311,43 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 getActivity().finish();
 
             }
+        }else if (id.equals("like")) {
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                if (likesIndex == -1) {
+                    Like l = new Like();
+                    l.sid = sid;
+                    l.islike = 1;
+                    if (likes == null) {
+                        likes = new ArrayList<Like>();
+                    }
+                    likes.add(l);
+                    like.setText(String.valueOf(sound.like + 1));
+                    AppShare.setLikeList(getActivity(), likes);
+                    initDianZan();
+                }
+
+
+            } else {
+
+            }
+        } else if (id.equals("getComments")) {
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                ArrayList<CommentsInfo> commentsInfos
+                        = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<CommentsInfo>>() {
+                }.getType());
+
+                if (commentsInfos == null || commentsInfos.size() == 0) {
+
+                } else {
+                    tab1CommentsAdapter.setData(commentsInfos);
+                    no_comments.setVisibility(View.GONE);
+                }
+
+            }
         }
+
 
     }
 
@@ -336,6 +402,18 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 teaUrl.length());
         teafileName = sound.musicname + "_" + teafileName;
         teaFile = new File(Variable.StorageMusicCachPath, teafileName);
+
+        if (likes != null) {
+            for (int i = 0; i < likes.size(); i++) {
+                Like dz = likes.get(i);
+                if (dz.sid.equals(sid)) {
+
+                    likesIndex = i;
+                    initDianZan();
+                }
+
+            }
+        }
     }
 
     @Override
@@ -358,6 +436,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             }
         } else {
+            sid = String.valueOf(sound.sid);
             initData();
         }
 
@@ -439,6 +518,25 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 }
 
                 break;
+
+            case R.id.like:
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.like, MyNetRequestConfig
+                                .like(getActivity(), AppShare.getUserInfo(getActivity()).uid, sid),
+                        "like", SoundItemDetailFragment.this, false, true);
+                break;
+            case R.id.comment:
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+//                Bundle bundle = new Bundle();
+
+                intent.putExtra("sid",sid+"");
+                intent.putExtra("fromuid",AppShare.getUserInfo(getActivity()).uid+"");
+                LogUtils.LOGE(tag,sound.toString());
+                intent.putExtra("touid",sound.fromuid+"");
+                getActivity().startActivity(intent);
+
+                break;
+
         }
     }
 
@@ -448,6 +546,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         /** 注册下载完成接收广播 **/
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getComments, MyNetRequestConfig
+                        .getComments(getActivity(), sid),
+                "getComments", SoundItemDetailFragment.this, false, true);
     }
 
     @Override

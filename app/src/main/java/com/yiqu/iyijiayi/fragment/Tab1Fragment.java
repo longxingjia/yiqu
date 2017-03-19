@@ -2,7 +2,6 @@ package com.yiqu.iyijiayi.fragment;
 
 
 import android.content.Intent;
-import android.net.Network;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,21 +13,19 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.jauker.widget.BadgeView;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
-import com.yiqu.iyijiayi.fragment.tab1.FindAllFragment;
+import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Remen;
@@ -38,10 +35,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
-import com.yiqu.iyijiayi.view.VpSwipeRefreshLayout;
 
 import java.util.ArrayList;
 
@@ -79,6 +73,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private RefreshList lvSound;
     private Tab1SoundAdapter tab1SoundAdapter;
     private TextView more_xizuo;
+
+    private int count = 0;
+    private int rows = 10;
 
     @Override
     protected int getTitleView() {
@@ -168,7 +165,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             uid = "0";
         }
 
-
     }
 
     @Override
@@ -194,7 +190,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     protected boolean onPageNext() {
        // pageNextComplete();
         Model.startNextAct(getActivity(),
-                FindAllFragment.class.getName());
+                SearchAllFragment.class.getName());
         return true;
     }
 
@@ -229,7 +225,11 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 tab1XizuoAdapter.setData(xizuo);
 
                 tab1SoundAdapter.setData(sound);
-                mLoadMoreView.setMoreAble(false);
+
+                if (sound.size() == rows) {
+                    mLoadMoreView.setMoreAble(true);
+                }
+                count += rows;
                 resfreshOk();
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);

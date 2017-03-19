@@ -22,37 +22,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
-public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListener {
+public class SearchUserAdapter extends BaseAdapter implements OnItemClickListener {
     private String tag ="Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Music> datas = new ArrayList<Music>();
+    private ArrayList<UserInfo> datas = new ArrayList<UserInfo>();
     private Context mContext;
 
-    public SearchMusicAdapter(Context context) {
+    public SearchUserAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
 
     }
 
 
-    public void setData(ArrayList<Music> list) {
+    public void setData(ArrayList<UserInfo> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Music> allDatas) {
+    public void addData(ArrayList<UserInfo> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -63,7 +70,7 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
     }
 
     @Override
-    public Music getItem(int position) {
+    public UserInfo getItem(int position) {
         return datas.get(position);
     }
 
@@ -75,8 +82,8 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
     private class HoldChild {
 
         TextView name;
-        TextView musictype;
-        TextView accompaniment;
+        TextView desc;
+        ImageView header;
 
     }
 
@@ -87,18 +94,19 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.search_music, null);
+                v = mLayoutInflater.inflate(R.layout.search_sound, null);
                 h.name = (TextView) v.findViewById(R.id.musicname);
-                h.musictype = (TextView) v.findViewById(R.id.musictype);
-                h.accompaniment = (TextView) v.findViewById(R.id.accompaniment);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.header = (ImageView) v.findViewById(R.id.header);
 
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Music f = getItem(position);
-            h.name.setText(f.musicname);
-            h.musictype.setText(f.musictype);
-            h.accompaniment.setText(f.accompaniment);
+            UserInfo f = getItem(position);
+            h.name.setText(f.username);
+            h.desc.setText(f.desc);
+
+            PictureUtils.showPicture(mContext,f.userimage,h.header,47);
 
 
         } catch (Exception e) {
@@ -112,21 +120,50 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
         if (position-1<0){
             return;
         }
-
-        Music f = getItem(position-1);
+        UserInfo f = getItem(position-1);
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
-        if (AppShare.getIsLogin(mContext)){
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", DownloadXizuoFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("music",f);
-            i.putExtras(bundle);
-            mContext.startActivity(i);
+        if (AppShare.getIsLogin(mContext)) {
+
+            RestNetCallHelper.callNet(mContext,
+                    MyNetApiConfig.getUserPage,
+                    MyNetRequestConfig.getUserPage(mContext
+                            , f.uid, AppShare.getUserInfo(mContext).uid),
+                    "getUserPage",
+                    new NetCallBack() {
+                        @Override
+                        public void onNetNoStart(String id) {
+
+                        }
+
+                        @Override
+                        public void onNetStart(String id) {
+
+                        }
+
+                        @Override
+                        public void onNetEnd(String id, int type, NetResponse netResponse) {
+                            if (TYPE_SUCCESS == type) {
+                                Gson gson = new Gson();
+                                HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                                Intent i = new Intent(mContext, StubActivity.class);
+                                i.putExtra("fragment", HomePageFragment.class.getName());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("data",homePage);
+                                i.putExtras(bundle);
+                                mContext.startActivity(i);
+                            }
+
+                        }
+                    });
+
+
+
+
         }else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());

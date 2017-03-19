@@ -59,7 +59,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     private EditText content;
     private TextView musicName;
     private Button submit;
-    private String tag = "UploadXizuoFragment";
+    private String tag = "AddQuestionFragment";
     private Music music;
     private String fileUrl;
     private ComposeVoice composeVoice;
@@ -305,32 +305,36 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             }
         } else if (id.equals("getNewOrder")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-
+                LogUtils.LOGE(tag,netResponse.toString());
                 try {
-                    PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
-                    Order order = payInfo.order;
-                    Wx_arr wx_arr = payInfo.wx_arr;
-                    if (wx_arr == null) {
 
-                        RestNetCallHelper.callNet(
-                                getActivity(),
-                                MyNetApiConfig.orderQuery,
-                                MyNetRequestConfig.orderQuery(getActivity(), order.order_number),
-                                "orderQuery", AddQuestionFragment.this);
-                    } else {
+                    if (netResponse.data.contains("wx_arr")){
+                        PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
+                        Order order = payInfo.order;
+                        Wx_arr wx_arr = payInfo.wx_arr;
+
                         Intent i = new Intent(getActivity(), StubActivity.class);
                         i.putExtra("fragment", PayforFragment.class.getName());
                         Bundle b = new Bundle();
                         b.putSerializable("data", payInfo);
                         i.putExtras(b);
                         startActivityForResult(i, requestCode);
+                    }else {
+                        Order order = new Gson().fromJson(netResponse.data, Order.class);
+                        RestNetCallHelper.callNet(
+                                getActivity(),
+                                MyNetApiConfig.orderQuery,
+                                MyNetRequestConfig.orderQuery(getActivity(), order.order_number),
+                                "orderQuery", AddQuestionFragment.this);
                     }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         } else if (id.equals("orderQuery")) {
+            LogUtils.LOGE(tag,netResponse.result);
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
                 userInfo.free_question--;

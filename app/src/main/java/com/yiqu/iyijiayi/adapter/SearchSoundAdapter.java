@@ -24,35 +24,36 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
-public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListener {
+public class SearchSoundAdapter extends BaseAdapter implements OnItemClickListener {
     private String tag ="Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Music> datas = new ArrayList<Music>();
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
 
-    public SearchMusicAdapter(Context context) {
+    public SearchSoundAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
 
     }
 
 
-    public void setData(ArrayList<Music> list) {
+    public void setData(ArrayList<Sound> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Music> allDatas) {
+    public void addData(ArrayList<Sound> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -63,7 +64,7 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
     }
 
     @Override
-    public Music getItem(int position) {
+    public Sound getItem(int position) {
         return datas.get(position);
     }
 
@@ -75,8 +76,8 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
     private class HoldChild {
 
         TextView name;
-        TextView musictype;
-        TextView accompaniment;
+        TextView desc;
+        ImageView header;
 
     }
 
@@ -87,19 +88,17 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.search_music, null);
+                v = mLayoutInflater.inflate(R.layout.search_sound, null);
                 h.name = (TextView) v.findViewById(R.id.musicname);
-                h.musictype = (TextView) v.findViewById(R.id.musictype);
-                h.accompaniment = (TextView) v.findViewById(R.id.accompaniment);
-
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.header = (ImageView) v.findViewById(R.id.header);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Music f = getItem(position);
+            Sound f = getItem(position);
             h.name.setText(f.musicname);
-            h.musictype.setText(f.musictype);
-            h.accompaniment.setText(f.accompaniment);
-
+            h.desc.setText(f.desc);
+            PictureUtils.showPicture(mContext,f.stuimage,h.header,47);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,21 +111,32 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
         if (position-1<0){
             return;
         }
-
-        Music f = getItem(position-1);
+        Sound sound = getItem(position-1);
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
+
         if (AppShare.getIsLogin(mContext)){
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", DownloadXizuoFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("music",f);
-            i.putExtras(bundle);
-            mContext.startActivity(i);
+
+            if (sound.stype == 1) {   //
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+                i.putExtra("data",sound.sid+"");
+
+                mContext.startActivity(i);
+
+//            h.pl.setText("评论了");
+            } else {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                i.putExtra("data", sound.sid + "");
+                mContext.startActivity(i);
+            }
+
+
         }else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());

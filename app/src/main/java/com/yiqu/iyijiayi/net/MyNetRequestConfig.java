@@ -83,6 +83,13 @@ public class MyNetRequestConfig {
         r.addHttpParam("text", text);
         return r;
     }
+   public static NetRequest searchItems(Context c, String text,int count,int rows) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("text", text);
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
+        return r;
+    }
 
     /**
      * 6、
@@ -420,6 +427,14 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam("sid", sid);
+        return r;
+    }
+    public static NetRequest addComment(Context c,  String sid,String fromuid,String touid,String comment) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("touid", touid);
+        r.addHttpParam("comment", comment);
         return r;
     }
 }

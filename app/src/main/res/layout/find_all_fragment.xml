@@ -45,6 +45,57 @@
         android:layout_height="1dp"
         android:background="@color/tab_line_color"/>
 
+    <LinearLayout
+
+        android:id="@+id/search_ll"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:paddingTop="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/search_music"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/search_music_icon"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/search_user"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/search_user"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/search_sound1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/search_word"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/search_sound2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@mipmap/search_sound_icon"/>
+
+
+    </LinearLayout>
+
     <ScrollView
         android:fillViewport="true"
         android:background="@color/white"
@@ -56,12 +107,29 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ListView
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
                 android:id="@+id/musicList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </ListView>
+            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
+                android:id="@+id/sound1List"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
+                android:id="@+id/sound2List"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+
+            <com.yiqu.iyijiayi.view.ScrollViewWithListView
+                android:id="@+id/userList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
         </LinearLayout>
     </ScrollView>

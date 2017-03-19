@@ -72,8 +72,9 @@
         </provider>
 
         <activity android:name=".CommentActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"></activity>
+            android:theme="@style/dialogstyle"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+          ></activity>
     </application>
 
 </manifest>
