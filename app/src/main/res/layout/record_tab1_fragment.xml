@@ -1,15 +1,51 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color_rating_grey"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-  <com.ui.views.RefreshList
-      android:id="@+id/tab1_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/white_box"
+        android:orientation="horizontal">
 
-  </com.ui.views.RefreshList>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/find" />
+
+        <TextView
+            android:id="@+id/buttonOne"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+
+            android:gravity="center"
+            android:text="搜索您想要的伴奏"
+            android:textColor="@color/dd_gray"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
 
-</RelativeLayout>
+    <com.ui.views.RefreshList
+        android:id="@+id/tab1_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    </com.ui.views.RefreshList>
+
+
+</LinearLayout>

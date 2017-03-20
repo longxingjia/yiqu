@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
@@ -20,8 +21,10 @@ import com.yiqu.iyijiayi.model.Wx_arr;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 import com.yiqu.iyijiayi.wxapi.WXPayEntryActivity;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -130,7 +133,7 @@ public class PayforYBFragment extends AbsAllFragment implements View.OnClickList
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_OK:
 
-                LogUtils.LOGE(tag, "2222222");
+
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
                                 getActivity(), userInfo.uid), "getUserByPhoneUid", PayforYBFragment.this, true, true);
@@ -169,12 +172,17 @@ public class PayforYBFragment extends AbsAllFragment implements View.OnClickList
 
         } else if (id.equals("getNewCoinOrder")) {
             if (type == TYPE_SUCCESS) {
-                PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
-                Intent i = new Intent(getActivity(), WXPayEntryActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable("data", payInfo.wx_arr);
-                i.putExtras(b);
-                startActivityForResult(i, requestCode);
+
+                if (AppAvilibleUtils.isWeixinAvilible(getActivity())) {
+                    PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
+                    Intent i = new Intent(getActivity(), WXPayEntryActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("data", payInfo.wx_arr);
+                    i.putExtras(b);
+                    startActivityForResult(i, requestCode);
+                } else {
+                    ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                }
 
             }
         }

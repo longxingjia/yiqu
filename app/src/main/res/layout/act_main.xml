@@ -2,53 +2,79 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/page_bg_color"
+    android:background="@android:color/transparent"
     >
-    <LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical"
-    >
-    <FrameLayout 
-    android:id="@+id/sub_tab_content"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    />
 
-		<RelativeLayout
-			android:layout_width="match_parent"
-			android:background="@mipmap/tab_bg"
-			android:layout_height="60dp"
-		>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <FrameLayout
+           android:layout_marginBottom="50dp"
+            android:id="@+id/sub_tab_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             />
 
-			<com.ui.views.TabHostView
-				xmlns:tab="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
-				android:id="@+id/tabHostView"
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/tab_height"
-				android:layout_marginTop="10dp"
-				tab:num="5"
-				tab:name_array="@array/tab_host_names"
-				tab:icon_array="@array/main_tab_icon"
-				tab:icon_disable_array="@array/main_tab_icon_disable"
-				/>
-
-			<ImageView
-				android:layout_width="60dp"
-				android:layout_height="match_parent"
-				android:layout_centerInParent="true"
-				android:src="@mipmap/main_tab3_an"
-				android:layout_marginBottom="2dp"
-				/>
-		</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:background="@color/transparent"
+            android:layout_height="60dp">
+            <View
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tab_bg_color"
+                android:layout_marginBottom="50dp"/>
 
 
-	</LinearLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/tab_bg" />
 
-	<!--<FrameLayout-->
-		<!--android:id="@+id/content_frame"-->
-		<!--android:layout_width="match_parent"-->
-		<!--android:layout_height="match_parent" />-->
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="2dp"
+                android:src="@mipmap/main_tab3_an" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="1dp"
+           >
+
+            <com.ui.views.TabHostView xmlns:tab="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
+                android:id="@+id/tabHostView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_height"
+                android:layout_marginTop="10dp"
+                tab:icon_array="@array/main_tab_icon"
+                tab:icon_disable_array="@array/main_tab_icon_disable"
+                tab:name_array="@array/tab_host_names"
+                tab:num="5" />
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/content_frame"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
 </FrameLayout>

@@ -234,7 +234,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     protected void initTitle() {
-        setTitleText("音乐详情");
+        setTitleText("问题详情");
     }
 
     @Override
@@ -269,12 +269,13 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         no_comments = (TextView) v.findViewById(R.id.no_comments);
 
         likes = AppShare.getLikeList(getActivity());
-        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity());
-        listview.setAdapter(tab1CommentsAdapter);
+
         comment = (TextView) v.findViewById(R.id.comment);
         like.setOnClickListener(this);
         comment.setOnClickListener(this);
         likes = AppShare.getLikeList(getActivity());
+
+
     }
 
     private void initDianZan() {
@@ -301,7 +302,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
@@ -314,6 +314,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         }else if (id.equals("like")) {
 
             if (type == NetCallBack.TYPE_SUCCESS) {
+
                 if (likesIndex == -1) {
                     Like l = new Like();
                     l.sid = sid;
@@ -332,7 +333,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             }
         } else if (id.equals("getComments")) {
-
+            LogUtils.LOGE(tag,netResponse.toString());
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<CommentsInfo> commentsInfos
                         = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<CommentsInfo>>() {
@@ -378,6 +379,15 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 tea_listen.setText("1元偷偷听");
             }
         }
+
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,sound.fromuid+"");
+        listview.setAdapter(tab1CommentsAdapter);
+        listview.setOnItemClickListener(tab1CommentsAdapter);
+
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getComments, MyNetRequestConfig
+                        .getComments(getActivity(), sid),
+                "getComments", SoundItemDetailFragment.this, false, true);
 
         PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
@@ -439,8 +449,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             sid = String.valueOf(sound.sid);
             initData();
         }
-
-
         super.init(savedInstanceState);
     }
 
@@ -479,7 +487,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         }
                     } else {
                         String desc = "";
-                        if (userInfo.coin_apple > 1) {
+                        if (userInfo.coin_apple > 0) {
                             desc = "支付";
                         } else {
                             desc = "去充值";
@@ -547,10 +555,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
-        RestNetCallHelper.callNet(getActivity(),
-                MyNetApiConfig.getComments, MyNetRequestConfig
-                        .getComments(getActivity(), sid),
-                "getComments", SoundItemDetailFragment.this, false, true);
+
     }
 
     @Override

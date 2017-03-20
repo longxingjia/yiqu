@@ -78,12 +78,14 @@ public class MyNetRequestConfig {
         r.addHttpParam("checkpay", checkpay);
         return r;
     }
+
     public static NetRequest searchByText(Context c, String text) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("text", text);
         return r;
     }
-   public static NetRequest searchItems(Context c, String text,int count,int rows) {
+
+    public static NetRequest searchItems(Context c, String text, int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("text", text);
         r.addHttpParam("count", String.valueOf(count));
@@ -183,11 +185,19 @@ public class MyNetRequestConfig {
         r.addHttpParam("sort", sort);
         return r;
     }
+
     /**
-     * 20、获取热门/发现列表
+     * 20、 NSDictionary   nsDictionary = new NSDictionary();
+     * nsDictionary.isopen = "1";
+     * nsDictionary.ispay = "1";
+     * nsDictionary.isreply = "1";
+     * nsDictionary.status = "1";
+     * nsDictionary.stype = "1";
+     * Gson gson = new Gson();
+     * String  arr = gson.toJson(nsDictionary);
      */
     public static NetRequest getSoundList(Context c, String arr,
-                                          int count, int rows, String orderby, String sort,String uid) {
+                                          int count, int rows, String orderby, String sort, String uid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("arr", arr);
         r.addHttpParam("count", count + "");
@@ -209,7 +219,6 @@ public class MyNetRequestConfig {
     }
 
 
-
     public static NetRequest getSoundDetail(Context c, String sid,
                                             String uid) {
         MyNetRequest r = new MyNetRequest(c);
@@ -217,7 +226,9 @@ public class MyNetRequestConfig {
         r.addHttpParam("checkpay", uid);
 
         return r;
-    }   public static NetRequest getComments(Context c, String sid) {
+    }
+
+    public static NetRequest getComments(Context c, String sid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("sid", sid);
         return r;
@@ -391,7 +402,7 @@ public class MyNetRequestConfig {
      * 23、
      */
     public static NetRequest refuseReply(Context c, String sid,
-                                            String touid) {
+                                         String touid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("sid", sid);
         r.addHttpParam("touid", touid);
@@ -420,7 +431,6 @@ public class MyNetRequestConfig {
     }
 
 
-
     /**
      */
     public static NetRequest like(Context c, String uid, String sid) {
@@ -429,7 +439,8 @@ public class MyNetRequestConfig {
         r.addHttpParam("sid", sid);
         return r;
     }
-    public static NetRequest addComment(Context c,  String sid,String fromuid,String touid,String comment) {
+
+    public static NetRequest addComment(Context c, String sid, String fromuid, String touid, String comment) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("fromuid", fromuid);
         r.addHttpParam("sid", sid);

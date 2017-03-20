@@ -187,9 +187,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text="已点评"
+                android:text="点评了"
                 android:textColor="@color/dd_gray"
-                android:textSize="15sp"
+                android:textSize="14sp"
 
                 />
 

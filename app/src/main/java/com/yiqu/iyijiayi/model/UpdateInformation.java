@@ -12,4 +12,14 @@ public class UpdateInformation {
     public  String url ;// 升级包获取地址
     public  String ismust ;// 1 强制更新
 
+    @Override
+    public String toString() {
+        return "UpdateInformation{" +
+                "id=" + id +
+                ", version='" + version + '\'' +
+                ", content='" + content + '\'' +
+                ", url='" + url + '\'' +
+                ", ismust='" + ismust + '\'' +
+                '}';
+    }
 }

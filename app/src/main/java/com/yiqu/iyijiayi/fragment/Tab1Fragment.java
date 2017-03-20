@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
@@ -28,6 +29,7 @@ import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
@@ -35,6 +37,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 
 import java.util.ArrayList;
@@ -76,6 +79,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     private int count = 0;
     private int rows = 10;
+    private String arr;
+    private Remen remen;
+
 
     @Override
     protected int getTitleView() {
@@ -109,6 +115,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onResume() {
         super.onResume();
+        if (AppShare.getIsLogin(getActivity())) {
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        } else {
+            uid = "0";
+        }
+
         if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
             Remen remen = AppShare.getRemenList(getActivity());
             if (remen != null) {
@@ -116,6 +128,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 tab1SoundAdapter.setData(remen.sound);
             }
         } else {
+            count = 0;
             RestNetCallHelper.callNet(
                     getActivity(),
                     MyNetApiConfig.remen,
@@ -159,11 +172,17 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
-        if (AppShare.getIsLogin(getActivity())) {
-            uid = AppShare.getUserInfo(getActivity()).uid;
-        } else {
-            uid = "0";
-        }
+
+
+        NSDictionary nsDictionary = new NSDictionary();
+        nsDictionary.isopen = "1";
+        nsDictionary.ispay = "1";
+        nsDictionary.isreply = "1";
+        nsDictionary.status = "1";
+        nsDictionary.stype = "1";
+        Gson gson = new Gson();
+        arr = gson.toJson(nsDictionary);
+
 
     }
 
@@ -175,7 +194,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT|FLAG_BTN;
+        return FLAG_TXT | FLAG_BTN;
     }
 
     @Override
@@ -188,7 +207,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
-       // pageNextComplete();
+        // pageNextComplete();
         Model.startNextAct(getActivity(),
                 SearchAllFragment.class.getName());
         return true;
@@ -218,12 +237,11 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         if (netResponse != null && "Remen".equals(id)) {
             if (netResponse.bool == 1) {
                 Gson gson = new Gson();
-                Remen remen = gson.fromJson(netResponse.data, Remen.class);
+                remen = gson.fromJson(netResponse.data, Remen.class);
                 AppShare.setRemenList(getActivity(), remen);
                 sound = remen.sound;
                 xizuo = remen.xizuo;
                 tab1XizuoAdapter.setData(xizuo);
-
                 tab1SoundAdapter.setData(sound);
 
                 if (sound.size() == rows) {
@@ -236,6 +254,27 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 resfreshFail();
             }
 
+        } else if (id.equals("getSoundList")) {
+
+            if (type == TYPE_SUCCESS) {
+                sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+
+                remen.sound.addAll(sound);
+                AppShare.setRemenList(getActivity(), remen);
+                tab1SoundAdapter.setData(sound);
+
+                tab1SoundAdapter.addData(sound);
+                if (sound.size() < rows) {
+                    mLoadMoreView.setMoreAble(false);
+                }
+                count += rows;
+                mLoadMoreView.end();
+
+            } else {
+                mLoadMoreView.setMoreAble(false);
+                mLoadMoreView.end();
+            }
         }
 
         super.onNetEnd(id, type, netResponse);
@@ -247,6 +286,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 //        mImageLoaderHm.stop();
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
+        count = 0;
+        LogUtils.LOGE("tag", uid);
 
         RestNetCallHelper.callNet(
                 getActivity(),
@@ -264,16 +305,11 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 // 正在加载中
             } else {
                 mLoadMoreView.loading();
-//                page++;
-//                RestNetCallHelper.callNet(getActivity(),
-//                        MyNetApiConfig.findAllPushMsg,
-//                        MyNetRequestConfig.findAllPushMsg(getActivity()
-//                                , AppShare.getToken(getActivity())
-//                                ,  AppShare.getPhone(getActivity())
-//                                ,""+page
-//                                ,""+PAGE_SIZE),
-//                        "findAllPushMsg_more",
-//                        this,false,true);
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.getSoundList,
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
+                        "getSoundList", Tab1Fragment.this, false, true);
 
             }
         }

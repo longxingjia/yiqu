@@ -282,7 +282,7 @@ public class MyNetApiConfig {
     public static MyNetApi searchByMusicName = new MyNetApi() {
         @Override
         public String getPath() {
-            return ServerAddr + "/search/search-by-music-name";
+            return ServerAddr + "/search/search-sound-by-music-name";
         }
 
     };

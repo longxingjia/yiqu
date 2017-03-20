@@ -176,27 +176,32 @@ public class WelcomePageActivity extends Activity {
                     @Override
                     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-//                        updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
-////                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
-//                        fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
-//
-//                        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
-//
-//                        String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
-//                        if (!updateInfo.version.equals(versionName)) {
+                        updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
+                        LogUtils.LOGE("1",updateInfo.toString());
+//                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
+                        fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
+
+                        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
+
+                        String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
+                        if (!updateInfo.version.equals(versionName)) {
 //                            if (updateInfo.ismust.equals("1")) {
 //                                forceUpdate(WelcomePageActivity.this);
 //                            } else {
 //                                normalUpdate(WelcomePageActivity.this);
 //                            }
-//
-//                        }
+
+                            forceUpdate(WelcomePageActivity.this);
+
+                        }else {
+                            begin();
+                        }
 
                     }
                 }, false, true);
 
 
-        begin();
+//        begin();
     }
 
     private void installApk(File apkFile) {

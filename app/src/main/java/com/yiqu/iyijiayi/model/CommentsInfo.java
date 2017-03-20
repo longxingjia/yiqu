@@ -22,8 +22,25 @@ public class CommentsInfo implements Serializable {
     public String comment;//
     public String status;//
     public String isread;//
-    public String created;//
+    public long created;//
     public String edited;//
 
-
+    @Override
+    public String toString() {
+        return "CommentsInfo{" +
+                "id='" + id + '\'' +
+                ", cid='" + cid + '\'' +
+                ", fromuid='" + fromuid + '\'' +
+                ", fromusername='" + fromusername + '\'' +
+                ", touid='" + touid + '\'' +
+                ", tousername='" + tousername + '\'' +
+                ", fromuserimage='" + fromuserimage + '\'' +
+                ", touserimage='" + touserimage + '\'' +
+                ", comment='" + comment + '\'' +
+                ", status='" + status + '\'' +
+                ", isread='" + isread + '\'' +
+                ", created=" + created +
+                ", edited='" + edited + '\'' +
+                '}';
+    }
 }

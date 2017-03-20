@@ -128,7 +128,7 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
                 h.title.setText(f.tecschool);
                 PictureUtils.showPicture(mContext, f.tecimage, h.header,40);
 
-                h.pl.setText("评论了");
+                h.pl.setText("点评了");
             } else {
                 h.title.setText(f.stuschool);
                 PictureUtils.showPicture(mContext, f.stuimage, h.header,40);

@@ -183,7 +183,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     protected void initTitle() {
-        setTitleText("音乐详情");
+        setTitleText("作品详情");
     }
 
     @Override
@@ -214,10 +214,9 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         listview = (ListView) v.findViewById(R.id.listview);
         stu_listen.setOnClickListener(this);
 
-        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity());
+
         likes = AppShare.getLikeList(getActivity());
 
-        listview.setAdapter(tab1CommentsAdapter);
         xizuo = (Xizuo) getActivity().getIntent().getSerializableExtra("xizuo");
         if (xizuo == null) {
             sid = getActivity().getIntent().getExtras().getString("data");
@@ -244,8 +243,9 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             }
         }
 
-
-
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,xizuo.fromuid+"");
+        listview.setAdapter(tab1CommentsAdapter);
+        listview.setOnItemClickListener(tab1CommentsAdapter);
 
     }
 

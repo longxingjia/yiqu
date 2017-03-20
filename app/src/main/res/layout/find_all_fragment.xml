@@ -20,7 +20,7 @@
             android:background="@drawable/light_gray_box"
             android:drawableLeft="@mipmap/find"
             android:drawablePadding="5dp"
-            android:hint="搜索"
+            android:hint="请输入搜索内容"
             android:imeOptions="actionSearch"
             android:maxLength="10"
             android:paddingLeft="10dp"
@@ -40,67 +40,118 @@
 
 
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/tab_line_color"/>
+        android:background="@color/tab_line_color" />
 
     <LinearLayout
 
         android:id="@+id/search_ll"
-        android:background="@color/white"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         android:gravity="center_vertical"
-        android:paddingTop="20dp"
+        android:orientation="horizontal"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:paddingTop="20dp">
 
-        <ImageView
-            android:id="@+id/search_music"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@mipmap/search_music_icon"/>
-        <View
+        <LinearLayout
+            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_height="75dp"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/search_user"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@mipmap/search_user"/>
-        <View
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/search_music"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/search_music_icon" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="伴奏" />
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_height="75dp"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/search_sound1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@mipmap/search_word"/>
-        <View
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/search_user"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/search_user" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="导师/学员" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_height="75dp"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/search_sound2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@mipmap/search_sound_icon"/>
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/search_sound1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/search_word" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="关键词" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/search_sound2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/search_sound_icon" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="声乐/播音" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <ScrollView
-        android:fillViewport="true"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,26 +161,22 @@
             <com.yiqu.iyijiayi.view.ScrollViewWithListView
                 android:id="@+id/musicList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+                android:layout_height="wrap_content"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
             <com.yiqu.iyijiayi.view.ScrollViewWithListView
                 android:id="@+id/sound1List"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+                android:layout_height="wrap_content"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
             <com.yiqu.iyijiayi.view.ScrollViewWithListView
                 android:id="@+id/sound2List"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+                android:layout_height="wrap_content"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
             <com.yiqu.iyijiayi.view.ScrollViewWithListView
                 android:id="@+id/userList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.yiqu.iyijiayi.view.ScrollViewWithListView>
+                android:layout_height="wrap_content"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
 
         </LinearLayout>
     </ScrollView>

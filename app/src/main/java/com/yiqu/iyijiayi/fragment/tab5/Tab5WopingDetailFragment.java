@@ -692,12 +692,13 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         protected void onPostExecute(String s) {
             if (dialogHelper != null) {
                 dialogHelper.dismissProgressDialog();
+
             }
             if (!TextUtils.isEmpty(s)) {
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.soundReply,
-                        MyNetRequestConfig.soundReply(getActivity(), sound.sid + "", AppShare.getUserInfo(getActivity()).uid, s, msecond + "", "1"),
+                        MyNetRequestConfig.soundReply(getActivity(), sound.sid + "", AppShare.getUserInfo(getActivity()).uid, s, mSecond + "", "1"),
                         "soundReply", Tab5WopingDetailFragment.this);
 
             } else{

@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -13,7 +15,9 @@ import com.ui.abs.AbsFragment;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
+import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -52,13 +56,14 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
     @Override
     protected void initView(View v) {
 
-//        ToastManager.getInstance(getActivity()).showText("1");
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
         soundsTab1Adapter = new SoundsTab1Adapter(getActivity());
         listView.setAdapter(soundsTab1Adapter);
+        LinearLayout search = (LinearLayout) v.findViewById(R.id.search);
+
         listView.setOnItemClickListener(soundsTab1Adapter);
         listView.setRefreshListListener(this);
-//
+
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
@@ -70,6 +75,17 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
                 MyNetApiConfig.getMusicList, MyNetRequestConfig
                         .getMusicList(getActivity(), count, rows),
                 "getMusicList", SoundsTab1Fragment.this,false,true);
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), StubActivity.class);
+                intent.putExtra("fragment", SearchFragment.class.getName());
+                intent.putExtra("data","search_music");
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
     }
 

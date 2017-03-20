@@ -97,7 +97,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                 "getSoundList", Tab1XizuoListFragment.this);
 
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
@@ -212,7 +212,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                 "getSoundList", Tab1XizuoListFragment.this,false,true);
 
     }
@@ -228,7 +228,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getSoundList,
-                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                         "getSoundList_more", Tab1XizuoListFragment.this,false,true);
 
             }
