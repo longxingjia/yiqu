@@ -1,11 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tab_bg_color"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:padding="15dp">
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="40dp"
+            android:background="@mipmap/logo" />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="艺加艺V1.1.1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="--艺加艺--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="为艺术生与心仪的导师之间搭建一个桥梁，实现真正有价值的问答。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--钢琴伴奏--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="为用户提供了海量声乐艺考指定曲目的钢琴伴奏，且正在持续增加中。艺考生可以随时模拟考场环境练习，反复录制习作，并获得心仪导师的专业指导；"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="我问模块选择自己的提问类型，录制习作、填写问题内容、选择导师、支付费用即可与与心仪导师实现语音交流。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--微信登录--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="微信直接登陆，免去注册以及记忆新账号的麻烦。
+对于导师用户，有申请功能，通过审核的导师才能入驻平台。
+用户可以关注心仪的导师。可以对其他人的问题答案偷听和点赞。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用户可以关注心仪的导师。可以对其他人的问题答案偷听和点赞。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--语音提问--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="我问模块选择自己的提问类型，录制习作、填写问题内容、选择导师、支付费用即可与与心仪导师实现语音交流。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--语音回答--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="当导师收到提问，可以对问题通过语音进行回答；不愿回答，也可以直接拒绝该用户。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--艺币--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="用户在偷听操作需要通过内购的艺币支付；艺币可通过微信支付内购进行充值，安卓端可通过微信直接充值支付，如遇充值异常请联系我们。"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--支付--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="对导师提问可选择付费提问，如果提问被拒绝，用户的支付数额将原路返回到你的微信账户；"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="--联系我们--"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="- 客服邮箱：359548919@qq.com"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="- 网址：http://www.hunanyiqu.com"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="- 微信公众号：艺加艺APP"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Copyright © 2016" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="湖南艺趣网络科技有限公司"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+</ScrollView>

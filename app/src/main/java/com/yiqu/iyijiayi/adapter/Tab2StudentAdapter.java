@@ -51,10 +51,10 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
     private LayoutInflater mLayoutInflater;
     private ArrayList<Student> datas = new ArrayList<Student>();
     private Context mContext;
-    private String uid ;
+    private String uid;
     private ZhaoRen zhaoRen;
 
-    private  String tag="Tab2StudentAdapter";
+    private String tag = "Tab2StudentAdapter";
 
     public Tab2StudentAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -64,7 +64,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
 
     public void setData(ZhaoRen list) {
         datas = list.student;
-        zhaoRen =list;
+        zhaoRen = list;
         notifyDataSetChanged();
     }
 
@@ -110,19 +110,19 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-           final Student f = getItem(position);
+            final Student f = getItem(position);
 
             h.name.setText(f.username);
             h.content.setText(f.title);
 
             h.icon.setTag(f.userimage);
 
-            PictureUtils.showPicture(mContext,f.userimage,h.icon);
+            PictureUtils.showPicture(mContext, f.userimage, h.icon);
 
-            if (f.isfollow.equals("0")){  //没有关注
+            if (f.isfollow.equals("0")) {  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);
 
-            }else {
+            } else {
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
 
@@ -130,7 +130,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                 @Override
                 public void onClick(View v) {
 
-                    if (uid.equals("0")){
+                    if (uid.equals("0")) {
                         Intent i = new Intent(mContext, StubActivity.class);
                         i.putExtra("fragment", SelectLoginFragment.class.getName());
                         mContext.startActivity(i);
@@ -140,12 +140,12 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                     }
 
 
-                    if (f.isfollow.equals("0")){  //没有关注
+                    if (f.isfollow.equals("0")) {  //没有关注
 //                        h.follow.setBackgroundResource(R.mipmap.follow);
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.addfollow,
-                                MyNetRequestConfig.addfollow(mContext,uid,f.uid ),
+                                MyNetRequestConfig.addfollow(mContext, uid, f.uid),
                                 "teacher", new NetCallBack() {
                                     @Override
                                     public void onNetNoStart(String id) {
@@ -160,14 +160,14 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
+                                        if (netResponse != null) {
+                                            if (netResponse.bool == 1) {
                                                 f.isfollow = "1";
                                                 zhaoRen.student = datas;
-                                                AppShare.setZhaoRenList(mContext,zhaoRen);
+                                                AppShare.setZhaoRenList(mContext, zhaoRen);
                                                 notifyDataSetChanged();
-                                            }else {
-                                               ToastManager.getInstance(mContext).showText(netResponse.result);
+                                            } else {
+                                                ToastManager.getInstance(mContext).showText(netResponse.result);
                                             }
 
                                         }
@@ -175,12 +175,12 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                                     }
                                 });
 
-                    }else {
+                    } else {
 
                         RestNetCallHelper.callNet(
                                 mContext,
                                 MyNetApiConfig.delfollow,
-                                MyNetRequestConfig.delfollow(mContext,uid,f.uid ),
+                                MyNetRequestConfig.delfollow(mContext, uid, f.uid),
                                 "delfollow", new NetCallBack() {
                                     @Override
                                     public void onNetNoStart(String id) {
@@ -195,11 +195,11 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                                        if (netResponse!=null){
-                                            if(netResponse.bool==1){
+                                        if (netResponse != null) {
+                                            if (netResponse.bool == 1) {
                                                 f.isfollow = "0";
                                                 notifyDataSetChanged();
-                                            }else {
+                                            } else {
                                                 ToastManager.getInstance(mContext).showText(netResponse.result);
                                             }
 
@@ -221,7 +221,7 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (arg2 <1){
+        if (arg2 < 1) {
             return;
         }
         Student f = getItem(arg2 - 1);
@@ -231,54 +231,41 @@ public class Tab2StudentAdapter extends BaseAdapter implements OnItemClickListen
                     R.string.fm_net_call_no_network);
             return;
         }
-        UserInfo userInfo = null;
+        String uid = "0";
         if (AppShare.getIsLogin(mContext)) {
-            userInfo = AppShare.getUserInfo(mContext);
-            RestNetCallHelper.callNet(mContext,
-                    MyNetApiConfig.getUserPage,
-                    MyNetRequestConfig.getUserPage(mContext
-                            , f.uid, userInfo.uid),
-                    "getUserPage",
-                    new NetCallBack() {
-                        @Override
-                        public void onNetNoStart(String id) {
-
-                        }
-
-                        @Override
-                        public void onNetStart(String id) {
-
-                        }
-
-                        @Override
-                        public void onNetEnd(String id, int type, NetResponse netResponse) {
-                            if (TYPE_SUCCESS == type) {
-                                Gson gson = new Gson();
-                                HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
-                                Intent i = new Intent(mContext, StubActivity.class);
-                                i.putExtra("fragment", HomePageFragment.class.getName());
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("data",homePage);
-                                i.putExtras(bundle);
-                                mContext.startActivity(i);
-                            }
-
-                        }
-                    });
-
-
-
-
-        } else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请您登录后在操作");
-            mContext.startActivity(i);
+            uid = AppShare.getUserInfo(mContext).uid;
         }
+        RestNetCallHelper.callNet(mContext,
+                MyNetApiConfig.getUserPage,
+                MyNetRequestConfig.getUserPage(mContext
+                        , f.uid, uid),
+                "getUserPage",
+                new NetCallBack() {
+                    @Override
+                    public void onNetNoStart(String id) {
 
+                    }
 
+                    @Override
+                    public void onNetStart(String id) {
 
+                    }
 
+                    @Override
+                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                        if (TYPE_SUCCESS == type) {
+                            Gson gson = new Gson();
+                            HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                            Intent i = new Intent(mContext, StubActivity.class);
+                            i.putExtra("fragment", HomePageFragment.class.getName());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", homePage);
+                            i.putExtras(bundle);
+                            mContext.startActivity(i);
+                        }
+
+                    }
+                });
 
 
     }

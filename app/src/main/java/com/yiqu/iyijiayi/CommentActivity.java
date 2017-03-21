@@ -28,10 +28,11 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.EmojiFilter;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.ToastHelper;
 
-public class CommentActivity extends Activity implements NetCallBack{
+public class CommentActivity extends Activity implements NetCallBack {
 
 
     private Button butt2;
@@ -76,9 +77,9 @@ public class CommentActivity extends Activity implements NetCallBack{
         final String touid = intent.getStringExtra("touid");
         final String toname = intent.getStringExtra("toname");
 
-        if (!TextUtils.isEmpty(toname)){
+        if (!TextUtils.isEmpty(toname)) {
 
-            edit.setHint("回复 "+ toname +":");
+            edit.setHint("回复 " + toname + ":");
             edit.setHintTextColor(getResources().getColor(R.color.dd_gray));
 
         }
@@ -88,16 +89,19 @@ public class CommentActivity extends Activity implements NetCallBack{
         butt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(edit.getText().toString().trim())){
-                    ToastManager.getInstance(CommentActivity.this).showText("请填写你的评论后再提交");
+
+
+//                test_emoji.setText(edit.getText().toString());
+//                String s = EmojiFilter.filterEmoji(edit.getText().toString());
+                String s = edit.getText().toString();
+                if (TextUtils.isEmpty(s)) {
+                    ToastManager.getInstance(CommentActivity.this).showText("请填写你的文字后再提交");
                     return;
                 }
 
-                test_emoji.setText(edit.getText().toString());
-
                 RestNetCallHelper.callNet(CommentActivity.this,
                         MyNetApiConfig.addComment, MyNetRequestConfig
-                                .addComment(CommentActivity.this, sid,fromuid,touid,edit.getText().toString().trim()),
+                                .addComment(CommentActivity.this, sid, fromuid, touid, s),
                         "addComment", CommentActivity.this, false, true);
 //                去除软键盘显示
 //                edit.clearFocus();
@@ -148,8 +152,8 @@ public class CommentActivity extends Activity implements NetCallBack{
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        LogUtils.LOGE("tag",netResponse.toString());
-        if (type==TYPE_SUCCESS){
+        LogUtils.LOGE("tag", netResponse.toString());
+        if (type == TYPE_SUCCESS) {
             ToastManager.getInstance(CommentActivity.this).showText(netResponse.result.toString());
             finish();
         }

@@ -35,6 +35,9 @@ public class ApplyTeacherFragment extends AbsAllFragment {
     private EditText desc;
     private Button sumbit;
     private String tag = "ApplyTeacherFragment";
+    private EditText phonenum;
+    private EditText from;
+    private EditText city;
 
     @Override
     protected int getTitleBarType() {
@@ -73,6 +76,9 @@ public class ApplyTeacherFragment extends AbsAllFragment {
         school = (EditText) v.findViewById(R.id.school);
         title = (EditText) v.findViewById(R.id.et_title);
         desc = (EditText) v.findViewById(R.id.info);
+        phonenum = (EditText) v.findViewById(R.id.phonenum);
+        city = (EditText) v.findViewById(R.id.city);
+        from = (EditText) v.findViewById(R.id.from);
         sumbit = (Button) v.findViewById(R.id.submit);
     }
 
@@ -90,7 +96,12 @@ public class ApplyTeacherFragment extends AbsAllFragment {
             name.setText(teacherApply.username);
             school.setText(teacherApply.school);
             title.setText(teacherApply.title);
+            phonenum.setText(teacherApply.phone);
+            city.setText(teacherApply.address);
+            from.setText(teacherApply.source);
             desc.setText(teacherApply.desc);
+
+            LogUtils.LOGE(tag,teacherApply.toString());
 
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getTeacherApply, MyNetRequestConfig
@@ -99,7 +110,6 @@ public class ApplyTeacherFragment extends AbsAllFragment {
 
 
         }
-
 
         sumbit.setOnClickListener(new View.OnClickListener() {
 
@@ -110,7 +120,11 @@ public class ApplyTeacherFragment extends AbsAllFragment {
                 String schoolStr = school.getText().toString().trim();
                 String titleStr = title.getText().toString().trim();
                 String descStr = desc.getText().toString().trim();
-                if (nameStr.length() == 0 || schoolStr.length() == 0 || titleStr.length() == 0 || descStr.length() == 0) {
+                String phonenumStr = phonenum.getText().toString().trim();
+                String cityStr = city.getText().toString().trim();
+                String fromStr = desc.getText().toString().trim();
+                if (nameStr.length() == 0 || schoolStr.length() == 0 || titleStr.length() == 0 || descStr.length() == 0
+                        ||phonenumStr.length() == 0||cityStr.length() == 0||fromStr.length() == 0) {
                     ToastManager.getInstance(getActivity()).showText(
                             "请全部填写完毕后再提交!");
                     return;
@@ -118,7 +132,8 @@ public class ApplyTeacherFragment extends AbsAllFragment {
 
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addTeacherApply, MyNetRequestConfig
-                                .addTeacherApply(getActivity(), uid, nameStr, schoolStr, titleStr, descStr),
+                                .addTeacherApply(getActivity(), uid, nameStr, schoolStr, titleStr, descStr,
+                                        phonenumStr,cityStr,fromStr),
                         "addTeacherApply", ApplyTeacherFragment.this);
             }
         });
@@ -129,10 +144,12 @@ public class ApplyTeacherFragment extends AbsAllFragment {
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
+        LogUtils.LOGE(tag,netResponse.toString());
         if (id.equals("addTeacherApply")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 TeacherApply teacherApply = new Gson().fromJson(netResponse.data, TeacherApply.class);
+                LogUtils.LOGE(tag,teacherApply.toString());
                 AppShare.setTeacherApplyInfo(getActivity(), teacherApply);
                 if (teacherApply.status == 0) {
                     ToastManager.getInstance(getActivity()).showText("正在审核中，请耐心等待。。。");

@@ -41,9 +41,11 @@
     <string name="net_success">上传完成</string>
     <string name="net_error">连接失败，请检查您的网络</string>
     <string name="zuopin">作品</string>
+    <string name="remenzuopin">热门作品</string>
     <string name="dianping">点评</string>
     <string name="record_zuopin">录制作品</string>
     <string name="mine_zuopin">我的作品</string>
     <string name="left_time">剩余120\"</string>
+    <string name="about"></string>
 
 </resources>

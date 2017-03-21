@@ -42,6 +42,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     private String code;
     public static final String APP_ID = Constant.APP_ID;
     private IWXAPI api;
+    private String band;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         api.handleIntent(getIntent(), this);
 
         String login = getIntent().getStringExtra("data");
+        band = getIntent().getStringExtra("band");
 
         if (!TextUtils.isEmpty(login)) {
             regTowx();
@@ -139,6 +141,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     finish();
                 } else {
                     WechatAccessToken wechatAccessToken = new Gson().fromJson(result, WechatAccessToken.class);
+                    if (!TextUtils.isEmpty(band)){
+                        Intent intent = new Intent();
+                        intent.putExtra("openid",wechatAccessToken.openid);
+                        setResult(RESULT_OK,intent);
+                        finish();
+                        return;
+                    }
 
                     if (NetworkRestClient.isNetworkAvailable(mContext)) {
                         GetWechatUserInfoTask getWechatUserInfoTask = new GetWechatUserInfoTask(mContext, wechatAccessToken.access_token, wechatAccessToken.openid);

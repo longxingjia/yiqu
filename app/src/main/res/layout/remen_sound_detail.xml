@@ -51,24 +51,43 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/isformulation"
-                android:layout_width="100dp"
+                android:id="@+id/chapter"
+
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
                 android:singleLine="true"
-                android:text="艺考规定曲目"
+                android:text=""
                 android:textColor="@color/dd_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <TextView
-                android:layout_width="100dp"
+                android:id="@+id/isformulation"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:padding="5dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
                 android:singleLine="true"
-                android:text="钢琴伴奏"
+                android:text=""
                 android:textColor="@color/dd_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+
+                android:id="@+id/accompaniment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/dd_gray"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
         </LinearLayout>
 

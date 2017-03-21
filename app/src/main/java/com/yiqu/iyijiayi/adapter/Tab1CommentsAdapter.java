@@ -32,6 +32,7 @@ import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -123,9 +124,10 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
 
             if (!uid.equals(f.touid)){
 
-                h.comment.setText("回复 "+ f.tousername+" : "+f.comment);
+                h.comment.setText("回复 "+ f.tousername+" : "+EmojiCharacterUtil.decode(f.comment));
             }else {
-                h.comment.setText(f.comment);
+                String s = EmojiCharacterUtil.decode(f.comment);
+                h.comment.setText(s);
             }
 
 

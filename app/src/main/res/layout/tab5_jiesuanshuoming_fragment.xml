@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:background="@color/white"
-        android:textSize="16sp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="收入自动结算到您的微信红包。请绑定微信，并在微信app中授权登录艺加艺，以确保结算正常"/>
+        android:text="收入自动结算到您的微信红包。请绑定微信，并在微信app中授权登录艺加艺，以确保结算正常"
+        android:textSize="16sp" />
 
 
     <LinearLayout
@@ -23,30 +23,50 @@
         android:layout_marginTop="22dp"
         android:gravity="center"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/dd_gray"
-            android:text="第一步"/>
 
         <TextView
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="绑定微信"/>
+            android:text="第一步"
+            android:textColor="@color/dd_gray"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="绑定微信"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:layout_width="110dp"
-        android:text="立即绑定"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:background="@drawable/white_box"
-        android:layout_height="40dp" />
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/edit_bg"
+            android:hint="验证码"
+            android:visibility="gone"
+            android:maxLength="8"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/band"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:background="@drawable/white_box"
+            android:gravity="center"
+            android:text="立即绑定"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,19 +74,20 @@
         android:layout_marginTop="22dp"
         android:gravity="center"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/dd_gray"
-            android:text="第二步"/>
 
         <TextView
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="在微信app中登录艺加艺"/>
+            android:text="第二步"
+            android:textColor="@color/dd_gray"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="在微信app中登录艺加艺"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </LinearLayout>

@@ -231,57 +231,41 @@ public class Tab2TeacherAdapter extends BaseAdapter implements OnItemClickListen
                     R.string.fm_net_call_no_network);
             return;
         }
-        UserInfo userInfo = null;
+        String uid = "0";
         if (AppShare.getIsLogin(mContext)) {
-             userInfo = AppShare.getUserInfo(mContext);
-            RestNetCallHelper.callNet(mContext,
-                    MyNetApiConfig.getUserPage,
-                    MyNetRequestConfig.getUserPage(mContext
-                            , f.uid, userInfo.uid),
-                    "getUserPage",
-                    new NetCallBack() {
-                        @Override
-                        public void onNetNoStart(String id) {
-
-                        }
-
-                        @Override
-                        public void onNetStart(String id) {
-
-                        }
-
-                        @Override
-                        public void onNetEnd(String id, int type, NetResponse netResponse) {
-                            if (TYPE_SUCCESS == type) {
-                                Gson gson = new Gson();
-                                HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
-                                Intent i = new Intent(mContext, StubActivity.class);
-                                i.putExtra("fragment", HomePageFragment.class.getName());
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("data",homePage);
-                                i.putExtras(bundle);
-                                mContext.startActivity(i);
-                            }
-
-                        }
-                    });
-
-
-
-
-        } else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请您登录后在操作");
-            mContext.startActivity(i);
+            uid = AppShare.getUserInfo(mContext).uid;
         }
+        RestNetCallHelper.callNet(mContext,
+                MyNetApiConfig.getUserPage,
+                MyNetRequestConfig.getUserPage(mContext
+                        , f.uid, uid),
+                "getUserPage",
+                new NetCallBack() {
+                    @Override
+                    public void onNetNoStart(String id) {
 
+                    }
 
+                    @Override
+                    public void onNetStart(String id) {
 
+                    }
 
+                    @Override
+                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                        if (TYPE_SUCCESS == type) {
+                            Gson gson = new Gson();
+                            HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                            Intent i = new Intent(mContext, StubActivity.class);
+                            i.putExtra("fragment", HomePageFragment.class.getName());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", homePage);
+                            i.putExtras(bundle);
+                            mContext.startActivity(i);
+                        }
 
-
-
+                    }
+                });
     }
 
     public boolean isNetworkConnected(Context context) {

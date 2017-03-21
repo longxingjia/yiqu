@@ -155,7 +155,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     protected void initTitle() {
 
-        setTitleText(getString(R.string.zuopin));
+        setTitleText(getString(R.string.remenzuopin));
 
     }
 

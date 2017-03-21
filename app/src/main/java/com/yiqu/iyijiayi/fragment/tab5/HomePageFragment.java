@@ -66,7 +66,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private LoadMoreView mLoadMoreView;
     private int TYPE = 1;
     private String uid;
-    private String myUid;
+    private String myUid ="0";
     private Tab5DianpingAdapter tab5DianpingAdapter;
     private Tab1XizuoAdapter tab5XizuoAdapter;
     private Tab1SoundAdapter tab1SoundAdapter;
@@ -134,9 +134,10 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         mLoadMoreView.setMoreAble(false);
 
         InitHeadView(headview);
-        myUid = AppShare.getUserInfo(mContext).uid;
+        if (AppShare.getIsLogin(mContext))
+            myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
+        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(),this);
         tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
 
@@ -385,7 +386,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                                 if (AppShare.getIsLogin(mContext)) {
                                     Intent i = new Intent(mContext, StubActivity.class);
                                     i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
-                                    i.putExtra("data",xizuo.sid+"");
+                                    i.putExtra("data", xizuo.sid + "");
                                     mContext.startActivity(i);
                                 } else {
                                     Intent i = new Intent(mContext, StubActivity.class);

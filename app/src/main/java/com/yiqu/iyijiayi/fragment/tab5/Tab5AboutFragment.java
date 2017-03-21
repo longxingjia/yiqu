@@ -44,7 +44,7 @@ public class Tab5AboutFragment extends AbsAllFragment {
 
     @Override
     protected void initTitle() {
-        setTitleText("关于");
+        setTitleText("关于我们");
 
     }
 

@@ -181,7 +181,7 @@ public class RegisterFragment extends AbsAllFragment {
                 mMyCount.start();
 
                 if (netResponse.bool == 0) {
-                    LogUtils.LOGE(tag, netResponse.toString());
+                 //   LogUtils.LOGE(tag, netResponse.toString());
                     ToastManager.getInstance(getActivity()).showText(netResponse.result);
                 } else {
                     Gson gson = new Gson();

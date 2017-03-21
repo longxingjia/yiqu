@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.Tool.Common.CommonApplication;
 import com.Tool.Common.CommonThreadPool;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -36,6 +37,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
@@ -154,51 +156,58 @@ public class WelcomePageActivity extends Activity {
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
-        RestNetCallHelper.callNet(
-                this,
-                MyNetApiConfig.checkUpdate,
-                MyNetRequestConfig.checkUpdate(this),
-                "checkUpdate", new NetCallBack() {
+       if (NetWorkUtils.isNetworkAvailable(this)){
+           RestNetCallHelper.callNet(
+                   this,
+                   MyNetApiConfig.checkUpdate,
+                   MyNetRequestConfig.checkUpdate(this),
+                   "checkUpdate", new NetCallBack() {
 
 
 
 
-                    @Override
-                    public void onNetNoStart(String id) {
+                       @Override
+                       public void onNetNoStart(String id) {
 
-                    }
+                       }
 
-                    @Override
-                    public void onNetStart(String id) {
+                       @Override
+                       public void onNetStart(String id) {
 
-                    }
+                       }
 
-                    @Override
-                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                       @Override
+                       public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                        updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
-                        LogUtils.LOGE("1",updateInfo.toString());
+                           updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
+                           LogUtils.LOGE("1",updateInfo.toString());
 //                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
-                        fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
+                           fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
 
-                        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
+                           filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
 
-                        String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
-                        if (!updateInfo.version.equals(versionName)) {
+                           String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
+                           if (!updateInfo.version.equals(versionName)) {
 //                            if (updateInfo.ismust.equals("1")) {
 //                                forceUpdate(WelcomePageActivity.this);
 //                            } else {
 //                                normalUpdate(WelcomePageActivity.this);
 //                            }
 
-                            forceUpdate(WelcomePageActivity.this);
+                               forceUpdate(WelcomePageActivity.this);
 
-                        }else {
-                            begin();
-                        }
+                           }else {
+                               begin();
+                           }
 
-                    }
-                }, false, true);
+                       }
+                   }, false, true);
+
+       }else {
+           ToastManager.getInstance(this).showText("网络故障，请检查网络再试");
+
+       }
+
 
 
 //        begin();

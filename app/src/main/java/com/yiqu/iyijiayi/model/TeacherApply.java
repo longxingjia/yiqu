@@ -12,8 +12,12 @@ public class TeacherApply {
     public  String school;
     public  String title;
     public  String desc;
+    public  String phone;
+    public  String address;
+    public  String source;
     public  int reason;
     public  int status;
+
 
     @Override
     public String toString() {
@@ -24,6 +28,7 @@ public class TeacherApply {
                 ", school='" + school + '\'' +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
+
                 ", reason=" + reason +
                 ", status=" + status +
                 '}';

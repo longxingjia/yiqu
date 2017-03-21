@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,24 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Constant;
+import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
@@ -41,17 +52,19 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
-
+    private Fragment fragment;
     private String tag = "Tab1SoundAdapter";
 
-    public Tab1SoundAdapter(Context context) {
+    public Tab1SoundAdapter(Context context, Fragment fragment) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
+        this.fragment = fragment;
 
     }
 
 
     public void setData(ArrayList<Sound> list) {
+        LogUtils.LOGE(tag, list.toString());
         datas = list;
         notifyDataSetChanged();
     }
@@ -115,7 +128,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             }
 
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+            final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
             h.soundtime.setText(f.soundtime + "\"");
@@ -146,10 +159,16 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
             PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
 
-            h.stu_listen.setOnClickListener(new View.OnClickListener() {
+            h.tea_header.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    initHomepage(String.valueOf(f.touid));
+                }
+            });
+            h.stu_header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initHomepage(String.valueOf(f.fromuid));
                 }
             });
 
@@ -160,6 +179,43 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         return v;
     }
 
+    private void initHomepage(String uid) {
+        String mUid = "0";
+        if (AppShare.getIsLogin(mContext)) {
+            mUid = AppShare.getUserInfo(mContext).uid;
+        }
+        RestNetCallHelper.callNet(mContext,
+                MyNetApiConfig.getUserPage,
+                MyNetRequestConfig.getUserPage(mContext
+                        , uid, mUid),
+                "getUserPage",
+                new NetCallBack() {
+                    @Override
+                    public void onNetNoStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                        if (TYPE_SUCCESS == type) {
+                            Gson gson = new Gson();
+                            HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                            Intent i = new Intent(mContext, StubActivity.class);
+                            i.putExtra("fragment", HomePageFragment.class.getName());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", homePage);
+                            i.putExtras(bundle);
+                            mContext.startActivity(i);
+                        }
+
+                    }
+                });
+    }
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -177,9 +233,10 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SoundItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("Sound",f);
+            bundle.putSerializable("Sound", f);
             i.putExtras(bundle);
-            mContext.startActivity(i);
+            i.putExtra("position",arg2 - 2);
+            fragment.startActivityForResult(i, 0);
         } else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());
@@ -201,6 +258,31 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             }
         }
         return false;
+    }
+
+    public void updateSingleRow(ListView listView, int sid) {
+
+        if (listView != null) {
+            int start = listView.getFirstVisiblePosition() + 1;
+            LogUtils.LOGE("s",start+"");
+            int j = listView.getLastVisiblePosition();
+            for (int i = start; i <= j; i++) {
+                Sound sound = (Sound) listView.getItemAtPosition(i);
+                LogUtils.LOGE("sss",sound.toString());
+                if (sid == sound.sid) {
+
+                    View view = listView.getChildAt(i - start+2);
+                    HoldChild h = (HoldChild) view.getTag();
+                    h.tea_listen = (TextView) view.findViewById(R.id.tea_listen);
+                    h.tea_listen.setText("已付费");
+                    LogUtils.LOGE("s",i+"");
+                    getView(i, view, listView);
+                    break;
+                }
+            }
+//            View view = listView.getChildAt(position);
+//            getView(position, view, listView);
+        }
     }
 
 

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,12 +36,15 @@ import com.ui.views.DialogView;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
+import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
@@ -74,6 +78,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Administrator on 2017/2/20.
@@ -215,6 +221,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TextView no_comments;
     private TextView comment;
     private int likesIndex = -1;
+    private TextView isformulation;
+    private TextView accompaniment;
+    private TextView chapter;
+    private int payforTag = 0;
+    private int position;
 
 
     @Override
@@ -224,6 +235,21 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     protected boolean onPageBack() {
+//        if (payforTag == 1) {
+//            Intent intent = new Intent();
+//            if (position!=-1){
+//                intent.putExtra("position", position);
+//                getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+//                getActivity().finish();//此处一定要调用finish()方法
+//            }
+//
+//        }
+        Intent intent = new Intent();
+        if (position!=-1){
+            intent.putExtra("position", position);
+            getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+            getActivity().finish();//此处一定要调用finish()方法
+        }
         return false;
     }
 
@@ -254,6 +280,9 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         musicname = (TextView) v.findViewById(R.id.musicname);
         like = (TextView) v.findViewById(R.id.like);
         desc = (TextView) v.findViewById(R.id.desc);
+        isformulation = (TextView) v.findViewById(R.id.isformulation);
+        accompaniment = (TextView) v.findViewById(R.id.accompaniment);
+        chapter = (TextView) v.findViewById(R.id.chapter);
         soundtime = (TextView) v.findViewById(R.id.soundtime);
         stu_listen = (TextView) v.findViewById(R.id.stu_listen);
         tea_listen = (TextView) v.findViewById(R.id.tea_listen);
@@ -275,6 +304,8 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         comment.setOnClickListener(this);
         likes = AppShare.getLikeList(getActivity());
 
+        stu_header.setOnClickListener(this);
+        tea_header.setOnClickListener(this);
 
     }
 
@@ -294,6 +325,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
                         "getSoundDetail", SoundItemDetailFragment.this);
                 userInfo.coin_apple--;
+                payforTag = 1;
                 AppShare.setUserInfo(getActivity(), userInfo);
             }
 
@@ -311,7 +343,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 getActivity().finish();
 
             }
-        }else if (id.equals("like")) {
+        } else if (id.equals("like")) {
 
             if (type == NetCallBack.TYPE_SUCCESS) {
 
@@ -333,7 +365,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             }
         } else if (id.equals("getComments")) {
-            LogUtils.LOGE(tag,netResponse.toString());
+            LogUtils.LOGE(tag, netResponse.toString());
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<CommentsInfo> commentsInfos
                         = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<CommentsInfo>>() {
@@ -365,6 +397,21 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         like.setText(sound.like + "");
         if (sound.type == 1) {
             musictype.setImageResource(R.mipmap.shengyue);
+            String text = "";
+            if (!TextUtils.isEmpty(sound.chapter)) {
+                text = sound.chapter + " | ";
+            }
+            if (!TextUtils.isEmpty(sound.musictype)) {
+                text = text + sound.musictype + " | ";
+            }
+            if (!TextUtils.isEmpty(sound.accompaniment)) {
+                text = text + sound.accompaniment + " | ";
+                accompaniment.setText(sound.accompaniment);
+            }
+            chapter.setVisibility(View.VISIBLE);
+            chapter.setText(text);
+
+
         } else {
             musictype.setImageResource(R.mipmap.boyin);
         }
@@ -380,7 +427,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             }
         }
 
-        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,sound.fromuid+"");
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(), sid, sound.fromuid + "");
         listview.setAdapter(tab1CommentsAdapter);
         listview.setOnItemClickListener(tab1CommentsAdapter);
 
@@ -432,6 +479,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         tea_listen.setOnClickListener(this);
 
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
+        position = getActivity().getIntent().getIntExtra("position",-1);
         userInfo = AppShare.getUserInfo(getActivity());
 
         if (sound == null) {
@@ -537,12 +585,19 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
 //                Bundle bundle = new Bundle();
 
-                intent.putExtra("sid",sid+"");
-                intent.putExtra("fromuid",AppShare.getUserInfo(getActivity()).uid+"");
-                LogUtils.LOGE(tag,sound.toString());
-                intent.putExtra("touid",sound.fromuid+"");
+                intent.putExtra("sid", sid + "");
+                intent.putExtra("fromuid", AppShare.getUserInfo(getActivity()).uid + "");
+                LogUtils.LOGE(tag, sound.toString());
+                intent.putExtra("touid", sound.fromuid + "");
                 getActivity().startActivity(intent);
 
+                break;
+
+            case R.id.stu_header:
+                initHomepage(getActivity(), String.valueOf(sound.fromuid));
+                break;
+            case R.id.tea_header:
+                initHomepage(getActivity(), String.valueOf(sound.touid));
                 break;
 
         }
@@ -555,7 +610,45 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
+    }
 
+
+    private void initHomepage(final Context mContext, String uid) {
+        String mUid = "0";
+        if (AppShare.getIsLogin(mContext)) {
+            mUid = AppShare.getUserInfo(mContext).uid;
+        }
+        RestNetCallHelper.callNet(mContext,
+                MyNetApiConfig.getUserPage,
+                MyNetRequestConfig.getUserPage(mContext
+                        , uid, mUid),
+                "getUserPage",
+                new NetCallBack() {
+                    @Override
+                    public void onNetNoStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                        if (TYPE_SUCCESS == type) {
+                            Gson gson = new Gson();
+                            HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                            Intent i = new Intent(mContext, StubActivity.class);
+                            i.putExtra("fragment", HomePageFragment.class.getName());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", homePage);
+                            i.putExtras(bundle);
+                            mContext.startActivity(i);
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -634,9 +727,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             }
         }
     };
-
-
-
 
 
     private void palyStudentVoice() {
@@ -780,11 +870,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             mTimerTask = null;
         }
 
-        if (downloadManager != null ){
-            if (downloadTeaId!=-1){
+        if (downloadManager != null) {
+            if (downloadTeaId != -1) {
                 downloadManager.remove(downloadTeaId);
             }
-            if (downloadStuId!=-1){
+            if (downloadStuId != -1) {
                 downloadManager.remove(downloadStuId);
             }
 

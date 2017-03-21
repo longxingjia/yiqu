@@ -35,6 +35,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.net.UploadImage;
+import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.wxapi.WXPayEntryActivity;
@@ -108,7 +109,7 @@ public class PayforFragment extends AbsAllFragment implements View.OnClickListen
         PayInfo payInfo = (PayInfo) intent.getSerializableExtra("data");
         wx_arr = payInfo.wx_arr;
         order_number.setText(payInfo.order.order_number);
-        price.setText(payInfo.order.price+"");
+        price.setText(payInfo.order.price + "");
 
 
     }
@@ -137,11 +138,15 @@ public class PayforFragment extends AbsAllFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit:
-                Intent i = new Intent(getActivity(), WXPayEntryActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable("data", wx_arr);
-                i.putExtras(b);
-                startActivityForResult(i, requestCode);
+                if (AppAvilibleUtils.isWeixinAvilible(getActivity())) {
+                    Intent i = new Intent(getActivity(), WXPayEntryActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("data", wx_arr);
+                    i.putExtras(b);
+                    startActivityForResult(i, requestCode);
+                } else {
+                    ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                }
 
                 break;
         }

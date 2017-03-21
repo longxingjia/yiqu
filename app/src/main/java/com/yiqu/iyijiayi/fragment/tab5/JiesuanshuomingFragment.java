@@ -3,7 +3,9 @@ package com.yiqu.iyijiayi.fragment.tab5;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,17 +23,22 @@ import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogSexHelper;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.model.YzmKey;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -39,6 +46,10 @@ import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class JiesuanshuomingFragment extends AbsAllFragment {
 
+
+    private String key;
+    private String openid;
+    private EditText code;
 
     @Override
     protected int getTitleBarType() {
@@ -72,8 +83,67 @@ public class JiesuanshuomingFragment extends AbsAllFragment {
 
     @Override
     protected void initView(View v) {
+        code = (EditText) v.findViewById(R.id.code);
+
+        v.findViewById(R.id.band).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!TextUtils.isEmpty(key)) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.getLoginMessageCode, MyNetRequestConfig
+                                    .getLoginMessageCode(getActivity(), AppShare.getUserInfo(getActivity()).phone),
+                            "getLoginMessageCode", JiesuanshuomingFragment.this);
+                } else {
+                    if (!TextUtils.isEmpty(openid)) {
+                        if (AppAvilibleUtils.isWeixinAvilible(getActivity())) {
+                            Intent intent = new Intent(getActivity(), WXEntryActivity.class);
+                            intent.putExtra("data", "login");
+                            intent.putExtra("band", "band");
+                            startActivityForResult(intent, 0);
+                        } else {
+                            ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                        }
+                    } else {
+                        if (!TextUtils.isEmpty(code.getText().toString().trim())) {
+                        
+                        }
+
+                    }
+
+                }
+
+            }
+        });
 
 
+    }
+
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
+        super.onNetEnd(id, type, netResponse);
+        if (id.equals("getLoginMessageCode")) {
+            if (type == TYPE_SUCCESS) {
+                Gson gson = new Gson();
+                YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
+                key = yzmKey.key;
+                ToastManager.getInstance(getActivity()).showText("发送成功");
+            }
+
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_OK:
+                openid = data.getStringExtra("openid");
+
+
+                break;
+        }
     }
 
     @Override

@@ -23,7 +23,7 @@
             android:layout_height="30dp"
             android:background="@drawable/red_box"
             android:gravity="center"
-            android:text="热门作品"
+            android:text="最新作品"
             android:textSize="18sp"
             android:textColor="@color/white" />
 

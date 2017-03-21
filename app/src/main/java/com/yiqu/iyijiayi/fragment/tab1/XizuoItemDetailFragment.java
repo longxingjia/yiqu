@@ -36,10 +36,13 @@ import com.google.gson.reflect.TypeToken;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
+import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Xizuo;
@@ -213,7 +216,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         musictype = (ImageView) v.findViewById(R.id.musictype);
         listview = (ListView) v.findViewById(R.id.listview);
         stu_listen.setOnClickListener(this);
-
+        stu_header.setOnClickListener(this);
 
         likes = AppShare.getLikeList(getActivity());
 
@@ -243,9 +246,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             }
         }
 
-        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,xizuo.fromuid+"");
-        listview.setAdapter(tab1CommentsAdapter);
-        listview.setOnItemClickListener(tab1CommentsAdapter);
+
 
     }
 
@@ -291,9 +292,11 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                         = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<CommentsInfo>>() {
                 }.getType());
 
+
                 if (commentsInfos == null || commentsInfos.size() == 0) {
 
                 } else {
+                    LogUtils.LOGE(tag,commentsInfos.toString());
                     tab1CommentsAdapter.setData(commentsInfos);
                     no_comments.setVisibility(View.GONE);
                 }
@@ -348,7 +351,48 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 //                mPopupWindow.showAsDropDown(v);
 
                 break;
+            case R.id.stu_header:
+                initHomepage(getActivity(), String.valueOf(xizuo.fromuid));
+                break;
         }
+    }
+
+    private void initHomepage(final Context mContext, String uid) {
+        String mUid = "0";
+        if (AppShare.getIsLogin(mContext)) {
+            mUid = AppShare.getUserInfo(mContext).uid;
+        }
+        RestNetCallHelper.callNet(mContext,
+                MyNetApiConfig.getUserPage,
+                MyNetRequestConfig.getUserPage(mContext
+                        , uid, mUid),
+                "getUserPage",
+                new NetCallBack() {
+                    @Override
+                    public void onNetNoStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetStart(String id) {
+
+                    }
+
+                    @Override
+                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                        if (TYPE_SUCCESS == type) {
+                            Gson gson = new Gson();
+                            HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
+                            Intent i = new Intent(mContext, StubActivity.class);
+                            i.putExtra("fragment", HomePageFragment.class.getName());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", homePage);
+                            i.putExtras(bundle);
+                            mContext.startActivity(i);
+                        }
+
+                    }
+                });
     }
 
     private void dowoload(String downloadUrl, String fileName) {
@@ -489,6 +533,10 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                 url.length());
         fileName = xizuo.musicname + "_" + fileName;
         mFile = new File(Variable.StorageMusicCachPath, fileName);
+
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,xizuo.fromuid+"");
+        listview.setAdapter(tab1CommentsAdapter);
+        listview.setOnItemClickListener(tab1CommentsAdapter);
     }
 
     @Override

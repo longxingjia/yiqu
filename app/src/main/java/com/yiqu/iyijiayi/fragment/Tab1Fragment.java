@@ -42,6 +42,8 @@ import com.yiqu.iyijiayi.utils.NetWorkUtils;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener, OnClickListener, RefreshList.IRefreshListViewListener {
 
     private static final int TAB_1 = 1;
@@ -115,26 +117,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onResume() {
         super.onResume();
-        if (AppShare.getIsLogin(getActivity())) {
-            uid = AppShare.getUserInfo(getActivity()).uid;
-        } else {
-            uid = "0";
-        }
 
-        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
-            Remen remen = AppShare.getRemenList(getActivity());
-            if (remen != null) {
-                tab1XizuoAdapter.setData(remen.xizuo);
-                tab1SoundAdapter.setData(remen.sound);
-            }
-        } else {
-            count = 0;
-            RestNetCallHelper.callNet(
-                    getActivity(),
-                    MyNetApiConfig.remen,
-                    MyNetRequestConfig.remen(getActivity(), uid),
-                    "Remen", Tab1Fragment.this, false, true);
-        }
 
     }
 
@@ -168,11 +151,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
         lvXizuo.setAdapter(tab1XizuoAdapter);
 
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity());
+        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(), this);
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
-
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
@@ -182,6 +164,27 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         nsDictionary.stype = "1";
         Gson gson = new Gson();
         arr = gson.toJson(nsDictionary);
+
+        if (AppShare.getIsLogin(getActivity())) {
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        } else {
+            uid = "0";
+        }
+
+        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
+            Remen remen = AppShare.getRemenList(getActivity());
+            if (remen != null) {
+                tab1XizuoAdapter.setData(remen.xizuo);
+                tab1SoundAdapter.setData(remen.sound);
+            }
+        } else {
+            count = 0;
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.remen,
+                    MyNetRequestConfig.remen(getActivity(), uid),
+                    "Remen", Tab1Fragment.this, false, true);
+        }
 
 
     }
@@ -232,6 +235,35 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_OK:
+//                Bundle b=data.getExtras(); //data为B中回传的Intent
+//                String str=b.getString("str1");//str即为回传的值
+
+//                String sid = data.getExtras().getString("data");
+//                LogUtils.LOGE("tab1f",Integer.parseInt(sid)+"");
+//                int position = data.getIntExtra("position", -1);
+
+//                LogUtils.LOGE("s",position+"");
+//                Sound s = sound.get(position);
+//                LogUtils.LOGE("1",s.toString());
+//                s.listen = 1;
+//                sound.remove(position);
+//                sound.add(position,s);
+//
+//                LogUtils.LOGE("tab1f", sound.toString());
+
+//                tab1SoundAdapter.updateSingleRow(lvSound, 107);
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
         if (netResponse != null && "Remen".equals(id)) {
@@ -262,8 +294,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
                 remen.sound.addAll(sound);
                 AppShare.setRemenList(getActivity(), remen);
-                tab1SoundAdapter.setData(sound);
-
+//                tab1SoundAdapter.setData(sound);
                 tab1SoundAdapter.addData(sound);
                 if (sound.size() < rows) {
                     mLoadMoreView.setMoreAble(false);

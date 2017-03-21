@@ -106,7 +106,7 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                                         getActivity(),
                                         MyNetApiConfig.searchMusic,
                                         MyNetRequestConfig.searchItems(getActivity(), et_search_content.getText().toString().trim(), count, rows),
-                                        "searchMusic", SearchFragment.this, false, true);
+                                        "searchMusic", SearchFragment.this);
 
                                 break;
                             case "search_user":
@@ -114,21 +114,21 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                                         getActivity(),
                                         MyNetApiConfig.searchUser,
                                         MyNetRequestConfig.searchItems(getActivity(), et_search_content.getText().toString().trim(), count, rows),
-                                        "searchUser", SearchFragment.this, false, true);
+                                        "searchUser", SearchFragment.this);
                                 break;
                             case "search_sound1":
                                 RestNetCallHelper.callNet(
                                         getActivity(),
                                         MyNetApiConfig.searchSoundByText,
                                         MyNetRequestConfig.searchItems(getActivity(), et_search_content.getText().toString().trim(), count, rows),
-                                        "searchSoundByText", SearchFragment.this, false, true);
+                                        "searchSoundByText", SearchFragment.this);
                                 break;
                             case "search_sound2":
                                 RestNetCallHelper.callNet(
                                         getActivity(),
                                         MyNetApiConfig.searchByMusicName,
                                         MyNetRequestConfig.searchItems(getActivity(), et_search_content.getText().toString().trim(), count, rows),
-                                        "searchByMusicName", SearchFragment.this, false, true);
+                                        "searchByMusicName", SearchFragment.this);
 
 
                                 break;

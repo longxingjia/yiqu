@@ -146,13 +146,17 @@ public class MyNetRequestConfig {
      * 10、
      */
     public static NetRequest addTeacherApply(Context c, String uid, String username,
-                                             String school, String title, String desc) {
+                                             String school, String title, String desc,
+                                             String phone, String address, String source) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam("username", username);
         r.addHttpParam("school", school);
         r.addHttpParam("title", title);
         r.addHttpParam("desc", desc);
+        r.addHttpParam("phone", phone);
+        r.addHttpParam("address", address);
+        r.addHttpParam("source", source);
 
         return r;
     }
