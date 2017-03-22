@@ -27,6 +27,7 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
@@ -103,12 +104,22 @@ public class WelcomePageActivity extends Activity {
 
     @Override
     protected void onResume() {
+       // MobclickAgent.setDebugMode( true );
 
         PermissionGen.needPermission(this, 100, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE
         });
+        MobclickAgent.onPageStart("启动页面"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
+        MobclickAgent.onResume(this);
 
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("启动页面"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
+        MobclickAgent.onPause(this);
     }
 
     @Override

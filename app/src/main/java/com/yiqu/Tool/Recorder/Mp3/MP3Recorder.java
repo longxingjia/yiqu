@@ -8,9 +8,10 @@ import com.Tool.Function.CommonFunction;
 import com.Tool.Function.FileFunction;
 import com.Tool.Function.LogFunction;
 import com.Tool.Function.PermissionFunction;
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 import com.Tool.Global.Variable;
 import com.Tool.Common.CommonThreadPool;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -24,10 +25,9 @@ public class MP3Recorder {
 
     private final static int toTransformLocationNumber = 3;
     private final static int receiveSuperEaCycleNumber = 10;
+    private static final int recordSleepDuration = 500;
 
     private final static int sampleDuration = 100;
-
-    private static final int recordSleepDuration = 500;
 
     //自定义 每160帧作为一个周期，通知一下需要进行编码
     private static final int FRAME_COUNT = 160;
@@ -54,15 +54,18 @@ public class MP3Recorder {
 
     private void initAudioRecord() {
         int audioRecordMinBufferSize = AudioRecord
-                .getMinBufferSize(Constant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
+                .getMinBufferSize(RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
                         pcmFormat.getAudioFormat());
 
         audioRecordBufferSize =
-                Constant.RecordSampleRate * pcmFormat.getBytesPerFrame() / (1000 / sampleDuration);
+                RecordConstant.RecordSampleRate * pcmFormat.getBytesPerFrame() / (1000 / sampleDuration);
 
         if (audioRecordMinBufferSize > audioRecordBufferSize) {
             audioRecordBufferSize = audioRecordMinBufferSize;
         }
+
+        LogUtils.LOGE("audioRecordBufferSize",audioRecordBufferSize+"");
+        LogUtils.LOGE("audioRecordMinBufferSize",audioRecordMinBufferSize+"");
 
         /* Get number of samples. Calculate the buffer size
          * (round up to the factor of given frame size)
@@ -76,16 +79,19 @@ public class MP3Recorder {
             audioRecordBufferSize = frameSize * bytesPerFrame;
         }
 
+
+
+
         audioRecordBuffer = new short[audioRecordBufferSize];
 
-        double sampleNumberInOneMicrosecond = (double) Constant.RecordSampleRate / 1000;
+        double sampleNumberInOneMicrosecond = (double) RecordConstant.RecordSampleRate / 1000;
 
         realSampleDuration = audioRecordBufferSize * 1000 /
-                (Constant.RecordSampleRate * pcmFormat.getBytesPerFrame());
+                (RecordConstant.RecordSampleRate * pcmFormat.getBytesPerFrame());
 
         realSampleNumberInOneDuration = (int) (sampleNumberInOneMicrosecond * realSampleDuration);
 
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, Constant.RecordSampleRate,
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordConstant.RecordSampleRate,
                 AudioFormat.CHANNEL_IN_MONO, pcmFormat.getAudioFormat(), audioRecordBufferSize);
     }
 
@@ -141,7 +147,7 @@ public class MP3Recorder {
     }
 
     public int getVolume() {
-        int volume = (int) (Math.sqrt(amplitude)) * Constant.RecordVolumeMaxRank / 60;
+        int volume = (int) (Math.sqrt(amplitude)) * RecordConstant.RecordVolumeMaxRank / 60;
         return volume;
     }
 
@@ -184,7 +190,7 @@ public class MP3Recorder {
             while (running) {
                 if (recordVoice) {
                     audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                            Constant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
+                            RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
                             pcmFormat.getAudioFormat(), audioRecordBufferSize);
 
                     try {

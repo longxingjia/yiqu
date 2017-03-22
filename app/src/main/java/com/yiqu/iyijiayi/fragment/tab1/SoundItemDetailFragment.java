@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.DialogUtil;
 import com.ui.views.DialogView;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
@@ -253,6 +254,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         return false;
     }
 
+
     @Override
     protected boolean onPageNext() {
         return false;
@@ -416,7 +418,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             musictype.setImageResource(R.mipmap.boyin);
         }
 
-        long t = System.currentTimeMillis() / 1000 - sound.created;
+        long t = System.currentTimeMillis() / 1000 - sound.edited;
         if (t < 2 * 24 * 60 * 60 && t > 0) {
             tea_listen.setText("限时免费听");
         } else {
@@ -516,7 +518,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                 break;
             case R.id.tea_listen:
-                long t = System.currentTimeMillis() / 1000 - sound.created;
+                long t = System.currentTimeMillis() / 1000 - sound.edited;
 
                 if (t < 2 * 24 * 60 * 60 && t > 0) {
                     if (teaFile.exists()) {
@@ -609,6 +611,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         /** 注册下载完成接收广播 **/
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        MobclickAgent.onPageStart("声乐详情");
 
     }
 
@@ -660,8 +663,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             scheduledExecutorService = null;
 
         }
+        MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
+
     }
+
 
 
     private long dowoload(String downloadUrl, String fileName, final int tag) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ui.abs.AbsFragment;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
@@ -57,6 +58,8 @@ public class SoundsFragment extends AbsFragment implements View.OnClickListener 
         mViewPager.setCurrentItem(desTab, true);
     }
 
+
+
     @Override
     protected int getContentView() {
         return R.layout.sounds_fragment;
@@ -83,6 +86,20 @@ public class SoundsFragment extends AbsFragment implements View.OnClickListener 
 
         mViewPager.setAdapter(new MyFrageStatePagerAdapter(getChildFragmentManager()));
         mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("声乐3个页面");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("声乐3个页面");
+
     }
 
     /**

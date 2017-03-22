@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -22,11 +21,12 @@ import android.widget.Toast;
 import com.Tool.Function.AudioFunction;
 import com.Tool.Function.CommonFunction;
 import com.Tool.Function.VoiceFunction;
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 import com.Tool.Global.Variable;
 
 import java.io.File;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -44,7 +44,6 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import kr.co.namee.permissiongen.PermissionFail;
@@ -151,6 +150,22 @@ public class RecordActivity extends Activity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("录制声乐页面");
+        MobclickAgent.onResume(this);
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("录制声乐页面");
+        MobclickAgent.onPause(this);
+    }
+
 
     private void goRecordSuccessState() {
         recordVoiceBegin = false;
@@ -176,7 +191,7 @@ public class RecordActivity extends Activity
 
 
         AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
-                actualRecordTime + Constant.MusicCutEndOffset, this);
+                actualRecordTime + RecordConstant.MusicCutEndOffset, this);
     }
 
     @Override
@@ -197,7 +212,7 @@ public class RecordActivity extends Activity
     @Override
     public void recordVoiceStateChanged(int volume, long recordDuration) {
         if (recordDuration > 0) {
-            recordTime = (int) (recordDuration / Constant.OneSecond);
+            recordTime = (int) (recordDuration / RecordConstant.OneSecond);
             int leftTime = music.time-recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
 
@@ -269,16 +284,16 @@ public class RecordActivity extends Activity
     @Override
     public void updateDecodeProgress(int decodeProgress) {
         composeProgressBar.setProgress(
-                decodeProgress * Constant.MaxDecodeProgress / Constant.NormalMaxProgress);
+                decodeProgress * RecordConstant.MaxDecodeProgress / RecordConstant.NormalMaxProgress);
     }
 
     @Override
     public void decodeSuccess() {
-        composeProgressBar.setProgress(Constant.MaxDecodeProgress);
+        composeProgressBar.setProgress(RecordConstant.MaxDecodeProgress);
 
         AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
-                Constant.VoiceWeight, Constant.VoiceBackgroundWeight,
-                -1 * Constant.MusicCutEndOffset / 2 * Constant.RecordDataNumberInOneSecond, this);
+                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
+                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
 
 
     }
@@ -293,8 +308,8 @@ public class RecordActivity extends Activity
     @Override
     public void updateComposeProgress(int composeProgress) {
         composeProgressBar.setProgress(
-                composeProgress * (Constant.NormalMaxProgress - Constant.MaxDecodeProgress) /
-                        Constant.NormalMaxProgress + Constant.MaxDecodeProgress);
+                composeProgress * (RecordConstant.NormalMaxProgress - RecordConstant.MaxDecodeProgress) /
+                        RecordConstant.NormalMaxProgress + RecordConstant.MaxDecodeProgress);
     }
 
     @Override

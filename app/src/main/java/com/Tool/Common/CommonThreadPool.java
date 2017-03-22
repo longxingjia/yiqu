@@ -1,6 +1,6 @@
 package com.Tool.Common;
 
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +16,7 @@ public class CommonThreadPool {
 
     // 创建线程池,requestThreadCount为线程池中工作线程的个数
     private CommonThreadPool() {
-        fixedExecutorService = Executors.newFixedThreadPool(Constant.ThreadPoolCount);
+        fixedExecutorService = Executors.newFixedThreadPool(RecordConstant.ThreadPoolCount);
         cachedExecutorService = Executors.newCachedThreadPool();
     }
 

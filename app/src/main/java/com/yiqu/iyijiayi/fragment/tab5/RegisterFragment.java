@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -221,6 +222,18 @@ public class RegisterFragment extends AbsAllFragment {
         super.onNetEnd(id, type, netResponse);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("注册"); //统计页面，"MainScreen"为页面名称，可自定义
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("注册");
+    }
 
     @Override
     protected int getTitleBarType() {

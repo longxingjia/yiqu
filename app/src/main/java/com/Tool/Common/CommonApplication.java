@@ -5,13 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.StrictMode;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.Tool.Function.CommonFunction;
 import com.Tool.Function.InitFunction;
-import com.Tool.Global.Constant;
 import com.ui.App;
 
 /**
@@ -58,7 +56,7 @@ public class CommonApplication extends Application {
 
             InitFunction.Initialise(this);
 
-//            if (Constant.Debug) {
+//            if (RecordConstant.Debug) {
 //                StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
 //                        new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog();
 //                StrictMode.VmPolicy.Builder vmPolicyBuilder =

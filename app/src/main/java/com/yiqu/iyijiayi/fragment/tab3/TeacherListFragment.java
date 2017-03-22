@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.SelectTeacherAdapter;
@@ -97,6 +98,17 @@ public class TeacherListFragment extends AbsAllFragment  {
 
 
     }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("选择老师列表"); //统计页面，"MainScreen"为页面名称，可自定义
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("选择老师列表");
+    }
+
+
 
     @Override
     public void onDestroy() {

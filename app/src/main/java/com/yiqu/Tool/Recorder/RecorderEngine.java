@@ -12,7 +12,7 @@ import com.Tool.Function.FileFunction;
 import com.Tool.Function.LogFunction;
 
 import com.Tool.Common.CommonApplication;
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Recorder.Mp3.MP3Recorder;
@@ -131,7 +131,7 @@ public class RecorderEngine {
 
             recording = false;
 
-            if (recordDuration < Constant.OneSecond) {
+            if (recordDuration < RecordConstant.OneSecond) {
                 recordVoiceSuccess = false;
             }
 

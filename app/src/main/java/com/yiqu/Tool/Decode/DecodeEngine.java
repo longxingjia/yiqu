@@ -6,7 +6,7 @@ import android.media.MediaFormat;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 import com.Tool.Global.Variable;
 
 import java.io.BufferedOutputStream;
@@ -182,9 +182,9 @@ public class DecodeEngine {
 
             decodeTime = System.currentTimeMillis();
 
-            if (decodeTime - decodeNoticeTime > Constant.OneSecond) {
+            if (decodeTime - decodeNoticeTime > RecordConstant.OneSecond) {
                 final int decodeProgress =
-                        (int) ((presentationTimeUs - startMicroseconds) * Constant
+                        (int) ((presentationTimeUs - startMicroseconds) * RecordConstant
                                 .NormalMaxProgress /
                                 endMicroseconds);
 
@@ -280,13 +280,13 @@ public class DecodeEngine {
                         continue;
                     }
 
-                    byte[] convertByteNumberByteArray = ConvertByteNumber(byteNumber, Constant
+                    byte[] convertByteNumberByteArray = ConvertByteNumber(byteNumber, RecordConstant
                                     .RecordByteNumber,
                             sourceByteArray);
 
                     byte[] resultByteArray =
-                            ConvertChannelNumber(channelCount, Constant.RecordChannelNumber,
-                                    Constant.RecordByteNumber,
+                            ConvertChannelNumber(channelCount, RecordConstant.RecordChannelNumber,
+                                    RecordConstant.RecordByteNumber,
                                     convertByteNumberByteArray);
 
                     try {
@@ -312,7 +312,7 @@ public class DecodeEngine {
             }
         }
 
-        if (sampleRate != Constant.RecordSampleRate) {
+        if (sampleRate != RecordConstant.RecordSampleRate) {
             Resample(sampleRate, decodeFileUrl);
         }
 
@@ -335,8 +335,8 @@ public class DecodeEngine {
             FileOutputStream fileOutputStream =
                     new FileOutputStream(new File(newDecodeFileUrl));
 
-            new SSRC(fileInputStream, fileOutputStream, sampleRate, Constant.RecordSampleRate,
-                    Constant.RecordByteNumber, Constant.RecordByteNumber, 1, Integer.MAX_VALUE,
+            new SSRC(fileInputStream, fileOutputStream, sampleRate, RecordConstant.RecordSampleRate,
+                    RecordConstant.RecordByteNumber, RecordConstant.RecordByteNumber, 1, Integer.MAX_VALUE,
                     0, 0, true);
 
             fileInputStream.close();

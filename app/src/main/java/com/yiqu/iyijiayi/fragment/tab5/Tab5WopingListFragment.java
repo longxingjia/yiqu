@@ -12,6 +12,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab5WopingAdapter;
@@ -74,8 +75,18 @@ public class Tab5WopingListFragment extends AbsAllFragment implements LoadMoreVi
         return false;
     }
 
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("我评列表");
+    }
+
     @Override
     public void onResume() {
+        MobclickAgent.onPageStart("我评列表"); //统计页面，"MainScreen"为页面名称，可自定义
+
         super.onResume();
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";

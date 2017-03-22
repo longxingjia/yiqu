@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragmentAct;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
@@ -52,6 +53,15 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
     protected void init(Bundle savedInstanceState) {
 
         InitViewPager();
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);       //统计时长
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

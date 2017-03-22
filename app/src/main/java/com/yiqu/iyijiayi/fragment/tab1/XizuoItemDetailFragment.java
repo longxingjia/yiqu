@@ -33,6 +33,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
@@ -247,7 +248,6 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         }
 
 
-
     }
 
 
@@ -296,7 +296,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                 if (commentsInfos == null || commentsInfos.size() == 0) {
 
                 } else {
-                    LogUtils.LOGE(tag,commentsInfos.toString());
+                    LogUtils.LOGE(tag, commentsInfos.toString());
                     tab1CommentsAdapter.setData(commentsInfos);
                     no_comments.setVisibility(View.GONE);
                 }
@@ -336,10 +336,10 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
 //                Bundle bundle = new Bundle();
 
-                intent.putExtra("sid",sid+"");
-                intent.putExtra("fromuid",AppShare.getUserInfo(getActivity()).uid+"");
+                intent.putExtra("sid", sid + "");
+                intent.putExtra("fromuid", AppShare.getUserInfo(getActivity()).uid + "");
 
-                intent.putExtra("touid",xizuo.fromuid+"");
+                intent.putExtra("touid", xizuo.fromuid + "");
                 getActivity().startActivity(intent);
 
 //                View popupView = getActivity().getLayoutInflater().inflate(R.layout.activity_comment, null);
@@ -489,6 +489,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         /** 注册下载完成接收广播 **/
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        MobclickAgent.onPageStart("作品详情");
     }
 
     @Override
@@ -497,8 +499,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
             future.cancel(true);
             scheduledExecutorService.shutdown();
-
             scheduledExecutorService = null;
+            MobclickAgent.onPageEnd("作品详情");
 
         }
         super.onPause();
@@ -534,10 +536,11 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         fileName = xizuo.musicname + "_" + fileName;
         mFile = new File(Variable.StorageMusicCachPath, fileName);
 
-        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(),sid,xizuo.fromuid+"");
+        tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(), sid, xizuo.fromuid + "");
         listview.setAdapter(tab1CommentsAdapter);
         listview.setOnItemClickListener(tab1CommentsAdapter);
     }
+
 
     @Override
     public void playVoiceBegin() {

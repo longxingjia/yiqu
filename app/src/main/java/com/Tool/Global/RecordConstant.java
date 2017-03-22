@@ -3,7 +3,7 @@ package com.Tool.Global;
 
 import com.yiqu.iyijiayi.BuildConfig;
 
-public class Constant {
+public class RecordConstant {
     public static final boolean Debug = BuildConfig.DEBUG;
 
     public static final int NoExistIndex = -1;
@@ -11,16 +11,17 @@ public class Constant {
     public static final int OneSecond = 1000;
 
     public static final int RecordSampleRate = 44100; // 采样率
-    public static final int RecordByteNumber = 2; // 采样率
+    public static final int RecordByteNumber = 2;
     public static final int RecordChannelNumber = 1;  // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
+
     public static final int RecordDataNumberInOneSecond =
             RecordSampleRate * RecordByteNumber * RecordChannelNumber;
-    // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
+
     public static final int BehaviorSampleRate = 44100; // 采样率
 
     public static final int LameMp3Quality = 0; // Lame Default Settings，0=很好很慢 9=很差很快
     public static final int LameBehaviorChannelNumber = RecordChannelNumber;
-    // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
+
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
     public static final int LameBehaviorBitRate = 256;

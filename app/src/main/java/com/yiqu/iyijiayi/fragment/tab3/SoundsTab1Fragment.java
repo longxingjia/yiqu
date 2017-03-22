@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.ui.abs.AbsFragment;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
@@ -86,6 +87,20 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
                 getActivity().finish();
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("声乐伴奏页面");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("声乐伴奏页面");
 
     }
 

@@ -3,6 +3,7 @@ package com.Tool.Function;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.Tool.Global.RecordConstant;
 import com.czt.mp3recorder.util.LameUtil;
 
 import java.io.FileInputStream;
@@ -15,11 +16,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import com.yiqu.Tool.Decode.DecodeEngine;
 
-import com.Tool.Global.Constant;
 import com.Tool.Global.Variable;
 
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -114,14 +115,17 @@ public class AudioFunction {
         FileOutputStream composeAudioOutputStream = FileFunction.GetFileOutputStreamFromFile
                 (composeAudioFilePath);
 
-        LameUtil.init(Constant.RecordSampleRate, Constant.LameBehaviorChannelNumber,
-                Constant.BehaviorSampleRate, Constant.LameBehaviorBitRate, Constant.LameMp3Quality);
+        LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
+                RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
 
         try {
             while (!firstAudioFinish && !secondAudioFinish) {
                 index = 0;
 
                 if (audioOffset < 0) {
+
+                    LogUtils.LOGE("audiofun",audioOffset+"");
+
                     secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
 
                     outputShortArrayLength = secondAudioReadNumber / 2;
@@ -132,6 +136,8 @@ public class AudioFunction {
 
                         outputShortArray[index] = (short) (resultShort * secondAudioWeight);
                     }
+
+                    LogUtils.LOGE("audiofun",audioOffset+"");
 
                     audioOffset += secondAudioReadNumber;
 
@@ -156,6 +162,7 @@ public class AudioFunction {
                     }
 
                     audioOffset -= firstAudioReadNumber;
+                    LogUtils.LOGE("audiofun",audioOffset+"");
 
                     if (firstAudioReadNumber < 0) {
                         firstAudioFinish = true;
@@ -335,8 +342,8 @@ public class AudioFunction {
         FileOutputStream composeAudioOutputStream = FileFunction.GetFileOutputStreamFromFile
                 (composeAudioFilePath);
 
-        LameUtil.init(Constant.RecordSampleRate, Constant.LameBehaviorChannelNumber,
-                Constant.BehaviorSampleRate, Constant.LameBehaviorBitRate, Constant.LameMp3Quality);
+        LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
+                RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
 
         try {
             while (!firstAudioFinish ) {

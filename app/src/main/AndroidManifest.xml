@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
+
     <application
         android:name="com.Tool.Common.CommonApplication"
         android:allowBackup="true"
@@ -75,6 +76,9 @@
             android:theme="@style/dialogstyle"
             android:windowSoftInputMode="stateVisible|adjustResize"
           ></activity>
+
+        <meta-data android:value="58d1d55482b63508ae0007b6" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

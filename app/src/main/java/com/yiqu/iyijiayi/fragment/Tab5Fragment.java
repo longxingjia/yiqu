@@ -14,6 +14,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.CircleImageView;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
@@ -172,7 +173,8 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     @Override
     public void onResume() {
-        //   LogUtils.LOGE("hhhh");
+        MobclickAgent.onPageStart("我"); //统计页面，"MainScreen"为页面名称，可自定义
+
         initUI();
         super.onResume();
     }
@@ -317,5 +319,11 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
                 break;
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("我");
     }
 }

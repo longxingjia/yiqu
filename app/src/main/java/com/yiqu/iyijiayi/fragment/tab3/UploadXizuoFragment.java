@@ -15,6 +15,7 @@ import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
@@ -69,6 +70,15 @@ public class UploadXizuoFragment extends AbsAllFragment {
     protected void initTitle() {
 //
         setTitleText("上传作品");
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("上传作品"); //统计页面，"MainScreen"为页面名称，可自定义
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("上传作品");
     }
 
     @Override

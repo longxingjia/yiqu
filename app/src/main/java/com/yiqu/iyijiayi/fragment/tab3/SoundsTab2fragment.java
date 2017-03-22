@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
@@ -65,6 +66,15 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
         if (musics!=null&&musics.size()>0){
             soundsTab1Adapter.setData(musics);
         }
+        MobclickAgent.onPageStart("声乐已下载");
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("声乐已下载");
+
     }
 
     @Override

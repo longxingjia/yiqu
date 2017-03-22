@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.LogUtils;
@@ -19,6 +20,16 @@ public class StubActivity extends AbsFragmentAct {
 	@Override
 	protected int getContentView() {
 		return R.layout.act_sub;
+	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);          //统计时长
+	}
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.Tool.Global.Variable;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -114,6 +115,8 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
         }
     };
+
+
 
     @Override
     protected int getTitleBarType() {
@@ -289,6 +292,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         /** 注册下载完成接收广播 **/
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        MobclickAgent.onPageStart("下载作品");
     }
 
     @Override
@@ -300,6 +304,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
             scheduledExecutorService = null;
 
         }
+        MobclickAgent.onPageEnd("下载作品");
         super.onPause();
     }
 

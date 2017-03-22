@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.base.utils.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
@@ -39,6 +40,18 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 	protected void init(Bundle savedInstanceState) {
 		setSlidingMenuEnable(false);
 
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageStart("录制和提问"); //统计页面，"MainScreen"为页面名称，可自定义
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageEnd("录制和提问");
 	}
 	
 

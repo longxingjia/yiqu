@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId "com.yiqu.iyijiayi"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 2
         versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -59,7 +59,27 @@ android {
             universalApk false
         }
     }
+
+    productFlavors {
+
+        wandoujia {}
+        baidu {}
+        c360 {}
+        qq {}
+        xiaomi {}
+        huawei {}
+        wostore {}
+        liqucn {}
+
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+
+    }
 }
+
+
 
 
 
@@ -77,5 +97,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+    compile 'com.umeng.analytics:analytics:latest.integration'
     testCompile 'junit:junit:4.12'
 }

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.Tool.Function.VoiceFunction;
 import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -245,5 +246,19 @@ public class PlayActivity extends Activity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("播放录音或者声乐页面");
+        MobclickAgent.onResume(this);
 
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("播放录音或者声乐页面");
+        MobclickAgent.onPause(this);
+    }
 }

@@ -50,6 +50,7 @@ public class JiesuanshuomingFragment extends AbsAllFragment {
     private String key;
     private String openid;
     private EditText code;
+    private UserInfo userInfo;
 
     @Override
     protected int getTitleBarType() {
@@ -85,32 +86,37 @@ public class JiesuanshuomingFragment extends AbsAllFragment {
     protected void initView(View v) {
         code = (EditText) v.findViewById(R.id.code);
 
+
         v.findViewById(R.id.band).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!TextUtils.isEmpty(key)) {
-                    RestNetCallHelper.callNet(getActivity(),
-                            MyNetApiConfig.getLoginMessageCode, MyNetRequestConfig
-                                    .getLoginMessageCode(getActivity(), AppShare.getUserInfo(getActivity()).phone),
-                            "getLoginMessageCode", JiesuanshuomingFragment.this);
-                } else {
-                    if (!TextUtils.isEmpty(openid)) {
-                        if (AppAvilibleUtils.isWeixinAvilible(getActivity())) {
-                            Intent intent = new Intent(getActivity(), WXEntryActivity.class);
-                            intent.putExtra("data", "login");
-                            intent.putExtra("band", "band");
-                            startActivityForResult(intent, 0);
-                        } else {
-                            ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
-                        }
+                if(AppShare.getIsLogin(getActivity())){
+                    userInfo = AppShare.getUserInfo(getActivity());
+                    if (TextUtils.isEmpty(key)) {
+                        RestNetCallHelper.callNet(getActivity(),
+                                MyNetApiConfig.getLoginMessageCode, MyNetRequestConfig
+                                        .getLoginMessageCode(getActivity(), userInfo.phone),
+                                "getLoginMessageCode", JiesuanshuomingFragment.this);
+                        code.setVisibility(View.VISIBLE);
                     } else {
                         if (!TextUtils.isEmpty(code.getText().toString().trim())) {
-                        
+                            if (AppAvilibleUtils.isWeixinAvilible(getActivity())) {
+                                Intent intent = new Intent(getActivity(), WXEntryActivity.class);
+                                intent.putExtra("data", "login");
+                                intent.putExtra("band", "band");
+                                startActivityForResult(intent, 0);
+                            } else {
+                                ToastManager.getInstance(getActivity()).showText("您还没有安装微信，请您先安装微信。");
+                            }
+                        } else {
+                            ToastManager.getInstance(getActivity()).showText("请填写验证码");
                         }
 
                     }
-
+                }else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText("请登录后再试");
                 }
 
             }
@@ -127,9 +133,15 @@ public class JiesuanshuomingFragment extends AbsAllFragment {
                 Gson gson = new Gson();
                 YzmKey yzmKey = gson.fromJson(netResponse.data, YzmKey.class);
                 key = yzmKey.key;
-                ToastManager.getInstance(getActivity()).showText("发送成功");
+                ToastManager.getInstance(getActivity()).showText("验证码发送成功");
             }
 
+        }else if (id.equals("bindPhoneCheck")){
+
+            LogUtils.LOGE("1",netResponse.toString());
+            if (type == TYPE_SUCCESS) {
+//                ToastManager.getInstance(getActivity()).showText();
+            }
         }
 
     }
@@ -140,7 +152,10 @@ public class JiesuanshuomingFragment extends AbsAllFragment {
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_OK:
                 openid = data.getStringExtra("openid");
-
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.bindPhoneCheck, MyNetRequestConfig
+                                .bindPhoneCheck(getActivity(),userInfo.uid,userInfo.phone,code.getText().toString().trim(),key,openid ),
+                        "bindPhoneCheck", JiesuanshuomingFragment.this);
 
                 break;
         }

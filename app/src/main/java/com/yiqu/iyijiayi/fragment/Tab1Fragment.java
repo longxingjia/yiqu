@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
@@ -117,7 +118,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onResume() {
         super.onResume();
-
+        MobclickAgent.onPageStart("热门"); //统计页面，"MainScreen"为页面名称，可自定义
 
     }
 
@@ -232,6 +233,14 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 break;
         }
 
+    }
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("热门");
     }
 
     @Override

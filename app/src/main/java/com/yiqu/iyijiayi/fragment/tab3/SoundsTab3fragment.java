@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
@@ -74,6 +75,20 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
             resfreshFail();
             ToastManager.getInstance(getActivity()).showText("没有数据");
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("本地");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("本地");
 
     }
 

@@ -13,6 +13,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.abs.AbsFragment;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.SearchMusicAdapter;
@@ -160,6 +161,21 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
                 return false;
             }
         });
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("查找所有");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("查找所有");
 
     }
 

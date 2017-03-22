@@ -57,7 +57,7 @@ public abstract class AbsAllFragment extends AbsTitleNetFragment {
 //		if(type == TYPE_TOKEN_INVALID){
 //			//如果token失效
 //			Intent intent = new Intent();
-//			intent.setAction(Constant.ACTION_LOG_OUT);
+//			intent.setAction(RecordConstant.ACTION_LOG_OUT);
 //			getActivity().sendBroadcast(intent);
 //			//AppShare.LoginOut(getActivity());
 //

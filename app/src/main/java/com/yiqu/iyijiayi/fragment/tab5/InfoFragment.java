@@ -14,6 +14,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.CircleImageView;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -92,6 +93,14 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         return R.layout.tab5_info_fragment;
     }
 
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("个人信息");
+    }
+
     @Override
     protected void initView(View v) {
         rl_edit_head = (RelativeLayout) v.findViewById(R.id.rl_edit_head);
@@ -126,6 +135,8 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("个人信息"); //统计页面，"MainScreen"为页面名称，可自定义
+
         if (AppShare.getIsLogin(getActivity())) {
             userInfo = AppShare.getUserInfo(getActivity());
         } else {

@@ -12,6 +12,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
@@ -71,6 +72,21 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         mLoadMoreView.setMoreAble(false);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("老师学生列表");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("老师学生列表");
+
+    }
+
     @Override
     protected boolean isTouchMaskForNetting() {
         return false;
@@ -83,14 +99,14 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         } else {
             uid = "0";
         }
-       // LogUtils.LOGE(tag,uid+"");
+        // LogUtils.LOGE(tag,uid+"");
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.get_follow_recommend_list,
                 MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                        ,uid,type,count,rows),
+                        , uid, type, count, rows),
                 "get_follow_recommend_list",
-                this,false,true);
-        tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(),uid);
+                this, false, true);
+        tab2ListFragmetAdapter = new Tab2ListFragmetAdapter(getActivity(), uid);
         listView.setAdapter(tab2ListFragmetAdapter);
         listView.setOnItemClickListener(tab2ListFragmetAdapter);
         listView.setRefreshListListener(this);
@@ -105,7 +121,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT|FLAG_BACK;
+        return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
@@ -125,9 +141,9 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     @Override
     protected void initTitle() {
         type = getActivity().getIntent().getStringExtra("data");
-        if (type.equals("2")){
+        if (type.equals("2")) {
             setTitleText("老师");
-        }else {
+        } else {
             setTitleText("学生");
         }
 
@@ -171,7 +187,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                     e.printStackTrace();
                 }
 
-            }else {
+            } else {
                 mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
@@ -188,9 +204,9 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.get_follow_recommend_list,
                 MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                        ,uid,type,count,rows),
+                        , uid, type, count, rows),
                 "get_follow_recommend_list",
-                this,false,true);
+                this, false, true);
 
     }
 
@@ -205,9 +221,9 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.get_follow_recommend_list,
                         MyNetRequestConfig.get_follow_recommend_list(getActivity()
-                                ,uid,type,count,rows),
+                                , uid, type, count, rows),
                         "get_follow_recommend_list_more",
-                        this,false,true);
+                        this, false, true);
 
             }
         }
@@ -260,8 +276,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
         }.execute();
     }
-
-
 
 
 }

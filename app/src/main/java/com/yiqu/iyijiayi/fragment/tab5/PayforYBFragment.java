@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
@@ -64,6 +65,19 @@ public class PayforYBFragment extends AbsAllFragment implements View.OnClickList
     @Override
     protected void initTitle() {
         setTitleText("艺币充值");
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("艺币充值"); //统计页面，"MainScreen"为页面名称，可自定义
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("艺币充值");
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.Tool.Function;
 
 import android.util.Log;
 
-import com.Tool.Global.Constant;
+import com.Tool.Global.RecordConstant;
 import com.Tool.Global.Variable;
 
 import java.io.BufferedWriter;
@@ -88,7 +88,7 @@ public class LogFunction {
      * 打印日志数据
 	 */
     public static void log(String title, String content) {
-        if (Constant.Debug) {
+        if (RecordConstant.Debug) {
             Log.e(tag + ":" + title, getStackInformation(content));
         }
     }
@@ -97,7 +97,7 @@ public class LogFunction {
      * 打印错误日志数据，同时将数据写到外文件
      */
     public static void error(String title, String content) {
-        if (Constant.Debug) {
+        if (RecordConstant.Debug) {
             Log.e(tag + " :" + title, getStackInformation(content));
         }
 
@@ -118,7 +118,7 @@ public class LogFunction {
      * 为不使getStackInformation少输出一层，故而放弃使用error(title，e.toString()));
      */
     public static void error(String title, Exception exception) {
-        if (Constant.Debug) {
+        if (RecordConstant.Debug) {
             Log.e(tag + ":" + title, getStackInformation(exception.toString()));
         }
 

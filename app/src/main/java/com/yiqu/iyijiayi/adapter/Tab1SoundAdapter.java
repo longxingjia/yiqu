@@ -136,7 +136,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.listener.setText(f.views + "");
             h.tectitle.setText(f.tectitle);
 
-            long time = System.currentTimeMillis() / 1000 - f.created;
+            long time = System.currentTimeMillis() / 1000 - f.edited;
 
             if (time < 2 * 24 * 60 * 60 && time > 0) {
                 h.tea_listen.setText("限时免费听");

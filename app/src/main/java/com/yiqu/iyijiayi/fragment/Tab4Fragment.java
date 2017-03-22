@@ -20,6 +20,7 @@ import com.ui.views.LoadMoreView;
 import com.ui.views.LoadMoreView.OnMoreListener;
 import com.ui.views.RefreshList;
 import com.ui.views.RefreshList.IRefreshListViewListener;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
 import com.yiqu.iyijiayi.model.Discovery;
@@ -110,6 +111,8 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
+
         if (count>0){
             loadErr.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
@@ -142,6 +145,14 @@ public class Tab4Fragment extends TabContentFragment implements OnMoreListener, 
 
         }
 
+
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("发现");
     }
 
     @Override

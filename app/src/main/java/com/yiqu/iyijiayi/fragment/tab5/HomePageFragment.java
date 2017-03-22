@@ -20,6 +20,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -117,6 +118,19 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             setTitleText(userInfo.username + "的主页");
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("个人主页"); //统计页面，"MainScreen"为页面名称，可自定义
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("个人主页");
+    }
+
 
     @Override
     protected void initView(View v) {

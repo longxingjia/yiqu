@@ -15,6 +15,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.abs.AbsFragment;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SearchMusicAdapter;
 import com.yiqu.iyijiayi.adapter.SearchSoundAdapter;
@@ -164,6 +165,20 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
     @Override
     public void onNetStart(String id) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("查找单个");
+        MobclickAgent.onResume(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("查找单个");
+        MobclickAgent.onPause(getActivity());
     }
 
     @Override

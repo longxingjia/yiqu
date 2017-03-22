@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
@@ -107,6 +108,14 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     @Override
     protected void init(Bundle savedInstanceState) {
         setSlidingMenuEnable(false);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("找人"); //统计页面，"MainScreen"为页面名称，可自定义
+
         zhaoRen = AppShare.getZhaoRenList(getActivity());
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
@@ -118,7 +127,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
         lvTeacher.setAdapter(tab2TeacherAdapter);
         lvTeacher.setOnItemClickListener(tab2TeacherAdapter);
 
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(),uid);
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), uid);
         lvStudent.setAdapter(tab2StudentAdapter);
         lvStudent.setOnItemClickListener(tab2StudentAdapter);
 
@@ -142,9 +151,11 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("找人");
     }
 
     @Override
@@ -174,7 +185,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT |FLAG_BTN;
+        return FLAG_TXT | FLAG_BTN;
     }
 
     @Override
@@ -187,10 +198,10 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected boolean onPageNext() {
-       // pageNextComplete();
+        // pageNextComplete();
         Intent intent = new Intent(getActivity(), StubActivity.class);
         intent.putExtra("fragment", SearchFragment.class.getName());
-        intent.putExtra("data","search_user");
+        intent.putExtra("data", "search_user");
         getActivity().startActivity(intent);
 
         return true;
@@ -261,11 +272,11 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.loadmore_student:
-                if (uid.equals("0")){
+                if (uid.equals("0")) {
                     Intent i = new Intent(getActivity(), StubActivity.class);
                     i.putExtra("fragment", SelectLoginFragment.class.getName());
 
-                    startActivityForResult(i,REQUESTNO);
+                    startActivityForResult(i, REQUESTNO);
 
                     ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
 
@@ -277,7 +288,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
                 getActivity().startActivity(i);
                 break;
             case R.id.loadmore_teacher:
-                if (uid.equals("0")){
+                if (uid.equals("0")) {
                     Intent it = new Intent(getActivity(), StubActivity.class);
                     it.putExtra("fragment", SelectLoginFragment.class.getName());
                     getActivity().startActivity(it);

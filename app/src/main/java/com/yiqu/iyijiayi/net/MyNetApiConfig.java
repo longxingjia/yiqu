@@ -103,6 +103,13 @@ public class MyNetApiConfig {
         }
 
     };
+ public static MyNetApi bindPhoneCheck = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/wallet/bind-phone-check";
+        }
+
+    };
 
 
     /**

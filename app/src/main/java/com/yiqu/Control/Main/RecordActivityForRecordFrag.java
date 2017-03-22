@@ -3,44 +3,29 @@ package com.yiqu.Control.Main;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.Tool.Function.AudioFunction;
-import com.Tool.Function.CommonFunction;
 import com.Tool.Function.VoiceFunction;
-import com.Tool.Global.Constant;
-import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
-import com.czt.mp3recorder.util.LameUtil;
-import com.yiqu.Tool.Interface.ComposeAudioInterface;
-import com.yiqu.Tool.Interface.DecodeOperateInterface;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
@@ -50,18 +35,10 @@ import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.DensityUtil;
-import com.yiqu.iyijiayi.utils.FileSizeUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.utils.Tools;
 import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -163,6 +140,22 @@ public class RecordActivityForRecordFrag extends Activity
         recordVoiceButton.setOnClickListener(this);
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         recordHintTextView.setText("按下开始录音");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("录制录音页面");
+        MobclickAgent.onResume(this);
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("录制录音页面");
+        MobclickAgent.onPause(this);
     }
 
     /**

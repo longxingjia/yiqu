@@ -17,6 +17,7 @@ import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentActForMainAct;
 import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.LogUtils;
@@ -54,6 +55,19 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);          //统计时长
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     @Override
     protected void init(Bundle savedInstanceState) {

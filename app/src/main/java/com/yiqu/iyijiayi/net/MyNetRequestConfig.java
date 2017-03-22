@@ -55,6 +55,15 @@ public class MyNetRequestConfig {
         r.addHttpParam("deviceToken", deviceToken);
         return r;
     }
+    public static NetRequest bindPhoneCheck(Context c, String uid, String phone, String smscode, String key,String openid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("phone", phone);
+        r.addHttpParam("smscode", smscode);
+        r.addHttpParam("key", key);
+        r.addHttpParam("openid", openid);
+        return r;
+    }
 
 
     /**

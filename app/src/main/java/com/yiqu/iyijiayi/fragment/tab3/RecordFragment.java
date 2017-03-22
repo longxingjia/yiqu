@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 import com.yiqu.iyijiayi.R;
@@ -119,11 +120,22 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
             rl_have_record.setVisibility(View.VISIBLE);
             soundsTab3Adapter.setData(voice);
         }
+
+        MobclickAgent.onPageStart("录音列表");
+
     }
 
     private void record() {
         Intent intent = new Intent(getActivity(), RecordActivityForRecordFrag.class);
         getActivity().startActivity(intent);
+
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("录音列表");
 
     }
 
