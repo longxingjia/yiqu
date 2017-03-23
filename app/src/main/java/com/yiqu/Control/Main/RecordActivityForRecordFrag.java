@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.Tool.Function.VoiceFunction;
+import com.Tool.Global.Variable;
 import com.base.utils.ToastManager;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -39,6 +40,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -76,6 +78,8 @@ public class RecordActivityForRecordFrag extends Activity
     private int mSecond = 0;
     private static final int MSG_TIME_SHORT = 0x123;
     private static final int POPUPWINDOW = 0x124;
+    private EditText desc;
+    private TextView content;
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -90,8 +94,7 @@ public class RecordActivityForRecordFrag extends Activity
             }
         }
     };
-    private EditText desc;
-    private TextView content;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,9 @@ public class RecordActivityForRecordFrag extends Activity
         recordVoiceButton.setOnClickListener(this);
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         recordHintTextView.setText("按下开始录音");
+        File mFile = new File(Variable.StorageMusicCachPath, "红豆词_1474598402.mp3");
+     //   VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), instance);
+
     }
 
     @Override
@@ -153,6 +159,7 @@ public class RecordActivityForRecordFrag extends Activity
 
     @Override
     protected void onPause() {
+//        VoiceFunction.StopVoice();
         super.onPause();
         MobclickAgent.onPageEnd("录制录音页面");
         MobclickAgent.onPause(this);

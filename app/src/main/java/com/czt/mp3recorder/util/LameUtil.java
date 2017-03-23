@@ -17,7 +17,9 @@ public class LameUtil {
 
 
     private String mFilePath = null;
-    private int sampleRate = 8000;
+    private int sampleRate = 32000;
+    //  private int sampleRate = 44100;
+    // private int sampleRate = 48000;
     private boolean isRecording = false;
     private boolean isPause = false;
     private Handler handler = null;

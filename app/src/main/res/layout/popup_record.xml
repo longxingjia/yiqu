@@ -44,6 +44,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/white_box"
             android:hint="请输入一个名称"
+            android:text="#艺加艺#"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textSize="16sp" />
