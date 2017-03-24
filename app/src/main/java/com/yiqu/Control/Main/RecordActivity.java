@@ -27,6 +27,7 @@ import com.Tool.Global.Variable;
 
 import java.io.File;
 
+import com.shuyu.waveview.FileUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -138,16 +139,27 @@ public class RecordActivity extends Activity
         musictime.setText(string2TimeUtils.stringForTimeS(music.time));
 
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
+
+
+
         if (mFile.exists()) {
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
-            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
+//            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
+            File file = new File(FileUtils.getAppPath());
+            if (!file.exists()) {
+                if (!file.mkdirs()) {
+                    Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            tempVoicePcmUrl = FileUtils.getAppPath() + music.musicname + "_tempVoice.pcm";
 
             musicFileUrl = mFile.getAbsolutePath();
-            decodeFileUrl = Variable.StorageMusicPath + music.musicname + t + "_decodeFile.pcm";
+            decodeFileUrl =  FileUtils.getAppPath() + music.musicname + t + "_decodeFile.pcm";
             fileNameCom = music.musicname + t + "_composeVoice.mp3";
-            composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
+            composeVoiceUrl =  FileUtils.getAppPath() + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
 

@@ -263,13 +263,13 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 final Map<String, String> params = new HashMap<String, String>();
 
                 params.put("type", String.valueOf(1));
-                if (!TextUtils.isEmpty(mRecorderUtil.getRecorderPath())) {
-                    File file = new File(mRecorderUtil.getRecorderPath());
-                    if (file.exists()) {
-                        upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
-                        u.execute();
-                    }
-                }
+//                if (!TextUtils.isEmpty(mRecorderUtil.getRecorderPath())) {
+//                    File file = new File(mRecorderUtil.getRecorderPath());
+//                    if (file.exists()) {
+//                        upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
+//                        u.execute();
+//                    }
+//                }
 
 
                 break;
@@ -352,7 +352,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         record.setVisibility(View.GONE);
         recording.setVisibility(View.VISIBLE);
         stop_text.setVisibility(View.VISIBLE);
-        mRecorderUtil.startRecording();
+//        mRecorderUtil.startRecording();
         timer = new Timer(true);
         timer.schedule(timerTask, 1000, 1000);
 
@@ -629,9 +629,9 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private void StopRecording() {
         stopAnimation();
 
-        mRecorderUtil.stopRecording();
-        mIsRecording = false;
-        recordPath = mRecorderUtil.getRecorderPath();
+//        mRecorderUtil.stopRecording();
+//        mIsRecording = false;
+//        recordPath = mRecorderUtil.getRecorderPath();
         if (timer != null) {
             timer.cancel();
             timerTask.cancel();
@@ -640,7 +640,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     @PermissionFail(requestCode = 100)
     public void failContact() {
-
         ToastManager.getInstance(getActivity()).showText(getString(R.string.permission_record_hint));
         getActivity().finish();
         PermissionUtils.openSettingActivity(getActivity());

@@ -42,13 +42,13 @@ public class RecorderAndPlayUtil {
         mRecorder = new LameUtil();
     }
 
-    public void startRecording() {
-        mRecorder.start();
-    }
-
-    public void stopRecording() {
-        mRecorder.stop();
-    }
+//    public void startRecording() {
+//        mRecorder.start();
+//    }
+//
+//    public void stopRecording() {
+//        mRecorder.stop();
+//    }
 
     public void startPlaying(String filePath) {
         if (filePath == null) {
@@ -92,24 +92,24 @@ public class RecorderAndPlayUtil {
         }
     }
 
-    public void release() {
-        stopRecording();
-        if (mPlayer != null) {
-            if (mPlayer.isPlaying()) {
-                mPlayer.stop();
-            }
-            mPlayer.release();
-        }
-    }
+//    public void release() {
+//        stopRecording();
+//        if (mPlayer != null) {
+//            if (mPlayer.isPlaying()) {
+//                mPlayer.stop();
+//            }
+//            mPlayer.release();
+//        }
+//    }
 
     /**
      * 获取录音路径
      *
      * @return
      */
-    public String getRecorderPath() {
-        return mRecorder.getFilePath();
-    }
+//    public String getRecorderPath() {
+//        return mRecorder.getFilePath();
+//    }
 
     /**
      * 获取录音类实例
@@ -125,7 +125,7 @@ public class RecorderAndPlayUtil {
      *
      * @return
      */
-    public int getVolume() {
-        return mRecorder.getVolume();
-    }
+//    public int getVolume() {
+//        return mRecorder.getVolume();
+//    }
 }
