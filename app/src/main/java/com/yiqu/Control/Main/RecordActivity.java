@@ -46,6 +46,7 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -147,6 +148,7 @@ public class RecordActivity extends Activity
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 //            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
+            LogUtils.LOGE(tag,FileUtils.getAppPath());
             File file = new File(FileUtils.getAppPath());
             if (!file.exists()) {
                 if (!file.mkdirs()) {

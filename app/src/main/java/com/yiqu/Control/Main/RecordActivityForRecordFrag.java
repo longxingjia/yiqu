@@ -41,7 +41,7 @@ import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
+import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class RecordActivityForRecordFrag extends Activity
     private ImageView image_anim;
     private Animation rotate;
     private ComposeVoice composeVoice;
-//    private RecorderAndPlayUtil mRecorderUtil;
+    private RecorderAndPlayUtil mRecorderUtil;
     private TimerTask mTimerTask = null;
     private Timer mTimer = null;
     private int mSecond = 0;
@@ -101,7 +101,7 @@ public class RecordActivityForRecordFrag extends Activity
     };
     private String filePath;
     private Context context;
-    private MP3Recorder mRecorder;
+
 
 
     @Override
@@ -147,7 +147,7 @@ public class RecordActivityForRecordFrag extends Activity
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
-       // mRecorderUtil = new RecorderAndPlayUtil();
+        mRecorderUtil = new RecorderAndPlayUtil(this);
 
         recordVoiceButton.setOnClickListener(this);
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
@@ -311,134 +311,8 @@ public class RecordActivityForRecordFrag extends Activity
     }
 
 
-    /**
-     * 开始录音
-     */
-    private void resolveRecord() {
-//        filePath = FileUtils.getAppPath();
-//        File file = new File(filePath);
-//        if (!file.exists()) {
-//            if (!file.mkdirs()) {
-//                Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//        }
-  //     filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
-        filePath = Variable.StorageMusicPath + System.currentTimeMillis() + ".mp3";
-        mRecorder = new MP3Recorder(new File(filePath));
-//        int size = getScreenWidth(getActivity()) / dip2px(getActivity(), 1);//控件默认的间隔是1
-//        mRecorder.setDataList(audioWave.getRecList(), size);
-        mRecorder.setErrorHandler(new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == MP3Recorder.ERROR_TYPE) {
-                    Toast.makeText(context, "没有麦克风权限", Toast.LENGTH_SHORT).show();
-                    resolveError();
-                }
-            }
-        });
 
-        //audioWave.setBaseRecorder(mRecorder);
 
-        try {
-            mRecorder.start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "录音出现异常", Toast.LENGTH_SHORT).show();
-            resolveError();
-            return;
-        }
-
-        mIsRecording = true;
-    }
-
-    /**
-     * 停止录音
-     */
-    private void resolveStopRecord() {
-
-        if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.setPause(false);
-            mRecorder.stop();
-//            audioWave.stopView();
-        }
-        mIsRecording = false;
-//        recordPause.setText("暂停");
-
-    }
-
-    /**
-     * 录音异常
-     */
-    private void resolveError() {
-//        resolveNormalUI();
-        FileUtils.deleteFile(filePath);
-        filePath = "";
-        if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.stop();
-//            audioWave.stopView();
-        }
-    }
-
-    /**
-     * 播放
-     */
-    private void resolvePlayRecord() {
-        if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
-            Toast.makeText(context, "文件不存在", Toast.LENGTH_SHORT).show();
-            return;
-        }
-//        playText.setText(" ");
-        mIsRecording = true;
-//        audioPlayer.playUrl(filePath);
-//        resolvePlayUI();
-    }
-
-    /**
-     * 播放
-     */
-//    private void resolvePlayWaveRecord() {
-//        if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
-//            Toast.makeText(getActivity(), "文件不存在", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        resolvePlayUI();
-//        Intent intent = new Intent(getActivity(), WavePlayActivity.class);
-//        intent.putExtra("uri", filePath);
-//        startActivity(intent);
-//    }
-
-    /**
-     * 重置
-     */
-//    private void resolveResetPlay() {
-//        filePath = "";
-////        playText.setText("");
-//        if (mIsRecording) {
-//            mIsPlay = false;
-//            audioPlayer.pause();
-//        }
-//
-//    }
-
-    /**
-     * 暂停
-     */
-//    private void resolvePause() {
-//        if (!mIsRecord)
-//            return;
-//        resolvePauseUI();
-//        if (mRecorder.isPause()) {
-//            resolveRecordUI();
-//            mRecorder.setPause(false);
-//            recordPause.setText("暂停");
-//        } else {
-//            mRecorder.setPause(true);
-//            recordPause.setText("继续");
-//        }
-//    }
 
 
     private void initRecording() {
@@ -478,11 +352,11 @@ public class RecordActivityForRecordFrag extends Activity
             mTimer.cancel();
             mTimerTask.cancel();
         }
-     //   mRecorderUtil.stopRecording();
-        resolveStopRecord();
+        mRecorderUtil.stopRecording();
+
         mIsRecording = false;
         mSecond = 0;
-      //  mRecorderUtil.getRecorderPath();
+//        mRecorderUtil.getRecorderPath();
     }
 
     @Override
@@ -579,8 +453,8 @@ public class RecordActivityForRecordFrag extends Activity
                             mTimer.cancel();
                             mTimerTask.cancel();
                             mIsRecording = false;
-                        //    mRecorderUtil.stopRecording();
-                            resolveStopRecord();
+                            mRecorderUtil.stopRecording();
+
                         }
                     });
                 }
@@ -590,8 +464,8 @@ public class RecordActivityForRecordFrag extends Activity
                 }
             }
         };
-      //  mRecorderUtil.startRecording();
-        resolveRecord();
+        mRecorderUtil.startRecording();
+
         mTimer = new Timer(true);
         mTimer.schedule(mTimerTask, 1000, 1000);
 

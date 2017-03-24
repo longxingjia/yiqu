@@ -40,7 +40,6 @@ import com.yiqu.iyijiayi.model.Voice;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -43,9 +43,9 @@ import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tools;
-import com.yiqu.iyijiayi.view.RecorderAndPlayUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -232,7 +232,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
-        mRecorderUtil = new RecorderAndPlayUtil();
+        mRecorderUtil = new RecorderAndPlayUtil(getActivity());
         recordTime = 0;
         super.init(savedInstanceState);
     }
@@ -263,13 +263,13 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 final Map<String, String> params = new HashMap<String, String>();
 
                 params.put("type", String.valueOf(1));
-//                if (!TextUtils.isEmpty(mRecorderUtil.getRecorderPath())) {
-//                    File file = new File(mRecorderUtil.getRecorderPath());
-//                    if (file.exists()) {
-//                        upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
-//                        u.execute();
-//                    }
-//                }
+                if (!TextUtils.isEmpty(mRecorderUtil.getRecorderPath())) {
+                    File file = new File(mRecorderUtil.getRecorderPath());
+                    if (file.exists()) {
+                        upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
+                        u.execute();
+                    }
+                }
 
 
                 break;
@@ -289,7 +289,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 break;
             case R.id.play:
                 if (!TextUtils.isEmpty(recordPath))
-                    mRecorderUtil.startPlaying(recordPath);
+                    VoiceFunction.PlayToggleVoice(recordPath, this);
                 break;
             case R.id.recording:
                 if (mIsRecording) {
@@ -334,10 +334,10 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                         @Override
                         public void run() {
                             // 录音结束
-//                            timer.cancel();
-//                            timerTask.cancel();
-//                            mIsRecording = false;
-//                            mRecorderUtil.stopRecording();
+                            timer.cancel();
+                            timerTask.cancel();
+                            mIsRecording = false;
+                            mRecorderUtil.stopRecording();
                             StopRecording();
                         }
                     });
@@ -352,7 +352,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         record.setVisibility(View.GONE);
         recording.setVisibility(View.VISIBLE);
         stop_text.setVisibility(View.VISIBLE);
-//        mRecorderUtil.startRecording();
+        mRecorderUtil.startRecording();
         timer = new Timer(true);
         timer.schedule(timerTask, 1000, 1000);
 
@@ -629,9 +629,9 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private void StopRecording() {
         stopAnimation();
 
-//        mRecorderUtil.stopRecording();
-//        mIsRecording = false;
-//        recordPath = mRecorderUtil.getRecorderPath();
+        mRecorderUtil.stopRecording();
+        mIsRecording = false;
+        recordPath = mRecorderUtil.getRecorderPath();
         if (timer != null) {
             timer.cancel();
             timerTask.cancel();
@@ -714,7 +714,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                         MyNetRequestConfig.soundReply(getActivity(), sound.sid + "", AppShare.getUserInfo(getActivity()).uid, s, mSecond + "", "1"),
                         "soundReply", Tab5WopingDetailFragment.this);
 
-            } else{
+            } else {
                 ToastManager.getInstance(getActivity()).showText(getString(R.string.net_error));
 
             }
