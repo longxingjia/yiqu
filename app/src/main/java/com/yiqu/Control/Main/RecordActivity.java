@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -46,6 +47,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -99,7 +101,7 @@ public class RecordActivity extends Activity
 
     public void bindView() {
 
-     
+
         rlHint = (RelativeLayout) findViewById(R.id.hint);
         recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
         musicName = (TextView) findViewById(R.id.musicname);
@@ -139,11 +141,12 @@ public class RecordActivity extends Activity
         if (mFile.exists()) {
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
+            long t = System.currentTimeMillis() / 1000;
             tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
 
             musicFileUrl = mFile.getAbsolutePath();
-            decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_decodeFile.pcm";
-            fileNameCom = music.musicname + "_composeVoice.mp3";
+            decodeFileUrl = Variable.StorageMusicPath + music.musicname + t + "_decodeFile.pcm";
+            fileNameCom = music.musicname + t + "_composeVoice.mp3";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
@@ -181,7 +184,6 @@ public class RecordActivity extends Activity
         musictime.setVisibility(View.INVISIBLE);
 
 
-
     }
 
     private void compose() {
@@ -203,7 +205,7 @@ public class RecordActivity extends Activity
 
             recordTime = 0;
 
-            musictime.setText(string2TimeUtils.stringForTimeS(music.time -recordTime));
+            musictime.setText(string2TimeUtils.stringForTimeS(music.time - recordTime));
 
             musictime.setVisibility(View.VISIBLE);
         }
@@ -213,12 +215,11 @@ public class RecordActivity extends Activity
     public void recordVoiceStateChanged(int volume, long recordDuration) {
         if (recordDuration > 0) {
             recordTime = (int) (recordDuration / RecordConstant.OneSecond);
-            int leftTime = music.time-recordTime;
+            int leftTime = music.time - recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
 
 
-
-            if (leftTime<=0){
+            if (leftTime <= 0) {
                 VoiceFunction.StopVoice();
                 VoiceFunction.StopRecordVoice();
                 compose();
@@ -419,7 +420,7 @@ public class RecordActivity extends Activity
                     } else {
 
                         startAnimation();
-                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl,instance);
+                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl, instance);
                         VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
                         recordVoiceButton.setText("完成录制");
                     }
@@ -458,9 +459,12 @@ public class RecordActivity extends Activity
 
                             break;
                         case 1:
-                            VoiceFunction.StopRecordVoice();
-                            VoiceFunction.StopVoice();
+                            //   recordHintTextView.setVisibility(View.GONE);
                             finish();
+                            VoiceFunction.StopVoice();
+                            VoiceFunction.GiveUpRecordVoice(true);
+
+
                             break;
                     }
                 }

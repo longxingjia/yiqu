@@ -157,6 +157,10 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
 
         edit_title.setText(userInfo.specialities);
 
+        if (userInfo.type.equals("2")) {
+            rl_edit_apply.setVisibility(View.GONE);
+        }
+
         PictureUtils.showPicture(getActivity(), userInfo.userimage, edit_head);
         PictureUtils.showPicture(getActivity(), userInfo.backgroundimage, edit_background);
     }

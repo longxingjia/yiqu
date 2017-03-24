@@ -183,7 +183,7 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        LogUtils.LOGE("", netResponse.toString());
+
         switch (id) {
             case "searchMusic":
                 if (type == TYPE_SUCCESS) {
@@ -192,6 +192,9 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                     listview.setAdapter(searchMusicAdapter);
                     searchMusicAdapter.setData(musics);
                     listview.setOnItemClickListener(searchMusicAdapter);
+
+                }else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
 
                 }
 
@@ -204,6 +207,9 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                     listview.setAdapter(searchUserAdapter);
                     listview.setOnItemClickListener(searchUserAdapter);
                     searchUserAdapter.setData(user);
+                }else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+
                 }
 
                 break;
@@ -216,6 +222,9 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                     listview.setAdapter(searchSoundAdapter);
                     listview.setOnItemClickListener(searchSoundAdapter);
                     searchSoundAdapter.setData(sound1);
+                }else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+
                 }
 
 
@@ -228,6 +237,9 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
                     listview.setAdapter(searchSoundAdapter);
                     listview.setOnItemClickListener(searchSoundAdapter);
                     searchSoundAdapter.setData(sound1);
+                }else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+
                 }
 
                 break;

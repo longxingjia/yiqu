@@ -24,7 +24,7 @@ public class RecordConstant {
 
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
-    public static final int LameBehaviorBitRate = 320;
+    public static final int LameBehaviorBitRate = 256;
 //    public static final int LameBehaviorBitRate = 256;
 
     public static final int MusicCutEndOffset = 0;

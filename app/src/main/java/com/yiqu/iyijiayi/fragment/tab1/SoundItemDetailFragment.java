@@ -433,10 +433,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         listview.setAdapter(tab1CommentsAdapter);
         listview.setOnItemClickListener(tab1CommentsAdapter);
 
-        RestNetCallHelper.callNet(getActivity(),
-                MyNetApiConfig.getComments, MyNetRequestConfig
-                        .getComments(getActivity(), sid),
-                "getComments", SoundItemDetailFragment.this, false, true);
 
         PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
@@ -612,6 +608,13 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         MobclickAgent.onPageStart("声乐详情");
+
+
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getComments, MyNetRequestConfig
+                        .getComments(getActivity(), sid),
+                "getComments", SoundItemDetailFragment.this, false, true);
+
 
     }
 

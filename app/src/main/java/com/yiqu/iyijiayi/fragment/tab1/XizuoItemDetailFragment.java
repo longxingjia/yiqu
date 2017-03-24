@@ -481,6 +481,8 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     public void onResume() {
         super.onResume();
+        LogUtils.LOGE(tag,"3333");
+
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getComments, MyNetRequestConfig
                         .getComments(getActivity(), sid),

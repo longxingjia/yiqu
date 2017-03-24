@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -97,15 +98,15 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
 
                                 @Override
                                 public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                    LogUtils.LOGE("a", netResponse.toString());
+
                                     if (type == NetCallBack.TYPE_SUCCESS) {
 
                                         GlobleSearch globleSearch = new Gson().fromJson(netResponse.data, GlobleSearch.class);
-                                        if (globleSearch != null) {
-                                            search_ll.setVisibility(View.GONE);
-                                        }
+                                        int flag = 0;
+
                                         if (globleSearch.music != null && globleSearch.music.size() > 0) {
                                             searchMusicAdapter.setData(globleSearch.music);
+                                            flag = 1;
                                             if (headerView1 == null) {
                                                 headerView1 = getActivity().getLayoutInflater().inflate(R.layout.search_headview, null);
                                                 musicListView.addHeaderView(headerView1);
@@ -115,6 +116,7 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
                                             }
                                         }
                                         if (globleSearch.sound1 != null && globleSearch.sound1.size() > 0) {
+                                            flag = 1;
                                             SearchSoundAdapter searchSoundAdapter = new SearchSoundAdapter(getActivity());
                                             sound1List.setAdapter(searchSoundAdapter);
                                             sound1List.setOnItemClickListener(searchSoundAdapter);
@@ -128,6 +130,7 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
                                         }
 
                                         if (globleSearch.sound2 != null && globleSearch.sound2.size() > 0) {
+                                            flag = 1;
                                             SearchSoundAdapter searchSoundAdapter = new SearchSoundAdapter(getActivity());
                                             sound2List.setAdapter(searchSoundAdapter);
                                             searchSoundAdapter.setData(globleSearch.sound2);
@@ -140,6 +143,7 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
                                         }
 
                                         if (globleSearch.user != null && globleSearch.user.size() > 0) {
+                                            flag = 1;
                                             SearchUserAdapter searchUserAdapter = new SearchUserAdapter(getActivity());
                                             userList.setAdapter(searchUserAdapter);
                                             userList.setOnItemClickListener(searchUserAdapter);
@@ -152,6 +156,16 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
 
                                             }
                                         }
+
+
+                                        if (flag==1) {
+                                            search_ll.setVisibility(View.GONE);
+                                        }else {
+                                            ToastManager.getInstance(getActivity()).showText("没有数据,请您换个词搜索");
+
+                                        }
+
+
 
                                     }
 

@@ -160,7 +160,7 @@ public class RecorderEngine {
 
             if (stopRecordSuccess) {
                 if (voiceRecorderInterface != null) {
-                    voiceRecorderInterface.recordVoiceFinish();
+                 //   voiceRecorderInterface.recordVoiceFinish();
                 }
             } else {
                 if (voiceRecorderInterface != null) {

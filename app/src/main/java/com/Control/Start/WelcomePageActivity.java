@@ -76,6 +76,7 @@ public class WelcomePageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        MobclickAgent.openActivityDurationTrack(false);
         init(R.layout.activity_welcome_page);
     }
 
