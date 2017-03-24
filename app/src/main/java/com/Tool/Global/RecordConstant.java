@@ -19,15 +19,15 @@ public class RecordConstant {
 
     public static final int BehaviorSampleRate = 44100; // 采样率
 
-    public static final int LameMp3Quality = 0; // Lame Default Settings，0=很好很慢 9=很差很快
+    public static final int LameMp3Quality = 2; // Lame Default Settings，0=很好很慢 9=很差很快
     public static final int LameBehaviorChannelNumber = RecordChannelNumber;
 
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
-    public static final int LameBehaviorBitRate = 256;
+    public static final int LameBehaviorBitRate = 128;
 //    public static final int LameBehaviorBitRate = 256;
 
-    public static final int MusicCutEndOffset = 0;
+    public static final int MusicCutEndOffset = 2;
 //    public static final int MusicCutEndOffset =2;
 
     public static final int MaxDecodeProgress = 50;
@@ -36,7 +36,7 @@ public class RecordConstant {
     public static final int RecordVolumeMaxRank = 9;
     public static final int ThreadPoolCount = 5;
 
-    public static final float VoiceWeight = 1.6f;
+    public static final float VoiceWeight = 1.8f;
     public static final float VoiceBackgroundWeight = 0.2f;
 
     public static final String IGeneImageSuffix = ".ipg";

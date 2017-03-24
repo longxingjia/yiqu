@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.Tool.Global.RecordConstant;
+import com.Tool.Global.Variable;
 import com.czt.mp3recorder.util.LameUtil;
 
 import java.io.FileInputStream;
@@ -14,18 +15,29 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import android.os.Handler;
+import android.os.Looper;
+
+import com.czt.mp3recorder.util.LameUtil;
 import com.yiqu.Tool.Decode.DecodeEngine;
-
-import com.Tool.Global.Variable;
-
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
-import com.yiqu.iyijiayi.utils.LogUtils;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zhengtongyu on 16/5/29.
  */
 public class AudioFunction {
+
     public static void DecodeMusicFile(final String musicFileUrl, final String decodeFileUrl, final int startSecond,
                                        final int endSecond,
                                        final DecodeOperateInterface decodeOperateInterface) {
@@ -123,9 +135,6 @@ public class AudioFunction {
                 index = 0;
 
                 if (audioOffset < 0) {
-
-                    LogUtils.LOGE("audiofun",audioOffset+"");
-
                     secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
 
                     outputShortArrayLength = secondAudioReadNumber / 2;
@@ -136,8 +145,6 @@ public class AudioFunction {
 
                         outputShortArray[index] = (short) (resultShort * secondAudioWeight);
                     }
-
-                    LogUtils.LOGE("audiofun",audioOffset+"");
 
                     audioOffset += secondAudioReadNumber;
 
@@ -162,7 +169,6 @@ public class AudioFunction {
                     }
 
                     audioOffset -= firstAudioReadNumber;
-                    LogUtils.LOGE("audiofun",audioOffset+"");
 
                     if (firstAudioReadNumber < 0) {
                         firstAudioFinish = true;
@@ -313,147 +319,4 @@ public class AudioFunction {
             }
         });
     }
-
-
-    public static void Pcm2Mp3(String firstAudioFilePath,
-                                    String composeAudioFilePath, boolean deleteSource,
-                                    float firstAudioWeight,
-                                    int audioOffset,
-                                    final ComposeAudioInterface composeAudioInterface) {
-        boolean firstAudioFinish = false;
-        byte[] firstAudioByteBuffer;
-        byte[] mp3Buffer;
-        short resultShort;
-        short[] outputShortArray;
-        int index;
-        int firstAudioReadNumber;
-        int outputShortArrayLength;
-        final int byteBufferSize = 1024;
-
-        firstAudioByteBuffer = new byte[byteBufferSize];
-        mp3Buffer = new byte[(int) (7200 + (byteBufferSize * 1.25))];
-
-        outputShortArray = new short[byteBufferSize / 2];
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        FileInputStream firstAudioInputStream = FileFunction.GetFileInputStreamFromFile
-                (firstAudioFilePath);
-
-        FileOutputStream composeAudioOutputStream = FileFunction.GetFileOutputStreamFromFile
-                (composeAudioFilePath);
-
-        LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
-                RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
-
-        try {
-            while (!firstAudioFinish ) {
-                index = 0;
-
-                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
-
-                    outputShortArrayLength = firstAudioReadNumber / 2;
-
-                    for (; index < outputShortArrayLength; index++) {
-                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
-                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
-
-                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
-                    }
-
-                    audioOffset -= firstAudioReadNumber;
-
-                    if (firstAudioReadNumber < 0) {
-                        firstAudioFinish = true;
-                        break;
-                    }
-
-                    if (audioOffset <= 0) {
-                        break;
-                    }
-
-
-                if (outputShortArrayLength > 0) {
-                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
-                            outputShortArrayLength, mp3Buffer);
-
-                    if (encodedSize > 0) {
-                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
-                    }
-                }
-            }
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (composeAudioInterface != null) {
-                        composeAudioInterface.updateComposeProgress(20);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            LogFunction.error("ComposeAudio异常", e);
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (composeAudioInterface != null) {
-                        composeAudioInterface.composeFail();
-                    }
-                }
-            });
-
-            return;
-        }
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (composeAudioInterface != null) {
-                    composeAudioInterface.updateComposeProgress(50);
-                }
-            }
-        });
-
-        try {
-            final int flushResult = LameUtil.flush(mp3Buffer);
-
-            if (flushResult > 0) {
-                composeAudioOutputStream.write(mp3Buffer, 0, flushResult);
-            }
-        } catch (Exception e) {
-            LogFunction.error("释放ComposeAudio LameUtil异常", e);
-        } finally {
-            try {
-                composeAudioOutputStream.close();
-            } catch (Exception e) {
-                LogFunction.error("关闭合成输出音频流异常", e);
-            }
-
-            LameUtil.close();
-        }
-
-        if (deleteSource) {
-            FileFunction.DeleteFile(firstAudioFilePath);
-
-        }
-
-        try {
-            firstAudioInputStream.close();
-
-        } catch (IOException e) {
-            LogFunction.error("关闭合成输入音频流异常", e);
-        }
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (composeAudioInterface != null) {
-                    composeAudioInterface.composeSuccess();
-                }
-            }
-        });
-    }
-
-
 }
