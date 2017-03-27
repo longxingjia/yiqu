@@ -24,10 +24,10 @@ public class RecordConstant {
 
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
-    public static final int LameBehaviorBitRate = 128;
+    public static final int LameBehaviorBitRate = 192;
 //    public static final int LameBehaviorBitRate = 256;
 
-    public static final int MusicCutEndOffset = 2;
+    public static final int MusicCutEndOffset = 1;
 //    public static final int MusicCutEndOffset =2;
 
     public static final int MaxDecodeProgress = 50;
@@ -36,8 +36,8 @@ public class RecordConstant {
     public static final int RecordVolumeMaxRank = 9;
     public static final int ThreadPoolCount = 5;
 
-    public static final float VoiceWeight = 1.8f;
-    public static final float VoiceBackgroundWeight = 0.2f;
+    public static final float VoiceWeight = 1.5f;
+    public static final float VoiceBackgroundWeight = 0.1f;
 
     public static final String IGeneImageSuffix = ".ipg";
     public static final String JPGSuffix = ".jpg";

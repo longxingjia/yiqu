@@ -40,6 +40,7 @@ import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 
@@ -99,9 +100,9 @@ public class RecordActivityForRecordFrag extends Activity
             }
         }
     };
-    private String filePath;
-    private Context context;
 
+    private Context context;
+    private String mRecorderPath;
 
 
     @Override
@@ -286,7 +287,7 @@ public class RecordActivityForRecordFrag extends Activity
                                     initRecording();
                                     recordComFinish = true;
                                 }
-                                VoiceFunction.PlayToggleVoice(filePath, instance);
+                                VoiceFunction.PlayToggleVoice(mRecorderPath, instance);
 
                                 stopAnimation();
                                 dialog.dismiss();
@@ -336,9 +337,11 @@ public class RecordActivityForRecordFrag extends Activity
         composeVoice.touid = 0;
         composeVoice.soundpath = "";
 
-        composeVoice.voicename = filePath.substring(
-                filePath.lastIndexOf("/") + 1,
-                filePath.length());
+        LogUtils.LOGE(tag,mRecorderPath);
+
+        composeVoice.voicename = mRecorderPath.substring(
+                mRecorderPath.lastIndexOf("/") + 1,
+                mRecorderPath.length());
 
         composeVoice.isreply = "0";
         composeVoice.ispay = "0";
@@ -465,6 +468,7 @@ public class RecordActivityForRecordFrag extends Activity
             }
         };
         mRecorderUtil.startRecording();
+        mRecorderPath = mRecorderUtil.getRecorderPath();
 
         mTimer = new Timer(true);
         mTimer.schedule(mTimerTask, 1000, 1000);

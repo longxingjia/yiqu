@@ -142,26 +142,25 @@ public class RecordActivity extends Activity
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
 
 
-
         if (mFile.exists()) {
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 //            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
-            LogUtils.LOGE(tag,FileUtils.getAppPath());
-            File file = new File(FileUtils.getAppPath());
-            if (!file.exists()) {
-                if (!file.mkdirs()) {
-                    Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            tempVoicePcmUrl = FileUtils.getAppPath() + music.musicname + "_tempVoice.pcm";
+//            LogUtils.LOGE(tag,FileUtils.getAppPath());
+//            File file = new File(FileUtils.getAppPath());
+//            if (!file.exists()) {
+//                if (!file.mkdirs()) {
+//                    Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+            tempVoicePcmUrl = Variable.StorageMusicPath  + music.musicname + "_tempVoice.pcm";
 
             musicFileUrl = mFile.getAbsolutePath();
-            decodeFileUrl =  FileUtils.getAppPath() + music.musicname + t + "_decodeFile.pcm";
+            decodeFileUrl = Variable.StorageMusicPath  + music.musicname + t + "_decodeFile.pcm";
             fileNameCom = music.musicname + t + "_composeVoice.mp3";
-            composeVoiceUrl =  FileUtils.getAppPath() + fileNameCom;
+            composeVoiceUrl = Variable.StorageMusicPath  + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
 
@@ -200,15 +199,7 @@ public class RecordActivity extends Activity
 
     }
 
-    private void compose() {
-        composeProgressBar.setProgress(0);
-        composeProgressBar.setVisibility(View.VISIBLE);
-        recordVoiceButton.setEnabled(false);
 
-
-        AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
-                actualRecordTime + RecordConstant.MusicCutEndOffset, this);
-    }
 
     @Override
     public void recordVoiceBegin() {
@@ -302,13 +293,26 @@ public class RecordActivity extends Activity
                 decodeProgress * RecordConstant.MaxDecodeProgress / RecordConstant.NormalMaxProgress);
     }
 
+    private void compose() {
+        composeProgressBar.setProgress(0);
+        composeProgressBar.setVisibility(View.VISIBLE);
+        recordVoiceButton.setEnabled(false);
+
+
+        AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
+                actualRecordTime + RecordConstant.MusicCutEndOffset, this);
+    }
+
     @Override
     public void decodeSuccess() {
         composeProgressBar.setProgress(RecordConstant.MaxDecodeProgress);
 
         AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
                 RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
-                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
+                0, this);
+//   AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
+//                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
+//                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
 
 
     }
@@ -379,14 +383,12 @@ public class RecordActivity extends Activity
             case R.id.recordVoiceButton:
                 if (recordComFinish) {
 
-
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
                     MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
                         @Override
                         public void onTea(int tea) {
                             switch (tea) {
-
                                 case 0:
                                     Intent intent = new Intent(instance, StubActivity.class);
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
