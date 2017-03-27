@@ -59,7 +59,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
         Cursor c = null;
         try {
             SQLiteDatabase db = getReadableDatabase();
-            c = db.query(TABLE_NAME, null, ISCOMPOSE + " = " + isCompose + " ", null, null, null, null);
+            c = db.query(TABLE_NAME, null, ISCOMPOSE + " = " + isCompose + " ", null, null, null, CREATETIME +" desc ");
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 ComposeVoice music = new ComposeVoice();

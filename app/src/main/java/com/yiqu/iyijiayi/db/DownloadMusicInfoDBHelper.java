@@ -32,6 +32,8 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     public static final String ISFORMULATION = "isformulation";
     public static final String CREATED = "created";
     public static final String EDITED = "edited";
+    public static final String ISDECODE = "isdecode";
+    public static final String DECODETIME = "decodetime";
 
 
     public DownloadMusicInfoDBHelper(Context context) {
@@ -53,7 +55,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 Music music = new Music();
-                music.type =  c.getInt(c.getColumnIndex(TYPE));
+                music.type = c.getInt(c.getColumnIndex(TYPE));
                 music.mid = c.getInt(c.getColumnIndex(MID));
                 music.typename = c.getString(c.getColumnIndex(TYPENAME));
                 music.image = c.getString(c.getColumnIndex(IMAGE));
@@ -67,6 +69,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
                 music.isformulation = c.getString(c.getColumnIndex(ISFORMULATION));
                 music.created = c.getLong(c.getColumnIndex(CREATED));
                 music.edited = c.getLong(c.getColumnIndex(EDITED));
+                music.isdecode = c.getInt(c.getColumnIndex(ISDECODE));
                 ds.add(music);
                 c.moveToNext();
             }
@@ -110,7 +113,33 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     }
 
 
-
+    /**
+     * @param id
+     * @return
+     * @comments 获取某一个的ID(其实是查找是否有这个id)
+     * @version 1.0
+     */
+    public Music getDecode(int id) {
+        Cursor c = null;
+        Music m = new Music();
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            c = db.query(TABLE_NAME, null, MID + " = " + id + " ", null, null, null, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                m.isdecode = c.getInt(c.getColumnIndex(ISDECODE));
+                m.decodetime = c.getLong(c.getColumnIndex(DECODETIME));
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e.toString());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            this.close();
+        }
+        return m;
+    }
 
 
     /**
@@ -174,6 +203,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(ISFORMULATION, cc.isformulation);
             c.put(CREATED, cc.created);
             c.put(EDITED, cc.edited);
+            c.put(ISDECODE, -1);
 
             count = db.insert(TABLE_NAME, null, c);
             db.close();
@@ -182,6 +212,44 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         } finally {
         }
         return count;
+    }
+
+
+    /**
+     * @param mid
+     * @param status 1表示已经解码,-1 没有解码，0正在解码
+     * @return
+     * @comments 更新某一个
+     * @version 1.0
+     */
+    public int updateDecode(int mid, int status, long time) {
+        // TODO Auto-generated method stub
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues c = new ContentValues();
+            c.put(ISDECODE, status);
+            c.put(DECODETIME, time);
+//            c.put(TYPENAME, cc.typename);
+//            c.put(IMAGE, cc.image);
+//            c.put(MUSICNAME, cc.musicname);
+//            c.put(MUSICPATH, cc.musicpath);
+//            c.put(MUSICTYPE, cc.musictype);
+//            c.put(CHAPTER, cc.chapter);
+//            c.put(ACCOMPANIMENT, cc.accompaniment);
+//            c.put(TIME, cc.time);
+//            c.put(SIZE, cc.size);
+//            c.put(ISFORMULATION, cc.isformulation);
+//            c.put(CREATED, cc.created);
+//            c.put(EDITED, cc.edited);
+            int r = db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
+//            db.close();
+            return r;
+        } catch (Exception e) {
+            Log.w(TAG, e.toString());
+        } finally {
+            this.close();
+        }
+        return 0;
     }
 
 
@@ -209,7 +277,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(ISFORMULATION, cc.isformulation);
             c.put(CREATED, cc.created);
             c.put(EDITED, cc.edited);
-            int r =db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
+            int r = db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
 //            db.close();
             return r;
         } catch (Exception e) {
@@ -219,7 +287,6 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         }
         return 0;
     }
-
 
 
     /**
@@ -243,7 +310,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     }
 
     /**
-     * @param a
+     * @param
      * @return
      * @comments 删除全部
      * @version 1.0

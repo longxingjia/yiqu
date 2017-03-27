@@ -152,7 +152,7 @@ public class PlayActivity extends Activity
             }
         };
         mTimer = new Timer(true);
-        mTimer.schedule(mTimerTask, 1000, 1000);
+        mTimer.schedule(mTimerTask, 0, 1000);
 
     }
 
@@ -175,6 +175,7 @@ public class PlayActivity extends Activity
     @Override
     public void playVoiceFinish() {
         stopAnimation();
+        musictime.setText(0 + "\"");
         mTimer.cancel();
         mTimerTask.cancel();
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);

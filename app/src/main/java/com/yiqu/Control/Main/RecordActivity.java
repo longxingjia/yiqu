@@ -27,6 +27,7 @@ import com.Tool.Global.Variable;
 
 import java.io.File;
 
+import com.base.utils.ToastManager;
 import com.shuyu.waveview.FileUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
@@ -39,6 +40,7 @@ import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
+import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
@@ -92,6 +94,7 @@ public class RecordActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         init(R.layout.record_xizuo_fragment);
+
     }
 
     private void init(int layoutId) {
@@ -129,38 +132,43 @@ public class RecordActivity extends Activity
 
         Intent intent = getIntent();
         music = (Music) intent.getSerializableExtra("music");
-        musicName.setText(music.musicname + "");
-
-        String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
-        String fileName = Url.substring(
-                Url.lastIndexOf("/") + 1,
-                Url.length());
-        fileName = music.musicname + "_" + fileName;
         string2TimeUtils = new String2TimeUtils();
         musictime.setText(string2TimeUtils.stringForTimeS(music.time));
+        musicName.setText(music.musicname);
 
+        String fileName = music.musicname + "_" + music.mid;
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
 
-
         if (mFile.exists()) {
+            musicFileUrl = mFile.getAbsolutePath();
+            decodeFileUrl = Variable.StorageMusicPath + fileName + "_decodeTem.pcm";
+
+            DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(this);
+            Music m = downloadMusicInfoDBHelper.getDecode(music.mid);
+            //  downloadMusicInfoDBHelper.close();
+            if (m.isdecode == -1) {
+                AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
+                        music.time, this);
+                downloadMusicInfoDBHelper.updateDecode(music.mid, 0, System.currentTimeMillis());
+            } else if (m.isdecode == 0 && System.currentTimeMillis() - m.decodetime > 2 * 60 * 1000) { //解码超过两分钟,重新解码。
+                File file = new File(decodeFileUrl);
+                file.delete();
+                AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
+                        music.time, this);
+                downloadMusicInfoDBHelper.updateDecode(music.mid, 0, System.currentTimeMillis());
+
+            }
+            downloadMusicInfoDBHelper.close();
+
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
-//            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
-//            LogUtils.LOGE(tag,FileUtils.getAppPath());
-//            File file = new File(FileUtils.getAppPath());
-//            if (!file.exists()) {
-//                if (!file.mkdirs()) {
-//                    Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//            }
-            tempVoicePcmUrl = Variable.StorageMusicPath  + music.musicname + "_tempVoice.pcm";
 
-            musicFileUrl = mFile.getAbsolutePath();
-            decodeFileUrl = Variable.StorageMusicPath  + music.musicname + t + "_decodeFile.pcm";
+
+            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
+
             fileNameCom = music.musicname + t + "_composeVoice.mp3";
-            composeVoiceUrl = Variable.StorageMusicPath  + fileNameCom;
+            composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
 
@@ -198,7 +206,6 @@ public class RecordActivity extends Activity
 
 
     }
-
 
 
     @Override
@@ -299,28 +306,31 @@ public class RecordActivity extends Activity
         recordVoiceButton.setEnabled(false);
 
 
-        AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
-                actualRecordTime + RecordConstant.MusicCutEndOffset, this);
+//        AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
+//                actualRecordTime + RecordConstant.MusicCutEndOffset, this);
     }
 
     @Override
     public void decodeSuccess() {
-        composeProgressBar.setProgress(RecordConstant.MaxDecodeProgress);
+        // composeProgressBar.setProgress(RecordConstant.MaxDecodeProgress);
 
-        AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
-                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
-                0, this);
+//        AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
+//                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
+//                0, this);
 //   AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
 //                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
 //                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
+        //  ToastManager.getInstance(instance).showText("解码成功");
+        DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(this);
+        downloadMusicInfoDBHelper.updateDecode(music.mid, 1,System.currentTimeMillis());
+        downloadMusicInfoDBHelper.close();
 
 
     }
 
     @Override
     public void decodeFail() {
-
-
+        ToastManager.getInstance(instance).showText("对不起，音频解码失败，请在设置意见反馈中提交您的机型。");
         composeProgressBar.setVisibility(View.GONE);
     }
 
@@ -425,10 +435,16 @@ public class RecordActivity extends Activity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 //                                recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-                                VoiceFunction.StopVoice();
-                                VoiceFunction.StopRecordVoice();
-                                compose();
+                                if (recordTime > 9) {
+                                    VoiceFunction.StopVoice();
+                                    VoiceFunction.StopRecordVoice();
+                                    compose();
+
+                                } else {
+                                    ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
+                                }
                                 dialog.dismiss();
+
                             }
                         });
                         builder.show();

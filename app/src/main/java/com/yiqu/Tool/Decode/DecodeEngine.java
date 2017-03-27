@@ -22,6 +22,7 @@ import com.Tool.Function.LogFunction;
 
 import vavi.sound.pcm.resampling.ssrc.SSRC;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by  on 2016/03/04.
@@ -187,6 +188,7 @@ public class DecodeEngine {
                         (int) ((presentationTimeUs - startMicroseconds) * RecordConstant
                                 .NormalMaxProgress /
                                 endMicroseconds);
+                LogUtils.LOGE("decodeProgress",decodeProgress+"");
 
                 if (decodeProgress > 0) {
                     handler.post(new Runnable() {

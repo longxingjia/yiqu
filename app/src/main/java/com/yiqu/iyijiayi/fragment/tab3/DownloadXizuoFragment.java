@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.Tool.Function.AudioFunction;
 import com.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivity;
@@ -31,6 +32,7 @@ import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LightAlertDialog;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
@@ -101,7 +103,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 //                            statusText.setText(percentage + "%");
 
                         }
-
                         //终止轮询task
                         if (fileTotalSize == bytesDL)
                             future.cancel(true);
@@ -115,7 +116,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
         }
     };
-
+    private String fileName;
 
 
     @Override
@@ -164,24 +165,25 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         submit.setEnabled(false);
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
+   //     LogUtils.LOGE(tag, music.toString());
         musicName.setText(music.musicname + "");
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
-        String fileName = Url.substring(
-                Url.lastIndexOf("/") + 1,
-                Url.length());
-        fileName = music.musicname + "_" + fileName;
+//        String fileName = Url.substring(
+//                Url.lastIndexOf("/") + 1,
+//                Url.length());
+        fileName = music.musicname + "_" + music.mid;
 //        AppShare
 
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
-       // LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
+        // LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
 
         if (mFile.exists()) {
-         //   Log.d(tag, "file " + mFile.getName() + " already exits!!");
+            //   Log.d(tag, "file " + mFile.getName() + " already exits!!");
             nextPage();
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
-                dowoload(Url,fileName);
+                dowoload(Url, fileName);
             }
         }
 
@@ -281,6 +283,12 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 submit.setBackgroundResource(R.drawable.red_box);
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
                 downloadMusicInfoDBHelper.insert(music);
+                downloadMusicInfoDBHelper.close();
+
+//                File mFile = new File(Variable.StorageMusicCachPath, fileName);
+//            String    decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_" + music.mid + "_decodeTem.pcm";
+//                AudioFunction.DecodeMusicFile(mFile.getAbsolutePath(), decodeFileUrl, 0,
+//                        music.time, getActivity());
 
             }
         }
@@ -318,171 +326,11 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         getActivity().finish();
     }
 
-    public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
-
-        private final String TAG = "DownLoaderTask";
-        private URL mUrl;
-        private File mFile;
-        private int mProgress = 0;
-        private ProgressReportingOutputStream mOutputStream;
-        private Activity mContext = null;
-        private int contentLength = 1;
-
-        public DownLoaderTask(String downloadPath, String out, String fileName, Activity context) {
-            super();
-            mContext = context;
-            try {
-                mUrl = new URL(downloadPath);
-
-                mFile = new File(out, fileName);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setProgress(0);
-            tv_progress.setText("");
-//
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-            return download();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-//            if (mDialog == null)
-//                return;
-            if (values.length > 1) {
-
-                contentLength = values[1];
-                if (contentLength == -1) {
-                    progressBar.setIndeterminate(true);
-                } else {
-                    progressBar.setMax(contentLength);
-                }
-            } else {
-                progressBar.setProgress(values[0].intValue());
-                if (contentLength == -1) {
-
-                } else {
-                    tv_progress.setText(values[0].intValue() * 100 / contentLength + "%");
-                }
-            }
-
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            // super.onPostExecute(result);
-            submit.setClickable(true);
-            submit.setEnabled(true);
-            submit.setBackgroundResource(R.drawable.red_box);
-            DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
-            downloadMusicInfoDBHelper.insert(music);
-
-            if (isCancelled()) {
-                mFile.delete();
-                submit.setClickable(false);
-            }
-            return;
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length() */) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-                File directory = new File(Variable.StorageMusicPath);
-                if (null != directory && !directory.exists()) {
-                    directory.mkdir();
-                }
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output,
-                    1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends
-                FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
-
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (downloadManager != null && downloadId != -1){
+        if (downloadManager != null && downloadId != -1) {
             downloadManager.remove(downloadId);
         }
     }

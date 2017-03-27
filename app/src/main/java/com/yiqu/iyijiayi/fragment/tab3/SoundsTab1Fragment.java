@@ -72,6 +72,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
 
+        count = 0;
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getMusicList, MyNetRequestConfig
                         .getMusicList(getActivity(), count, rows),
@@ -94,6 +95,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("声乐伴奏页面");
+
 
     }
 

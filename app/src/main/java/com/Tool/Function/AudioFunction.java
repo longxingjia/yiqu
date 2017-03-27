@@ -23,6 +23,7 @@ import com.czt.mp3recorder.util.LameUtil;
 import com.yiqu.Tool.Decode.DecodeEngine;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -37,6 +38,7 @@ import rx.schedulers.Schedulers;
  * Created by zhengtongyu on 16/5/29.
  */
 public class AudioFunction {
+    private static String tag = "AudioFunction";
 
     public static void DecodeMusicFile(final String musicFileUrl, final String decodeFileUrl, final int startSecond,
                                        final int endSecond,
@@ -131,64 +133,69 @@ public class AudioFunction {
                 RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
 
         try {
-            while (!firstAudioFinish && !secondAudioFinish) {
-                index = 0;
-
-                if (audioOffset < 0) {
-                    secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
-
-                    outputShortArrayLength = secondAudioReadNumber / 2;
-
-                    for (; index < outputShortArrayLength; index++) {
-                        resultShort = CommonFunction.GetShort(secondAudioByteBuffer[index * 2],
-                                secondAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
-
-                        outputShortArray[index] = (short) (resultShort * secondAudioWeight);
-                    }
-
-                    audioOffset += secondAudioReadNumber;
-
-                    if (secondAudioReadNumber < 0) {
-                        secondAudioFinish = true;
-                        break;
-                    }
-
-                    if (audioOffset >= 0) {
-                        break;
-                    }
-                } else {
-                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
-
-                    outputShortArrayLength = firstAudioReadNumber / 2;
-
-                    for (; index < outputShortArrayLength; index++) {
-                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
-                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
-
-                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
-                    }
-
-                    audioOffset -= firstAudioReadNumber;
-
-                    if (firstAudioReadNumber < 0) {
-                        firstAudioFinish = true;
-                        break;
-                    }
-
-                    if (audioOffset <= 0) {
-                        break;
-                    }
-                }
-
-                if (outputShortArrayLength > 0) {
-                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
-                            outputShortArrayLength, mp3Buffer);
-
-                    if (encodedSize > 0) {
-                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
-                    }
-                }
-            }
+//            while (!firstAudioFinish) {
+////            while (!firstAudioFinish && !secondAudioFinish) {
+//                index = 0;
+//
+//                if (audioOffset < 0) {
+//                    secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
+//
+//                    outputShortArrayLength = secondAudioReadNumber / 2;
+//
+//                    for (; index < outputShortArrayLength; index++) {
+//                        resultShort = CommonFunction.GetShort(secondAudioByteBuffer[index * 2],
+//                                secondAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
+//
+//                        outputShortArray[index] = (short) (resultShort * secondAudioWeight);
+//                    }
+//
+//                    audioOffset += secondAudioReadNumber;
+//
+//                    if (secondAudioReadNumber < 0) {
+//                        secondAudioFinish = true;
+//                        break;
+//                    }
+//
+//                    if (audioOffset >= 0) {
+//                        break;
+//                    }
+//                } else {
+//                    LogUtils.LOGE(tag, audioOffset + "");
+//
+//                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
+//
+//                    outputShortArrayLength = firstAudioReadNumber / 2;
+//
+//                    for (; index < outputShortArrayLength; index++) {
+//                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
+//                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
+//
+//                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
+//                    }
+//                    LogUtils.LOGE("firstAudioReadNumber", firstAudioReadNumber + "");
+//                    audioOffset -= firstAudioReadNumber;
+//
+//                    if (firstAudioReadNumber < 0) {
+//                        firstAudioFinish = true;
+//                        break;
+//                    }
+//
+//                    if (audioOffset <= 0) {
+//                        break;
+//                    }
+//                }
+//                LogUtils.LOGE(tag, audioOffset + "");
+//                LogUtils.LOGE("outputShortArrayLength", outputShortArrayLength + "");
+//
+//                if (outputShortArrayLength > 0) {
+//                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
+//                            outputShortArrayLength, mp3Buffer);
+//
+//                    if (encodedSize > 0) {
+//                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
+//                    }
+//                }
+//            }
 
             handler.post(new Runnable() {
                 @Override
@@ -199,9 +206,10 @@ public class AudioFunction {
                 }
             });
 
-            while (!firstAudioFinish || !secondAudioFinish) {
+            while (!firstAudioFinish) {
+//            while (!firstAudioFinish || !secondAudioFinish) {
                 index = 0;
-
+//                audioOffset = -1024;
                 firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
                 secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
 
@@ -246,8 +254,11 @@ public class AudioFunction {
                         }
                     }
                 }
-
+          //      LogUtils.LOGE("outputShortArrayLength", outputShortArrayLength + "");
                 if (outputShortArrayLength > 0) {
+                  //  LogUtils.LOGE("outputShortArray", outputShortArray[0] + "");
+                 //   calc(outputShortArray,0,outputShortArray.length);
+                 //   LogUtils.LOGE("outputShortArray2",outputShortArray[0] + "");
                     int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
                             outputShortArrayLength, mp3Buffer);
 
@@ -318,5 +329,15 @@ public class AudioFunction {
                 }
             }
         });
+    }
+
+
+    //噪音消除算法
+   static void calc(short[] lin, int off, int len) {
+        int i, j;
+        for (i = 0; i < len; i++) {
+            j = lin[i + off];
+            lin[i + off] = (short) (j >> 2);
+        }
     }
 }
