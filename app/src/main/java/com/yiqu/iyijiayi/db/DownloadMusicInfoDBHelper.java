@@ -18,6 +18,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
 
     public static final String TAG = "DownloadMusicInfoDB";
     public static final String TABLE_NAME = "download_music_info";
+
     public static final String TYPE = "type";
     public static final String MID = "mid";
     public static final String TYPENAME = "typename";

@@ -1,12 +1,10 @@
 package com.yiqu.iyijiayi.utils;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.widget.Toast;
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 import com.czt.mp3recorder.MP3Recorder;
 import com.shuyu.waveview.FileUtils;
 import java.io.File;

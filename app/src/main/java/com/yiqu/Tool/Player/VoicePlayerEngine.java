@@ -2,13 +2,12 @@ package com.yiqu.Tool.Player;
 
 import android.media.MediaPlayer;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.LogFunction;
-import com.Tool.Function.UpdateFunction;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.UpdateFunction;
 
 import com.yiqu.Tool.Data.MusicData;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.File;
 
@@ -36,7 +35,7 @@ public class VoicePlayerEngine {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 start();
-                if (currentTime>0){
+                if (currentTime > 0) {
                     seekTo(currentTime);
                 }
             }
@@ -111,6 +110,7 @@ public class VoicePlayerEngine {
         prepareMusic(voiceUrl, time);
     }
 
+
     private synchronized void prepareMusic(String voiceUrl, int time) {
         playingUrl = voiceUrl;
         currentTime = time;
@@ -142,13 +142,11 @@ public class VoicePlayerEngine {
             voicePlayer.prepareAsync();
         } catch (Exception e) {
             playFail();
-
-
-
             UpdateFunction.ShowToastFromThread("播放语音文件失败");
             LogFunction.error("播放语音异常", e);
         }
     }
+
 
     private void playFail() {
         if (voicePlayerInterface != null) {
@@ -210,7 +208,7 @@ public class VoicePlayerEngine {
 
         if (musicPlayerState == MusicData.MusicPlayerState.playing) {
             if (!voicePlayer.isPlaying()) {
-                return ;
+                return;
             }
             voicePlayer.seekTo(time);
         }

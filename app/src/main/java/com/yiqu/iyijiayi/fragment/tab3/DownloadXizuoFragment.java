@@ -1,6 +1,5 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,45 +7,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.Tool.Function.AudioFunction;
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LightAlertDialog;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -156,6 +137,8 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         tv_progress = (TextView) v.findViewById(R.id.tv_progress);
         submit = (Button) v.findViewById(R.id.submit);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        getActivity().registerReceiver(downloadCompleteReceiver,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
     }
 
@@ -172,7 +155,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 //        String fileName = Url.substring(
 //                Url.lastIndexOf("/") + 1,
 //                Url.length());
-        fileName = music.musicname + "_" + music.mid;
+        fileName = music.musicname + "_" + music.mid+".mp3";
 //        AppShare
 
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
@@ -298,20 +281,13 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         /** 注册下载完成接收广播 **/
-        getActivity().registerReceiver(downloadCompleteReceiver,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
         MobclickAgent.onPageStart("下载作品");
     }
 
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(downloadCompleteReceiver);
-        if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
-            future.cancel(true);
-            scheduledExecutorService.shutdown();
-            scheduledExecutorService = null;
 
-        }
         MobclickAgent.onPageEnd("下载作品");
         super.onPause();
     }
@@ -332,6 +308,14 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         super.onDestroy();
         if (downloadManager != null && downloadId != -1) {
             downloadManager.remove(downloadId);
+        }
+
+        getActivity().unregisterReceiver(downloadCompleteReceiver);
+        if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
+            future.cancel(true);
+            scheduledExecutorService.shutdown();
+            scheduledExecutorService = null;
+
         }
     }
 }

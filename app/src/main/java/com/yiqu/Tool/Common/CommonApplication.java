@@ -1,4 +1,4 @@
-package com.Tool.Common;
+package com.yiqu.Tool.Common;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -8,8 +8,8 @@ import android.content.IntentFilter;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.InitFunction;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.InitFunction;
 import com.ui.App;
 
 /**

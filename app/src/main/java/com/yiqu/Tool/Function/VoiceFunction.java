@@ -1,4 +1,4 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
@@ -62,7 +62,18 @@ public class VoiceFunction {
         } else {
             return false;
         }
-    }
+    } /**
+     *
+     * @param fileUrl 是否在播
+     * @return
+     */
+//    public synchronized static int getVoiceDuration(String fileUrl) {
+////        if (IsPlayVoice(fileUrl)) {
+//            return VoicePlayerEngine.getInstance().getDuration(fileUrl);
+////        } else {
+////            return false;
+////        }
+//    }
 
     public synchronized static void PlayToggleVoice(String fileUrl,
                                                     VoicePlayerInterface voicePlayerInterface) {

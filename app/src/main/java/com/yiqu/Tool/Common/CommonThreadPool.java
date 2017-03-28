@@ -1,6 +1,6 @@
-package com.Tool.Common;
+package com.yiqu.Tool.Common;
 
-import com.Tool.Global.RecordConstant;
+import com.yiqu.Tool.Global.RecordConstant;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

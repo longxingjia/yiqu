@@ -7,7 +7,7 @@
 
 package vavi.sound.pcm.resampling.ssrc;
 
-import com.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.LogFunction;
 
 import java.io.*;
 import java.nio.ByteBuffer;

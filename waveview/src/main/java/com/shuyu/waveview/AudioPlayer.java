@@ -56,6 +56,7 @@ public class AudioPlayer implements MediaPlayer.OnBufferingUpdateListener, Media
 
     public void play() {
         mAudioManager.setMode(AudioManager.MODE_NORMAL);
+    //    mAudioManager.setStreamVolume();
         mMediaPlayer.start();
     }
 

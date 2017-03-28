@@ -1,9 +1,9 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
 import android.util.Log;
 
-import com.Tool.Global.RecordConstant;
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.RecordConstant;
+import com.yiqu.Tool.Global.Variable;
 
 import java.io.BufferedWriter;
 import java.io.File;

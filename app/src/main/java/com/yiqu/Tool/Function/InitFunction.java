@@ -1,8 +1,8 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
 import android.app.Application;
 
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 
 import java.nio.ByteOrder;
 

@@ -2,8 +2,8 @@ package com.yiqu.Tool.Recorder.Native;
 
 import android.media.MediaRecorder;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.LogFunction;
 
 import java.io.File;
 

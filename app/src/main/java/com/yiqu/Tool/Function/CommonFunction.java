@@ -1,16 +1,15 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
 
-import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
-import com.Tool.Common.CommonApplication;
+import com.yiqu.Tool.Common.CommonApplication;
 
 /**
  * Created by zhengtongyu on 16/5/23.

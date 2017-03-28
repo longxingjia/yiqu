@@ -2,23 +2,19 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.SumPathEffect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -36,10 +32,8 @@ import com.yiqu.iyijiayi.model.Wx_arr;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.net.UploadImage;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.wxapi.WXPayEntryActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +42,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 /**

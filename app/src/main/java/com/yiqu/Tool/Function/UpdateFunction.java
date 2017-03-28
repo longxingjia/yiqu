@@ -1,10 +1,9 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.Tool.Common.CommonApplication;
+import com.yiqu.Tool.Common.CommonApplication;
 
 
 /**

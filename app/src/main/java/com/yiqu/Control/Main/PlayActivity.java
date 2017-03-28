@@ -1,16 +1,10 @@
 package com.yiqu.Control.Main;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -20,33 +14,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.Tool.Function.VoiceFunction;
-import com.Tool.Global.Variable;
-import com.base.utils.ToastManager;
+import com.yiqu.Tool.Function.VoiceFunction;
+import com.yiqu.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
-import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Voice;
-import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.PermissionUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import kr.co.namee.permissiongen.PermissionFail;
-import kr.co.namee.permissiongen.PermissionGen;
-import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class PlayActivity extends Activity
         implements VoicePlayerInterface, View.OnClickListener {

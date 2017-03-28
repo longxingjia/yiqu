@@ -6,8 +6,8 @@ import android.media.MediaFormat;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.Tool.Global.RecordConstant;
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.RecordConstant;
+import com.yiqu.Tool.Global.Variable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -16,9 +16,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.FileFunction;
-import com.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.FileFunction;
+import com.yiqu.Tool.Function.LogFunction;
 
 import vavi.sound.pcm.resampling.ssrc.SSRC;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -129,11 +129,8 @@ public class DecodeEngine {
     }
 
     private void getDecodeData(MediaExtractor mediaExtractor, MediaCodec mediaCodec, String
-            decodeFileUrl, int
-                                       sampleRate,
-                               int channelCount, int startSecond, int endSecond,
-                               Handler handler,
-                               final DecodeOperateInterface decodeOperateInterface) {
+            decodeFileUrl, int sampleRate,int channelCount, int startSecond, int endSecond,
+                               Handler handler,final DecodeOperateInterface decodeOperateInterface) {
         boolean decodeInputEnd = false;
         boolean decodeOutputEnd = false;
 
@@ -172,7 +169,7 @@ public class DecodeEngine {
         mediaExtractor.selectTrack(0);
 
         bufferInfo = new MediaCodec.BufferInfo();
-
+      //  LogUtils.LOGE("buffers:" , inputBuffers.length+"");
         BufferedOutputStream bufferedOutputStream = FileFunction
                 .GetBufferedOutputStreamFromFile(decodeFileUrl);
 
@@ -188,8 +185,7 @@ public class DecodeEngine {
                         (int) ((presentationTimeUs - startMicroseconds) * RecordConstant
                                 .NormalMaxProgress /
                                 endMicroseconds);
-                LogUtils.LOGE("decodeProgress",decodeProgress+"");
-
+             //   LogUtils.LOGE("decodeProgress",decodeProgress+"");
                 if (decodeProgress > 0) {
                     handler.post(new Runnable() {
                         @Override
@@ -198,7 +194,6 @@ public class DecodeEngine {
                         }
                     });
                 }
-
                 decodeNoticeTime = decodeTime;
             }
 
@@ -314,8 +309,9 @@ public class DecodeEngine {
             }
         }
 
+      //  LogUtils.LOGE("sampleRate",sampleRate+"");
         if (sampleRate != RecordConstant.RecordSampleRate) {
-            Resample(sampleRate, decodeFileUrl);
+             Resample(sampleRate, decodeFileUrl);
         }
 
         if (mediaCodec != null) {
@@ -328,14 +324,16 @@ public class DecodeEngine {
         }
     }
 
+
     private static void Resample(int sampleRate, String decodeFileUrl) {
-        String newDecodeFileUrl = decodeFileUrl + "new";
+        String newDecodeFileUrl =decodeFileUrl + "new";
 
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(new File(decodeFileUrl));
             FileOutputStream fileOutputStream =
                     new FileOutputStream(new File(newDecodeFileUrl));
+
 
             new SSRC(fileInputStream, fileOutputStream, sampleRate, RecordConstant.RecordSampleRate,
                     RecordConstant.RecordByteNumber, RecordConstant.RecordByteNumber, 1, Integer.MAX_VALUE,

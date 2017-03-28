@@ -3,7 +3,6 @@ package com.Control.Start;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,24 +15,21 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.Tool.Common.CommonApplication;
-import com.Tool.Common.CommonThreadPool;
+import com.yiqu.Tool.Common.CommonApplication;
+import com.yiqu.Tool.Common.CommonThreadPool;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
-import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -41,7 +37,6 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.utils.Tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -64,7 +59,7 @@ import kr.co.namee.permissiongen.PermissionSuccess;
 
 
 /**
- * Created by 郑童宇 on 2016/05/24.
+ * Created by  on 2016/05/24.
  */
 public class WelcomePageActivity extends Activity {
     private Intent intent;

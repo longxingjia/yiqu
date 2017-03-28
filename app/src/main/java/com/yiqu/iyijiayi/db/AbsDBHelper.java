@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "yijiayi.db";
-    private static final int DB_VERSION = 9;
+    private static final int DB_VERSION = 13;
 
 
     public AbsDBHelper(Context context) {
@@ -32,7 +32,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     /**
      * @param db
-     * @param oldVersion 现在等于五
+     * @param oldVersion
      * @param newVersion
      */
     @Override
@@ -78,13 +78,15 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
      * @param tableName The table name.
      * @param columns   The columns range, format is "ColA, ColB, ColC, ... ColN";
      */
-    protected void upgradeTables(SQLiteDatabase db, String tableName, String[] dbVersion, String columns) {
+    protected void upgradeTables(SQLiteDatabase db, String tableName, String dbVersion, String columns) {
         try {
 
             // 1, Rename table.
             String tempTableName = tableName + "_temp";
             String sql = "ALTER TABLE " + tableName + " RENAME TO " + tempTableName;
             executeBatch(sql, db);
+//            db.execSQL("");
+
 
             // 2, Create table.
             executeBatch(dbVersion, db);
@@ -95,7 +97,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     " SELECT " + columns + " FROM " + tempTableName;
 
             executeBatch(sql, db);
-            LogUtils.LOGE("ssss",sql);
+           // LogUtils.LOGE("ssss",sql);
 
             // 4, Drop the temporary table.
             executeBatch( "DROP TABLE IF EXISTS " + tempTableName,db);
@@ -104,12 +106,12 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.endTransaction();
+         //   db.endTransaction();
         }
     }
 
 
-    private static final String version_7[] = {
+    private static final String version_7 =
             "Create table " + DownloadMusicInfoDBHelper.TABLE_NAME + "("
                     + DownloadMusicInfoDBHelper.TYPE + " text , "
                     + DownloadMusicInfoDBHelper.MID + " text , "
@@ -127,9 +129,9 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.DECODETIME + " text , "
                     + DownloadMusicInfoDBHelper.CREATED + " text , "
                     + DownloadMusicInfoDBHelper.EDITED + " text "
-                    + ");"
+                    + ");";
 
-    };
+
 
 
     /**

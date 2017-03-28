@@ -4,13 +4,13 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.FileFunction;
-import com.Tool.Function.LogFunction;
-import com.Tool.Function.PermissionFunction;
-import com.Tool.Global.RecordConstant;
-import com.Tool.Global.Variable;
-import com.Tool.Common.CommonThreadPool;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.FileFunction;
+import com.yiqu.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.PermissionFunction;
+import com.yiqu.Tool.Global.RecordConstant;
+import com.yiqu.Tool.Global.Variable;
+import com.yiqu.Tool.Common.CommonThreadPool;
 import com.czt.mp3recorder.PCMFormat;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -65,8 +65,8 @@ public class MP3Recorder {
             audioRecordBufferSize = audioRecordMinBufferSize;
         }
 
-        LogUtils.LOGE("audioRecordBufferSize",audioRecordBufferSize+"");
-        LogUtils.LOGE("audioRecordMinBufferSize",audioRecordMinBufferSize+"");
+//        LogUtils.LOGE("audioRecordBufferSize",audioRecordBufferSize+"");
+//        LogUtils.LOGE("audioRecordMinBufferSize",audioRecordMinBufferSize+"");
 
         /* Get number of samples. Calculate the buffer size
          * (round up to the factor of given frame size)

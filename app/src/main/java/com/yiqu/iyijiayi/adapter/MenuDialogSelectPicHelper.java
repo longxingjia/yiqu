@@ -13,10 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 import com.ui.views.MenuDialog;
 import com.ui.views.MenuDialog.OnMenuListener;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

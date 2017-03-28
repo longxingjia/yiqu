@@ -7,12 +7,12 @@ import android.os.Handler;
 import java.io.File;
 import java.io.IOException;
 
-import com.Tool.Function.CommonFunction;
-import com.Tool.Function.FileFunction;
-import com.Tool.Function.LogFunction;
+import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.FileFunction;
+import com.yiqu.Tool.Function.LogFunction;
 
-import com.Tool.Common.CommonApplication;
-import com.Tool.Global.RecordConstant;
+import com.yiqu.Tool.Common.CommonApplication;
+import com.yiqu.Tool.Global.RecordConstant;
 
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Recorder.Mp3.MP3Recorder;
@@ -35,13 +35,13 @@ public class RecorderEngine {
 
     private static MP3Recorder recorder;
 
-    //    private static NativeRecorder recorder;
+        //    private static NativeRecorder recorder;
 
-    private static RecorderEngine instance;
+        private static RecorderEngine instance;
 
     private RecorderEngine() {
-        audioManager = (AudioManager) CommonApplication.getInstance()
-                .getSystemService(Context.AUDIO_SERVICE);
+            audioManager = (AudioManager) CommonApplication.getInstance()
+                    .getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
 

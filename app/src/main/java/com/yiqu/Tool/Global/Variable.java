@@ -1,4 +1,4 @@
-package com.Tool.Global;
+package com.yiqu.Tool.Global;
 
 public class Variable {
     public static boolean isBigEnding = false;

@@ -1,9 +1,9 @@
-package com.Tool.Function;
+package com.yiqu.Tool.Function;
 
 import android.app.Application;
 import android.os.Environment;
 
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Global.Variable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

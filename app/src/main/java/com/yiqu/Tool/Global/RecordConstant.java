@@ -1,11 +1,9 @@
-package com.Tool.Global;
+package com.yiqu.Tool.Global;
 
-
-import android.media.AudioFormat;
 
 import com.yiqu.iyijiayi.BuildConfig;
 
-public class RecordConstantbak {
+public class RecordConstant {
     public static final boolean Debug = BuildConfig.DEBUG;
 
     public static final int NoExistIndex = -1;
@@ -13,9 +11,7 @@ public class RecordConstantbak {
     public static final int OneSecond = 1000;
 
     public static final int RecordSampleRate = 44100; // 采样率
-    public static final int RecordByteNumber = 16;
-    public static final int CHANNEL = AudioFormat.CHANNEL_IN_MONO;
-
+    public static final int RecordByteNumber = 2;
     public static final int RecordChannelNumber = 1;  // 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
 
     public static final int RecordDataNumberInOneSecond =
@@ -23,24 +19,27 @@ public class RecordConstantbak {
 
     public static final int BehaviorSampleRate = 44100; // 采样率
 
-    public static final int LameMp3Quality = 0; // Lame Default Settings，0=很好很慢 9=很差很快
+    public static final int LameMp3Quality = 2; // Lame Default Settings，0=很好很慢 9=很差很快
     public static final int LameBehaviorChannelNumber = RecordChannelNumber;
 
     public static final int lameRecordBitRate = 64;
     // Encoded bit rate. MP3 file will be encoded with bit rate 64kbps
-    public static final int LameBehaviorBitRate = 256;
+    public static final int LameBehaviorBitRate = 192;
+//    public static final int LameBehaviorBitRate = 256;
 
-    public static final int MusicCutEndOffset = 2;
+    public static final int MusicCutEndOffset = 1;
+//    public static final int MusicCutEndOffset =2;
 
     public static final int MaxDecodeProgress = 50;
     public static final int NormalMaxProgress = 100;
 
     public static final int RecordVolumeMaxRank = 9;
-
     public static final int ThreadPoolCount = 5;
 
-    public static final float VoiceWeight = 1.8f;
-    public static final float VoiceBackgroundWeight = 0.2f;
+    public static final float VoiceEarWeight = 1.8f;
+    public static final float VoiceEarBackgroundWeight = 0.2f;
+    public static final float VoiceWeight = 1.5f;
+    public static final float VoiceBackgroundWeight = 0.1f;
 
     public static final String IGeneImageSuffix = ".ipg";
     public static final String JPGSuffix = ".jpg";

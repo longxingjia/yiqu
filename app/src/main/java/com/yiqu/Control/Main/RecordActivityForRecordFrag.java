@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -23,11 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.Tool.Function.VoiceFunction;
-import com.Tool.Global.Variable;
+import com.yiqu.Tool.Function.VoiceFunction;
 import com.base.utils.ToastManager;
-import com.czt.mp3recorder.MP3Recorder;
-import com.shuyu.waveview.FileUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
@@ -44,11 +42,8 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
@@ -112,6 +107,7 @@ public class RecordActivityForRecordFrag extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         context = this;
         PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 
