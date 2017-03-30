@@ -20,6 +20,7 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ui.views.AutoScrollViewPager;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
@@ -29,6 +30,7 @@ import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
+import com.yiqu.iyijiayi.model.Banner;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
@@ -40,17 +42,22 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
+import static com.ui.views.AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE;
 
 public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener, OnClickListener, RefreshList.IRefreshListViewListener {
 
     private static final int TAB_1 = 1;
     //	List<>
 
-    private ViewPager vp_spinner;
+    private AutoScrollViewPager vp_spinner;
     private LoadMoreView mLoadMoreView;
     /**
      * 图片资源id
@@ -84,6 +91,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private int rows = 10;
     private String arr;
     private Remen remen;
+    private ArrayList<Banner> banners;
 
 
     @Override
@@ -123,7 +131,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     }
 
     private void initHeadView(View v) {
-        vp_spinner = (ViewPager) v.findViewById(R.id.vp_spinner);
+        vp_spinner = (AutoScrollViewPager) v.findViewById(R.id.vp_spinner);
         lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
         more_xizuo.setOnClickListener(this);
@@ -138,17 +146,21 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     protected void init(Bundle savedInstanceState) {
         setSlidingMenuEnable(false);
 
-        imgIdArray = new int[]{R.mipmap.banner_1, R.mipmap.banner_2};
-        // 得到views集合
-        views = new ArrayList<View>();
 
-        for (int i = 1; i <= imgIdArray.length; i++) {
-            View view = getActivity().getLayoutInflater().inflate(R.layout.tab1_viewpage, null);
-            views.add(view);
+//        imgIdArray = new int[]{R.mipmap.banner_1, R.mipmap.banner_2};
+//        // 得到views集合
+//        views = new ArrayList<View>();
+//
+//        for (int i = 1; i <= imgIdArray.length; i++) {
+//            View view = getActivity().getLayoutInflater().inflate(R.layout.tab1_viewpage, null);
+//            views.add(view);
+//        }
+        banners = AppShare.getBannerList(getActivity());
+        if (banners !=null && banners.size()>0){
+            List<Map<String, Object>> data = getData(banners);
+            vp_spinner.setAdapter(new MyAdapter(data));
         }
 
-        vp_spinner.setAdapter(new MyAdapter());
-        vp_spinner.setCurrentItem(0);
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
         lvXizuo.setAdapter(tab1XizuoAdapter);
 
@@ -185,6 +197,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                     MyNetApiConfig.remen,
                     MyNetRequestConfig.remen(getActivity(), uid),
                     "Remen", Tab1Fragment.this, false, true);
+
+
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.getBannerList,
+                    MyNetRequestConfig.getBannerList(getActivity()),
+                    "getBannerList", Tab1Fragment.this, false, true);
         }
 
 
@@ -234,7 +253,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         }
 
     }
-
 
 
     @Override
@@ -315,9 +333,34 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
+        } else if (id.equals("getBannerList")) {
+            if (type == TYPE_SUCCESS) {
+                banners = new Gson()
+                        .fromJson(netResponse.data, new TypeToken<ArrayList<Banner>>() {
+                        }.getType());
+                AppShare.setBannerList(getActivity(), banners);
+
+                List<Map<String, Object>> data = getData(banners);
+                vp_spinner.setAdapter(new MyAdapter(data));
+            }
+            //    LogUtils.LOGE("tab1", netResponse.toString());
         }
 
         super.onNetEnd(id, type, netResponse);
+    }
+
+    public List<Map<String, Object>> getData(ArrayList<Banner> banners) {
+        List<Map<String, Object>> mdata = new ArrayList<Map<String, Object>>();
+        for (Banner banner : banners) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("url", banner.image);
+            map.put("view", new ImageView(getActivity()));
+            mdata.add(map);
+        }
+        vp_spinner.startAutoScroll();
+       // vp_spinner.setCycle(false);
+        vp_spinner.setSlideBorderMode(SLIDE_BORDER_MODE_CYCLE);
+        return mdata;
     }
 
     @Override
@@ -327,7 +370,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
-        LogUtils.LOGE("tag", uid);
+
 
         RestNetCallHelper.callNet(
                 getActivity(),
@@ -361,12 +404,18 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     // PagerAdapter是object的子类
     class MyAdapter extends PagerAdapter {
 
+        List<Map<String, Object>> viewLists;
+
+        public MyAdapter(List<Map<String, Object>> viewLists) {
+            this.viewLists = viewLists;
+        }
+
         /**
          * PagerAdapter管理数据大小
          */
         @Override
         public int getCount() {
-            return views.size();
+            return viewLists.size();
         }
 
         /**
@@ -391,13 +440,21 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            View view = views.get(position);
-            // 如果访问网络下载图片，此处可以进行异步加载
-            ImageView img = (ImageView) view.findViewById(R.id.spinner);
-//            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
-            img.setBackgroundResource(imgIdArray[position]);
-            container.addView(view);
-            return views.get(position); // 返回该view对象，作为key
+//            View view = viewLists.get(position);
+//            // 如果访问网络下载图片，此处可以进行异步加载
+//            ImageView img = (ImageView) view.findViewById(R.id.spinner);
+////            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
+//            img.setBackgroundResource(imgIdArray[position]);
+//            container.addView(view);
+//            return viewLists.get(position); // 返回该view对象，作为key
+            ImageView x = (ImageView) viewLists.get(position).get("view");
+            x.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            //   imageLoader.displayImage(viewLists.get(position).get("url").toString(), x,options);
+            PictureUtils.showBannersPicture(getActivity(), viewLists.get(position).get("url").toString(), x);
+            ((ViewPager) container).addView(x, 0);
+
+            return viewLists.get(position).get("view");
+
         }
 
     }

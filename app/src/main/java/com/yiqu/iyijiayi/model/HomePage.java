@@ -15,7 +15,7 @@ public class HomePage implements Serializable{
     @Override
     public String toString() {
         return "HomePage{" +
-                "user=" + user +
+                "agreement=" + user +
                 ", sound=" + sound +
                 '}';
     }

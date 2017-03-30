@@ -80,6 +80,17 @@ public class MyNetApiConfig {
 
 
     };
+    /**
+     * 4、修改用户
+     */
+    public static MyNetApi addFeedback = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/add-feedback";
+        }
+
+
+    };
 
 
     /**
@@ -293,6 +304,20 @@ public class MyNetApiConfig {
         }
 
     };
+  public static MyNetApi getHistory = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-history";
+        }
+
+    };
+  public static MyNetApi followed = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/follow";
+        }
+
+    };
 
     /**
      * 67、获取推荐关注接口
@@ -421,6 +446,14 @@ public class MyNetApiConfig {
 //        public static String uploadSounds = ServerAddr+"";
 
     };
+    public static MyNetApi addHistory = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/add-history";
+        }
+//        public static String uploadSounds = ServerAddr+"";
+
+    };
     public static MyNetApi soundReply = new MyNetApi() {
         @Override
         public String getPath() {
@@ -523,6 +556,19 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/comment/getcomments";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+
+    };
+    public static MyNetApi getBannerList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/site/get-banner-list";
         }
 
         @Override

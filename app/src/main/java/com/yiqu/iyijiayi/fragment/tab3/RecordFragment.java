@@ -22,6 +22,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
@@ -81,7 +82,9 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         });
         buttonTwo.setOnClickListener(this);
 
-        soundsTab3Adapter = new SoundsTab3Adapter(getActivity());
+        UserInfo userInfo = (UserInfo) getActivity().getIntent().getSerializableExtra("data");
+
+        soundsTab3Adapter = new SoundsTab3Adapter(getActivity(),userInfo);
         listView.setAdapter(soundsTab3Adapter);
         listView.setRefreshListListener(this);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

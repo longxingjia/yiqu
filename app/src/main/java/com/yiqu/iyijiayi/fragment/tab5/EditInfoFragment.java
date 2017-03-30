@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.fragment.tab5;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -73,6 +74,7 @@ public class EditInfoFragment extends AbsAllFragment {
         switch (data) {
             case "username":
                 datastr = "名字";
+
                 break;
             case "school":
                 datastr = "学校";
@@ -86,10 +88,18 @@ public class EditInfoFragment extends AbsAllFragment {
             case "desc":
                 datastr = "个人介绍";
                 break;
+            case "price":
+                datastr = "收费";
+                break;
+            case "advices":
+                datastr = "建议反馈";
+                break;
         }
-
-
-        setTitleText("修改" + datastr);
+        if (data.equals("advices")){
+            setTitleText(datastr);
+        }else {
+            setTitleText("修改"+datastr);
+        }
 
     }
 
@@ -124,45 +134,63 @@ public class EditInfoFragment extends AbsAllFragment {
                             "请输入您要修改的内容!");
                     return;
                 }
+                if (data.equals("advices")) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.addFeedback, MyNetRequestConfig
+                                    .addFeedback(getActivity(), uid, contentStr),
+                            "addFeedback", EditInfoFragment.this);
+                } else {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.editUser, MyNetRequestConfig
+                                    .editUser(getActivity(), uid, data, contentStr),
+                            "editUser", EditInfoFragment.this);
+                }
 
-                RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.editUser, MyNetRequestConfig
-                                .editUser(getActivity(), uid, data, contentStr),
-                        "getLoginMessageCode", EditInfoFragment.this);
             }
         });
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        if (netResponse != null) {
-            if (netResponse.bool == 1) {
-                Gson gson = new Gson();
-                UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
+        if (id.equals("editUser")) {
+            if (netResponse != null) {
+                if (netResponse.bool == 1) {
+                    Gson gson = new Gson();
+                    UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
 
-                AppShare.setUserInfo(getActivity(),userInfo);
+                    AppShare.setUserInfo(getActivity(), userInfo);
 //                Intent i = new Intent(getActivity(), StubActivity.class);
 //                i.putExtra("fragment", InfoFragment.class.getName());
 ////                    i.putExtra("fromLogin", "10");
-                getActivity().finish();
+                    getActivity().finish();
 //                getActivity().startActivity(i);
 
 
-            } else {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                } else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                }
             }
+        } else if (id.equals("addFeedback")) {
+            if (type==TYPE_SUCCESS){
+                getActivity().finish();
+                ToastManager.getInstance(getActivity()).showText("提交成功，请耐心等下我们的工作人员与您联系");
+            }
+
+
         }
+
         super.onNetEnd(id, type, netResponse);
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
         content.setHint("请填写您的" + datastr);
-        if (data.equals("desc")) {
+        if (data.equals("desc") || data.equals("advices")) {
 
             ViewGroup.LayoutParams lp = content.getLayoutParams();
             lp.height = DensityUtil.dip2px(getActivity(), 200);
             content.setLayoutParams(lp);
+            content.setGravity(Gravity.TOP);
             content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             //  content.setHeight(DensityUtil.dip2px(getActivity(),200));
         }

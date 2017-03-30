@@ -25,6 +25,7 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -36,12 +37,13 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     private LayoutInflater mLayoutInflater;
     private ArrayList<ComposeVoice> datas = new ArrayList<ComposeVoice>();
     private Context mContext;
-
+    private UserInfo userInfo;
     private String tag = "SoundsTab3Adapter";
 
-    public SoundsTab3Adapter(Context context) {
+    public SoundsTab3Adapter(Context context, UserInfo userInfo) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
+        this.userInfo = userInfo;
     }
 
 
@@ -102,7 +104,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
             h.musicname.setText(f.musicname);
             String2TimeUtils string2TimeUtils = new String2TimeUtils();
 
-            h.record_time.setText(String2TimeUtils.longToString(f.createtime,"MM月dd日 HH:mm"));
+            h.record_time.setText(String2TimeUtils.longToString(f.createtime, "MM月dd日 HH:mm"));
 
             h.upload.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,6 +123,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", f);
+                    bundle.putSerializable("userInfo", userInfo);
                     Intent intent = new Intent(mContext, StubActivity.class);
                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
 
@@ -140,7 +143,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         ComposeVoice m = getItem(arg2 - 1);
-        LogUtils.LOGE(tag+"6",m.toString()+"44444444444");
+        LogUtils.LOGE(tag + "6", m.toString() + "44444444444");
 
         Intent intent = new Intent(mContext, PlayActivity.class);
         Bundle b = new Bundle();

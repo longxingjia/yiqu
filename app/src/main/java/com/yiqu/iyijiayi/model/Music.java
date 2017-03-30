@@ -23,6 +23,7 @@ public class Music implements Serializable {
     public long decodetime;
     public long created;
     public long edited;
+    public long downloadtime;
 
 
     @Override

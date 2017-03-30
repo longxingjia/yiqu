@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -30,46 +28,44 @@ import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Like;
+import com.yiqu.iyijiayi.model.Listened;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import static java.lang.System.currentTimeMillis;
-
-public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab5WotingAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Sound> datas = new ArrayList<Sound>();
+    private ArrayList<Listened> datas = new ArrayList<Listened>();
     private Context mContext;
-    private Fragment fragment;
-    private String tag = "Tab1SoundAdapter";
 
-    public Tab1SoundAdapter(Context context, Fragment fragment) {
+    private String tag = "Tab1ListenedAdapter";
+
+    public Tab5WotingAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        this.fragment = fragment;
 
     }
 
 
-    public void setData(ArrayList<Sound> list) {
-
+    public void setData(ArrayList<Listened> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Sound> allDatas) {
+    public void addData(ArrayList<Listened> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -80,7 +76,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     }
 
     @Override
-    public Sound getItem(int position) {
+    public Listened getItem(int position) {
         return datas.get(position);
     }
 
@@ -93,15 +89,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         TextView musicname;
         TextView desc;
-        TextView soundtime;
-        TextView tea_name;
-        TextView tectitle;
-        ImageView stu_header;
-        ImageView tea_header;
+        TextView name;
+        TextView title;
+        ImageView header;
         ImageView musictype;
-        TextView stu_listen;
-        TextView listener;
-        TextView tea_listen;
+        TextView views;
+        TextView like;
+        TextView time;
 
     }
 
@@ -112,66 +106,89 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                v = mLayoutInflater.inflate(R.layout.tab5_woting, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.desc = (TextView) v.findViewById(R.id.desc);
-                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
-                h.tea_name = (TextView) v.findViewById(R.id.tea_name);
-                h.tectitle = (TextView) v.findViewById(R.id.tectitle);
-                h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.like = (TextView) v.findViewById(R.id.like);
+                h.name = (TextView) v.findViewById(R.id.name);
+                h.title = (TextView) v.findViewById(R.id.title);
+                h.time = (TextView) v.findViewById(R.id.time);
+                h.header = (ImageView) v.findViewById(R.id.header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.listener = (TextView) v.findViewById(R.id.listener);
-                h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
-                h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
-                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+                h.views = (TextView) v.findViewById(R.id.views);
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            final Sound f = getItem(position);
+            final Listened f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime + "\"");
-            h.tea_name.setText(f.tecname);
-            h.listener.setText(f.views + "");
-            h.tectitle.setText(f.tectitle);
-
-            long time = System.currentTimeMillis() / 1000 - f.edited;
-
-            if (time < 2 * 24 * 60 * 60 && time > 0) {
-                h.tea_listen.setText("限时免费听");
-            } else {
-                if (f.listen == 1) {
-                    h.tea_listen.setText("已付费");
-                } else {
-                    h.tea_listen.setText("1元偷偷听");
-                }
-
-            }
-
+            h.name.setText(f.username);
+            h.title.setText(f.title);
+            h.like.setText(String.valueOf(f.like));
 
             if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
             } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
+            PictureUtils.showPicture(mContext, f.userimage, h.header, 50);
 
-            PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
-            PictureUtils.showPicture(mContext, f.stuimage, h.stu_header);
-
-            h.tea_header.setOnClickListener(new View.OnClickListener() {
+            h.header.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    initHomepage(String.valueOf(f.touid));
-                }
-            });
-            h.stu_header.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initHomepage(String.valueOf(f.fromuid));
+                    initHomepage(mContext, String.valueOf(f.uid));
                 }
             });
 
+//            h.like.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    RestNetCallHelper.callNet(mContext,
+//                            MyNetApiConfig.like, MyNetRequestConfig
+//                                    .like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+//                            "like", new NetCallBack() {
+//                                @Override
+//                                public void onNetNoStart(String id) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onNetStart(String id) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onNetEnd(String id, int type, NetResponse netResponse) {
+//                                    if (type == NetCallBack.TYPE_SUCCESS) {
+//
+////                                        if (likesIndex == -1) {
+////                                            Like l = new Like();
+////                                            l.sid = sid;
+////                                            l.islike = 1;
+////                                            if (likes == null) {
+////                                                likes = new ArrayList<Like>();
+////                                            }
+////                                            likes.add(l);
+////                                            like.setText(String.valueOf(sound.like + 1));
+////                                            AppShare.setLikeList(getActivity(), likes);
+////                                            initDianZan();
+////                                        }
+//
+//
+//                                    }
+//
+//                                }
+//                            }, false, true);
+//                }
+//            });
+
+            h.views.setText(f.views + "");
+
+            String2TimeUtils string2TimeUtils = new String2TimeUtils();
+            long currentTimeMillis = System.currentTimeMillis() / 1000;
+            long time = currentTimeMillis - f.edited;
+            h.time.setText(string2TimeUtils.long2Time(time));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,7 +196,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         return v;
     }
 
-    private void initHomepage(String uid) {
+    private void initHomepage(final Context mContext, String uid) {
         String mUid = "0";
         if (AppShare.getIsLogin(mContext)) {
             mUid = AppShare.getUserInfo(mContext).uid;
@@ -202,6 +219,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
                     @Override
                     public void onNetEnd(String id, int type, NetResponse netResponse) {
+
                         if (TYPE_SUCCESS == type) {
                             Gson gson = new Gson();
                             HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
@@ -217,34 +235,22 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 });
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (arg2 < 2) {
-            return;
-        }
-        Sound f = getItem(arg2 - 2);//加了头部
+
+        Listened f = getItem(arg2 - 1);
+
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
+        Intent i = new Intent(mContext, StubActivity.class);
+        i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+        i.putExtra("data", f.sid + "");
 
-        if (AppShare.getIsLogin(mContext)) {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Sound", f);
-            i.putExtras(bundle);
-            i.putExtra("position",arg2 - 2);
-            fragment.startActivityForResult(i, 0);
-        } else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请登录后再试");
-            mContext.startActivity(i);
-
-        }
-
+        mContext.startActivity(i);
 
     }
 
@@ -258,31 +264,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             }
         }
         return false;
-    }
-
-    public void updateSingleRow(ListView listView, int sid) {
-
-        if (listView != null) {
-            int start = listView.getFirstVisiblePosition() + 1;
-            LogUtils.LOGE("s",start+"");
-            int j = listView.getLastVisiblePosition();
-            for (int i = start; i <= j; i++) {
-                Sound sound = (Sound) listView.getItemAtPosition(i);
-                LogUtils.LOGE("sss",sound.toString());
-                if (sid == sound.sid) {
-
-                    View view = listView.getChildAt(i - start+2);
-                    HoldChild h = (HoldChild) view.getTag();
-                    h.tea_listen = (TextView) view.findViewById(R.id.tea_listen);
-                    h.tea_listen.setText("已付费");
-                    LogUtils.LOGE("s",i+"");
-                    getView(i, view, listView);
-                    break;
-                }
-            }
-//            View view = listView.getChildAt(position);
-//            getView(position, view, listView);
-        }
     }
 
 

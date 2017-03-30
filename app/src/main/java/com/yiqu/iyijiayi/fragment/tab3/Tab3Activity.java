@@ -51,7 +51,6 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
 
     @Override
     protected void init(Bundle savedInstanceState) {
-
         InitViewPager();
     }
 

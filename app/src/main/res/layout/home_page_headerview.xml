@@ -197,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="像我提问需要支付￥"
+                android:text="向我提问需要支付￥"
                 android:textSize="16sp" />
 
             <TextView

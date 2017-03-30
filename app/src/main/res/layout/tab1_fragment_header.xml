@@ -5,12 +5,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
+    <com.ui.views.AutoScrollViewPager
         android:id="@+id/vp_spinner"
         android:layout_width="match_parent"
         android:layout_height="144dp">
 
-    </android.support.v4.view.ViewPager>
+    </com.ui.views.AutoScrollViewPager>
 
     <RelativeLayout
         android:layout_marginLeft="10dp"
@@ -24,7 +24,7 @@
             android:background="@drawable/red_box"
             android:gravity="center"
             android:text="最新作品"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/white" />
 
         <TextView

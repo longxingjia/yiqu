@@ -61,8 +61,11 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     private static int requestCode = 1;
     private TextView tea_name;
     private TextView tea_price;
-    private Teacher teacher;
+
     private UserInfo userInfo;
+    private String username;
+    private String price;
+    private String uid;
 
     @Override
     protected int getTitleBarType() {
@@ -134,6 +137,15 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         super.init(savedInstanceState);
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
+        UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userInfo");
+
+        if (userInfo != null) {
+            username = userInfo.username;
+            price = userInfo.price;
+            uid = userInfo.uid;
+            tea_name.setText(username);
+            tea_price.setText(price);
+        }
         fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
         musicName.setText(composeVoice.musicname);
 
@@ -158,9 +170,12 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             case RESULT_OK:
                 Bundle b = data.getExtras(); //data为B中回传的Intent
                 //str即为回传的值
-                teacher = (Teacher) b.getSerializable("teacher");
-                tea_name.setText(teacher.username);
-                tea_price.setText(teacher.price);
+                Teacher teacher = (Teacher) b.getSerializable("teacher");
+                username = teacher.username;
+                price = teacher.price;
+                uid = teacher.uid;
+                tea_name.setText(username);
+                tea_price.setText(price);
                 break;
             case Constant.FINISH:
                 getActivity().finish();
@@ -188,8 +203,8 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             return;
         }
 
-        composeVoice.questionprice = teacher.price;
-        composeVoice.touid = Integer.parseInt(teacher.uid);
+        composeVoice.questionprice = price;
+        composeVoice.touid = Integer.parseInt(uid);
         composeVoice.musicname = musicNameStr;
         composeVoice.desc = contentStr;
 
@@ -207,7 +222,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             case R.id.payfor:
 
                 if (file.exists()) {
-                    UTask upLoaderTask = new UTask(getActivity(),MyNetApiConfig.uploadSounds.getPath(), params, file, "0");
+                    UTask upLoaderTask = new UTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file, "0");
                     upLoaderTask.execute();
                 } else {
                     ToastManager.getInstance(getActivity()).showText("文件已经损坏，请您重新录制");
@@ -216,7 +231,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
 
             case R.id.submit:
                 if (file.exists()) {
-                    UTask uTask = new UTask(getActivity(),MyNetApiConfig.uploadSounds.getPath(), params, file, "1");
+                    UTask uTask = new UTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file, "1");
                     uTask.execute();
                 } else {
                     ToastManager.getInstance(getActivity()).showText("文件已经损坏，请您重新录制");
@@ -234,7 +249,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         private DialogHelper dialogHelper;
 
 
-        public UTask(Context context, String RequestURL, Map<String, String> params, File file,String isfree) {
+        public UTask(Context context, String RequestURL, Map<String, String> params, File file, String isfree) {
             super(context, RequestURL, params, file);
             this.isfree = isfree;
         }
@@ -243,7 +258,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
         protected void onPreExecute() {
             super.onPreExecute();
             if (dialogHelper == null) {
-                dialogHelper = new DialogHelper(getActivity(), this,100);
+                dialogHelper = new DialogHelper(getActivity(), this, 100);
                 dialogHelper.showProgressDialog();
             }
 
@@ -279,7 +294,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                         MyNetRequestConfig.addSound(getActivity(), userInfo.uid, "1", isfree, composeVoice),
                         "addSound", AddQuestionFragment.this);
 
-            } else{
+            } else {
                 ToastManager.getInstance(getActivity()).showText(getString(R.string.net_error));
 
             }
@@ -302,7 +317,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                     RestNetCallHelper.callNet(
                             getActivity(),
                             MyNetApiConfig.getNewOrder,
-                            MyNetRequestConfig.getNewOrder(getActivity(), composeVoice.fromuid, sid, teacher.price),
+                            MyNetRequestConfig.getNewOrder(getActivity(), composeVoice.fromuid, sid, price),
                             "getNewOrder", AddQuestionFragment.this);
 
                 } catch (JSONException e) {
@@ -314,10 +329,10 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             }
         } else if (id.equals("getNewOrder")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag,netResponse.toString());
+                LogUtils.LOGE(tag, netResponse.toString());
                 try {
 
-                    if (netResponse.data.contains("wx_arr")){
+                    if (netResponse.data.contains("wx_arr")) {
                         PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
                         Order order = payInfo.order;
                         Wx_arr wx_arr = payInfo.wx_arr;
@@ -328,7 +343,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                         b.putSerializable("data", payInfo);
                         i.putExtras(b);
                         startActivityForResult(i, requestCode);
-                    }else {
+                    } else {
                         Order order = new Gson().fromJson(netResponse.data, Order.class);
                         RestNetCallHelper.callNet(
                                 getActivity(),
@@ -343,9 +358,9 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                 }
             }
         } else if (id.equals("orderQuery")) {
-            LogUtils.LOGE(tag,netResponse.result);
+            LogUtils.LOGE(tag, netResponse.result);
             if (type == NetCallBack.TYPE_SUCCESS) {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                ToastManager.getInstance(getActivity()).showText("提问成功,请等待老师回答");
                 userInfo.free_question--;
                 AppShare.setUserInfo(getActivity(), userInfo);
                 getActivity().finish();

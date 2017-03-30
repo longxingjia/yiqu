@@ -1,7 +1,10 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,7 +16,9 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.ImageLoaderHm;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -46,15 +51,21 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     protected void initView(View v) {
         listView = (RefreshList) v.findViewById(R.id.tab1_list);
 
-        soundsTab3Adapter = new SoundsTab3Adapter(getActivity());
-        listView.setAdapter(soundsTab3Adapter);
-        listView.setOnItemClickListener(soundsTab3Adapter);
-        listView.setRefreshListListener(this);
+
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+
+         Fragment fm =  getParentFragment();
+        Intent intent = fm.getActivity().getIntent();
+        UserInfo userInfo = (UserInfo)intent.getSerializableExtra("data");
+
+        soundsTab3Adapter = new SoundsTab3Adapter(getActivity(),userInfo);
+        listView.setAdapter(soundsTab3Adapter);
+        listView.setOnItemClickListener(soundsTab3Adapter);
+        listView.setRefreshListListener(this);
 
         composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(getActivity());
         composeVoices = composeVoiceInfoDBHelper.getAll(ComposeVoiceInfoDBHelper.COMPOSE);

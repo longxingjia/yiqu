@@ -307,6 +307,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
                         "getSoundDetail", SoundItemDetailFragment.this);
+
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.addHistory, MyNetRequestConfig
+                                .addHistory(getActivity(), sid, userInfo.uid),
+                        "addHistory", SoundItemDetailFragment.this,false,true);
                 userInfo.coin_apple--;
                 payforTag = 1;
                 AppShare.setUserInfo(getActivity(), userInfo);
@@ -348,7 +353,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
             }
         } else if (id.equals("getComments")) {
-            LogUtils.LOGE(tag, netResponse.toString());
+
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<CommentsInfo> commentsInfos
                         = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<CommentsInfo>>() {
@@ -361,6 +366,11 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                     no_comments.setVisibility(View.GONE);
                 }
 
+            }
+        }else if (id.equals("addHistory")){
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                LogUtils.LOGE(tag, netResponse.toString());
             }
         }
 
@@ -443,7 +453,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             for (int i = 0; i < likes.size(); i++) {
                 Like dz = likes.get(i);
                 if (dz.sid.equals(sid)) {
-
                     likesIndex = i;
                     initDianZan();
                 }
@@ -623,6 +632,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                     @Override
                     public void onNetEnd(String id, int type, NetResponse netResponse) {
+
                         if (TYPE_SUCCESS == type) {
                             Gson gson = new Gson();
                             HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);
@@ -840,7 +850,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         stucurrentTime = 0;
         teacurrentTime = 0;
-
         commenttime.setText(sound.commenttime + "\"");
         soundtime.setText(sound.soundtime + "\"");
 

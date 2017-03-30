@@ -48,8 +48,8 @@ public class CommentActivity extends Activity implements NetCallBack {
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay(); // 为获取屏幕宽、高
         android.view.WindowManager.LayoutParams p = getWindow().getAttributes();
-        p.height = (int) (d.getHeight() * 0.3); // 高度设置为屏幕的0.3
-        p.width = (int) (d.getWidth()); // 宽度设置为屏幕的0.7
+        p.height = (int) (d.getHeight() * 0.2); // 高度设置为屏幕的0.3
+        p.width = (int) (d.getWidth()); // 宽度设置为屏幕
         p.alpha = 1.0f;      //设置本身透明度
         p.dimAmount = 0.5f;      //设置黑暗度
         getWindow().setAttributes(p);
@@ -83,6 +83,10 @@ public class CommentActivity extends Activity implements NetCallBack {
             edit.setHint("回复 " + toname + ":");
             edit.setHintTextColor(getResources().getColor(R.color.dd_gray));
 
+        }
+        String s =AppShare.getLastComment(this);
+        if (!TextUtils.isEmpty(s)){
+            edit.setText(s);
         }
 
 
@@ -127,6 +131,7 @@ public class CommentActivity extends Activity implements NetCallBack {
         super.onPause();
         MobclickAgent.onPageEnd("评论"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
         MobclickAgent.onPause(this);
+        AppShare.setLastComment(this,edit.getText().toString());
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener getGlobalLayoutListener(final View decorView, final View contentView) {
@@ -165,9 +170,10 @@ public class CommentActivity extends Activity implements NetCallBack {
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        LogUtils.LOGE("tag", netResponse.toString());
+
         if (type == TYPE_SUCCESS) {
             ToastManager.getInstance(CommentActivity.this).showText(netResponse.result.toString());
+            edit.setText("");
             finish();
         }
 

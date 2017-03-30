@@ -35,6 +35,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     public static final String EDITED = "edited";
     public static final String ISDECODE = "isdecode";
     public static final String DECODETIME = "decodetime";
+    public static final String DOWNLOADTIME = "downloadtime";
 
 
     public DownloadMusicInfoDBHelper(Context context) {
@@ -52,7 +53,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         Cursor c = null;
         try {
             SQLiteDatabase db = getReadableDatabase();
-            c = db.query(TABLE_NAME, null, null, null, null, null, null);
+            c = db.query(TABLE_NAME, null, null, null, null, null, DOWNLOADTIME +" desc ");
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 Music music = new Music();
@@ -71,6 +72,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
                 music.created = c.getLong(c.getColumnIndex(CREATED));
                 music.edited = c.getLong(c.getColumnIndex(EDITED));
                 music.isdecode = c.getInt(c.getColumnIndex(ISDECODE));
+                music.downloadtime = c.getLong(c.getColumnIndex(DOWNLOADTIME));
                 ds.add(music);
                 c.moveToNext();
             }
@@ -204,6 +206,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(ISFORMULATION, cc.isformulation);
             c.put(CREATED, cc.created);
             c.put(EDITED, cc.edited);
+            c.put(DOWNLOADTIME, cc.downloadtime);
             c.put(ISDECODE, -1);
 
             count = db.insert(TABLE_NAME, null, c);

@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "yijiayi.db";
-    private static final int DB_VERSION = 13;
+    private static final int DB_VERSION = 14;
 
 
     public AbsDBHelper(Context context) {
@@ -43,21 +43,23 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + ComposeVoiceInfoDBHelper.TABLE_NAME}, db);
             executeBatch(version_1, db);
         } else {
-            String columns = DownloadMusicInfoDBHelper.TYPE+","+
-                    DownloadMusicInfoDBHelper.MID+","+
-                    DownloadMusicInfoDBHelper.TYPENAME+","+
-                    DownloadMusicInfoDBHelper.IMAGE+","+
-                    DownloadMusicInfoDBHelper.MUSICNAME+","+
-                    DownloadMusicInfoDBHelper.MUSICPATH+","+
-                    DownloadMusicInfoDBHelper.MUSICTYPE+","+
-                    DownloadMusicInfoDBHelper.CHAPTER+","+
-                    DownloadMusicInfoDBHelper.ACCOMPANIMENT+","+
-                    DownloadMusicInfoDBHelper.TIME+","+
-                    DownloadMusicInfoDBHelper.SIZE+","+
-                    DownloadMusicInfoDBHelper.ISFORMULATION+","+
-                    DownloadMusicInfoDBHelper.CREATED+","+
+            String columns = DownloadMusicInfoDBHelper.TYPE + "," +
+                    DownloadMusicInfoDBHelper.MID + "," +
+                    DownloadMusicInfoDBHelper.TYPENAME + "," +
+                    DownloadMusicInfoDBHelper.IMAGE + "," +
+                    DownloadMusicInfoDBHelper.MUSICNAME + "," +
+                    DownloadMusicInfoDBHelper.MUSICPATH + "," +
+                    DownloadMusicInfoDBHelper.MUSICTYPE + "," +
+                    DownloadMusicInfoDBHelper.CHAPTER + "," +
+                    DownloadMusicInfoDBHelper.ACCOMPANIMENT + "," +
+                    DownloadMusicInfoDBHelper.TIME + "," +
+                    DownloadMusicInfoDBHelper.SIZE + "," +
+                    DownloadMusicInfoDBHelper.ISFORMULATION + "," +
+                    DownloadMusicInfoDBHelper.CREATED + "," +
+                    DownloadMusicInfoDBHelper.DECODETIME + "," +
+                    DownloadMusicInfoDBHelper.ISDECODE + "," +
                     DownloadMusicInfoDBHelper.EDITED;
-            upgradeTables(db,DownloadMusicInfoDBHelper.TABLE_NAME,version_7,columns);
+            upgradeTables(db, DownloadMusicInfoDBHelper.TABLE_NAME, version_14, columns);
 
         }
         Log.w("onUpgrade", "oldVersion:" + oldVersion + ",newVersion:"
@@ -97,18 +99,39 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     " SELECT " + columns + " FROM " + tempTableName;
 
             executeBatch(sql, db);
-           // LogUtils.LOGE("ssss",sql);
+            // LogUtils.LOGE("ssss",sql);
 
             // 4, Drop the temporary table.
-            executeBatch( "DROP TABLE IF EXISTS " + tempTableName,db);
+            executeBatch("DROP TABLE IF EXISTS " + tempTableName, db);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-         //   db.endTransaction();
+            //   db.endTransaction();
         }
     }
+
+    private static final String version_14 =
+            "Create table " + DownloadMusicInfoDBHelper.TABLE_NAME + "("
+                    + DownloadMusicInfoDBHelper.TYPE + " text , "
+                    + DownloadMusicInfoDBHelper.MID + " text , "
+                    + DownloadMusicInfoDBHelper.TYPENAME + " text , "
+                    + DownloadMusicInfoDBHelper.IMAGE + " text , "
+                    + DownloadMusicInfoDBHelper.MUSICNAME + " text , "
+                    + DownloadMusicInfoDBHelper.MUSICPATH + " text , "
+                    + DownloadMusicInfoDBHelper.MUSICTYPE + " text , "
+                    + DownloadMusicInfoDBHelper.CHAPTER + " text , "
+                    + DownloadMusicInfoDBHelper.ACCOMPANIMENT + " text , "
+                    + DownloadMusicInfoDBHelper.TIME + " text , "
+                    + DownloadMusicInfoDBHelper.SIZE + " text , "
+                    + DownloadMusicInfoDBHelper.ISFORMULATION + " text , "
+                    + DownloadMusicInfoDBHelper.ISDECODE + " text , "
+                    + DownloadMusicInfoDBHelper.DECODETIME + " text , "
+                    + DownloadMusicInfoDBHelper.DOWNLOADTIME + " text , "
+                    + DownloadMusicInfoDBHelper.CREATED + " text , "
+                    + DownloadMusicInfoDBHelper.EDITED + " text "
+                    + ");";
 
 
     private static final String version_7 =
@@ -130,8 +153,6 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.CREATED + " text , "
                     + DownloadMusicInfoDBHelper.EDITED + " text "
                     + ");";
-
-
 
 
     /**

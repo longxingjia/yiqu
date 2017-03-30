@@ -61,10 +61,27 @@ public class String2TimeUtils {
 
         mFormatBuilder.setLength(0);
 
-        if (months > 0) {
-            return mFormatter.format("%d", months).toString() + "月前";
-        } else if (weeks > 0) {
-            return mFormatter.format("%d", weeks).toString() + "星期前";
+//        if (months > 0) {
+//            return mFormatter.format("%d", months).toString() + "月前";
+//        } else if (weeks > 0) {
+//            return mFormatter.format("%d", weeks).toString() + "星期前";
+//
+//        } else if (days > 0) {
+//            return mFormatter.format("%d", days).toString() + "天前";
+//
+//        } else if (hours > 0) {
+//            return mFormatter.format("%d", hours).toString() + "小时前";
+//
+//        }else if (minutes > 0) {
+//            return mFormatter.format("%d", minutes).toString() + "分钟前";
+//
+//        } else {
+//            return "刚刚";
+//
+//        }
+
+        if (weeks > 0 || months > 0) {
+            return "1星期前";
 
         } else if (days > 0) {
             return mFormatter.format("%d", days).toString() + "天前";
@@ -72,8 +89,7 @@ public class String2TimeUtils {
         } else if (hours > 0) {
             return mFormatter.format("%d", hours).toString() + "小时前";
 
-        }
-        if (minutes > 0) {
+        } else if (minutes > 0) {
             return mFormatter.format("%d", minutes).toString() + "分钟前";
 
         } else {
@@ -82,7 +98,7 @@ public class String2TimeUtils {
         }
     }
 
-    public static String longToString(long currentTime,String formatType)
+    public static String longToString(long currentTime, String formatType)
             throws ParseException {
 
         Date date = longToDate(currentTime, formatType); // long类型转成Date类型

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tab_bg_color"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/tab_bg_color"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="基本"
+        android:gravity="center_vertical"
+        android:textColor="@color/dd_gray" />
+
+    <TextView
+        android:id="@+id/agreement"
+        style="@style/textview_setting"
+        android:text="用户协议" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/tab_line_color" />
+
+    <TextView
+        android:id="@+id/publish_rules"
+        style="@style/textview_setting"
+        android:text="发布规则" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/tab_line_color" />
+
+    <TextView
+        android:id="@+id/help"
+        style="@style/textview_setting"
+        android:text="使用帮助" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/tab_line_color" />
+
+    <TextView
+        android:id="@+id/about"
+        style="@style/textview_setting"
+        android:text="关于我们" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/tab_bg_color"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:paddingRight="15dp"
+        android:text="高级"
+
+        android:textColor="@color/dd_gray" />
+
+    <TextView
+        android:visibility="gone"
+        style="@style/textview_setting"
+        android:text="缓存" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/tab_line_color" />
+
+    <TextView
+        android:id="@+id/advices"
+        style="@style/textview_setting"
+        android:text="建议反馈" />
+
+</LinearLayout>

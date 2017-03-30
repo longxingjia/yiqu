@@ -264,6 +264,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 submit.setClickable(true);
                 submit.setEnabled(true);
                 submit.setBackgroundResource(R.drawable.red_box);
+                music.downloadtime = System.currentTimeMillis();
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
                 downloadMusicInfoDBHelper.insert(music);
                 downloadMusicInfoDBHelper.close();

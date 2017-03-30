@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yiqu.iyijiayi.model.Banner;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Teacher;
@@ -28,10 +29,12 @@ public class AppShare {
     private static final String USERINFO_INFO = "userinfo_info";
     private static final String ZHAOREN = "zhaoren";
     private static final String LIKE = "like";
+    private static final String BANNER = "banner";
     private static final String REMEN = "remen";
     private static final String IS_LOGIN = "is_login";
     private static final String TEACHERAPPLY_INFO = "teacherapply_info";
     private static final String LAST_LOGIN_PHONE = "last_login_phone";
+    private static final String LAST_COMMENT = "last_comment";
 
     /**
      * 获取是否登录
@@ -80,6 +83,31 @@ public class AppShare {
         e.putString(LAST_LOGIN_PHONE, loginPhone);
         e.commit();
     }
+
+    /**
+     * 获取上次登录手机号码
+     *
+     * @param c
+     * @return
+     */
+    public static String getLastComment(Context c) {
+        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME, Context.MODE_APPEND);
+        return p.getString(LAST_COMMENT, "");
+    }
+
+
+    /**
+     * 保存上次登录手机号码
+     *
+     * @param c
+     */
+    public static void setLastComment(Context c, String loginPhone) {
+        SharedPreferences p = c.getSharedPreferences(GLOBAL_BFILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor e = p.edit();
+        e.putString(LAST_COMMENT, loginPhone);
+        e.commit();
+    }
+
 
     /**
      * 获取微信的信息
@@ -228,6 +256,32 @@ public class AppShare {
         SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
         SharedPreferences.Editor editor = p.edit();
         editor.putString(LIKE, new Gson().toJson(likes));
+        editor.commit();
+    }
+
+
+    public static ArrayList<Banner> getBannerList(Context context) {
+
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        String tmp = p.getString(BANNER, "");
+        ArrayList<Banner> result = null;
+        if (tmp != null && tmp.length() > 0) {
+            result = new Gson().fromJson(tmp, new TypeToken<ArrayList<Banner>>() {
+            }.getType());
+        }
+        return result;
+    }
+
+    /**
+     * 保存
+     *
+     * @param context
+     * @param likes
+     */
+    public static void setBannerList(Context context, ArrayList<Banner> likes) {
+        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putString(BANNER, new Gson().toJson(likes));
         editor.commit();
     }
 

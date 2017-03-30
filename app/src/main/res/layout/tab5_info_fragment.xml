@@ -135,6 +135,24 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_edit_price"
+            style="@style/textview_edit_layout">
+            <TextView
+
+                style="@style/textview_edit_left"
+                android:text="收费" />
+
+            <TextView
+                android:id="@+id/edit_price"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                style="@style/textview_edit_right"
+                android:text="" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/rl_edit_introduction"
             style="@style/textview_edit_layout">
             <TextView

@@ -62,6 +62,8 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     private MenuDialogPicHelper menuDialogPicHelper;
     private String tag = "InfoFragment";
     private ImageView edit_background;
+    private TextView edit_price;
+    private RelativeLayout rl_edit_price;
 
     @Override
     protected int getTitleBarType() {
@@ -112,11 +114,13 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         rl_edit_photo = (RelativeLayout) v.findViewById(R.id.rl_edit_photo);
         rl_edit_introduction = (RelativeLayout) v.findViewById(R.id.rl_edit_introduction);
         rl_edit_apply = (RelativeLayout) v.findViewById(R.id.rl_edit_apply);
+        rl_edit_price = (RelativeLayout) v.findViewById(R.id.rl_edit_price);
         edit_background = (ImageView) v.findViewById(R.id.edit_background);
         edit_head = (CircleImageView) v.findViewById(R.id.edit_head);
         edit_name = (TextView) v.findViewById(R.id.edit_name);
         edit_title = (TextView) v.findViewById(R.id.edit_title);
         edit_sex = (TextView) v.findViewById(R.id.edit_sex);
+        edit_price = (TextView) v.findViewById(R.id.edit_price);
         edit_school = (TextView) v.findViewById(R.id.edit_school);
         edit_introduction = (TextView) v.findViewById(R.id.edit_introduction);
 
@@ -130,6 +134,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         rl_edit_photo.setOnClickListener(this);
         rl_edit_introduction.setOnClickListener(this);
         rl_edit_apply.setOnClickListener(this);
+        rl_edit_price.setOnClickListener(this);
     }
 
     @Override
@@ -158,7 +163,10 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         edit_title.setText(userInfo.specialities);
 
         if (userInfo.type.equals("2")) {
+            edit_price.setText(userInfo.price);
             rl_edit_apply.setVisibility(View.GONE);
+        }else {
+            rl_edit_price.setVisibility(View.GONE);
         }
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, edit_head);
@@ -222,6 +230,11 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 break;
             case R.id.rl_edit_photo:
 
+                break;
+            case R.id.rl_edit_price:
+                in.putExtra("fragment", EditInfoFragment.class.getName());
+                in.putExtra("data", "price");
+                getActivity().startActivity(in);
                 break;
             case R.id.rl_edit_introduction:
                 in.putExtra("fragment", EditInfoFragment.class.getName());

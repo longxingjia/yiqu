@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -80,6 +81,10 @@ public class WelcomePageActivity extends Activity {
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_NORMAL);
     //    getDeviceInfo(this);
         init(R.layout.activity_welcome_page);
+
+
+
+
     }
 
     private void init(int layoutResourceId) {
@@ -227,15 +232,38 @@ public class WelcomePageActivity extends Activity {
 //        begin();
     }
 
-    private void installApk(File apkFile) {
-        if (!apkFile.exists()) {
+//    private void installApk(File apkFile) {
+//        if (!apkFile.exists()) {
+//            return;
+//        }
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse("file://" + apkFile.toString());
+//        i.setDataAndType(uri, "application/vnd.android.package-archive");
+//        startActivity(i);
+//
+//    }
+
+    private  void installApk(String apkPath) {
+        if ( TextUtils.isEmpty(apkPath)) {
             return;
         }
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file://" + apkFile.toString());
-        i.setDataAndType(uri, "application/vnd.android.package-archive");
-        startActivity(i);
 
+
+        File file = new File(apkPath);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        //判读版本是否在7.0以上
+        if (Build.VERSION.SDK_INT >= 24) {
+            //provider authorities
+            Uri apkUri = FileProvider.getUriForFile(WelcomePageActivity.this, "com.yiqu.iyijiayi.fileprovider", file);
+            //Granting Temporary Permissions to a URI
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        }
+
+        startActivity(intent);
     }
 
 
@@ -401,7 +429,7 @@ public class WelcomePageActivity extends Activity {
 //                e.printStackTrace();
 //            }
 //            mFile.delete();
-            installApk(mFile);
+            installApk(mFile.getAbsolutePath());
 
 
         }

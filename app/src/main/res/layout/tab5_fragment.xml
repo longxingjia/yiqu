@@ -452,11 +452,9 @@
                     android:id="@+id/menu_item_guanzhu"
                     style="@style/textview_mine"
                     android:drawableLeft="@mipmap/mine_guanzhu"
-                    android:visibility="gone"
                     android:text="关注" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="5dp"
@@ -508,8 +506,8 @@
             <TextView
                 android:id="@+id/menu_item_guanyu"
                 style="@style/textview_mine"
-                android:drawableLeft="@mipmap/mine_about"
-                android:text="关于" />
+                android:drawableLeft="@mipmap/mine_apply"
+                android:text="成为导师" />
 
 
             <ImageView

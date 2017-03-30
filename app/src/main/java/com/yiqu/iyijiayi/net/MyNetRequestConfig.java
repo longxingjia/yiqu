@@ -110,6 +110,16 @@ public class MyNetRequestConfig {
         r.addHttpParam("uid", uid);
         return r;
     }
+    /**
+     * 6、
+     */
+    public static NetRequest getHistory(Context c, String uid, int count, int rows) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
+        return r;
+    }
 
     public static NetRequest addfollow(Context c, String uid, String fuid) {
         MyNetRequest r = new MyNetRequest(c);
@@ -136,8 +146,8 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam("type", type);
-        r.addHttpParam("count", count + "");
-        r.addHttpParam("rows", rows + "");
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
         return r;
     }
 
@@ -148,6 +158,12 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam(dataName, dataValue);
+        return r;
+    }
+    public static NetRequest addFeedback(Context c, String uid, String content) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("content", content);
         return r;
     }
 
@@ -237,6 +253,13 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("sid", sid);
         r.addHttpParam("checkpay", uid);
+        return r;
+    }
+    public static NetRequest addHistory(Context c, String sid,
+                                            String uid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("uid", uid);
 
         return r;
     }
@@ -440,6 +463,11 @@ public class MyNetRequestConfig {
     public static NetRequest checkUpdate(Context c) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("type", "2");
+        return r;
+    }
+   public static NetRequest getBannerList(Context c) {
+        MyNetRequest r = new MyNetRequest(c);
+//        r.addHttpParam("type", "2");
         return r;
     }
 

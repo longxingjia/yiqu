@@ -29,7 +29,10 @@ import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5TiwenAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SoundsTab3fragment;
+import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.Xizuo;
@@ -67,7 +70,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private LoadMoreView mLoadMoreView;
     private int TYPE = 1;
     private String uid;
-    private String myUid ="0";
+    private String myUid = "0";
     private Tab5DianpingAdapter tab5DianpingAdapter;
     private Tab1XizuoAdapter tab5XizuoAdapter;
     private Tab1SoundAdapter tab1SoundAdapter;
@@ -84,6 +87,9 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private ImageView background;
     private HomePage homePage;
     private ArrayList<Xizuo> xizuos;
+    private LinearLayout ll_tw;
+    private TextView price1;
+    private TextView ok;
 
     @Override
     protected int getTitleView() {
@@ -137,6 +143,9 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         homePage = (HomePage) getActivity().getIntent().getSerializableExtra("data");
         mContext = getActivity();
         listView = (RefreshList) v.findViewById(R.id.listView);
+        ll_tw = (LinearLayout) v.findViewById(R.id.ll_tw);
+        price1 = (TextView) v.findViewById(R.id.price);
+        ok = (TextView) v.findViewById(R.id.ok);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View headview = inflater.inflate(R.layout.home_page_headerview, null);
         listView.addHeaderView(headview);
@@ -151,7 +160,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(),this);
+        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(), this);
         tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
 
@@ -159,9 +168,11 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (homePage == null) {
             userInfo = AppShare.getUserInfo(mContext);
             if (userInfo.type.equals("2")) {
+
                 listView.setAdapter(tab5DianpingAdapter);
                 listView.setOnItemClickListener(tab5DianpingAdapter);
                 TYPE = 2;
+
             } else {
                 listView.setAdapter(tab1SoundAdapter);
                 listView.setOnItemClickListener(tab1SoundAdapter);
@@ -178,19 +189,35 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             userInfo = homePage.user;
             sounds = homePage.sound;
             if (userInfo.type.equals("2")) {
-
                 listView.setAdapter(tab5DianpingAdapter);
                 listView.setOnItemClickListener(tab5DianpingAdapter);
                 tab5DianpingAdapter.setData(sounds);
+                price1.setText(userInfo.price + "");
+                if (!userInfo.uid.equals(AppShare.getUserInfo(getActivity()).uid))
+
+                    ll_tw.setVisibility(View.VISIBLE);
             } else {
                 listView.setAdapter(tab1SoundAdapter);
                 tab1SoundAdapter.setData(sounds);
                 listView.setOnItemClickListener(tab1SoundAdapter);
             }
-
         }
 
         initUI();
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                Model.startNextAct(getActivity(),
+//                        Tab3Activity.class.getName());
+                Intent intent = new Intent(getActivity(), Tab3Activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", userInfo);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -230,7 +257,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         @Override
         public void onClick(View v) {
             TYPE = index;
-
             int i = index;
             switch (TYPE) {
                 case 1:
