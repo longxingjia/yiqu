@@ -18,7 +18,8 @@
             android:id="@+id/musicname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="jin"
+            android:text=""
+            android:singleLine="true"
             android:textSize="18sp" />
 
         <TextView

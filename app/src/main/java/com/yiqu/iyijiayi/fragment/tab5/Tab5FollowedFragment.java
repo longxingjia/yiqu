@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -15,17 +14,12 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
-import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
+import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab5GuanzhuAdapter;
-import com.yiqu.iyijiayi.fragment.Tab2Fragment;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
-import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
-import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
-import com.yiqu.iyijiayi.model.Followed;
 import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.ZhaoRen;
@@ -33,17 +27,16 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
 
-public class Tab5FollowedFragment extends TabContentFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class Tab5FollowedFragment extends AbsAllFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private String tag = "Tab5FollowedFragment";
     private String uid;
     private ScrollViewWithListView lvTeacher;
-    private ArrayList<Teacher> teacher;
-    private ArrayList<Student> student;
 
     private Tab5GuanzhuAdapter tab2TeacherAdapter;
     private Tab5GuanzhuAdapter tab2StudentAdapter;
@@ -57,16 +50,6 @@ public class Tab5FollowedFragment extends TabContentFragment implements SwipeRef
     @Override
     protected int getTitleView() {
         return R.layout.titlebar_tab5;
-    }
-
-    @Override
-    public void onSelect() {
-        super.onSelect();
-    }
-
-    @Override
-    public void onNoSelect() {
-        super.onNoSelect();
     }
 
     @Override
@@ -93,9 +76,20 @@ public class Tab5FollowedFragment extends TabContentFragment implements SwipeRef
 
         RestNetCallHelper.callNet(
                 getActivity(),
-                MyNetApiConfig.followed,
-                MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                MyNetApiConfig.getFollowTeacherList,
+                MyNetRequestConfig.getFollowTeacherList(getActivity(), uid),
                 "teacher", Tab5FollowedFragment.this);
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getFollowStudentList,
+                MyNetRequestConfig.getFollowTeacherList(getActivity(), uid),
+                "student", Tab5FollowedFragment.this);
+//        RestNetCallHelper.callNet(
+//                getActivity(),
+//                MyNetApiConfig.getFollowList,
+//                MyNetRequestConfig.getHistory(getActivity(), uid,0,1000),
+//                "getFollowList", Tab5FollowedFragment.this);
     }
 
     @Override
@@ -112,9 +106,6 @@ public class Tab5FollowedFragment extends TabContentFragment implements SwipeRef
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("关注"); //统计页面，"MainScreen"为页面名称，可自定义
-
-
-
     }
 
 
@@ -127,27 +118,49 @@ public class Tab5FollowedFragment extends TabContentFragment implements SwipeRef
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (netResponse != null) {
-            if (netResponse.bool == 1) {
+        // LogUtils.LOGE(tag, netResponse.toString());
+        if (id.equals("teacher")) {
 
-                Gson gson = new Gson();
-                Followed followed = gson.fromJson(netResponse.data, Followed.class);
-                tab2TeacherAdapter.setData(followed.teacher);
-                setListViewHeightBasedOnChildren(lvTeacher);
-                tab2StudentAdapter.setData(followed.student);
-                teacher_size.setText(String.valueOf(followed.teacher.size()));
-                student_size.setText(String.valueOf(followed.student.size()));
+            if (netResponse != null) {
+                if (netResponse.bool == 1) {
 
-            } else {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                    Gson gson = new Gson();
+                    ArrayList<Teacher> teacher = gson.fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
+                    }.getType());
+                    tab2TeacherAdapter.setData(teacher);
+                    setListViewHeightBasedOnChildren(lvTeacher);
+
+                    teacher_size.setText(String.valueOf(teacher.size()));
+
+
+                } else {
+                    ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                }
             }
+
+        }else if (id.equals("student")){
+            Gson gson = new Gson();
+            ArrayList<Teacher> student = gson.fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
+            }.getType());
+            tab2StudentAdapter.setData(student);
+            student_size.setText(String.valueOf(student.size()));
+
         }
+//        else if (id.equals("getFollowList")){
+//            LogUtils.LOGE(tag,netResponse.toString());
+//            Gson gson = new Gson();
+//            ArrayList<Teacher> student = gson.fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
+//            }.getType());
+//            tab2StudentAdapter.setData(student);
+//            student_size.setText(String.valueOf(student.size()));
+//
+//        }
         super.onNetEnd(id, type, netResponse);
     }
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT | FLAG_BTN;
+        return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
@@ -211,9 +224,15 @@ public class Tab5FollowedFragment extends TabContentFragment implements SwipeRef
             public void run() {
                 RestNetCallHelper.callNet(
                         getActivity(),
-                        MyNetApiConfig.followed,
-                        MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                        MyNetApiConfig.getFollowTeacherList,
+                        MyNetRequestConfig.getFollowTeacherList(getActivity(), uid),
                         "teacher", Tab5FollowedFragment.this);
+
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.getFollowStudentList,
+                        MyNetRequestConfig.getFollowTeacherList(getActivity(), uid),
+                        "student", Tab5FollowedFragment.this);
 
                 swipeRe.setRefreshing(false);
 

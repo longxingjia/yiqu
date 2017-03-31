@@ -138,7 +138,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
             long time = System.currentTimeMillis() / 1000 - f.edited;
 
-            if (time < 2 * 24 * 60 * 60 && time > 0) {
+            if (time < 2 * 24 * 60 * 60 * 1000 && time > 0) {
                 h.tea_listen.setText("限时免费听");
             } else {
                 if (f.listen == 1) {
@@ -235,7 +235,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             Bundle bundle = new Bundle();
             bundle.putSerializable("Sound", f);
             i.putExtras(bundle);
-            i.putExtra("position",arg2 - 2);
+            i.putExtra("position", arg2 - 2);
             fragment.startActivityForResult(i, 0);
         } else {
             Intent i = new Intent(mContext, StubActivity.class);
@@ -264,18 +264,18 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         if (listView != null) {
             int start = listView.getFirstVisiblePosition() + 1;
-            LogUtils.LOGE("s",start+"");
+            LogUtils.LOGE("s", start + "");
             int j = listView.getLastVisiblePosition();
             for (int i = start; i <= j; i++) {
                 Sound sound = (Sound) listView.getItemAtPosition(i);
-                LogUtils.LOGE("sss",sound.toString());
+                LogUtils.LOGE("sss", sound.toString());
                 if (sid == sound.sid) {
 
-                    View view = listView.getChildAt(i - start+2);
+                    View view = listView.getChildAt(i - start + 2);
                     HoldChild h = (HoldChild) view.getTag();
                     h.tea_listen = (TextView) view.findViewById(R.id.tea_listen);
                     h.tea_listen.setText("已付费");
-                    LogUtils.LOGE("s",i+"");
+                    LogUtils.LOGE("s", i + "");
                     getView(i, view, listView);
                     break;
                 }

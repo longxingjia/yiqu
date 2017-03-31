@@ -110,6 +110,13 @@ public class MyNetRequestConfig {
         r.addHttpParam("uid", uid);
         return r;
     }
+    public static NetRequest getFollowTeacherList(Context c, String uid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("myuid", uid);
+        r.addHttpParam("rows", String.valueOf(1000));
+        r.addHttpParam("count", String.valueOf(0));
+        return r;
+    }
     /**
      * 6、
      */

@@ -114,7 +114,7 @@ public class MyNetApiConfig {
         }
 
     };
- public static MyNetApi bindPhoneCheck = new MyNetApi() {
+    public static MyNetApi bindPhoneCheck = new MyNetApi() {
         @Override
         public String getPath() {
             return ServerAddr + "/wallet/bind-phone-check";
@@ -204,6 +204,12 @@ public class MyNetApiConfig {
         public String getPath() {
             return ServerAddr + "/user/get-follow-student-list";
         }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+
+        }
     };
 
 
@@ -224,6 +230,11 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/user/get-follow-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
         }
     };
 
@@ -304,17 +315,10 @@ public class MyNetApiConfig {
         }
 
     };
-  public static MyNetApi getHistory = new MyNetApi() {
+    public static MyNetApi getHistory = new MyNetApi() {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/get-history";
-        }
-
-    };
-  public static MyNetApi followed = new MyNetApi() {
-        @Override
-        public String getPath() {
-            return ServerAddr + "/user/follow";
         }
 
     };

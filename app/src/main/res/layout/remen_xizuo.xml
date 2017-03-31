@@ -40,29 +40,31 @@
 
 
     <LinearLayout
-        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
+        android:layout_gravity="center_vertical"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="22dp"
-            android:gravity="bottom"
             android:layout_marginTop="2dp"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <TextView
 
                 android:id="@+id/musicname"
                 android:layout_width="wrap_content"
+                android:maxWidth="220dp"
+                android:singleLine="true"
                 android:layout_height="match_parent"
-                android:text="今夜无人入睡"
+                android:text=""
                 android:textSize="18sp" />
 
             <ImageView
@@ -79,10 +81,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="3dp"
-            android:gravity="center_vertical"
-            android:text=""
-            android:maxLines="1"
             android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text=""
             android:textColor="@color/dd_gray"
             android:textSize="13sp" />
 

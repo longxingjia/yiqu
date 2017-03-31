@@ -15,9 +15,11 @@
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
+            android:maxWidth="220dp"
+            android:singleLine="true"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="今夜无人入睡"
+            android:text=""
             android:textSize="18sp" />
 
 

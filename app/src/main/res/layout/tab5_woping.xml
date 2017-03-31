@@ -45,7 +45,8 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="高消费"
+                android:singleLine="true"
+                android:text=""
                 android:textSize="18sp" />
 
             <TextView
@@ -82,7 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="今夜无人入睡"
+            android:maxWidth="220dp"
+            android:singleLine="true"
+            android:text=""
             android:textSize="18sp" />
 
         <ImageView

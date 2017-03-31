@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="3dp"
                 android:singleLine="true"
-                android:text="今夜无人夜无人夜无人"
+                android:text=""
                 android:textColor="@color/dd_gray"
                 android:textSize="14sp" />
 
@@ -87,7 +87,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="今夜无人入睡"
+                android:maxWidth="250dp"
+                android:singleLine="true"
+                android:text=""
                 android:textSize="16sp" />
 
             <ImageView

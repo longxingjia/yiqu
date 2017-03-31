@@ -17,6 +17,7 @@ import com.ui.views.RefreshList;
 import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
 import com.yiqu.iyijiayi.adapter.Tab5WotingAdapter;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
@@ -35,7 +36,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class Tab5WotingFragment extends TabContentFragment implements OnMoreListener, IRefreshListViewListener {
+public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener, IRefreshListViewListener {
 
     //分页
     private LoadMoreView mLoadMoreView;
@@ -124,7 +125,7 @@ public class Tab5WotingFragment extends TabContentFragment implements OnMoreList
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override

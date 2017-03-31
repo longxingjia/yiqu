@@ -410,7 +410,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         }
 
         long t = System.currentTimeMillis() / 1000 - sound.edited;
-        if (t < 2 * 24 * 60 * 60 && t > 0) {
+        if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
             tea_listen.setText("限时免费听");
         } else {
             if (sound.listen == 1) {
@@ -506,7 +506,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
             case R.id.tea_listen:
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
 
-                if (t < 2 * 24 * 60 * 60 && t > 0) {
+                if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
                     if (teaFile.exists()) {
                         palyTeacherVoice();
 

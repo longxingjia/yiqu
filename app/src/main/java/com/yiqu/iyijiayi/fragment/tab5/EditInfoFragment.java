@@ -193,6 +193,8 @@ public class EditInfoFragment extends AbsAllFragment {
             content.setGravity(Gravity.TOP);
             content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             //  content.setHeight(DensityUtil.dip2px(getActivity(),200));
+        }else if (data.equals("username")){
+            content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
         }
 
         super.init(savedInstanceState);

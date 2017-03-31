@@ -259,15 +259,13 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             sex.setBackgroundResource(R.mipmap.sex_male);
         }
 
-        if (userInfo.type.equals("2")) {
-            menu_item_guanyu.setVisibility(View.GONE);
-        }
+
         ll_tabs.setVisibility(View.VISIBLE);
         if (userInfo.type.equals("1")) {  //1是学生
-
+            menu_item_guanyu.setVisibility(View.VISIBLE);
             teacherOnly.setVisibility(View.GONE);
         } else {
-
+            menu_item_guanyu.setVisibility(View.GONE);
             teacherOnly.setVisibility(View.VISIBLE);
         }
 
