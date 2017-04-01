@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.czt.mp3recorder.util.LameUtil;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Common.CommonThreadPool;
 
@@ -79,7 +80,7 @@ public class WelcomePageActivity extends Activity {
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setDebugMode( true );
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_NORMAL);
-    //    getDeviceInfo(this);
+        LogUtils.LOGE("info",getDeviceInfo(this));
         init(R.layout.activity_welcome_page);
 
 
@@ -549,6 +550,7 @@ public class WelcomePageActivity extends Activity {
         return result;
     }
     public static String getDeviceInfo(Context context) {
+
         try {
             org.json.JSONObject json = new org.json.JSONObject();
             android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context

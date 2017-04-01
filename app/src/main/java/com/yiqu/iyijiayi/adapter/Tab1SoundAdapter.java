@@ -9,6 +9,7 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,11 +30,13 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -54,11 +57,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private Context mContext;
     private Fragment fragment;
     private String tag = "Tab1SoundAdapter";
+    private ArrayList<Like> likes;
 
-    public Tab1SoundAdapter(Context context, Fragment fragment) {
-        mLayoutInflater = LayoutInflater.from(context);
-        mContext = context;
+    public Tab1SoundAdapter(Fragment fragment, ArrayList<Like> likes) {
+        mContext = fragment.getActivity();
+        mLayoutInflater = LayoutInflater.from(mContext);
         this.fragment = fragment;
+        this.likes = likes;
 
     }
 
@@ -93,15 +98,16 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         TextView musicname;
         TextView desc;
-        TextView soundtime;
+        TextView time;
         TextView tea_name;
         TextView tectitle;
         ImageView stu_header;
         ImageView tea_header;
         ImageView musictype;
-        TextView stu_listen;
+        TextView comment;
         TextView listener;
         TextView tea_listen;
+        TextView like;
 
     }
 
@@ -115,15 +121,16 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 v = mLayoutInflater.inflate(R.layout.remen_sound, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.desc = (TextView) v.findViewById(R.id.desc);
-                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
+                h.time = (TextView) v.findViewById(R.id.time);
                 h.tea_name = (TextView) v.findViewById(R.id.tea_name);
                 h.tectitle = (TextView) v.findViewById(R.id.tectitle);
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.listener = (TextView) v.findViewById(R.id.listener);
                 h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
+                h.like = (TextView) v.findViewById(R.id.like);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
-                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+                h.comment = (TextView) v.findViewById(R.id.comment);
                 v.setTag(h);
             }
 
@@ -131,10 +138,12 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime + "\"");
+            h.time.setText(f.commenttime + "\"");
             h.tea_name.setText(f.tecname);
-            h.listener.setText(f.views + "");
+            h.listener.setText(String.valueOf(f.views));
             h.tectitle.setText(f.tectitle);
+            h.like.setText(String.valueOf(f.like));
+            //      h.comment.setText(f.comment);
 
             long time = System.currentTimeMillis() / 1000 - f.edited;
 
@@ -148,6 +157,78 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 }
 
             }
+
+            if (likes != null) {
+                for (int i = 0; i < likes.size(); i++) {
+                    Like dz = likes.get(i);
+                    if (dz.sid == f.sid) {
+//                     int likesIndex = i;
+                        f.isLike = 1;
+                        break;
+                    }
+
+                }
+            }
+            if (f.isLike == 1) {
+
+                initDianZan(h.like, true);
+            } else {
+                initDianZan(h.like, false);
+            }
+
+            h.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (!AppShare.getIsLogin(mContext)) {
+                        Intent i = new Intent(mContext, StubActivity.class);
+                        i.putExtra("fragment", SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请登录后再试");
+                        mContext.startActivity(i);
+                        return;
+                    }
+
+
+                    RestNetCallHelper.callNet(mContext,
+                            MyNetApiConfig.like, MyNetRequestConfig
+                                    .like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                            "like", new NetCallBack() {
+                                @Override
+                                public void onNetNoStart(String id) {
+
+                                }
+
+                                @Override
+                                public void onNetStart(String id) {
+
+                                }
+
+                                @Override
+                                public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                    LogUtils.LOGE(tag, f.isLike + "");
+                                    if (f.isLike == 1) {
+
+                                    } else {
+
+                                        Like l = new Like();
+                                        l.sid = f.sid;
+                                        l.islike = 1;
+                                        f.isLike = 1;
+                                        f.like++;
+
+                                        notifyDataSetChanged();
+                                        if (likes == null) {
+                                            likes = new ArrayList<Like>();
+                                        }
+                                        likes.add(l);
+                                        AppShare.setLikeList(mContext, likes);
+                                    }
+
+                                }
+                            }, false, true);
+                }
+            });
 
 
             if (f.type == 1) {
@@ -171,7 +252,6 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                     initHomepage(String.valueOf(f.fromuid));
                 }
             });
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,6 +297,20 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 });
     }
 
+    private void initDianZan(TextView textView, boolean t) {
+        Drawable leftDrawable;
+        if (t) {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan_pressed_new);
+
+        } else {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan__new);
+
+        }
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        textView.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
+    }
+
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         if (arg2 < 2) {
@@ -231,7 +325,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
 
         if (AppShare.getIsLogin(mContext)) {
             Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
             bundle.putSerializable("Sound", f);
             i.putExtras(bundle);

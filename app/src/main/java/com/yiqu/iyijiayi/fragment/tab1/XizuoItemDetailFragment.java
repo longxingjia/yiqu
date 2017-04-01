@@ -214,8 +214,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
         if (likes != null) {
             for (int i = 0; i < likes.size(); i++) {
                 Like dz = likes.get(i);
-                if (dz.sid.equals(sid)) {
-
+                if (dz.sid == Integer.parseInt(sid)) {
                     likesIndex = i;
                     initDianZan();
                 }
@@ -246,7 +245,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             if (type == NetCallBack.TYPE_SUCCESS) {
                 if (likesIndex == -1) {
                     Like l = new Like();
-                    l.sid = sid;
+                    l.sid = Integer.parseInt(sid);
                     l.islike = 1;
                     if (likes == null) {
                         likes = new ArrayList<Like>();

@@ -18,7 +18,8 @@
         android:layout_height="@dimen/title_height"
         android:gravity="center"
         android:orientation="horizontal"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:id="@+id/sounds"

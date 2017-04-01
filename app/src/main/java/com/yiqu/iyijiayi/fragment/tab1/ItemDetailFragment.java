@@ -19,15 +19,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.yiqu.Tool.Function.VoiceFunction;
-import com.yiqu.Tool.Global.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ui.abs.AbsFragment;
 import com.ui.views.DialogUtil;
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Tool.Function.VoiceFunction;
+import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
@@ -67,13 +68,13 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/2/20.
  */
 
-public class SoundItemDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface {
+public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface,NetCallBack {
     String tag = "SoundItemDetailFragment";
     private TextView like;
     private TextView musicname;
     private TextView desc;
     private TextView soundtime;
-    private TextView stu_listen;
+
     private TextView tea_name;
     private TextView tectitle;
     private TextView commenttime;
@@ -146,7 +147,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                         if (fileTotalSize != 0) {
                             int percentage = (int) (bytesDL * 100 / fileTotalSize);
-                            stu_listen.setText(percentage + "%");
+
 //                            statusBar.setProgress(percentage);
 //                            statusText.setText(percentage + "%");
                         }
@@ -210,51 +211,43 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     private int position;
 
 
-    @Override
-    protected int getTitleBarType() {
-        return FLAG_BACK;
-    }
 
-    @Override
-    protected boolean onPageBack() {
-//        if (payforTag == 1) {
-//            Intent intent = new Intent();
-//            if (position!=-1){
-//                intent.putExtra("position", position);
-//                getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-//                getActivity().finish();//此处一定要调用finish()方法
-//            }
-//
+//    @Override
+//    protected boolean onPageBack() {
+////        if (payforTag == 1) {
+////            Intent intent = new Intent();
+////            if (position!=-1){
+////                intent.putExtra("position", position);
+////                getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+////                getActivity().finish();//此处一定要调用finish()方法
+////            }
+////
+////        }
+//        Intent intent = new Intent();
+//        if (position!=-1){
+//            intent.putExtra("position", position);
+//            getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+//            getActivity().finish();//此处一定要调用finish()方法
 //        }
-        Intent intent = new Intent();
-        if (position!=-1){
-            intent.putExtra("position", position);
-            getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-            getActivity().finish();//此处一定要调用finish()方法
-        }
-        return false;
-    }
+//        return false;
+//    }
+//
+//
+//    @Override
+//    protected boolean onPageNext() {
+//        return false;
+//    }
+//
+//    @Override
+//    protected void initTitle() {
+//        setTitleText("问题详情");
+//    }
 
+//    @Override
+//    protected int getTitleView() {
+//        return R.layout.titlebar_tab5;
+//    }
 
-    @Override
-    protected boolean onPageNext() {
-        return false;
-    }
-
-    @Override
-    protected void initTitle() {
-        setTitleText("问题详情");
-    }
-
-    @Override
-    protected int getTitleView() {
-        return R.layout.titlebar_tab5;
-    }
-
-    @Override
-    protected int getBodyView() {
-        return R.layout.remen_sound_detail;
-    }
 
     @Override
     protected void initView(View v) {
@@ -267,7 +260,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         accompaniment = (TextView) v.findViewById(R.id.accompaniment);
         chapter = (TextView) v.findViewById(R.id.chapter);
         soundtime = (TextView) v.findViewById(R.id.soundtime);
-        stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+
         tea_listen = (TextView) v.findViewById(R.id.tea_listen);
         tea_name = (TextView) v.findViewById(R.id.tea_name);
         tectitle = (TextView) v.findViewById(R.id.tectitle);
@@ -298,19 +291,29 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
     }
 
     @Override
+    public void onNetNoStart(String id) {
+
+    }
+
+    @Override
+    public void onNetStart(String id) {
+
+    }
+
+    @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        super.onNetEnd(id, type, netResponse);
+
         if (id.equals("eavesdrop")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", SoundItemDetailFragment.this);
+                        "getSoundDetail", ItemDetailFragment.this);
 
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addHistory, MyNetRequestConfig
                                 .addHistory(getActivity(), sid, userInfo.uid),
-                        "addHistory", SoundItemDetailFragment.this,false,true);
+                        "addHistory", ItemDetailFragment.this,false,true);
                 userInfo.coin_apple--;
                 payforTag = 1;
                 AppShare.setUserInfo(getActivity(), userInfo);
@@ -462,7 +465,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        stu_listen.setOnClickListener(this);
+
         tea_listen.setOnClickListener(this);
 
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
@@ -477,7 +480,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", SoundItemDetailFragment.this);
+                        "getSoundDetail", ItemDetailFragment.this);
 
             }
         } else {
@@ -548,7 +551,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                                     RestNetCallHelper.callNet(getActivity(),
                                             MyNetApiConfig.eavesdrop, MyNetRequestConfig
                                                     .eavesdrop(getActivity(), userInfo.uid, sound.sid),
-                                            "eavesdrop", SoundItemDetailFragment.this);
+                                            "eavesdrop", ItemDetailFragment.this);
                                 } else {
                                     Model.startNextAct(getActivity(),
                                             PayforYBFragment.class.getName());
@@ -566,7 +569,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.like, MyNetRequestConfig
                                 .like(getActivity(), AppShare.getUserInfo(getActivity()).uid, sid),
-                        "like", SoundItemDetailFragment.this, false, true);
+                        "like", ItemDetailFragment.this, false, true);
                 break;
             case R.id.comment:
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
@@ -602,9 +605,14 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getComments, MyNetRequestConfig
                         .getComments(getActivity(), sid),
-                "getComments", SoundItemDetailFragment.this, false, true);
+                "getComments", ItemDetailFragment.this, false, true);
 
 
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.tab1_sound_detail;
     }
 
 
@@ -712,7 +720,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
                 palyTeacherVoice();
             }
             if (completeDownloadId == downloadStuId) {
-                stu_listen.setText("100%");
                 downloadStuId = -1;
                 palyStudentVoice();
 

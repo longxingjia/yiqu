@@ -53,8 +53,8 @@
         android:minHeight="55dp"
         android:scrollbars="none"></ListView>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="5dp"-->
-        <!--android:background="@color/tab_bg_color" />-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+         />
 </LinearLayout>

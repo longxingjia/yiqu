@@ -160,7 +160,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(), this);
+        tab1SoundAdapter = new Tab1SoundAdapter(this,null);
         tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
 
