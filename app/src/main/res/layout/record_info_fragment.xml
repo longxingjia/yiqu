@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="17dp"
+    android:gravity="center_horizontal"
+    android:background="@color/tab_bg_color">
+
+    <EditText
+        android:id="@+id/txt01"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/edit_bg"
+        android:drawablePadding="5dp"
+        android:hint="请输入标题"
+        android:inputType="phone"
+        android:maxLength="15"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text=""
+        android:singleLine="true"
+        android:textSize="15dp" />
+
+    <EditText
+        android:id="@+id/txt02"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_bg"
+        android:drawablePadding="5dp"
+        android:hint="请填写您的内容详情"
+        android:inputType="phone"
+        android:gravity="top"
+        android:maxLength="15"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text=""
+        android:singleLine="true"
+        android:textSize="15dp" />
+
+    <ImageView
+        android:id="@+id/submit"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/submit_unclick"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="@color/dd_gray"
+        android:text="小提示：请输入标题和内容详细描述再点确定按钮噢！"/>
+
+</LinearLayout>

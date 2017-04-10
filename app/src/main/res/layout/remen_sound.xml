@@ -191,17 +191,23 @@
                 android:layout_width="172dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:background="@drawable/yuying"
+
                 >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:background="@drawable/tea_voice"/>
 
                 <TextView
                     android:id="@+id/tea_listen"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="172dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
-                    android:background="@color/transparent"
+
                     android:gravity="center"
-                    android:text=""
+                    android:text="fssfsfsfs"
                     android:textColor="@color/white"
                     android:textSize="17sp" />
 

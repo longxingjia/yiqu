@@ -1,12 +1,18 @@
 package com.yiqu.iyijiayi.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+
+import java.io.File;
 
 /**
  * Created by Administrator on 2017/2/27.
@@ -53,6 +59,16 @@ public class PictureUtils {
             Picasso.with(context).load(R.mipmap.menu_head).into(icon);
         }
     }
+    public static void showPictureFile(Context context, File file, ImageView icon, int sizedp) {
+
+      //  Picasso.with(context).load(file).into(icon);
+        Picasso.with(context).load(file)
+                .resize(DensityUtil.dip2px(context,sizedp), DensityUtil.dip2px(context,sizedp))
+                .centerCrop().into(icon);
+
+    }
+
+
 
     public static void showBackgroudPicture(Context context, String url, ImageView icon) {
 
@@ -90,4 +106,7 @@ public class PictureUtils {
             Picasso.with(context).load(R.mipmap.banner_1).into(icon);
         }
     }
+
+
+
 }

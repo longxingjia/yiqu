@@ -35,7 +35,7 @@ import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
-import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -68,7 +68,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     private TextView created;
     private TextView views;
     private ImageView stu_header;
-    private Xizuo xizuo;
+    private Sound xizuo;
 
     private int totalTime;
     private int currentTime;
@@ -197,7 +197,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
 
         likes = AppShare.getLikeList(getActivity());
 
-        xizuo = (Xizuo) getActivity().getIntent().getSerializableExtra("xizuo");
+        xizuo = (Sound) getActivity().getIntent().getSerializableExtra("xizuo");
         if (xizuo == null) {
             sid = getActivity().getIntent().getExtras().getString("data");
 
@@ -209,6 +209,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             }
         } else {
             sid = String.valueOf(xizuo.sid);
+            LogUtils.LOGE(tag,xizuo.toString());
             initData();
         }
         if (likes != null) {
@@ -233,7 +234,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 Gson gson = new Gson();
-                xizuo = gson.fromJson(netResponse.data, Xizuo.class);
+                xizuo = gson.fromJson(netResponse.data, Sound.class);
                 initData();
 
 
@@ -456,7 +457,7 @@ public class XizuoItemDetailFragment extends AbsAllFragment implements View.OnCl
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.LOGE(tag,"3333");
+
 
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getComments, MyNetRequestConfig

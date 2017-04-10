@@ -99,13 +99,13 @@ public class MenuDialogPicHelper {
             getFile();
             File file = new File(tempFile);
 //            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= 24) {
                 imageUri = FileProvider.getUriForFile(mContext, "com.yiqu.iyijiayi.fileprovider", file);//通过FileProvider创建一个content类型的Uri
             } else {
                 imageUri = Uri.fromFile(file);
             }
             Intent intent = new Intent();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= 24) {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
             }
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
@@ -323,7 +323,7 @@ public class MenuDialogPicHelper {
         File file = new File(cropFile);
         Uri outputUri = Uri.fromFile(file);
         Intent intent = new Intent("com.android.camera.action.CROP");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         intent.setDataAndType(imageUri, "image/*");

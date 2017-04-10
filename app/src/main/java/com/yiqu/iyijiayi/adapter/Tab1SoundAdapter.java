@@ -31,10 +31,8 @@ import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Sound;
@@ -45,10 +43,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-
-import static java.lang.System.currentTimeMillis;
 
 public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener {
 
@@ -157,6 +152,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 }
 
             }
+            h.tea_listen.setText("1元偷偷听");
 
             if (likes != null) {
                 for (int i = 0; i < likes.size(); i++) {

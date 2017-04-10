@@ -28,6 +28,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         executeBatch(version_1, db);
+        db.execSQL("create table " + CachFileDBHelper.TABLE_NAME + "(FileName STRING PRIMARY KEY,FileSize INTEGER)");
     }
 
     /**
@@ -41,6 +42,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
             executeBatch(new String[]{"DROP TABLE if exists "
                     + DownloadMusicInfoDBHelper.TABLE_NAME, "DROP TABLE if exists "
                     + ComposeVoiceInfoDBHelper.TABLE_NAME}, db);
+            db.execSQL("create table " + CachFileDBHelper.TABLE_NAME + "(FileName STRING PRIMARY KEY,FileSize INTEGER)");
             executeBatch(version_1, db);
         } else {
             String columns = DownloadMusicInfoDBHelper.TYPE + "," +
@@ -221,6 +223,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.ISFORMULATION + " text , "
                     + DownloadMusicInfoDBHelper.ISDECODE + " text , "
                     + DownloadMusicInfoDBHelper.DECODETIME + " text , "
+                    + DownloadMusicInfoDBHelper.DOWNLOADTIME + " text , "
                     + DownloadMusicInfoDBHelper.CREATED + " text , "
                     + DownloadMusicInfoDBHelper.EDITED + " text "
                     + ");",

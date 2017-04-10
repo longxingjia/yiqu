@@ -16,7 +16,9 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -33,8 +35,8 @@ import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
+import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
@@ -42,6 +44,7 @@ import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -62,26 +65,85 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.app.Activity.RESULT_OK;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 /**
  * Created by Administrator on 2017/2/20.
  */
 
-public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface,NetCallBack {
-    String tag = "SoundItemDetailFragment";
-    private TextView like;
-    private TextView musicname;
-    private TextView desc;
-    private TextView soundtime;
+public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack {
+    String tag = "ItemDetailFragment";
+    @BindView(R.id.back)
+    public ImageView back;
+    @BindView(R.id.video_play)
+    public ImageView video_play;
+    @BindView(R.id.seekbar)
+    public SeekBar seekbar;
+    @BindView(R.id.like)
+    public TextView like;
+    @BindView(R.id.title)
+    public TextView title;
+    @BindView(R.id.musicname)
+    public TextView musicname;
+    @BindView(R.id.desc)
+    public TextView desc;
+    @BindView(R.id.soundtime)
+    public TextView soundtime;
+    @BindView(R.id.tea_name)
+    public TextView tea_name;
+    @BindView(R.id.stu_school)
+    public TextView stu_school;
+    @BindView(R.id.worth_name)
+    public TextView worth_name;
+    @BindView(R.id.stu_name)
+    public TextView stu_name;
+    @BindView(R.id.tectitle)
+    public TextView tectitle;
+    @BindView(R.id.commenttime)
+    public TextView commenttime;
+    @BindView(R.id.created)
+    public TextView created;
+    @BindView(R.id.views)
+    public TextView views;
+    @BindView(R.id.musictype)
+    public ImageView musictype;
+    @BindView(R.id.worth_type)
+    public ImageView worth_type;
+    @BindView(R.id.tea_listen)
+    public TextView tea_listen;
+    @BindView(R.id.worth_desc)
+    public TextView worth_desc;
+    @BindView(R.id.worth_header)
+    public ImageView worth_header;
+    @BindView(R.id.worth_teacher_name)
+    public TextView worth_teacher_name;
+    @BindView(R.id.worth_teacher_desc)
+    public TextView worth_teacher_desc;
+    @BindView(R.id.worth_comment)
+    public TextView worth_comment;
+    @BindView(R.id.worth_like)
+    public TextView worth_like;
+    @BindView(R.id.now_time)
+    public TextView now_time;
+    @BindView(R.id.worth_listener)
+    public TextView worth_listener;
+    @BindView(R.id.stu_header)
+    public ImageView stu_header;
+    @BindView(R.id.tea_header)
+    public ImageView tea_header;
+    @BindView(R.id.listview)
+    public ListView listview;
+    @BindView(R.id.teacher_info)
+    public LinearLayout teacher_info;
 
-    private TextView tea_name;
-    private TextView tectitle;
-    private TextView commenttime;
-    private TextView created;
-    private TextView views;
-    private ImageView stu_header;
-    private ImageView tea_header;
+    @BindView(R.id.no_comments)
+    public TextView no_comments;
+    @BindView(R.id.comment)
+    public TextView comment;
+
     private int teatotalTime;
     private int stutotalTime;
     private int stucurrentTime;
@@ -94,9 +156,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private File teaFile;
     private Timer mTimer;
     private TimerTask mTimerTask;
-    private TextView tea_listen;
+
     private Sound sound;
-    private ImageView musictype;
     private AlertDialog dialog;
     private UserInfo userInfo;
     private String sid;
@@ -199,17 +260,15 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
     };
     private ArrayList<Like> likes;
-    private ListView listview;
+
     private Tab1CommentsAdapter tab1CommentsAdapter;
-    private TextView no_comments;
-    private TextView comment;
+
     private int likesIndex = -1;
-    private TextView isformulation;
-    private TextView accompaniment;
-    private TextView chapter;
+
+
     private int payforTag = 0;
     private int position;
-
+    private Player player;
 
 
 //    @Override
@@ -248,44 +307,52 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 //        return R.layout.titlebar_tab5;
 //    }
 
+    @Override
+    protected int getContentView() {
+        return R.layout.tab1_sound_detail;
+    }
 
     @Override
     protected void initView(View v) {
-
-
-        musicname = (TextView) v.findViewById(R.id.musicname);
-        like = (TextView) v.findViewById(R.id.like);
-        desc = (TextView) v.findViewById(R.id.desc);
-        isformulation = (TextView) v.findViewById(R.id.isformulation);
-        accompaniment = (TextView) v.findViewById(R.id.accompaniment);
-        chapter = (TextView) v.findViewById(R.id.chapter);
-        soundtime = (TextView) v.findViewById(R.id.soundtime);
-
-        tea_listen = (TextView) v.findViewById(R.id.tea_listen);
-        tea_name = (TextView) v.findViewById(R.id.tea_name);
-        tectitle = (TextView) v.findViewById(R.id.tectitle);
-        commenttime = (TextView) v.findViewById(R.id.commenttime);
-        created = (TextView) v.findViewById(R.id.created);
-        views = (TextView) v.findViewById(R.id.views);
-        stu_header = (ImageView) v.findViewById(R.id.stu_header);
-        tea_header = (ImageView) v.findViewById(R.id.tea_header);
-        musictype = (ImageView) v.findViewById(R.id.musictype);
-        listview = (ListView) v.findViewById(R.id.listview);
-        no_comments = (TextView) v.findViewById(R.id.no_comments);
+        ButterKnife.bind(this, v);
 
         likes = AppShare.getLikeList(getActivity());
 
-        comment = (TextView) v.findViewById(R.id.comment);
-        like.setOnClickListener(this);
-        comment.setOnClickListener(this);
-
-        stu_header.setOnClickListener(this);
-        tea_header.setOnClickListener(this);
+//        like.setOnClickListener(this);
+//        comment.setOnClickListener(this);
+//
+//        stu_header.setOnClickListener(this);
+//        tea_header.setOnClickListener(this);
+        seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime);
 
     }
 
+    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
+        int progress;
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress,
+                                      boolean fromUser) {
+            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+            this.progress = (int) (progress * player.mediaPlayer.getDuration()
+                    / seekBar.getMax());
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
+            player.mediaPlayer.seekTo(progress);
+        }
+    }
+
     private void initDianZan() {
-        Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed);
+        Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed_new);
         leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
         like.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
     }
@@ -313,7 +380,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addHistory, MyNetRequestConfig
                                 .addHistory(getActivity(), sid, userInfo.uid),
-                        "addHistory", ItemDetailFragment.this,false,true);
+                        "addHistory", ItemDetailFragment.this, false, true);
                 userInfo.coin_apple--;
                 payforTag = 1;
                 AppShare.setUserInfo(getActivity(), userInfo);
@@ -369,11 +436,41 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 }
 
             }
-        }else if (id.equals("addHistory")){
+        } else if (id.equals("addHistory")) {
 
             if (type == NetCallBack.TYPE_SUCCESS) {
                 LogUtils.LOGE(tag, netResponse.toString());
             }
+        } else if (id.equals("getSoundList")) {
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+                Sound sound = sounds.get(0);
+                if (sound != null) {
+                    LogUtils.LOGE(tag, netResponse.toString());
+                    worth_name.setText(sound.musicname);
+                    if (!TextUtils.isEmpty(sound.desc))
+                        worth_desc.setText(sound.desc);
+                    if (sound.type == 1) {
+                        worth_type.setImageResource(R.mipmap.shengyue);
+
+                    } else {
+                        worth_type.setImageResource(R.mipmap.boyin);
+                    }
+                    PictureUtils.showPicture(getActivity(), sound.tecimage, worth_header, 40);
+                    worth_teacher_name.setText(sound.tecname);
+                    worth_teacher_desc.setText(sound.tectitle);
+
+                    // worth_comment.setText(sound.);
+                    worth_like.setText(String.valueOf(sound.like));
+                    worth_listener.setText(String.valueOf(sound.views));
+
+                }
+
+            }
+
+
         }
 
 
@@ -381,13 +478,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     private void initData() {
         desc.setText(sound.desc);
-        soundtime.setText(sound.soundtime + "\"");
-
         tea_name.setText(sound.tecname);
+        stu_name.setText(sound.stuname);
+        stu_school.setText("学生");
         musicname.setText(sound.musicname);
         tectitle.setText(sound.tectitle);
         commenttime.setText(sound.commenttime + "\"");
-        soundtime.setText(sound.soundtime + "\"");
+        String2TimeUtils string2TimeUtils = new String2TimeUtils();
+        soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
         views.setText(sound.views + "");
         like.setText(sound.like + "");
         if (sound.type == 1) {
@@ -399,16 +497,19 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             if (!TextUtils.isEmpty(sound.musictype)) {
                 text = text + sound.musictype + " | ";
             }
-            if (!TextUtils.isEmpty(sound.accompaniment)) {
-                text = text + sound.accompaniment + " | ";
-                accompaniment.setText(sound.accompaniment);
-            }
-            chapter.setVisibility(View.VISIBLE);
-            chapter.setText(text);
 
 
         } else {
             musictype.setImageResource(R.mipmap.boyin);
+        }
+
+        LogUtils.LOGE(tag, sound.toString());
+        if (sound.touid == 0) {
+            teacher_info.setVisibility(View.GONE);
+            title.setText("作品详情");
+        } else {
+            teacher_info.setVisibility(View.VISIBLE);
+            title.setText("问题详情");
         }
 
         long t = System.currentTimeMillis() / 1000 - sound.edited;
@@ -430,7 +531,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
-        String2TimeUtils string2TimeUtils = new String2TimeUtils();
         long currentTimeMillis = System.currentTimeMillis() / 1000;
 
         long time = currentTimeMillis - sound.edited;
@@ -454,22 +554,38 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         if (likes != null) {
             for (int i = 0; i < likes.size(); i++) {
                 Like dz = likes.get(i);
-                if (dz.sid== Integer.parseInt(sid)) {
+                if (dz.sid == Integer.parseInt(sid)) {
                     likesIndex = i;
                     initDianZan();
                 }
 
             }
         }
+
+        NSDictionary nsDictionary = new NSDictionary();
+        nsDictionary.isopen = "1";
+        nsDictionary.ispay = "1";
+        nsDictionary.isreply = "1";
+        nsDictionary.status = "1";
+        nsDictionary.stype = "1";
+
+        Gson gson = new Gson();
+        String arr = gson.toJson(nsDictionary);
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "edited", "desc", "0"),
+                "getSoundList", ItemDetailFragment.this, false, true);
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
 
-        tea_listen.setOnClickListener(this);
+        //   tea_listen.setOnClickListener(this);
 
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
-        position = getActivity().getIntent().getIntExtra("position",-1);
+        position = getActivity().getIntent().getIntExtra("position", -1);
         userInfo = AppShare.getUserInfo(getActivity());
 
         if (sound == null) {
@@ -490,9 +606,22 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         super.init(savedInstanceState);
     }
 
-    @Override
+    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header, R.id.video_play, R.id.back})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.back:
+                getActivity().finish();
+                break;
+            case R.id.video_play:
+                if (player.isPlaying()) {
+                    video_play.setImageResource(R.mipmap.video_play);
+                    player.pause();
+                } else {
+                    video_play.setImageResource(R.mipmap.video_pause);
+                    player.playUrl(stuUrl);
+                }
+
+                break;
             case R.id.stu_listen:
 
                 if (stuFile.exists()) {
@@ -610,11 +739,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     }
 
-    @Override
-    protected int getContentView() {
-        return R.layout.tab1_sound_detail;
-    }
-
 
     private void initHomepage(final Context mContext, String uid) {
         String mUid = "0";
@@ -668,7 +792,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         super.onPause();
 
     }
-
 
 
     private long dowoload(String downloadUrl, String fileName, final int tag) {
@@ -865,6 +988,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public void onDestroy() {
 
         VoiceFunction.StopVoice();
+        player.stop();
         stucurrentTime = 0;
         teacurrentTime = 0;
 

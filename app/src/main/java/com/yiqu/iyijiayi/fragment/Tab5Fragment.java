@@ -1,8 +1,13 @@
 package com.yiqu.iyijiayi.fragment;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +20,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Tool.Global.Variable;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
@@ -40,6 +46,18 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class Tab5Fragment extends TabContentFragment implements View.OnClickListener {
 
@@ -168,6 +186,9 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
             llUserInfo.setVisibility(View.VISIBLE);
             logOutBt.setVisibility(View.VISIBLE);
+
+
+
         } else {
             logOutBt.setVisibility(View.GONE);
             ll_tabs.setVisibility(View.GONE);
@@ -345,4 +366,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         super.onPause();
         MobclickAgent.onPageEnd("我");
     }
+
+
 }

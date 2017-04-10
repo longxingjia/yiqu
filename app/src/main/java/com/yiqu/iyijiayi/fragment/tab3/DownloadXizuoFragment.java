@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivity;
@@ -294,7 +295,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     }
 
     private void nextPage() {
-        Intent i = new Intent(getActivity(), RecordActivity.class);
+        Intent i = new Intent(getActivity(), RecordComActivity.class);
 //        i.putExtra("fragment", RecordXizuoFragment.class.getName());
         Bundle bundle = new Bundle();
         bundle.putSerializable("music", music);

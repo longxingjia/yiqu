@@ -36,12 +36,10 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
@@ -81,7 +79,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     };
     private String uid;
     private ArrayList<Sound> sound;
-    private ArrayList<Xizuo> xizuo;
+    private ArrayList<Sound> xizuo;
     private ListView lvXizuo;
     private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;

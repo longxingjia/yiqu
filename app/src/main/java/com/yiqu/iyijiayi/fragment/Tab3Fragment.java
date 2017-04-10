@@ -7,7 +7,9 @@ import com.base.utils.ToastManager;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab3.RecordInfoFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
+import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.utils.AppShare;
 
@@ -88,6 +90,11 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 		if (AppShare.getIsLogin(getActivity())){
 			Intent intent = new Intent(getActivity(), Tab3Activity.class);
 			startActivity(intent);
+//			Intent in = new Intent(getActivity(), StubActivity.class);
+//			in.putExtra("fragment", RecordInfoFragment.class.getName());
+//			startActivity(in);
+
+
 		}else {
 			Intent i = new Intent(getActivity(), StubActivity.class);
 			i.putExtra("fragment", SelectLoginFragment.class.getName());

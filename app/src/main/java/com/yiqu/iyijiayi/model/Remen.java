@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Remen {
 
     public ArrayList<Sound> sound;
-    public ArrayList<Xizuo> xizuo;
+    public ArrayList<Sound> xizuo;
 
     @Override
     public String toString() {

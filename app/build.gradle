@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'android-apt'
 android {
     signingConfigs {
         debugConfig {
@@ -8,7 +8,7 @@ android {
             keyPassword 'iyijiayi'
             storePassword 'iyijiayi'
 
-            v2SigningEnabled false
+            //  v2SigningEnabled false
             //   v1SigningEnabled false
         }
 
@@ -18,20 +18,30 @@ android {
             keyPassword 'iyijiayi'
             storePassword 'iyijiayi'
 
-            v2SigningEnabled false
+            //   v2SigningEnabled false
             //   v1SigningEnabled false
         }
 
     }
 
-    compileSdkVersion 24
+        useLibrary 'org.apache.http.legacy'
+
+
+    compileSdkVersion 23
     buildToolsVersion '25.0.2'
+
+    aaptOptions {
+        cruncherEnabled = false
+        useNewCruncher = false
+    }
 
     defaultConfig {
         applicationId "com.yiqu.iyijiayi"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 3
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
         versionName "1.2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -98,9 +108,14 @@ dependencies {
     compile files('libs/rxjava-1.1.0.jar')
     compile files('libs/android-async-http-1.4.6.jar')
     compile project(path: ':permissiongen')
+    compile project(':waveview')
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support:palette-v7:23.4.0'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.jakewharton:butterknife:8.4.0'
     testCompile 'junit:junit:4.12'
-    compile project(':waveview')
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+
 }

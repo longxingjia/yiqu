@@ -3,21 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="45dp"
     android:layout_alignParentBottom="true"
-    android:clickable="true"
     android:background="#dd000000"
-    android:scrollbars="none"
+    android:clickable="true"
     android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:scrollbars="none">
 
     <ImageView
         android:id="@+id/video_play"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginRight="5dp"
-        android:src="@mipmap/video_play"
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
-        android:scaleType="centerInside" />
+        android:scaleType="centerInside"
+        android:src="@mipmap/video_play" />
 
     <TextView
         android:id="@+id/now_time"
@@ -29,10 +29,10 @@
 
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_marginLeft="-5dp"
-        android:layout_marginRight="-5dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_marginLeft="-5dp"
+        android:layout_marginRight="-1dp"
+        android:layout_weight="1">
 
         <!--
         <ImageView
@@ -57,21 +57,21 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:maxHeight="4dp"
+            android:max="100"
             android:minHeight="4dp"
-            android:thumbOffset="0dp"
             android:progressDrawable="@drawable/progress_horizontal"
-            android:thumb="@mipmap/video_circle" />
+            android:thumb="@mipmap/video_circle"
+            android:thumbOffset="3dp" />
     </RelativeLayout>
 
     <TextView
-        android:layout_marginRight="10dp"
         android:id="@+id/soundtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         android:text="00:00"
         android:textColor="@color/white"
         android:textSize="10dp" />
-
 
 
 </LinearLayout>

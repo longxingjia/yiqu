@@ -33,6 +33,12 @@ public class MyNetApiConfig {
         }
     };
 
+    String p ;
+
+    public MyNetApiConfig(String p){
+        this.p =p;
+    }
+
     /**
      * 2、根据UID获取用户 get
      */
@@ -539,6 +545,19 @@ public class MyNetApiConfig {
         @Override
         public NetMethod getNetMethod() {
             return NetMethod.POST;
+        }
+
+
+    };
+    public  MyNetApi getlyric  = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return "http://geci.me/api/lyric/"+p;
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
         }
 
 

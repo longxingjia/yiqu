@@ -49,22 +49,15 @@ public class FileFunction {
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
+        Variable.StorageQandAPath = Variable.StorageDirectoryPath + "/musicQ/";
         Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
-        File localFile = new File(Variable.StorageMusicPath);
-        if(!localFile.exists()){
-            localFile.mkdirs();
-        }
-        File localFile2 = new File(Variable.StorageImagePath);
-        if(!localFile2.exists()){
-            localFile2.mkdirs();
-        }
-        File localFile3 = new File(Variable.StorageMusicCachPath);
-        if(!localFile3.exists()){
-            localFile3.mkdirs();
-        }
-
 
         CreateDirectory(Variable.StorageDirectoryPath);
+        CreateDirectory(Variable.StorageMusicPath);
+        CreateDirectory(Variable.StorageImagePath);
+        CreateDirectory(Variable.StorageMusicCachPath);
+        CreateDirectory(Variable.StorageQandAPath);
+
     }
 
     public static void SaveFile(String url, String content) {

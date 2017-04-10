@@ -440,6 +440,10 @@ public class MyNetRequestConfig {
         r.addHttpParam("sid", String.valueOf(sid));
         return r;
     }
+    public static NetRequest getlyric(Context c) {
+        MyNetRequest r = new MyNetRequest(c);
+        return r;
+    }
 
     /**
      * 23、

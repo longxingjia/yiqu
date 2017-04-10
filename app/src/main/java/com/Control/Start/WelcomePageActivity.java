@@ -80,7 +80,7 @@ public class WelcomePageActivity extends Activity {
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setDebugMode( true );
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_NORMAL);
-        LogUtils.LOGE("info",getDeviceInfo(this));
+
         init(R.layout.activity_welcome_page);
 
 

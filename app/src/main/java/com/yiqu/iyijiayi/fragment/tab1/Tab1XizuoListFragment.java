@@ -20,21 +20,14 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
-import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.JsonUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -43,7 +36,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
 
     private Tab1XizuoAdapter tab1XizuoAdapter;
     private String tag = "Tab2ListFragment";
-    private ArrayList<Xizuo> datas;
+    private ArrayList<Sound> datas;
     private Context mContext;
 
     //分页
@@ -107,7 +100,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Xizuo f = datas.get(position - 1);
+                Sound f = datas.get(position - 1);
                 if (AppShare.getIsLogin(mContext)) {
                     Intent i = new Intent(mContext, StubActivity.class);
                     i.putExtra("fragment", XizuoItemDetailFragment.class.getName());

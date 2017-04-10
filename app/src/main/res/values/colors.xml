@@ -9,6 +9,7 @@
     <color name="white">#ffffff</color>
     <!-- 黑色 -->
     <color name="black">#000000</color>
+    <color name="light">#33ffffff</color>
     <!-- 灰色 -->
     <color name="gray">#ababab</color>
     <color name="dark_gray">#AAAAAA</color>
