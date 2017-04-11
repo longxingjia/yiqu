@@ -146,10 +146,11 @@ public class RecordComActivity extends Activity
     public CircleImageView recordVoiceButton;
     @BindView(R.id.finish)
     public CircleImageView finish;
-    private PlayUtils playUtils;
+
     private File lrc;
     private String fileName;
     private int INTERVAL = 45;//歌词每行的间隔
+    private PlayUtils playUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -183,12 +184,12 @@ public class RecordComActivity extends Activity
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
 
         title_back.setOnClickListener(this);
-        playUtils = new PlayUtils(this);
+
     }
 
     public void initView() {
 //        composeProgressBar.getLayoutParams().width = (int) (width * 0.72);
-
+        playUtils = new PlayUtils(this);
     }
 
     private Bitmap createColorBitmap(int color) {
@@ -300,7 +301,6 @@ public class RecordComActivity extends Activity
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private Handler handler = new Handler();
@@ -327,7 +327,7 @@ public class RecordComActivity extends Activity
         Bitmap b = BitmapUtil.blur(bt, 25f, this);
         Bitmap bb = BitmapUtil.blur(b, 25f, this);
         background.setImageBitmap(bb);
-        background.setImageAlpha(220); //0完全透明，255
+      //  background.setImageAlpha(120); //0完全透明，255
     }
 
     @Override
@@ -585,9 +585,8 @@ public class RecordComActivity extends Activity
         composeVoice.createtime = System.currentTimeMillis();
 
         if (AppInfo.isForeground(instance, "RecordComActivity")) {
-            if (playUtils==null)
-                playUtils = new PlayUtils(this);
 
+//          mediaPlayer
             playUtils.playUrl(composeVoiceUrl);
             icon_record.setImageResource(R.mipmap.icon_pause);
             CommonFunction.showToast("合成成功", className);
@@ -658,7 +657,7 @@ public class RecordComActivity extends Activity
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
 
-                                    playUtils.stop();
+                                //    playUtils.stop();
 
                                     break;
                                 case 1:
@@ -668,7 +667,7 @@ public class RecordComActivity extends Activity
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
                                     //  mediaPlayer.stop();
-                                    playUtils.stop();
+                                 //   playUtils.stop();
                                     break;
                             }
 
@@ -714,8 +713,10 @@ public class RecordComActivity extends Activity
                 recordVoiceBegin = false;
                 recordComFinish = false;
                 mediaPlayer.stop();
-                playUtils.stop();
+            //    playUtils.stop();
+                playUtils.pause();
                 VoiceFunction.StopRecordVoice();
+                icon_finish.setImageResource(R.mipmap.finish);
                 //   playUtils.stop();
                 icon_record.setImageResource(R.mipmap.icon_record);
 
@@ -731,7 +732,7 @@ public class RecordComActivity extends Activity
         mediaPlayer.release();
         mediaPlayer = null;
         VoiceFunction.StopRecordVoice();
-        playUtils.stop();
+    //    playUtils.stop();
         super.onDestroy();
     }
 

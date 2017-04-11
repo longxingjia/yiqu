@@ -62,7 +62,7 @@ public class LyricView extends android.support.v7.widget.AppCompatTextView {
 		defaultLyricSize = ta.getDimension(R.styleable.LrcView_lrcTextSize, DensityUtil.dip2px(getContext(), 16));
 		mCurrentColor = ta.getColor(R.styleable.LrcView_lrcGradientStartColor, 0xff00ff00);
 		mGradientEndColor = ta.getColor(R.styleable.LrcView_lrcGradientStartColor, 0xffffffff);
-		mNormalColor = ta.getColor(R.styleable.LrcView_lrcNormalTextColor, 0xFFFF00FF);
+		mNormalColor = ta.getColor(R.styleable.LrcView_lrcNormalTextColor, 0xFFf5f5f5);
 		// 初始化其他相关的值
 		currentLyricSize = defaultLyricSize + DensityUtil.dip2px(getContext(), 3.0f);
 		colors[0] = mCurrentColor;
