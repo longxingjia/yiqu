@@ -41,6 +41,13 @@
         <item>@string/permission_read_external_hint</item>
         <item>@string/permission_white_external_hint</item>
     </string-array>
-	<!-- tab config end -->   
+
+    <string-array name="color">
+        　　        <item>#88ffffff</item>
+        　　        <item>#88000000</item>
+        　　        <item>#FE4359</item>
+        　　        <item>#29E5a9</item>
+        　　    </string-array>
+    <!-- tab config end -->
 
 </resources>

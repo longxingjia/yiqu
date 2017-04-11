@@ -21,7 +21,6 @@ import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
 
-import static android.R.attr.offset;
 
 public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener{
 

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
@@ -27,15 +26,11 @@ import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
-import com.yiqu.iyijiayi.adapter.Tab5TiwenAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab3.SoundsTab3fragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
-import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -45,9 +40,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -86,7 +79,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private TextView content;
     private ImageView background;
     private HomePage homePage;
-    private ArrayList<Xizuo> xizuos;
+    private ArrayList<Sound> xizuos;
     private LinearLayout ll_tw;
     private TextView price1;
     private TextView ok;
@@ -160,7 +153,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(), this);
+        tab1SoundAdapter = new Tab1SoundAdapter(this,null);
         tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
 
 
@@ -421,7 +414,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                                     return;
                                 }
 
-                                Xizuo xizuo = xizuos.get(position - 2);
+                                Sound xizuo = xizuos.get(position - 2);
 
                                 if (AppShare.getIsLogin(mContext)) {
                                     Intent i = new Intent(mContext, StubActivity.class);

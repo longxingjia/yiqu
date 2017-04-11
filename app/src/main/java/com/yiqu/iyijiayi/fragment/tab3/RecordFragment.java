@@ -16,12 +16,15 @@ import android.widget.TextView;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Control.Main.PActivity;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
+import com.yiqu.Control.Main.RecordOnlyActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
@@ -129,8 +132,12 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
     }
 
     private void record() {
-        Intent intent = new Intent(getActivity(), RecordActivityForRecordFrag.class);
+        Intent intent = new Intent(getActivity(), PActivity.class);
         getActivity().startActivity(intent);
+
+//        Model.startNextAct(getActivity(),
+//                RecordInfoFragment.class.getName());
+
 
     }
 

@@ -24,11 +24,11 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Xizuo;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener {
     private String tag ="Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Xizuo> datas = new ArrayList<Xizuo>();
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
 
     public Tab1XizuoAdapter(Context context) {
@@ -47,12 +47,12 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     }
 
 
-    public void setData(ArrayList<Xizuo> list) {
+    public void setData(ArrayList<Sound> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Xizuo> allDatas) {
+    public void addData(ArrayList<Sound> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -63,7 +63,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     }
 
     @Override
-    public Xizuo getItem(int position) {
+    public Sound getItem(int position) {
         return datas.get(position);
     }
 
@@ -96,7 +96,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Xizuo f = getItem(position);
+            Sound f = getItem(position);
             h.name.setText(f.musicname);
             h.content.setText(f.desc);
             if (f.type==1){
@@ -116,7 +116,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Xizuo f = getItem(position);
+        Sound f = getItem(position);
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
@@ -125,9 +125,9 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         }
         if (AppShare.getIsLogin(mContext)){
             Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("xizuo",f);
+            bundle.putSerializable("Sound",f);
             i.putExtras(bundle);
             mContext.startActivity(i);
         }else {

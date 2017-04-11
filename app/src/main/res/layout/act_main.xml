@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/transparent"
+             android:fitsSystemWindows="true"
     >
 
     <RelativeLayout
@@ -11,64 +12,62 @@
         android:orientation="vertical">
 
         <FrameLayout
-           android:layout_marginBottom="50dp"
             android:id="@+id/sub_tab_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             />
+            android:layout_marginBottom="50dp"
+            />
 
         <RelativeLayout
             android:id="@+id/bottom"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:background="@color/transparent"
-            android:layout_height="60dp">
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent">
+
             <View
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tab_bg_color"
-                android:layout_marginBottom="50dp"/>
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="50dp"
+                android:background="@color/tab_bg_color"/>
 
 
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
-                android:background="@mipmap/tab_bg" />
+                android:background="@mipmap/tab_bg"/>
 
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="2dp"
-                android:src="@mipmap/main_tab3_an" />
+                android:src="@mipmap/main_tab3_an"/>
 
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="1dp"
-           >
+            >
 
             <com.ui.views.TabHostView xmlns:tab="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
-                android:id="@+id/tabHostView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_height"
-                android:layout_marginTop="10dp"
-                tab:icon_array="@array/main_tab_icon"
-                tab:icon_disable_array="@array/main_tab_icon_disable"
-                tab:name_array="@array/tab_host_names"
-                tab:num="5" />
-
+                                      android:id="@+id/tabHostView"
+                                      android:layout_width="match_parent"
+                                      android:layout_height="@dimen/tab_height"
+                                      android:layout_marginTop="10dp"
+                                      tab:icon_array="@array/main_tab_icon"
+                                      tab:icon_disable_array="@array/main_tab_icon_disable"
+                                      tab:name_array="@array/tab_host_names"
+                                      tab:num="5"/>
 
 
         </RelativeLayout>
-
-
 
 
     </RelativeLayout>

@@ -30,6 +30,7 @@ import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListener {
@@ -79,7 +80,6 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
         TextView upload;
         TextView record_time;
         ImageView image;
-
 
     }
 
@@ -143,12 +143,14 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         ComposeVoice m = getItem(arg2 - 1);
-        LogUtils.LOGE(tag + "6", m.toString() + "44444444444");
 
         Intent intent = new Intent(mContext, PlayActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable("data", m);
-        intent.putExtras(b);
+//        Bundle b = new Bundle();
+//        b.putSerializable("ff", m);
+//        intent.putExtras(b);
+        intent.putExtra("data", (Serializable) datas);
+        intent.putExtra("position", arg2 - 1);
+
         mContext.startActivity(intent);
 
     }

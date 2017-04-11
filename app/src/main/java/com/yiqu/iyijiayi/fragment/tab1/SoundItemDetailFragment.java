@@ -285,7 +285,6 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         comment = (TextView) v.findViewById(R.id.comment);
         like.setOnClickListener(this);
         comment.setOnClickListener(this);
-        likes = AppShare.getLikeList(getActivity());
 
         stu_header.setOnClickListener(this);
         tea_header.setOnClickListener(this);
@@ -337,7 +336,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
 
                 if (likesIndex == -1) {
                     Like l = new Like();
-                    l.sid = sid;
+                    l.sid = Integer.parseInt(sid);
                     l.islike = 1;
                     if (likes == null) {
                         likes = new ArrayList<Like>();
@@ -452,7 +451,7 @@ public class SoundItemDetailFragment extends AbsAllFragment implements View.OnCl
         if (likes != null) {
             for (int i = 0; i < likes.size(); i++) {
                 Like dz = likes.get(i);
-                if (dz.sid.equals(sid)) {
+                if (dz.sid== Integer.parseInt(sid)) {
                     likesIndex = i;
                     initDianZan();
                 }

@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.InitFunction;
 import com.ui.App;
-
 /**
  */
 public class CommonApplication extends Application {

@@ -62,7 +62,9 @@ public class VoiceFunction {
         } else {
             return false;
         }
-    } /**
+    }
+
+    /**
      *
      * @param fileUrl 是否在播
      * @return

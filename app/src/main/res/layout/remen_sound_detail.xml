@@ -306,15 +306,12 @@
                 android:layout_width="172dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/tea_voice">
+               >
 
-                <ProgressBar
-                    android:id="@+id/pb_tea"
-                    style="?android:attr/progressBarStyleHorizontal"
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@mipmap/tea_voice"
-                    android:progressDrawable="@drawable/progressbar_stu" />
+                    android:background="@drawable/tea_voice"/>
 
                 <TextView
                     android:id="@+id/tea_listen"

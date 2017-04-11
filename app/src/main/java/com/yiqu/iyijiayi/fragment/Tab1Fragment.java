@@ -31,16 +31,15 @@ import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Banner;
+import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
@@ -80,18 +79,19 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     };
     private String uid;
     private ArrayList<Sound> sound;
-    private ArrayList<Xizuo> xizuo;
+    private ArrayList<Sound> xizuo;
     private ListView lvXizuo;
     private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;
     private Tab1SoundAdapter tab1SoundAdapter;
     private TextView more_xizuo;
-
+    private ArrayList<Like> likes;
     private int count = 0;
     private int rows = 10;
     private String arr;
     private Remen remen;
     private ArrayList<Banner> banners;
+
 
 
     @Override
@@ -163,8 +163,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
         lvXizuo.setAdapter(tab1XizuoAdapter);
-
-        tab1SoundAdapter = new Tab1SoundAdapter(getActivity(), this);
+        likes = AppShare.getLikeList(getActivity());
+        tab1SoundAdapter = new Tab1SoundAdapter(this,likes);
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
@@ -180,6 +180,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
+            likes = AppShare.getLikeList(getActivity());
         } else {
             uid = "0";
         }
@@ -293,6 +294,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
+      //  LogUtils.LOGE("2",netResponse.toString());
         if (netResponse != null && "Remen".equals(id)) {
             if (netResponse.bool == 1) {
                 Gson gson = new Gson();
@@ -315,12 +317,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         } else if (id.equals("getSoundList")) {
 
+
             if (type == TYPE_SUCCESS) {
                 sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
 
-                remen.sound.addAll(sound);
-                AppShare.setRemenList(getActivity(), remen);
+              //  remen.sound.addAll(sound);
+            //    AppShare.setRemenList(getActivity(), remen);
 //                tab1SoundAdapter.setData(sound);
                 tab1SoundAdapter.addData(sound);
                 if (sound.size() < rows) {
@@ -391,7 +394,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getSoundList,
-                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "asc"),
                         "getSoundList", Tab1Fragment.this, false, true);
 
             }

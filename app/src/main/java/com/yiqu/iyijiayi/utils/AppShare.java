@@ -155,8 +155,9 @@ public class AppShare {
         UserInfo result = null;
         if (tmp != null && tmp.length() > 0) {
             result = new Gson().fromJson(tmp, UserInfo.class);
+
         }
-//        LogUtils.LOGE("..sh.."+tmp);
+       // LogUtils.LOGE("..sh..",tmp);
         return result;
     }
 

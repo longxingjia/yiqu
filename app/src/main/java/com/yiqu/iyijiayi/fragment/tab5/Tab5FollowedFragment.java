@@ -139,11 +139,13 @@ public class Tab5FollowedFragment extends AbsAllFragment implements SwipeRefresh
             }
 
         }else if (id.equals("student")){
-            Gson gson = new Gson();
-            ArrayList<Teacher> student = gson.fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
-            }.getType());
-            tab2StudentAdapter.setData(student);
-            student_size.setText(String.valueOf(student.size()));
+            if(type==TYPE_SUCCESS){
+                Gson gson = new Gson();
+                ArrayList<Teacher> student = gson.fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
+                }.getType());
+                tab2StudentAdapter.setData(student);
+                student_size.setText(String.valueOf(student.size()));
+            }
 
         }
 //        else if (id.equals("getFollowList")){

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2017/2/13.
  */
-public class Sound implements Serializable{
+public class Sound implements Serializable {
     public int sid; //我问ID
     public int stype; //1问题 2习作
     public int type;  //声乐1，播音2
@@ -43,11 +43,13 @@ public class Sound implements Serializable{
     public String tecname;
     public String tecimage;
     public String tectitle;
+    public int isLike;
 
     @Override
     public String toString() {
         return "Sound{" +
                 "sid=" + sid +
+                ", isLike=" + isLike +
                 ", stype=" + stype +
                 ", type=" + type +
                 ", mid=" + mid +

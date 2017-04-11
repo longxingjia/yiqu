@@ -18,19 +18,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.model.Xizuo;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 

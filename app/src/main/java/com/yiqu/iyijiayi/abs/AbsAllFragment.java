@@ -72,7 +72,6 @@ public abstract class AbsAllFragment extends AbsTitleNetFragment {
             ToastManager.getInstance(getActivity()).showText(netResponse.result);
         }else if (type ==TYPE_NO_VALUE){
 //			ToastManager.getInstance(getActivity()).showText("没有更多数据了");
-
 		}
 
         super.onNetEnd(id, type, netResponse);

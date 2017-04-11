@@ -15,7 +15,7 @@ public class App extends Application  {
 	 * 前后台标记
 	 */
 	public static boolean isActive;
-
+	public static Context mContext; // 应用全局context
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -25,6 +25,7 @@ public class App extends Application  {
 			e.printStackTrace();
 		}
 		Log.i("byron", "fm-App-onCreate");
+		mContext = this.getApplicationContext();
 		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(myReceiver, filter );
 		super.onCreate();
