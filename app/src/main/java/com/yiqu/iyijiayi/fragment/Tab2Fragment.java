@@ -107,7 +107,7 @@ public class Tab2Fragment extends TabContentFragment implements SwipeRefreshLayo
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        setSlidingMenuEnable(false);
+
 
     }
 

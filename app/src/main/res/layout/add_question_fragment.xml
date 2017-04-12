@@ -50,7 +50,7 @@
             android:gravity="center_vertical"
             android:text="￥"
             android:textColor="@color/redMain"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/tea_price"
@@ -61,7 +61,7 @@
             android:paddingRight="10dp"
             android:text="0"
             android:textColor="@color/redMain"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
 
     </LinearLayout>

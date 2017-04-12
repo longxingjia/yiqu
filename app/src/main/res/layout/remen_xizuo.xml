@@ -35,6 +35,16 @@
             android:layout_centerInParent="true"
             android:padding="24dp"
             android:src="@mipmap/menu_head" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/play_status"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/xizuo_play" />
+
+
 
     </RelativeLayout>
 
@@ -63,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:maxWidth="220dp"
                 android:singleLine="true"
+                android:duplicateParentState="true"
                 android:layout_height="match_parent"
                 android:text=""
                 android:textSize="18sp" />

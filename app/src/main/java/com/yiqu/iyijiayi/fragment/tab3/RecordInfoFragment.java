@@ -20,12 +20,16 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
+import com.yiqu.Control.Main.RecordOnlyActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -53,7 +57,12 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.submit:
-                LogUtils.LOGE("22", "hhhh");
+         //       LogUtils.LOGE("22", "hhhh");
+                Intent intent = new Intent(getActivity(), RecordOnlyActivity.class);
+                intent.putExtra("musicname",musicname.getText().toString());
+                intent.putExtra("musicdesc",musicdesc.getText().toString());
+                getActivity().startActivity(intent);
+
                 break;
             default:
                 break;
@@ -90,22 +99,16 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-
-        MobclickAgent.onPageStart("录音列表");
-
-    }
-
-    private void record() {
-        Intent intent = new Intent(getActivity(), RecordActivityForRecordFrag.class);
-        getActivity().startActivity(intent);
+        MobclickAgent.onPageStart("录制作品");
 
     }
+
 
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("录音列表");
+        MobclickAgent.onPageEnd("录制作品");
 
     }
 

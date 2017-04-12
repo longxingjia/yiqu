@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_gray"/>
+
+    <include
+        android:visibility="gone"
+        android:id="@+id/top_play"
+        layout="@layout/top_play"
+        android:background="#11000000" />
 
     <com.ui.views.AutoScrollViewPager
         android:id="@+id/vp_spinner"
@@ -50,6 +60,7 @@
         android:layout_height="208dp"
         android:dividerHeight="8dp"
         android:divider="#00000000"
+        android:choiceMode="singleChoice"
         android:minHeight="55dp"
         android:scrollbars="none"></ListView>
 

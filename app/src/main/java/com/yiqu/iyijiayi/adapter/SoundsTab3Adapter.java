@@ -142,7 +142,7 @@ public class SoundsTab3Adapter extends BaseAdapter implements OnItemClickListene
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        ComposeVoice m = getItem(arg2 - 1);
+       // ComposeVoice m = getItem(arg2 - 1);
 
         Intent intent = new Intent(mContext, PlayActivity.class);
 //        Bundle b = new Bundle();

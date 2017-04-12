@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <com.ui.views.RefreshList
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/tab_bg_color"
+        android:dividerHeight="10dp">
+
+    </com.ui.views.RefreshList>
+
+    <RelativeLayout
+        android:id="@+id/loading_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/p"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/loading_error" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignBottom="@+id/p"
+            android:layout_marginBottom="40dp"
+            android:textColor="@color/dd_gray"
+            android:text="您关注的人太少了，赶紧多多关注好友吧" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

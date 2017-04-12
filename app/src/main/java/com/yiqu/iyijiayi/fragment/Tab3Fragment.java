@@ -9,8 +9,10 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.RecordInfoFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
+import com.yiqu.iyijiayi.fragment.tab3.TextQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.AppShare;
 
 public class Tab3Fragment extends TabContentFragment implements View.OnClickListener {
@@ -30,6 +32,21 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 	protected void initView(View v) {
 		v.findViewById(R.id.rl_add1).setOnClickListener(this);
 		v.findViewById(R.id.rl_add2).setOnClickListener(this);
+		v.findViewById(R.id.rl_add_text).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (AppShare.getIsLogin(getActivity())){
+					Model.startNextAct(getActivity(),
+							TextQuestionFragment.class.getName());
+
+				}else {
+					Intent i = new Intent(getActivity(), StubActivity.class);
+					i.putExtra("fragment", SelectLoginFragment.class.getName());
+					getActivity().startActivity(i);
+					ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+				}
+			}
+		});
 
 	}
 	
@@ -40,7 +57,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 
 	@Override
 	protected void init(Bundle savedInstanceState) {
-		setSlidingMenuEnable(false);
+
 
 	}
 

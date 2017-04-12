@@ -5,6 +5,11 @@
     android:background="@color/tab_line_color"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/top_play"
+        layout="@layout/top_play"
+        android:background="#11000000" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

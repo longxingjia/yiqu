@@ -1,5 +1,6 @@
 package com.ui.abs;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -7,10 +8,10 @@ import android.view.Window;
 import com.base.utils.ToastManager;
 import com.base.utils.Utils;
 import com.byron.framework.R;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+
 import com.ui.App;
 
-public abstract class AbsFragmentActForMainAct extends SlidingFragmentActivity {
+public abstract class AbsFragmentActForMainAct extends FragmentActivity {
 //public abstract class AbsFragmentAct extends SlidingFragmentActivity {
 
 	protected boolean isActVisibile;
@@ -22,7 +23,7 @@ public abstract class AbsFragmentActForMainAct extends SlidingFragmentActivity {
 		try {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(getContentView());
-			setBehindContentView(getBehindContentView());
+
 			initView();
 			init(savedInstanceState);
 		} catch (Exception e) {

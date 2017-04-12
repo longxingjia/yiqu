@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_color_rating_grey"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color_rating_grey"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/rl_add1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        android:orientation="vertical"
         android:layout_weight="1"
+        android:background="@color/white"
         android:gravity="center_horizontal"
-        android:background="@color/white">
+        android:orientation="vertical">
 
-        <View
-            android:layout_width="1dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/icon_help"/>
+
+
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/add_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/add_sound" />
+            android:src="@mipmap/add_sound"/>
 
         <TextView
-            android:gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
             android:text="@string/record_zuopin"
-            android:textSize="15sp"
-            android:textColor="@color/dd_gray"/>
+            android:textColor="@color/dd_gray"
+            android:textSize="15sp"/>
+
         <View
             android:layout_width="1dp"
             android:layout_height="0dp"
@@ -42,40 +54,107 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/rl_add2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@color/white">
+        android:orientation="horizontal">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:id="@+id/add_question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/add_question" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/rl_add_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
             android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="向老师提问"
-            android:textSize="15sp"
-            android:textColor="@color/dd_gray"/>
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@mipmap/icon_help"/>
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/text_question"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="文字提问"
+                android:textColor="@color/dd_gray"
+                android:textSize="15sp"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
         <View
             android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="@color/tab_bg_color"/>
 
+        <LinearLayout
+            android:id="@+id/rl_add2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@mipmap/icon_help"/>
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/add_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/add_question"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="作品提问"
+                android:textColor="@color/dd_gray"
+                android:textSize="15sp"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

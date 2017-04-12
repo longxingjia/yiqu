@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
@@ -43,7 +46,10 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
     private LoadMoreView mLoadMoreView;
     private int count = 0;
     private int rows = 10;
-
+    private LinearLayout top_play;
+    private ImageView play;
+    private TextView musicplaying;
+    private TextView authorName;
     //刷新
     private RefreshList listView;
     private String arr;
@@ -69,6 +75,11 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
         listView.setOnScrollListener(mLoadMoreView);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
+
+        musicplaying = (TextView) v.findViewById(R.id.musicname);
+        authorName = (TextView) v.findViewById(R.id.name);
+        top_play = (LinearLayout) v.findViewById(R.id.top_play);
+        play = (ImageView) v.findViewById(R.id.play);
     }
 
     @Override
@@ -94,7 +105,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                 "getSoundList", Tab1XizuoListFragment.this);
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),top_play,play,musicplaying,authorName);
         listView.setAdapter(tab1XizuoAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

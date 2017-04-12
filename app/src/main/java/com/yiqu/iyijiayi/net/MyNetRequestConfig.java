@@ -309,6 +309,38 @@ public class MyNetRequestConfig {
         r.addHttpParam("isfree", isfree);
         return r;
     }
+    /**
+     * 13、
+     *
+     * @param isfree 1 免费
+     */
+    public static NetRequest addSound(Context c, String fromuid, String touid, String isfree,String questionStr,String questionprice) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("type","3");
+        r.addHttpParam("mid", "0");
+        r.addHttpParam("musicname", "");
+        r.addHttpParam("chapter", "");
+        r.addHttpParam("accompaniment", "");
+        r.addHttpParam("musictype", "");
+        r.addHttpParam("commentpath", "");
+        r.addHttpParam("commenttime","0");
+        r.addHttpParam("isformulation", "0");
+        r.addHttpParam("listenprice", "1");
+        r.addHttpParam("isopen", "1");
+        r.addHttpParam("ispay", "0");
+        r.addHttpParam("isreply", "0");
+        r.addHttpParam("stype", "1");
+        r.addHttpParam("status", "1");
+        r.addHttpParam("touid",touid);
+        r.addHttpParam("questionprice",questionprice);
+        r.addHttpParam("desc", questionStr);
+        r.addHttpParam("soundpath", "");
+        r.addHttpParam("isfree", isfree);
+        r.addHttpParam("soundtime", "0");
+
+        return r;
+    }
 
     /**
 

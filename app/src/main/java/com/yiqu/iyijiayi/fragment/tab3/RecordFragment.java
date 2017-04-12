@@ -29,6 +29,7 @@ import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
@@ -95,9 +96,9 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(getActivity(), PlayActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable("data", voice.get(position-2));
-                intent.putExtras(b);
+
+                intent.putExtra("data", (Serializable) voice);
+                intent.putExtra("position", position - 2);
                 startActivity(intent);
             }
         });
@@ -132,11 +133,9 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
     }
 
     private void record() {
-        Intent intent = new Intent(getActivity(), PActivity.class);
-        getActivity().startActivity(intent);
 
-//        Model.startNextAct(getActivity(),
-//                RecordInfoFragment.class.getName());
+        Model.startNextAct(getActivity(),
+                RecordInfoFragment.class.getName());
 
 
     }

@@ -131,21 +131,15 @@ public class RecordComActivity extends Activity
     private int totalTime;
     private AudioManager audoManager;
 
-    @BindView(R.id.background)
-    public ImageView background;
+    @BindView(R.id.background) public ImageView background;
     @BindView(R.id.lyricview)
     public LyricView lyricView;
-    ;
-    @BindView(R.id.icon_record)
-    public ImageView icon_record;
-    @BindView(R.id.icon_finish)
-    public ImageView icon_finish;
-    @BindView(R.id.back)
-    public CircleImageView back;
-    @BindView(R.id.record)
-    public CircleImageView recordVoiceButton;
-    @BindView(R.id.finish)
-    public CircleImageView finish;
+
+    @BindView(R.id.icon_record)public ImageView icon_record;
+    @BindView(R.id.icon_finish)public ImageView icon_finish;
+    @BindView(R.id.back)public CircleImageView back;
+    @BindView(R.id.record)public CircleImageView recordVoiceButton;
+    @BindView(R.id.finish)public CircleImageView finish;
 
     private File lrc;
     private String fileName;
@@ -216,9 +210,7 @@ public class RecordComActivity extends Activity
         Random random = new Random();
         int i = random.nextInt(4);
         String color[] = getResources().getStringArray(R.array.color);
-
         Bitmap bitmap = createColorBitmap(Color.parseColor(color[i]));
-
         back.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
@@ -239,16 +231,13 @@ public class RecordComActivity extends Activity
                 initBackground(file);
 
             } else {
+
                 DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
                 downLoaderTask.execute();
             }
         } else {
             //  Picasso.with(context).load(R.mipmap.home_bg).into(icon);
         }
-
-
-//        PictureUtils.showBitmapPicture(this,userInfo.userimage,background);
-//        PictureUtils.showPicture(this,userInfo.userimage,image_anim,500);
 
 
         fileName = music.musicname + "_" + music.mid;
@@ -731,7 +720,7 @@ public class RecordComActivity extends Activity
         mediaPlayer.release();
         mediaPlayer = null;
         VoiceFunction.StopRecordVoice();
-    //    playUtils.stop();
+        playUtils.stop();
         super.onDestroy();
     }
 

@@ -12,7 +12,7 @@ import android.view.KeyEvent;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentActForMainAct;
 import com.ui.abs.OnFragmentListener;

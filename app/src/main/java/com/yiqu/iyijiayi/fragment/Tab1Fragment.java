@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -91,7 +92,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private String arr;
     private Remen remen;
     private ArrayList<Banner> banners;
-
+    private LinearLayout top_play;
+    private ImageView play;
+    private TextView musicplaying;
+    private TextView authorName;
 
 
     @Override
@@ -107,7 +111,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     protected void initView(View v) {
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab1_fragment_header, null);
-
         initHeadView(headerView);
         lvSound = (RefreshList) v.findViewById(R.id.lv_sound);
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
@@ -115,12 +118,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         lvSound.addFooterView(mLoadMoreView);
         lvSound.addHeaderView(headerView);
         lvSound.setOnScrollListener(mLoadMoreView);
-        //   lvSound.setHeaderDividersEnabled(false);
         lvSound.setFooterDividersEnabled(false);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         lvSound.setRefreshListListener(this);
-
     }
 
     @Override
@@ -134,6 +135,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         vp_spinner = (AutoScrollViewPager) v.findViewById(R.id.vp_spinner);
         lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
+        musicplaying = (TextView) v.findViewById(R.id.musicname);
+        authorName = (TextView) v.findViewById(R.id.name);
+        top_play = (LinearLayout) v.findViewById(R.id.top_play);
+        play = (ImageView) v.findViewById(R.id.play);
+
+
         more_xizuo.setOnClickListener(this);
     }
 
@@ -144,24 +151,14 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        setSlidingMenuEnable(false);
 
-
-//        imgIdArray = new int[]{R.mipmap.banner_1, R.mipmap.banner_2};
-//        // 得到views集合
-//        views = new ArrayList<View>();
-//
-//        for (int i = 1; i <= imgIdArray.length; i++) {
-//            View view = getActivity().getLayoutInflater().inflate(R.layout.tab1_viewpage, null);
-//            views.add(view);
-//        }
         banners = AppShare.getBannerList(getActivity());
         if (banners !=null && banners.size()>0){
             List<Map<String, Object>> data = getData(banners);
             vp_spinner.setAdapter(new MyAdapter(data));
         }
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity());
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),top_play,play,musicplaying,authorName);
         lvXizuo.setAdapter(tab1XizuoAdapter);
         likes = AppShare.getLikeList(getActivity());
         tab1SoundAdapter = new Tab1SoundAdapter(this,likes);

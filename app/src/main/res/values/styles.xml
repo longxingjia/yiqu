@@ -21,7 +21,7 @@
     <style name="textview_mine">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawablePadding">12dp</item>
         <item name="android:drawableRight">@mipmap/arrow</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">15dp</item>
