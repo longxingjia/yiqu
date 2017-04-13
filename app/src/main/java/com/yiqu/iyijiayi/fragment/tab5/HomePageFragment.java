@@ -26,7 +26,10 @@ import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
+<<<<<<< HEAD
 import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
+=======
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
@@ -155,7 +158,11 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
         tab1SoundAdapter = new Tab1SoundAdapter(this,null);
+<<<<<<< HEAD
         tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity());
+=======
+        tab5XizuoAdapter = new Tab1XizuoAdapter(getActivity());
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
 
 
         listView.setRefreshListListener(this);

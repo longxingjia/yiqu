@@ -9,7 +9,10 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.RecordInfoFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
+<<<<<<< HEAD
 import com.yiqu.iyijiayi.fragment.tab3.TextQuestionFragment;
+=======
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
 import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;

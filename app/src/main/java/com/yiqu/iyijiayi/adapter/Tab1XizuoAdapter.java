@@ -168,7 +168,11 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", ItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
+<<<<<<< HEAD
             bundle.putSerializable("Sound", f);
+=======
+            bundle.putSerializable("Sound",f);
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
             i.putExtras(bundle);
             mContext.startActivity(i);
         } else {

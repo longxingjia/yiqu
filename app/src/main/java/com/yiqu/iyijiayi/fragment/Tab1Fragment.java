@@ -98,6 +98,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private TextView authorName;
 
 
+
     @Override
     protected int getTitleView() {
         return R.layout.titlebar_tab1;

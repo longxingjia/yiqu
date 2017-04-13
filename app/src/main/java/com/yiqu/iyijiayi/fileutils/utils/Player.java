@@ -161,10 +161,14 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         now_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
         skbProgress.setProgress(100);
         isfirst = true;
+<<<<<<< HEAD
         if (video_play!=null){
             video_play.setImageResource(R.mipmap.video_play);
         }
 
+=======
+        video_play.setImageResource(R.mipmap.video_play);
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
     }
 
 

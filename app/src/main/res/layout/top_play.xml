@@ -39,4 +39,8 @@
         android:textColor="@color/dd_gray"
         android:textSize="13sp"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

@@ -14,6 +14,10 @@
         android:background="@drawable/edit_bg"
         android:drawablePadding="5dp"
         android:hint="请输入标题"
+<<<<<<< HEAD
+=======
+        android:inputType="phone"
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         android:maxLength="15"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -29,6 +33,10 @@
         android:background="@drawable/edit_bg"
         android:drawablePadding="5dp"
         android:hint="请填写您的内容详情"
+<<<<<<< HEAD
+=======
+        android:inputType="phone"
+>>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         android:gravity="top"
         android:maxLength="15"
         android:paddingLeft="5dp"
