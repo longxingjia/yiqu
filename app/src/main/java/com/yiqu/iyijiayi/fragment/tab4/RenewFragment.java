@@ -153,10 +153,8 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected boolean onPageBack() {
-        if (mOnFragmentListener != null) {
-            mOnFragmentListener.onFragmentBack(this);
-        }
-        return true;
+
+        return false;
     }
 
     @Override

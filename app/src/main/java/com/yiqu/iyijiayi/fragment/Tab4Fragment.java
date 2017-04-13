@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -23,7 +24,9 @@ import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
+import com.yiqu.iyijiayi.fragment.tab4.RenewFragment;
 import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -43,10 +46,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Tab4Fragment extends TabContentFragment  {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class Tab4Fragment extends TabContentFragment {
 
     private String tag = "Tab4Fragment";
     private String uid;
+    @BindView(R.id.item_renew)
+    public TextView item_renew;
+    @BindView(R.id.item_1)
+    public TextView item_1;
+    @BindView(R.id.item_2)
+    public TextView item_2;
+
 
     @Override
     protected int getTitleView() {
@@ -60,6 +74,7 @@ public class Tab4Fragment extends TabContentFragment  {
 
     @Override
     protected void initView(View v) {
+        ButterKnife.bind(this, v);
 
 
     }
@@ -120,9 +135,24 @@ public class Tab4Fragment extends TabContentFragment  {
         setTitleText(getString(R.string.label_tab4));
     }
 
+    @OnClick({R.id.item_renew, R.id.item_1, R.id.item_2})
+    public void onclick(View v) {
+        switch (v.getId()) {
+            case R.id.item_renew:
+                Model.startNextAct(getActivity(),
+                        RenewFragment.class.getName());
 
+                break;
 
+            case R.id.item_1:
 
+                break;
+            case R.id.item_2:
+
+                break;
+        }
+
+    }
 
 
 }

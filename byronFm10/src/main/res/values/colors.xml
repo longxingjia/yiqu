@@ -9,6 +9,7 @@
    <!-- #1898c4 179cfb-->
     <!-- page -->
     <color name="page_bg_color">#ffffff</color>
+    <color name="tab_text_color">#bbbbbb</color>
     <color name="page_set_bg_color">#f1eef9</color>
     <color name="menu_bg_color">#f1f0f8</color>
     <color name="dd_gray">#878787</color>

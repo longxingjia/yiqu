@@ -2,15 +2,12 @@ package com.yiqu.iyijiayi.fragment;
 
 
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.os.Handler;
-
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,43 +30,31 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+public class Tab23Fragment extends TabContentFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
-public class Tab2Fragment extends TabContentFragment {
-
+    private static final int TAB_2 = 2;
     private String tag = "Tab2Fragment";
-    private int flag = 0;
     private String uid;
-
+    private ScrollViewWithListView lvTeacher;
     private ArrayList<Teacher> teacher;
     private ArrayList<Student> student;
 
     private Tab2TeacherAdapter tab2TeacherAdapter;
     private Tab2StudentAdapter tab2StudentAdapter;
-
-    @BindView(R.id.tab_teacher)
-    public TextView tab_teacher;
-    @BindView(R.id.tab_student)
-    public TextView tab_student;
-    @BindView(R.id.shengyue)
-    public TextView shengyue;
-    @BindView(R.id.boyin)
-    public TextView boyin;
-    @BindView(R.id.yueqi)
-    public TextView yueqi;
-
+    private ScrollViewWithListView lvStudent;
+    private SwipeRefreshLayout swipeRe;
+    private TextView loadMoreTeacher;
+    private TextView loadMoreStudent;
+    private ZhaoRen zhaoRen;
+    private static int REQUESTNO = 1;
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab1;
     }
 
     @Override
@@ -89,7 +74,24 @@ public class Tab2Fragment extends TabContentFragment {
 
     @Override
     protected void initView(View v) {
-        ButterKnife.bind(this, v);
+        swipeRe = (SwipeRefreshLayout) v.findViewById(R.id.swipeRe);
+        swipeRe.setOnRefreshListener(this);
+        View student_headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_footer, null);
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_fragment_header, null);
+
+        loadMoreTeacher = (TextView) v.findViewById(R.id.loadmore_teacher);
+        loadMoreStudent = (TextView) v.findViewById(R.id.loadmore_student);
+
+        loadMoreStudent.setOnClickListener(this);
+        loadMoreTeacher.setOnClickListener(this);
+
+        lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
+        lvTeacher.addHeaderView(headView);
+
+        lvStudent = (ScrollViewWithListView) v.findViewById(R.id.lv_student);
+
+        lvStudent.addHeaderView(student_headView);
+
 
     }
 
@@ -100,22 +102,7 @@ public class Tab2Fragment extends TabContentFragment {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        tab_teacher.setSelected(true);
 
-        initData();
-
-    }
-
-    private void initData() {
-        if (flag==0){
-            shengyue.setText("资深声乐导师 TOP10");
-            boyin.setText("资深播音导师 TOP10");
-            yueqi.setText("资深乐器导师 TOP10");
-        }else {
-            shengyue.setText("优秀声乐学生");
-            boyin.setText("优秀播音学生");
-            yueqi.setText("优秀乐器学生");
-        }
 
     }
 
@@ -124,7 +111,7 @@ public class Tab2Fragment extends TabContentFragment {
         super.onResume();
         MobclickAgent.onPageStart("找人"); //统计页面，"MainScreen"为页面名称，可自定义
 
-
+        zhaoRen = AppShare.getZhaoRenList(getActivity());
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
         } else {
@@ -132,8 +119,30 @@ public class Tab2Fragment extends TabContentFragment {
         }
 
         tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), uid);
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), uid);
+        lvTeacher.setAdapter(tab2TeacherAdapter);
+        lvTeacher.setOnItemClickListener(tab2TeacherAdapter);
 
+        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), uid);
+        lvStudent.setAdapter(tab2StudentAdapter);
+        lvStudent.setOnItemClickListener(tab2StudentAdapter);
+
+        if (zhaoRen == null) {
+
+            RestNetCallHelper.callNet(
+                    getActivity(),
+                    MyNetApiConfig.follow_recommend,
+                    MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                    "teacher", Tab23Fragment.this);
+        } else {
+            teacher = zhaoRen.teacher;
+            student = zhaoRen.student;
+
+            tab2TeacherAdapter.setData(zhaoRen);
+            setListViewHeightBasedOnChildren(lvTeacher);
+            tab2StudentAdapter.setData(zhaoRen);
+            loadMoreTeacher.setVisibility(View.VISIBLE);
+            loadMoreStudent.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -157,8 +166,10 @@ public class Tab2Fragment extends TabContentFragment {
                 student = zhaoRen.student;
 
                 tab2TeacherAdapter.setData(zhaoRen);
-
+                setListViewHeightBasedOnChildren(lvTeacher);
                 tab2StudentAdapter.setData(zhaoRen);
+                loadMoreTeacher.setVisibility(View.VISIBLE);
+                loadMoreStudent.setVisibility(View.VISIBLE);
 
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
@@ -203,6 +214,26 @@ public class Tab2Fragment extends TabContentFragment {
     }
 
 
+    @Override
+    public void onRefresh() {
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.follow_recommend,
+                        MyNetRequestConfig.follow_recommend(getActivity(), uid),
+                        "teacher", Tab23Fragment.this);
+
+                swipeRe.setRefreshing(false);
+
+            }
+        }, 300);
+    }
+
+
     /**
      * @param listView
      */
@@ -232,40 +263,40 @@ public class Tab2Fragment extends TabContentFragment {
 
     }
 
-    @OnClick({R.id.tab_teacher, R.id.tab_student, R.id.boyin, R.id.shengyue, R.id.yueqi})
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.loadmore_student:
+                if (uid.equals("0")) {
+                    Intent i = new Intent(getActivity(), StubActivity.class);
+                    i.putExtra("fragment", SelectLoginFragment.class.getName());
 
-            case R.id.tab_teacher:
-                tab_teacher.setSelected(true);
-                tab_student.setSelected(false);
-                tab_teacher.setTextColor(getResources().getColor(R.color.white));
-                tab_student.setTextColor(getResources().getColor(R.color.tab_text_color));
-                flag=0;
-                initData();
+                    startActivityForResult(i, REQUESTNO);
 
+                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
 
+                    return;
+                }
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                i.putExtra("fragment", Tab2ListFragment.class.getName());
+                i.putExtra("data", "1");  //0 代表学生
+                getActivity().startActivity(i);
                 break;
-            case R.id.tab_student:
-                tab_teacher.setSelected(false);
-                tab_student.setSelected(true);
-                tab_student.setTextColor(getResources().getColor(R.color.white));
-                tab_teacher.setTextColor(getResources().getColor(R.color.tab_text_color));
-                flag=1;
-                initData();
+            case R.id.loadmore_teacher:
+                if (uid.equals("0")) {
+                    Intent it = new Intent(getActivity(), StubActivity.class);
+                    it.putExtra("fragment", SelectLoginFragment.class.getName());
+                    getActivity().startActivity(it);
+                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
 
-                break;
-            case R.id.boyin:
-
-
-                break;
-            case R.id.shengyue:
+                    return;
+                }
 
 
-                break;
-            case R.id.yueqi:
-
-
+                Intent in = new Intent(getActivity(), StubActivity.class);
+                in.putExtra("fragment", Tab2ListFragment.class.getName());
+                in.putExtra("data", "2");  //1 代表老师
+                getActivity().startActivity(in);
                 break;
         }
 

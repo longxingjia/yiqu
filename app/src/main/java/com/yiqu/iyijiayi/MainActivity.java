@@ -29,6 +29,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
     private String[] classNames;
     private String mCurrentTabFragmentTag;
     private TabHostView mTabHostView;
+    public static boolean isForeground = false;
 
     @Override
     protected int getContentView() {
@@ -60,6 +61,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
     @Override
     public void onResume() {
         super.onResume();
+        isForeground = true;
         MobclickAgent.onResume(this);          //统计时长
     }
 
@@ -67,6 +69,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+        isForeground = false;
     }
 
 

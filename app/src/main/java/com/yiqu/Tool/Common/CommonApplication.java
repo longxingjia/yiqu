@@ -11,6 +11,9 @@ import android.widget.Toast;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.InitFunction;
 import com.ui.App;
+
+import cn.jpush.android.api.JPushInterface;
+
 /**
  */
 public class CommonApplication extends Application {
@@ -31,7 +34,8 @@ public class CommonApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);
         instance = this;
 
         if (CommonFunction.isEmpty(CommonFunction.GetPackageName())) {

@@ -1,111 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    android:orientation="vertical">
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    >
 
 
-                <com.yiqu.iyijiayi.view.ScrollViewWithListView
-                    android:id="@+id/lv_teacher"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@color/background_color_rating_grey"
-                    android:dividerHeight="1dp"
-                    android:minHeight="255dp"
-                    android:listSelector="#00000000"
-                    android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tab_teacher"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:background="@drawable/teacher_selected_selector"
+                android:gravity="center"
+                android:text="导师"
+                android:textColor="@color/white"
+                android:textSize="15dp"/>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
-                <TextView
-                    android:visibility="invisible"
-                    android:id="@+id/loadmore_teacher"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:drawableRight="@mipmap/arrow_red"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="13dp"
-                    android:text="加载更多导师"
-                    android:textColor="@color/redMain" />
+            <TextView
+                android:id="@+id/tab_student"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="-1dp"
+                android:background="@drawable/student_selected_selector"
+                android:gravity="center"
+                android:text="学生"
+                android:textColor="@color/tab_text_color"
+                android:textSize="15dp"/>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
+        </LinearLayout>
 
-                <com.yiqu.iyijiayi.view.ScrollViewWithListView
-                    android:id="@+id/lv_student"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:listSelector="#00000000"
-                    android:divider="@color/background_color_rating_grey"
-                    android:dividerHeight="1dp"
-                    android:minHeight="255dp"
-                    android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:horizontalSpacing="5dp"
+            android:numColumns="4"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="@color/tab_line_color"/>
+
+        <TextView
+            android:id="@+id/shengyue"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="11dp"
+            android:text="导师"
+            android:drawableRight="@mipmap/arrow"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@mipmap/icon_shengyue"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tab_bg_color"/>
+
+        <TextView
+            android:id="@+id/boyin"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="11dp"
+            android:text="导师"
+            android:drawableRight="@mipmap/arrow"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@mipmap/icon_boyin"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tab_bg_color"/>
+
+        <TextView
+            android:id="@+id/yueqi"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="11dp"
+            android:text="导师"
+            android:drawableRight="@mipmap/arrow"
+            android:layout_marginRight="15dp"
+            android:drawableLeft="@mipmap/icon_yueqi"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp"/>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
-                <TextView
-                    android:visibility="invisible"
-                    android:id="@+id/loadmore_student"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:drawableRight="@mipmap/arrow_red"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="13dp"
-                    android:layout_marginRight="10dp"
-                    android:text="加载更多学生"
-                    android:textColor="@color/redMain" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
-
-            </LinearLayout>
-        </ScrollView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
 
-    <!--<com.yiqu.iyijiayi.view.ReScrollViewWithListView-->
-    <!--android:id="@+id/lv_teacher"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:divider="@color/background_color_rating_grey"-->
-    <!--android:dividerHeight="1dp"-->
-    <!--android:minHeight="255dp"-->
-    <!--android:scrollbars="none"></com.yiqu.iyijiayi.view.ReScrollViewWithListView>-->
 
-
-</LinearLayout>
-
+</ScrollView>
