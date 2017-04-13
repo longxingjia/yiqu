@@ -126,7 +126,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 // h.play_status.setImageResource(R.mipmap.xizuo_pause);
                 h.name.setTextColor(mContext.getResources().getColor(R.color.redMain));
                 mMusicname.setText(f.musicname);
-                mAuthor.setText(f.stuname); 
+                mAuthor.setText(f.stuname);
             } else {
                 //   h.play_status.setImageResource(R.mipmap.xizuo_play);
                 h.name.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));

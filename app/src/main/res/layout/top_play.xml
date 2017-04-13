@@ -21,6 +21,7 @@
         android:layout_marginLeft="8dp"
         android:duplicateParentState="true"
         android:maxWidth="220dp"
+        android:gravity="center"
         android:singleLine="true"
         android:text=""
         android:textSize="18sp"/>
@@ -32,6 +33,7 @@
         android:layout_marginLeft="10dp"
         android:duplicateParentState="true"
         android:maxWidth="220dp"
+        android:gravity="center"
         android:singleLine="true"
         android:text=""
         android:textColor="@color/dd_gray"
