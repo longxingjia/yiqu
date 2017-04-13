@@ -324,7 +324,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 //        stu_header.setOnClickListener(this);
 //        tea_header.setOnClickListener(this);
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime);
+        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
+            @Override
+            public void completion() {
+
+            }
+        });
 
     }
 
@@ -618,7 +623,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     player.pause();
                 } else {
                     video_play.setImageResource(R.mipmap.video_pause);
-                    player.playUrl(stuUrl);
+                    if (stuUrl.equals(player.getUrl())){
+                        player.rePlay();
+                    }else {
+                        player.playUrl(stuUrl);
+                    }
                 }
 
                 break;

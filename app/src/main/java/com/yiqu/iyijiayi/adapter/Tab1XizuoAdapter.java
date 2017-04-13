@@ -30,6 +30,8 @@ import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
@@ -46,6 +48,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private TextView mMusicname;
     private TextView mAuthor;
     private LinearLayout mRoot;
+    private Intent intent = new Intent();
 
     public Tab1XizuoAdapter(Context context, LinearLayout root, ImageView play, TextView musicname, TextView author) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -127,6 +130,13 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.name.setTextColor(mContext.getResources().getColor(R.color.redMain));
                 mMusicname.setText(f.musicname);
                 mAuthor.setText(f.stuname);
+                String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
+                intent.setClass(mContext, MusicService.class);
+          //      mContext.stopService(intent);
+                intent.putExtra("choice", "play");
+                intent.putExtra("url", url);
+                mContext.startService(intent);
+
             } else {
                 //   h.play_status.setImageResource(R.mipmap.xizuo_play);
                 h.name.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
@@ -168,11 +178,9 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", ItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
-<<<<<<< HEAD
+
             bundle.putSerializable("Sound", f);
-=======
-            bundle.putSerializable("Sound",f);
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
             i.putExtras(bundle);
             mContext.startActivity(i);
         } else {

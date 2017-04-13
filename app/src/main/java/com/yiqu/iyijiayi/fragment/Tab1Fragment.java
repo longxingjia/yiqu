@@ -1,7 +1,10 @@
 package com.yiqu.iyijiayi.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +43,9 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
@@ -96,7 +101,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private ImageView play;
     private TextView musicplaying;
     private TextView authorName;
-
+    private ImageView stop;
 
 
     @Override
@@ -123,7 +128,45 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         lvSound.setRefreshListListener(this);
+
+        //注册广播接收器
+        MyReceiver receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.yiqu.iyijiayi.service.MusicService");
+        getActivity().registerReceiver(receiver, filter);
     }
+
+    /**
+     * 获取广播数据
+     *
+     * @author jiqinlin
+     */
+    public class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            Bundle bundle=intent.getExtras();
+//            int count=bundle.getInt("count");
+//            editText.setText(count+"");
+          //  LogUtils.LOGE("tag","fs");
+
+            String data = intent.getStringExtra("data");
+            switch (data) {
+                case "stop":
+                    top_play.setVisibility(View.GONE);
+                    break;
+
+                case "rePlay":
+                    play.setImageResource(R.mipmap.play_banner);
+
+                    break;
+                case "pause":
+                    play.setImageResource(R.mipmap.pause_banner);
+                    break;
+            }
+
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -131,6 +174,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         MobclickAgent.onPageStart("热门"); //统计页面，"MainScreen"为页面名称，可自定义
 
     }
+
+    private Intent intent = new Intent();
 
     private void initHeadView(View v) {
         vp_spinner = (AutoScrollViewPager) v.findViewById(R.id.vp_spinner);
@@ -140,10 +185,35 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         authorName = (TextView) v.findViewById(R.id.name);
         top_play = (LinearLayout) v.findViewById(R.id.top_play);
         play = (ImageView) v.findViewById(R.id.play);
+        stop = (ImageView) v.findViewById(R.id.stop);
 
+        play.setOnClickListener(playListener);
+        stop.setOnClickListener(stopListener);
 
         more_xizuo.setOnClickListener(this);
     }
+
+    private OnClickListener playListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            intent.putExtra("choice", "pause");
+            //  play.setImageResource(R.mipmap.play_icon);
+            intent.setClass(getActivity(), MusicService.class);
+            getActivity().startService(intent);
+        }
+    };
+
+    private OnClickListener stopListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            intent.putExtra("choice", "stop");
+            top_play.setVisibility(View.GONE);
+            intent.setClass(getActivity(), MusicService.class);
+            getActivity().startService(intent);
+        }
+    };
 
     @Override
     protected boolean isTouchMaskForNetting() {
@@ -154,15 +224,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     protected void init(Bundle savedInstanceState) {
 
         banners = AppShare.getBannerList(getActivity());
-        if (banners !=null && banners.size()>0){
+        if (banners != null && banners.size() > 0) {
             List<Map<String, Object>> data = getData(banners);
             vp_spinner.setAdapter(new MyAdapter(data));
         }
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),top_play,play,musicplaying,authorName);
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
         lvXizuo.setAdapter(tab1XizuoAdapter);
         likes = AppShare.getLikeList(getActivity());
-        tab1SoundAdapter = new Tab1SoundAdapter(this,likes);
+        tab1SoundAdapter = new Tab1SoundAdapter(this, likes);
         lvSound.setAdapter(tab1SoundAdapter);
         lvSound.setOnItemClickListener(tab1SoundAdapter);
         lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
@@ -292,7 +362,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-      //  LogUtils.LOGE("2",netResponse.toString());
+        //  LogUtils.LOGE("2",netResponse.toString());
         if (netResponse != null && "Remen".equals(id)) {
             if (netResponse.bool == 1) {
                 Gson gson = new Gson();
@@ -320,8 +390,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
 
-              //  remen.sound.addAll(sound);
-            //    AppShare.setRemenList(getActivity(), remen);
+                //  remen.sound.addAll(sound);
+                //    AppShare.setRemenList(getActivity(), remen);
 //                tab1SoundAdapter.setData(sound);
                 tab1SoundAdapter.addData(sound);
                 if (sound.size() < rows) {
@@ -359,7 +429,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             mdata.add(map);
         }
         vp_spinner.startAutoScroll();
-       // vp_spinner.setCycle(false);
+        // vp_spinner.setCycle(false);
         vp_spinner.setSlideBorderMode(SLIDE_BORDER_MODE_CYCLE);
         return mdata;
     }

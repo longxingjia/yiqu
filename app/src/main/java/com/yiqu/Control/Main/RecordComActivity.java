@@ -131,7 +131,7 @@ public class RecordComActivity extends Activity
     private int totalTime;
     private AudioManager audoManager;
 
-<<<<<<< HEAD
+
     @BindView(R.id.background) public ImageView background;
     @BindView(R.id.lyricview)
     public LyricView lyricView;
@@ -141,23 +141,7 @@ public class RecordComActivity extends Activity
     @BindView(R.id.back)public CircleImageView back;
     @BindView(R.id.record)public CircleImageView recordVoiceButton;
     @BindView(R.id.finish)public CircleImageView finish;
-=======
-    @BindView(R.id.background)
-    public ImageView background;
-    @BindView(R.id.lyricview)
-    public LyricView lyricView;
-    ;
-    @BindView(R.id.icon_record)
-    public ImageView icon_record;
-    @BindView(R.id.icon_finish)
-    public ImageView icon_finish;
-    @BindView(R.id.back)
-    public CircleImageView back;
-    @BindView(R.id.record)
-    public CircleImageView recordVoiceButton;
-    @BindView(R.id.finish)
-    public CircleImageView finish;
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 
     private File lrc;
     private String fileName;
@@ -228,13 +212,8 @@ public class RecordComActivity extends Activity
         Random random = new Random();
         int i = random.nextInt(4);
         String color[] = getResources().getStringArray(R.array.color);
-<<<<<<< HEAD
-        Bitmap bitmap = createColorBitmap(Color.parseColor(color[i]));
-=======
-
         Bitmap bitmap = createColorBitmap(Color.parseColor(color[i]));
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         back.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
@@ -255,10 +234,7 @@ public class RecordComActivity extends Activity
                 initBackground(file);
 
             } else {
-<<<<<<< HEAD
 
-=======
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                 DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
                 downLoaderTask.execute();
             }
@@ -266,14 +242,6 @@ public class RecordComActivity extends Activity
             //  Picasso.with(context).load(R.mipmap.home_bg).into(icon);
         }
 
-
-<<<<<<< HEAD
-=======
-//        PictureUtils.showBitmapPicture(this,userInfo.userimage,background);
-//        PictureUtils.showPicture(this,userInfo.userimage,image_anim,500);
-
-
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         fileName = music.musicname + "_" + music.mid;
         File mFile = new File(Variable.StorageMusicCachPath, fileName + ".mp3");
 
@@ -301,10 +269,6 @@ public class RecordComActivity extends Activity
         lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
         if (!lrc.exists()) {
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
             MyNetApiConfig myNetApiConfig = new MyNetApiConfig(music.musicname);
 
             RestNetCallHelper.callNet(this,
@@ -758,11 +722,8 @@ public class RecordComActivity extends Activity
         mediaPlayer.release();
         mediaPlayer = null;
         VoiceFunction.StopRecordVoice();
-<<<<<<< HEAD
         playUtils.stop();
-=======
-    //    playUtils.stop();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         super.onDestroy();
     }
 
@@ -915,11 +876,8 @@ public class RecordComActivity extends Activity
             if (dialogHelper != null) {
                 dialogHelper.dismissProgressDialog();
             }
-<<<<<<< HEAD
-            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-=======
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
 
             if (isCancelled())
                 return;

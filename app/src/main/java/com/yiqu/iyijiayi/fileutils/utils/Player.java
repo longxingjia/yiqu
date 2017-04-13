@@ -14,6 +14,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -32,14 +34,17 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     MediaPlayerProxy proxy;
     Context context;
     private boolean USE_PROXY = true;
+    private String oldUrl ;
+    private onPlayCompletion onPlayCompletion;
 
-    public Player(Context context, SeekBar skbProgress, ImageView video_play , TextView now_time, TextView all_time) {
+    public Player(Context context, SeekBar skbProgress, ImageView video_play,
+                  TextView now_time, TextView all_time,onPlayCompletion onPlayCompletion) {
         this.skbProgress = skbProgress;
         this.now_time = now_time;
         this.all_time = all_time;
         this.context = context;
         this.video_play = video_play;
-
+        this.onPlayCompletion = onPlayCompletion;
         try {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -51,7 +56,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         }
 
         mTimer.schedule(mTimerTask, 0, 1000);
-
         proxy = new MediaPlayerProxy(context);
         proxy.init();
         proxy.start();
@@ -64,6 +68,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         @Override
         public void run() {
             if (mediaPlayer == null)
+                return;
+            if (skbProgress == null)
                 return;
             if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
                 handleProgress.sendEmptyMessage(0);
@@ -78,20 +84,28 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         public void handleMessage(Message msg) {
             int position = mediaPlayer.getCurrentPosition();
             duration = mediaPlayer.getDuration();
+           // LogUtils.LOGE("ff",String.valueOf(mediaPlayer.isPlaying()));
 
             if (duration > 0) {
-                long pos = skbProgress.getMax() * position / duration;
-                skbProgress.setProgress((int) pos);
-                now_time.setText("" + changeNum(position / (60 * 1000)) + ":" + changeNum(position % (60 * 1000) / 1000));
-                all_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
+                if (skbProgress != null) {
+                    long pos = skbProgress.getMax() * position / duration;
+                    skbProgress.setProgress((int) pos);
+                }
+                if (now_time != null) {
+
+                    now_time.setText("" + changeNum(position / (60 * 1000)) + ":" + changeNum(position % (60 * 1000) / 1000));
+                }
+                if (all_time != null) {
+
+                    all_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
+                }
             }
         }
 
         ;
     };
 
-
-    public void play() {
+    public void rePlay() {
         mediaPlayer.start();
     }
 
@@ -100,25 +114,36 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         return mediaPlayer.isPlaying();
     }
 
+    public String getUrl() {
+        return oldUrl;
+    }
+
     public void playUrl(String url) {
-
-        if (USE_PROXY) {
-            startProxy();
-            url = proxy.getProxyURL(url);
-        }
-
-        if (isfirst) {
+        if (oldUrl!=null && oldUrl.equals(url)) {
+            LogUtils.LOGE("f",url);
+        } else {
+            if (USE_PROXY) {
+                startProxy();
+                oldUrl = url;
+                url = proxy.getProxyURL(url);
+            }
             try {
+          //      LogUtils.LOGE("ff",String.valueOf(mediaPlayer.isPlaying()));
+                if (mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+               //     LogUtils.LOGE("f","pause");
+                }
+             //   LogUtils.LOGE("f","d");
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
-                long p = System.currentTimeMillis();
-                Log.e("P", String.valueOf(p));
+//                long p = System.currentTimeMillis();
+//                Log.e("P", String.valueOf(p));
                 mediaPlayer.prepare();
-                long s = System.currentTimeMillis();
-                Log.e("S", String.valueOf(s) + " " + (p - s));
+//                long s = System.currentTimeMillis();
+//                Log.e("S", String.valueOf(s) + " " + (p - s));
                 mediaPlayer.start();
-                long x = System.currentTimeMillis();
-                Log.e("X", String.valueOf(x) + " " + (x - s));
+//                long x = System.currentTimeMillis();
+//                Log.e("X", String.valueOf(x) + " " + (x - s));
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalStateException e) {
@@ -126,11 +151,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            isfirst = false;
-        }else {
-            play();
         }
+     //   LogUtils.LOGE("oldUrl",oldUrl);
     }
+
 
     public void pause() {
         mediaPlayer.pause();
@@ -151,33 +175,43 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     public void onPrepared(MediaPlayer arg0) {
         Log.e("mediaPlayer", "onPrepared");
         arg0.start();
-
     }
 
     @Override
     public void onCompletion(MediaPlayer arg0) {
         Log.e("mediaPlayer", "onCompletion");
         //now_time.setText(""+changeNum(position/(60*1000))+":"+changeNum(position%(60*1000)/1000));
-        now_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
-        skbProgress.setProgress(100);
+        if (now_time != null) {
+
+            now_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
+        }
+        if (skbProgress != null) {
+
+            skbProgress.setProgress(100);
+        }
         isfirst = true;
-<<<<<<< HEAD
-        if (video_play!=null){
+
+        if (video_play != null) {
             video_play.setImageResource(R.mipmap.video_play);
         }
+        onPlayCompletion.completion();
 
-=======
-        video_play.setImageResource(R.mipmap.video_play);
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
+    }
+    public interface onPlayCompletion {
+        public void completion();
     }
 
 
     @Override
     public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
-        skbProgress.setSecondaryProgress(bufferingProgress);
+        if (skbProgress != null) {
+
+            skbProgress.setSecondaryProgress(bufferingProgress);
+        }
 
 
-        int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
+        //  int currentProgress = skbProgress.getMax() * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
         // Log.e(currentProgress + "% play", bufferingProgress + "% buffer");
     }
 

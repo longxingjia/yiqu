@@ -6,21 +6,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-<<<<<<< HEAD
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
-=======
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-<<<<<<< HEAD
+
 import android.util.Log;
-=======
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.base.utils.ToastManager;
-<<<<<<< HEAD
+
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Global.Variable;
-=======
+
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.VoiceFunction;
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -54,7 +52,7 @@ import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
-<<<<<<< HEAD
+
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
@@ -84,8 +82,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-=======
+
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
@@ -94,7 +91,7 @@ import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import java.util.Timer;
 import java.util.TimerTask;
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+import butterknife.OnClick;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -106,15 +103,10 @@ public class RecordOnlyActivity extends Activity
     private TextView tv_record;
     private TextView musicName;
     private TextView musictime;
-<<<<<<< HEAD
+
     private String className;
     private TextView recordHintTextView;
-=======
-    private TextView recordVoiceButton;
-    private String className;
-    private TextView recordHintTextView;
-    private TextView recordDurationView;
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
     private boolean mIsRecording = false;
     private boolean mIsLittleTime = false;
     private boolean mIsSendVoice = false;
@@ -130,8 +122,6 @@ public class RecordOnlyActivity extends Activity
     private int mSecond = 0;
     private static final int MSG_TIME_SHORT = 0x123;
     private static final int POPUPWINDOW = 0x124;
-<<<<<<< HEAD
-
     private TextView content;
     private String mRecorderPath;
     @BindView(R.id.background)
@@ -146,11 +136,7 @@ public class RecordOnlyActivity extends Activity
     public CircleImageView recordVoiceButton;
     @BindView(R.id.finish)
     public CircleImageView finish;
-=======
-    private EditText desc;
-    private TextView content;
-    private String mRecorderPath;
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -164,12 +150,11 @@ public class RecordOnlyActivity extends Activity
             }
         }
     };
-<<<<<<< HEAD
+
     private PlayUtils playUtils;
     private String desc;
     private String2TimeUtils string2TimeUtils;
-=======
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -183,11 +168,8 @@ public class RecordOnlyActivity extends Activity
 
     private void init(int layoutId) {
         setContentView(layoutId);
-<<<<<<< HEAD
-        ButterKnife.bind(this);
-=======
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+        ButterKnife.bind(this);
         bindView();
         className = getClass().getSimpleName();
         instance = this;
@@ -196,10 +178,7 @@ public class RecordOnlyActivity extends Activity
 
     public void bindView() {
         recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
-<<<<<<< HEAD
-=======
-        recordDurationView = (TextView) findViewById(R.id.musictime);
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         rlHint = (RelativeLayout) findViewById(R.id.hint);
 
         musicName = (TextView) findViewById(R.id.musicname);
@@ -207,17 +186,12 @@ public class RecordOnlyActivity extends Activity
 //        musicSize = (TextView) findViewById(R.id.musicSize);
         tv_record = (TextView) findViewById(R.id.tv_record);
         content = (TextView) findViewById(R.id.content);
-<<<<<<< HEAD
 
-=======
-        recordVoiceButton = (TextView) findViewById(R.id.recordVoiceButton);
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
 //        composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
 
         title_back.setOnClickListener(this);
-<<<<<<< HEAD
 
         Random random = new Random();
         int i = random.nextInt(4);
@@ -239,19 +213,13 @@ public class RecordOnlyActivity extends Activity
         String name = intent.getStringExtra("musicname");
         desc = intent.getStringExtra("musicdesc");
         playUtils = new PlayUtils(this);
-=======
-    }
 
-
-    public void initData() {
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
         mRecorderUtil = new RecorderAndPlayUtil(this);
 
-<<<<<<< HEAD
 
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         recordHintTextView.setText("按下开始录音");
@@ -289,14 +257,7 @@ public class RecordOnlyActivity extends Activity
         Bitmap bb = BitmapUtil.blur(b, 25f, this);
         background.setImageBitmap(bb);
         //  background.setImageAlpha(120); //0完全透明，255
-=======
-        recordVoiceButton.setOnClickListener(this);
-        mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
-        recordHintTextView.setText("按下开始录音");
-     //   File mFile = new File(Variable.StorageMusicCachPath, "红豆词_1474598402.mp3");
-     //   VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), instance);
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
     }
 
     @Override
@@ -310,20 +271,12 @@ public class RecordOnlyActivity extends Activity
 
     @Override
     protected void onPause() {
-<<<<<<< HEAD
-=======
-//        VoiceFunction.StopVoice();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         super.onPause();
         MobclickAgent.onPageEnd("录制录音页面");
         MobclickAgent.onPause(this);
     }
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
     @Override
     public void playVoiceBegin() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_pause);
@@ -345,41 +298,25 @@ public class RecordOnlyActivity extends Activity
     }
 
 
-<<<<<<< HEAD
+
     @OnClick({R.id.record, R.id.back, R.id.finish})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.finish:
                 if (recordComFinish) {
 
-=======
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.recordVoiceButton:
-                if (recordComFinish) {
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
                     MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
                         @Override
                         public void onTea(int tea) {
                             switch (tea) {
-<<<<<<< HEAD
-=======
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                                 case 0:
                                     Intent intent = new Intent(instance, StubActivity.class);
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
-<<<<<<< HEAD
-
-                                    //    playUtils.stop();
-=======
-                                    VoiceFunction.StopVoice();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
 
                                     break;
                                 case 1:
@@ -388,20 +325,14 @@ public class RecordOnlyActivity extends Activity
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
-<<<<<<< HEAD
-                                    //  mediaPlayer.stop();
-                                    //   playUtils.stop();
-=======
-                                    VoiceFunction.StopVoice();
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                                     break;
                             }
 
                         }
                     });
                     menuDialogSelectTeaHelper.show(recordVoiceButton);
-<<<<<<< HEAD
+
                 } else if (mIsRecording) {
 
                     if (mSecond > 9) {
@@ -438,46 +369,12 @@ public class RecordOnlyActivity extends Activity
                     startRecord();
                 }
 
-
-=======
-                } else {
-                    rlHint.setVisibility(View.INVISIBLE);
-                    if (mIsRecording) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("完成录制");
-                        builder.setMessage("确定要完成录制吗？");
-                        builder.setNegativeButton("取消", null);
-                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                recordHintTextView.setText("已结束录音");
-                                if (mIsRecording) {
-                                    initRecording();
-                                    recordComFinish = true;
-                                }
-                                VoiceFunction.PlayToggleVoice(mRecorderPath, instance);
-
-                                stopAnimation();
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.show();
-
-                    } else {
-                        startAnimation();
-                        down();
-
-                        recordVoiceButton.setText("完成录制");
-                    }
-                }
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                 break;
 
             case R.id.title_back:
                 exit();
                 break;
-<<<<<<< HEAD
+
             case R.id.back:
                 mSecond = 0;
                 mIsRecording = false;
@@ -492,14 +389,13 @@ public class RecordOnlyActivity extends Activity
                 icon_record.setImageResource(R.mipmap.icon_record);
 
                 break;
-=======
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         }
 
     }
 
 
-<<<<<<< HEAD
+
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
 
         private final String TAG = "DownLoaderTask";
@@ -635,27 +531,16 @@ public class RecordOnlyActivity extends Activity
 
 
     private void stopRecording() {
-=======
-
-
-
-
-    private void initRecording() {
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = 0;
         composeVoice.type = "2";
         composeVoice.musicname = musicName.getText().toString();
-<<<<<<< HEAD
+
         composeVoice.musictype = "";
         composeVoice.chapter = "";
         composeVoice.desc = desc;
-=======
-        composeVoice.musictype ="";
-        composeVoice.chapter = "";
-        composeVoice.desc = desc.getText().toString();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         composeVoice.accompaniment = "";
         composeVoice.soundtime = mSecond;
         composeVoice.isformulation = "0";
@@ -667,12 +552,6 @@ public class RecordOnlyActivity extends Activity
         composeVoice.commentpath = "";
         composeVoice.touid = 0;
         composeVoice.soundpath = "";
-
-<<<<<<< HEAD
-        //  LogUtils.LOGE(tag, mRecorderPath);
-=======
-        LogUtils.LOGE(tag,mRecorderPath);
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
 
         composeVoice.voicename = mRecorderPath.substring(
                 mRecorderPath.lastIndexOf("/") + 1,
@@ -700,15 +579,11 @@ public class RecordOnlyActivity extends Activity
     @Override
     protected void onDestroy() {
         if (mIsRecording) {
-<<<<<<< HEAD
+
             stopRecording();
         }
         playUtils.stop();
-=======
-            initRecording();
-        }
-        VoiceFunction.StopVoice();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
         super.onDestroy();
     }
 
@@ -722,29 +597,18 @@ public class RecordOnlyActivity extends Activity
 
                             // mIsRecording = false;
                             if (mIsRecording) {
-<<<<<<< HEAD
+
                                 stopRecording();
                             }
 //                            VoiceFunction.StopRecordVoice();
                             stopAnimation();
 
-=======
-                                initRecording();
-                            }
-//                            VoiceFunction.StopRecordVoice();
-                            stopAnimation();
-                            recordVoiceButton.setText(getResources().getString(R.string.start_recording));
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
+
                             recordHintTextView.setText("按下开始录音");
 
                             break;
                         case 1:
-<<<<<<< HEAD
 
-=======
-                            VoiceFunction.StopRecordVoice();
-                            VoiceFunction.StopVoice();
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                             finish();
                             break;
                     }
@@ -778,17 +642,10 @@ public class RecordOnlyActivity extends Activity
     }
 
 
-<<<<<<< HEAD
     private void startRecord() {
         if (mTimer != null) mTimer.cancel();
         if (mTimerTask != null) mTimerTask.cancel();
         string2TimeUtils = new String2TimeUtils();
-=======
-    private void down() {
-        if (mTimer != null) mTimer.cancel();
-        if (mTimerTask != null) mTimerTask.cancel();
-
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         mSecond = 0;
         mIsRecording = true;
         mIsLittleTime = true;
@@ -803,13 +660,10 @@ public class RecordOnlyActivity extends Activity
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-<<<<<<< HEAD
+
                       //  musictime.setText(mSecond + "\"");
                         musictime.setText(string2TimeUtils.stringForTimeS(mSecond));
-=======
-                        musictime.setText(mSecond + "\"");
 
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
                     }
                 });
                 if (i == 0) {

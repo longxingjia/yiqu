@@ -33,7 +33,8 @@ public class PlayerForLocal implements OnBufferingUpdateListener, OnCompletionLi
     private boolean USE_PROXY = true;
     private onPlayCompletion onPlayCompletion;
 
-    public PlayerForLocal(Context context, SeekBar skbProgress, ImageView video_play , TextView now_time, TextView all_time,onPlayCompletion onPlayCompletion) {
+    public PlayerForLocal(Context context, SeekBar skbProgress, ImageView video_play ,
+                          TextView now_time, TextView all_time,onPlayCompletion onPlayCompletion) {
         this.skbProgress = skbProgress;
         this.now_time = now_time;
         this.all_time = all_time;

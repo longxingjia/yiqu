@@ -36,40 +36,30 @@
             android:name="com.yiqu.Control.Main.RecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"/>
-
         <activity
             android:name="com.yiqu.Control.Main.PlayActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.yiqu.Control.Main.RecordActivityForRecordFrag"
-            android:screenOrientation="portrait"
-            />
-
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.yiqu.Control.Main.RecordOnlyActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-          />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StubActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-           />
-
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-
             android:theme="@style/TranslucentTheme"/>
-
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -79,10 +69,7 @@
             android:theme="@style/TranslucentTheme"/>
         <activity
             android:name=".fragment.tab3.Tab3Activity"
-
             android:screenOrientation="portrait"/>
-
-
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -115,7 +102,11 @@
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}"/>
 
-
+        <service
+            android:name=".service.MusicService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

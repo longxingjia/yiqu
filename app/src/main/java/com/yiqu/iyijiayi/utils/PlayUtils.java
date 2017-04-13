@@ -35,50 +35,11 @@ public class PlayUtils implements  OnCompletionListener, MediaPlayer.OnPreparedL
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnPreparedListener(this);
-           mediaPlayer.setOnCompletionListener(this);
+            mediaPlayer.setOnCompletionListener(this);
         } catch (Exception e) {
             Log.e("mediaPlayer", "error", e);
         }
-
-
-
-//        proxy = new MediaPlayerProxy(context);
-//        proxy.init();
-//        proxy.start();
     }
-
-    /*******************************************************
-     * 通过定时器和Handler来更新进度条
-     ******************************************************/
-//    TimerTask mTimerTask = new TimerTask() {
-//        @Override
-//        public void run() {
-//            if (mediaPlayer == null)
-//                return;
-//            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
-//                handleProgress.sendEmptyMessage(0);
-//            }
-//        }
-//    };
-//
-//    @SuppressLint("HandlerLeak")
-//    Handler handleProgress = new Handler() {
-//
-//
-//        public void handleMessage(Message msg) {
-//            int position = mediaPlayer.getCurrentPosition();
-//            duration = mediaPlayer.getDuration();
-//
-//            if (duration > 0) {
-//                long pos = skbProgress.getMax() * position / duration;
-//                skbProgress.setProgress((int) pos);
-//                now_time.setText("" + changeNum(position / (60 * 1000)) + ":" + changeNum(position % (60 * 1000) / 1000));
-//                all_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
-//            }
-//        }
-//
-//        ;
-//    };
 
 
     public void play() {
@@ -97,14 +58,11 @@ public class PlayUtils implements  OnCompletionListener, MediaPlayer.OnPreparedL
             try {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
-                long p = System.currentTimeMillis();
-                Log.e("P", String.valueOf(p));
+
                 mediaPlayer.prepare();
-                long s = System.currentTimeMillis();
-                Log.e("S", String.valueOf(s) + " " + (p - s));
+
                 mediaPlayer.start();
-                long x = System.currentTimeMillis();
-                Log.e("X", String.valueOf(x) + " " + (x - s));
+
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalStateException e) {

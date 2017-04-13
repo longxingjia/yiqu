@@ -21,6 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.ServiceUtils;
 
 public class MainActivity extends AbsFragmentActForMainAct implements Handler.Callback,
         NetCallBack {
@@ -167,6 +168,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
                                     dialog.dismiss();
+                                    ServiceUtils.stopService(MainActivity.this);
                                     finish();
                                 }
                             }).setPositiveButton("取消", null)
