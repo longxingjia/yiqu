@@ -10,10 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-<<<<<<< HEAD
-=======
-
->>>>>>> 429a4c1dac7c9590b80443b9eb9e50e4abf32725
         android:src="@mipmap/record_lyrc"/>
 
     <ImageView
