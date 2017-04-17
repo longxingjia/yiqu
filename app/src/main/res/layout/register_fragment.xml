@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/red_box"
+        android:background="@drawable/red_circle"
         android:padding="5dp"
 
 

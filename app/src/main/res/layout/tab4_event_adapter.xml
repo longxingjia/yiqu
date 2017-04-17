@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/tab_bg_color"
+              android:orientation="vertical">
+
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.ui.views.CircleImageView
+            android:id="@+id/header"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:src="@mipmap/menu_head"
+            app:border_width="2dp"
+            app:border_color="@color/head_bg"
+            />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="15sp"
+            android:minWidth="20dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textSize="15sp"
+            android:minWidth="20dp"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:src="@mipmap/play_event"/>
+
+    </LinearLayout>
+    
+
+
+    
+    
+
+
+
+
+</LinearLayout>

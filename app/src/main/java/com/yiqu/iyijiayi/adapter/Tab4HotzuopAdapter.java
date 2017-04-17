@@ -9,7 +9,6 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -35,10 +33,9 @@ import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
-
 import java.util.ArrayList;
 
-public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab4HotzuopAdapter extends BaseAdapter implements OnItemClickListener {
     private String tag = "Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
@@ -50,7 +47,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private LinearLayout mRoot;
     private Intent intent = new Intent();
 
-    public Tab1XizuoAdapter(Context context, LinearLayout root, ImageView play, TextView musicname, TextView author) {
+    public Tab4HotzuopAdapter(Context context, LinearLayout root, ImageView play, TextView musicname, TextView author) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         mPlay = play;
@@ -107,7 +104,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_xizuo, null);
+                v = mLayoutInflater.inflate(R.layout.tab4_hot_zuopin, null);
                 h.name = (TextView) v.findViewById(R.id.musicname);
                 h.content = (TextView) v.findViewById(R.id.desc);
                 h.icon = (ImageView) v.findViewById(R.id.header);
@@ -174,14 +171,22 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                     R.string.fm_net_call_no_network);
             return;
         }
-        Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", ItemDetailFragment.class.getName());
-        Bundle bundle = new Bundle();
+        if (AppShare.getIsLogin(mContext)) {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
+            Bundle bundle = new Bundle();
 
-        bundle.putSerializable("Sound", f);
+            bundle.putSerializable("Sound", f);
 
-        i.putExtras(bundle);
-        mContext.startActivity(i);
+            i.putExtras(bundle);
+            mContext.startActivity(i);
+        } else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
+
+        }
     }
 
 

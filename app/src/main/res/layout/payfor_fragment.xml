@@ -151,7 +151,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"
-        android:background="@drawable/red_box"
+        android:background="@drawable/red_circle"
         android:gravity="center"
         android:text="完成订单"
         android:textColor="@color/white"

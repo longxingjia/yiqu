@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:minHeight="75dp"
+              android:gravity="center_vertical"
+              android:layout_height="75dp">
+
+    <com.ui.views.CircleImageView
+        android:id="@+id/header"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:src="@mipmap/menu_head"
+        app:border_width="2dp"
+        app:border_color="@color/head_bg"
+        />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="15sp"
+        android:minWidth="20dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="15sp"
+        android:minWidth="20dp"
+        android:gravity="center_vertical"
+        android:src="@mipmap/play_event"/>
+
+
+
+</LinearLayout>

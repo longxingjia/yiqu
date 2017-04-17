@@ -1,65 +1,49 @@
 package com.yiqu.iyijiayi.fragment;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
-import com.ui.views.LoadMoreView.OnMoreListener;
-import com.ui.views.RefreshList;
-import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
+import com.yiqu.iyijiayi.adapter.Tab4DiscoveryAdapter;
+import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
 import com.yiqu.iyijiayi.fragment.tab4.RenewFragment;
-import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.model.NSDictionary;
-import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class Tab4Fragment extends TabContentFragment {
+public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener {
 
     private String tag = "Tab4Fragment";
     private String uid;
-    @BindView(R.id.item_renew)
-    public TextView item_renew;
-    @BindView(R.id.item_1)
-    public TextView item_1;
-    @BindView(R.id.item_2)
-    public TextView item_2;
+
+    @BindView(R.id.listView)
+    public ListView listView;
+
+    private LoadMoreView mLoadMoreView;
+    private int count = 0;
+    private int rows = 10;
+    private Tab4Adapter tab4Adapter;
 
 
     @Override
@@ -87,7 +71,44 @@ public class Tab4Fragment extends TabContentFragment {
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        tab4Adapter = new Tab4Adapter(getActivity());
+        listView.setAdapter(tab4Adapter);
+        listView.setOnItemClickListener(tab4Adapter);
+//
+        mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
+        mLoadMoreView.setOnMoreListener(this);
+//        listView.addFooterView(mLoadMoreView);
+//        listView.setOnScrollListener(mLoadMoreView);
+//
+//        listView.setFooterDividersEnabled(false);
+//        listView.setHeaderDividersEnabled(false);
 
+        mLoadMoreView.end();
+        mLoadMoreView.setMoreAble(false);
+
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getEventList,
+                MyNetRequestConfig.getEventList(getActivity(), 0, 10),
+                "getEventList", Tab4Fragment.this);
+
+    }
+
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
+        super.onNetEnd(id, type, netResponse);
+        if (id.equals("getEventList")) {
+            if (type == TYPE_SUCCESS) {
+                LogUtils.LOGE(tag, netResponse.toString());
+                ArrayList<Events> events =
+                        new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Events>>() {
+                        }.getType());
+                tab4Adapter.setData(events);
+
+            }
+
+        }
 
     }
 
@@ -135,24 +156,20 @@ public class Tab4Fragment extends TabContentFragment {
         setTitleText(getString(R.string.label_tab4));
     }
 
-    @OnClick({R.id.item_renew, R.id.item_1, R.id.item_2})
+    @OnClick({R.id.item_renew})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.item_renew:
                 Model.startNextAct(getActivity(),
                         RenewFragment.class.getName());
-
-                break;
-
-            case R.id.item_1:
-
-                break;
-            case R.id.item_2:
-
                 break;
         }
 
     }
 
 
+    @Override
+    public boolean onMore(AbsListView view) {
+        return false;
+    }
 }

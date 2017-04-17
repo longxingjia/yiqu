@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/red_box"
+        android:background="@drawable/red_circle"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="绑  定"

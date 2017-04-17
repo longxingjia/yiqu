@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +20,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingListFragment;
-import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
@@ -37,28 +36,27 @@ import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
 
-public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Sound> datas = new ArrayList<Sound>();
+    private ArrayList<Discovery> datas = new ArrayList<Discovery>();
     private Context mContext;
 
-    private String tag = "Tab5WopingAdapter";
-    private final String2TimeUtils string2TimeUtils;
+    private String tag = "Tab1SoundAdapter";
 
-    public Tab5WopingAdapter(Context context) {
+    public Tab4DiscoveryAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        string2TimeUtils = new String2TimeUtils();
+
     }
 
 
-    public void setData(ArrayList<Sound> list) {
+    public void setData(ArrayList<Discovery> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Sound> allDatas) {
+    public void addData(ArrayList<Discovery> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -69,7 +67,7 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
     }
 
     @Override
-    public Sound getItem(int position) {
+    public Discovery getItem(int position) {
         return datas.get(position);
     }
 
@@ -79,16 +77,16 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
     }
 
     private class HoldChild {
-        ImageView header;
+
+        TextView musicname;
+        TextView desc;
         TextView name;
         TextView title;
-        TextView status;
-        TextView musicname;
+        ImageView header;
         ImageView musictype;
-        TextView desc;
-        TextView created;
         TextView views;
-        LinearLayout music_desc;
+        TextView pl;
+        TextView time;
 
     }
 
@@ -99,60 +97,54 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.tab5_woping, null);
-                h.header = (ImageView) v.findViewById(R.id.header);
+                v = mLayoutInflater.inflate(R.layout.tab4_discovery, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
+                h.desc = (TextView) v.findViewById(R.id.desc);
+                h.pl = (TextView) v.findViewById(R.id.pl);
                 h.name = (TextView) v.findViewById(R.id.name);
                 h.title = (TextView) v.findViewById(R.id.title);
-                h.status = (TextView) v.findViewById(R.id.status);
-                h.musicname = (TextView) v.findViewById(R.id.musicname);
+                h.time = (TextView) v.findViewById(R.id.time);
+                h.header = (ImageView) v.findViewById(R.id.header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.desc = (TextView) v.findViewById(R.id.desc);
-                h.created = (TextView) v.findViewById(R.id.created);
                 h.views = (TextView) v.findViewById(R.id.views);
-                h.music_desc = (LinearLayout) v.findViewById(R.id.music_desc);
-
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+            Discovery f = getItem(position);
+
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.name.setText(f.stuname);
-            h.views.setText(f.views + "");
-
-            long currentTimeMillis = System.currentTimeMillis() / 1000;
-            long time = currentTimeMillis - f.edited;
-            h.created.setText(string2TimeUtils.long2Time(time));
-
 
             if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            } else if (f.type ==2){
+            } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
-            }else {
-                h.music_desc.setVisibility(View.GONE);
             }
 
-            if (f.isreply == 0) {//问题
-                h.status.setText("问题");
-                h.status.setTextColor(mContext.getResources().getColor(R.color.redMain));
 
-            } else if (f.isreply == 1) {//追问
-                h.status.setTextColor(mContext.getResources().getColor(R.color.dd_gray));
-                if (f.isnewreply == 1) {
-                    h.status.setText("追问");
-                } else {
-                    h.status.setText("已点评");
-                }
+            if (f.stype == 1) {   //
+                h.name.setText(f.tecname);
+                h.title.setText(f.tecschool);
+                PictureUtils.showPicture(mContext, f.tecimage, h.header,40);
 
-            } else if (f.isreply == -1) {//已拒绝
-
-                h.status.setText("已拒绝");
-                h.status.setTextColor(mContext.getResources().getColor(R.color.dd_gray));
+                h.pl.setText("点评了");
+            } else {
+                h.title.setText(f.stuschool);
+                PictureUtils.showPicture(mContext, f.stuimage, h.header,40);
+                h.name.setText(f.stuname);
+                h.pl.setText("录制了");
             }
 
-            PictureUtils.showPicture(mContext, f.stuimage, h.header);
+
+            h.views.setText(f.views + "");
+
+            String2TimeUtils string2TimeUtils = new String2TimeUtils();
+            long currentTimeMillis = System.currentTimeMillis() / 1000;
+
+            long time = currentTimeMillis - f.edited;
+            h.time.setText(string2TimeUtils.long2Time(time));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,30 +155,48 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (arg2 < 1) {
-            return;
-        }
-        Sound f = getItem(arg2 - 1);//加了头部
+
+        Discovery f = getItem(arg2 - 1);
+
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
-        if (f.isreply == 0) {//问题
-            Intent intent = new Intent(mContext, StubActivity.class);
-            intent.putExtra("fragment", Tab5WopingDetailFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("data", f);
-            intent.putExtras(bundle);
-            mContext.startActivity(intent);
-        } else if (f.isreply == 1) {
+
+
+
+        if (AppShare.getIsLogin(mContext)){
+
+            if (f.stype == 1) {   //
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+                i.putExtra("data",f.sid+"");
+
+                mContext.startActivity(i);
+
+//            h.pl.setText("评论了");
+            } else {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                i.putExtra("data",f.sid+"");
+                mContext.startActivity(i);
+
+//                Bundle b = new Bundle();
+//                b.putSerializable("data",f);
+//                i.putExtras(b);
+
+//                mContext.startActivity(i);
+//            h.pl.setText("录制了");
+            }
+
+        }else {
             Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-            i.putExtra("data",f.sid+"");
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
             mContext.startActivity(i);
 
         }
-
 
     }
 

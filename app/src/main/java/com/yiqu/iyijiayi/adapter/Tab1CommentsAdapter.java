@@ -23,6 +23,8 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
@@ -143,20 +145,25 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
                     R.string.fm_net_call_no_network);
             return;
         }
-        String fromuid = AppShare.getUserInfo(mContext).uid;
-        if (fromuid.equals(f.fromuid)){
-            ToastManager.getInstance(mContext).showText("不能对自己评论");
-            return;
+        if (AppShare.getIsLogin(mContext)) {
+            String fromuid = AppShare.getUserInfo(mContext).uid;
+            if (fromuid.equals(f.fromuid)) {
+                ToastManager.getInstance(mContext).showText("不能对自己评论");
+                return;
+            }
+            Intent intent = new Intent(mContext, CommentActivity.class);
+            intent.putExtra("sid", sid);
+            intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid);
+            intent.putExtra("touid", f.fromuid + "");
+            intent.putExtra("toname", f.fromusername + "");
+            mContext.startActivity(intent);
+        } else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
         }
-        Intent intent = new Intent(mContext, CommentActivity.class);
-        intent.putExtra("sid",sid);
-        intent.putExtra("fromuid",AppShare.getUserInfo(mContext).uid);
-        intent.putExtra("touid",f.fromuid+"");
-        intent.putExtra("toname",f.fromusername+"");
-        mContext.startActivity(intent);
-
     }
-
 
     public boolean isNetworkConnected(Context context) {
         if (context != null) {

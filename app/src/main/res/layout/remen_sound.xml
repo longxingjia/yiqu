@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/shengyue"
-                    android:gravity="center" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/musicname"
@@ -198,14 +198,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerInside"
-                    android:background="@drawable/tea_voice"/>
+                    android:background="@drawable/red_circle"/>
 
                 <TextView
                     android:id="@+id/tea_listen"
                     android:layout_width="172dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
-
                     android:gravity="center"
                     android:text="fssfsfsfs"
                     android:textColor="@color/white"

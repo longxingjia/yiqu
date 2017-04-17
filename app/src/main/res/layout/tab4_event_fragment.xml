@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/tab_bg_color"
+              android:orientation="vertical">
+
+    <com.ui.views.RefreshList
+        android:id="@+id/lv_sound"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+
+        android:divider="@color/tab_bg_color"
+        android:listSelector="#00000000"
+        android:minHeight="250dp"
+        android:background="@color/white"
+        android:scrollbars="none"></com.ui.views.RefreshList>
+
+    <TextView
+        android:id="@+id/join_in"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:text="参与活动"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@drawable/red_circle"/>
+
+</LinearLayout>
+

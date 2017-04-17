@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Control.Main.PActivity;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 import com.yiqu.Control.Main.RecordOnlyActivity;

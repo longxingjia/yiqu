@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,11 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Discovery> datas = new ArrayList<Discovery>();
+    private ArrayList<Events> datas = new ArrayList<Events>();
     private Context mContext;
 
     private String tag = "Tab1SoundAdapter";
@@ -51,12 +51,12 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
     }
 
 
-    public void setData(ArrayList<Discovery> list) {
+    public void setData(ArrayList<Events> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Discovery> allDatas) {
+    public void addData(ArrayList<Events> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -67,7 +67,7 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
     }
 
     @Override
-    public Discovery getItem(int position) {
+    public Events getItem(int position) {
         return datas.get(position);
     }
 
@@ -78,15 +78,10 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
     private class HoldChild {
 
-        TextView musicname;
-        TextView desc;
-        TextView name;
+
         TextView title;
-        ImageView header;
-        ImageView musictype;
-        TextView views;
-        TextView pl;
-        TextView time;
+        ImageView icon;
+
 
     }
 
@@ -97,53 +92,17 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.tab4_discovery, null);
-                h.musicname = (TextView) v.findViewById(R.id.musicname);
-                h.desc = (TextView) v.findViewById(R.id.desc);
-                h.pl = (TextView) v.findViewById(R.id.pl);
-                h.name = (TextView) v.findViewById(R.id.name);
+                v = mLayoutInflater.inflate(R.layout.tab4_event_adapt, null);
                 h.title = (TextView) v.findViewById(R.id.title);
-                h.time = (TextView) v.findViewById(R.id.time);
-                h.header = (ImageView) v.findViewById(R.id.header);
-                h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.views = (TextView) v.findViewById(R.id.views);
+                h.icon = (ImageView) v.findViewById(R.id.icon);
+
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            Discovery f = getItem(position);
-
-            h.musicname.setText(f.musicname);
-            h.desc.setText(f.desc);
-
-            if (f.type == 1) {
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            } else {
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
-            }
-
-
-            if (f.stype == 1) {   //
-                h.name.setText(f.tecname);
-                h.title.setText(f.tecschool);
-                PictureUtils.showPicture(mContext, f.tecimage, h.header,40);
-
-                h.pl.setText("点评了");
-            } else {
-                h.title.setText(f.stuschool);
-                PictureUtils.showPicture(mContext, f.stuimage, h.header,40);
-                h.name.setText(f.stuname);
-                h.pl.setText("录制了");
-            }
-
-
-            h.views.setText(f.views + "");
-
-            String2TimeUtils string2TimeUtils = new String2TimeUtils();
-            long currentTimeMillis = System.currentTimeMillis() / 1000;
-
-            long time = currentTimeMillis - f.edited;
-            h.time.setText(string2TimeUtils.long2Time(time));
+            Events f = getItem(position);
+            h.title.setText(f.title);
+            PictureUtils.showPicture(mContext,f.image,h.icon,25);
 
 
         } catch (Exception e) {
@@ -156,7 +115,7 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-        Discovery f = getItem(arg2 - 1);
+        Events f = getItem(arg2);
 
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
@@ -167,28 +126,12 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
 
 
         if (AppShare.getIsLogin(mContext)){
-
-            if (f.stype == 1) {   //
-                Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", SoundItemDetailFragment.class.getName());
-                i.putExtra("data",f.sid+"");
-
-                mContext.startActivity(i);
-
-//            h.pl.setText("评论了");
-            } else {
-                Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
-                i.putExtra("data",f.sid+"");
-                mContext.startActivity(i);
-
-//                Bundle b = new Bundle();
-//                b.putSerializable("data",f);
-//                i.putExtras(b);
-
-//                mContext.startActivity(i);
-//            h.pl.setText("录制了");
-            }
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", EventFragment.class.getName());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("data",f);
+            i.putExtras(bundle);
+            mContext.startActivity(i);
 
         }else {
             Intent i = new Intent(mContext, StubActivity.class);

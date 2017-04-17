@@ -147,7 +147,7 @@ public class CommonFunction {
         short firstShort =
                 CommonFunction.GetShort(firstShortHighByte, firstShortLowByte, bigEnding);
         int j = firstShort;
-        firstShort = (short) (j >> 2);
+        firstShort = (short) (j >> 2);  //噪音消除
 
         short secondShort =
                 CommonFunction.GetShort(secondShortHighByte, secondShortLowByte, bigEnding);

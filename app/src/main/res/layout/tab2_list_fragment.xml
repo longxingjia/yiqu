@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <include
+        android:visibility="gone"
         android:id="@+id/top_play"
         layout="@layout/top_play"
         android:background="#11000000" />

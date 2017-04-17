@@ -244,7 +244,6 @@ public class Tab2Fragment extends TabContentFragment {
                 flag=0;
                 initData();
 
-
                 break;
             case R.id.tab_student:
                 tab_teacher.setSelected(false);

@@ -40,6 +40,23 @@ public class PictureUtils {
         }
     }
 
+    public static void showdefaultPicture(Context context, String url, ImageView icon) {
+
+        if (url != null) {
+            if (url.contains("http://wx.qlogo.cn")) {
+                Picasso.with(context).load(url)
+
+                        .placeholder(R.mipmap.menu_head).into(icon);
+            } else {
+                Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
+
+                        .placeholder(R.mipmap.menu_head).into(icon);
+            }
+        }else {
+            Picasso.with(context).load(R.mipmap.menu_head).into(icon);
+        }
+    }
+
 
     public static void showPicture(Context context, String url, ImageView icon,int sizedp) {
 

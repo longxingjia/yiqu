@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
@@ -264,7 +263,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 progressBar.setProgress(100);
                 submit.setClickable(true);
                 submit.setEnabled(true);
-                submit.setBackgroundResource(R.drawable.red_box);
+                submit.setBackgroundResource(R.drawable.red_circle);
                 music.downloadtime = System.currentTimeMillis();
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
                 downloadMusicInfoDBHelper.insert(music);

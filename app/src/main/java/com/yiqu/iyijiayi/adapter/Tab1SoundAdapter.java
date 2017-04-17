@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.HomePage;
@@ -319,21 +320,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             return;
         }
 
-        if (AppShare.getIsLogin(mContext)) {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", ItemDetailFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Sound", f);
-            i.putExtras(bundle);
-            i.putExtra("position", arg2 - 2);
-            fragment.startActivityForResult(i, 0);
-        } else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请登录后再试");
-            mContext.startActivity(i);
-
-        }
+        Intent i = new Intent(mContext, StubActivity.class);
+        i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Sound", f);
+        i.putExtras(bundle);
+        i.putExtra("position", arg2 - 2);
+        fragment.startActivityForResult(i, 0);
 
 
     }

@@ -523,6 +523,20 @@ public class MyNetApiConfig {
 
 
     };
+
+    public static MyNetApi getEventList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/event/get-event-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+
+    };
     public static MyNetApi getNewCoinOrder = new MyNetApi() {
         @Override
         public String getPath() {

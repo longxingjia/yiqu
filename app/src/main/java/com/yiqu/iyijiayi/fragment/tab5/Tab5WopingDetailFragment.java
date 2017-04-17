@@ -67,7 +67,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private TextView musicname;
     private TextView desc;
     private TextView soundtime;
-    private TextView stu_listen;
+
     private TextView created;
     private TextView views;
     private ImageView stu_header;
@@ -169,7 +169,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
         desc = (TextView) v.findViewById(R.id.desc);
         soundtime = (TextView) v.findViewById(R.id.soundtime);
-        stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+
         msecond = (TextView) v.findViewById(R.id.msecond);
         created = (TextView) v.findViewById(R.id.created);
 
@@ -177,7 +177,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         musictype = (ImageView) v.findViewById(R.id.musictype);
         recording = (ImageView) v.findViewById(R.id.recording);
         rejuse = (ImageView) v.findViewById(R.id.rejuse);
-        stu_listen.setOnClickListener(this);
+
         recording.setOnClickListener(this);
         rejuse.setOnClickListener(this);
         stop_text = (TextView) v.findViewById(R.id.stop_text);
@@ -406,7 +406,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         protected void onPreExecute() {
             super.onPreExecute();
 //            progressBar.setProgress(0);
-            stu_listen.setText("");
+
 
 //
         }
@@ -434,7 +434,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 if (contentLength == -1) {
 
                 } else {
-                    stu_listen.setText(values[0].intValue() * 100 / contentLength + "%");
+                 //   stu_listen.setText(values[0].intValue() * 100 / contentLength + "%");
                 }
             }
 

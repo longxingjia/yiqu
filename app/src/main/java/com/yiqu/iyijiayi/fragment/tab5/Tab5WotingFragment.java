@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.RelativeLayout;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -18,21 +17,12 @@ import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab4Adapter;
 import com.yiqu.iyijiayi.adapter.Tab5WotingAdapter;
-import com.yiqu.iyijiayi.fragment.TabContentFragment;
-import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.Listened;
-import com.yiqu.iyijiayi.model.NSDictionary;
-import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 

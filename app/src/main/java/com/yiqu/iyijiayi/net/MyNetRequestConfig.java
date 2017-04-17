@@ -127,6 +127,12 @@ public class MyNetRequestConfig {
         r.addHttpParam("rows", String.valueOf(rows));
         return r;
     }
+    public static NetRequest getEventList(Context c, int count, int rows) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
+        return r;
+    }
 
     public static NetRequest addfollow(Context c, String uid, String fuid) {
         MyNetRequest r = new MyNetRequest(c);
