@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
 import com.ui.views.CircleImageView;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.yiqu.Tool.Global.Variable;
@@ -33,10 +35,16 @@ import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PlayUtils;
+import com.yiqu.iyijiayi.view.LyricLoader;
+import com.yiqu.iyijiayi.view.LyricView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -47,7 +55,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlayActivity extends Activity
-        implements VoicePlayerInterface {
+        implements VoicePlayerInterface ,NetCallBack{
 
     private String tag = "PlayActivity";
     //    private int width;
@@ -81,6 +89,9 @@ public class PlayActivity extends Activity
     public ImageView mode;
     @BindView(R.id.upload)
     public ImageView upload;
+
+    @BindView(R.id.lyricview)
+    public LyricView lyricView;
 
     @BindView(R.id.pre_bg)
     public CircleImageView pre_bg;
@@ -156,13 +167,15 @@ public class PlayActivity extends Activity
 
 
         musicName.setText(voice.musicname);
-        LogUtils.LOGE(tag, voice.toString());
+
         startAnimation();
         //  VoiceFunction.PlayToggleVoice(Variable.StorageMusicPath + voice.voicename, instance);
 
         play.setImageResource(R.mipmap.icon_pause);
-        player.stop();
+       player.stop();
+
         player.playUrl(Variable.StorageMusicPath + voice.voicename);
+        handler.post(runnable);
         // player.onCompletion
 
         Random random = new Random();
@@ -175,7 +188,43 @@ public class PlayActivity extends Activity
         play_bg.setImageBitmap(bitmap);
         next_bg.setImageBitmap(bitmap);
 
+       String   fileName = voice.musicname + "_" + voice.mid;
+        File    lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
+        if (!lrc.exists()) {
+
+            MyNetApiConfig myNetApiConfig = new MyNetApiConfig(voice.musicname);
+
+            RestNetCallHelper.callNet(this,
+                    myNetApiConfig.getlyric, MyNetRequestConfig
+                            .getlyric(this),
+                    "getlyric", instance);
+        } else {
+            LogUtils.LOGE(tag,fileName);
+            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
+            lyricView.invalidate();
+        }
+
+
+
+
     }
+
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (player.isPlaying()) {
+                int time = player.getCurrentPosition();
+
+                LogUtils.LOGE(tag, player.getDuration()+"");
+                lyricView.updateLyrics( time, player.getDuration());
+                handler.postDelayed(this, 100);
+
+            }
+
+        }
+    };
 
     PlayerForLocal.onPlayCompletion onPlayCompletion = new PlayerForLocal.onPlayCompletion() {
         @Override
@@ -204,6 +253,21 @@ public class PlayActivity extends Activity
 
         }
     };
+
+    @Override
+    public void onNetNoStart(String id) {
+
+    }
+
+    @Override
+    public void onNetStart(String id) {
+
+    }
+
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+    }
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
         int progress;
@@ -312,9 +376,11 @@ public class PlayActivity extends Activity
                 if (player.isPlaying()) {
                     play.setImageResource(R.mipmap.icon_play);
                     player.pause();
+                //    handler.removeCallbacks(runnable);
                 } else {
                     play.setImageResource(R.mipmap.icon_pause);
                     player.playUrl(Variable.StorageMusicPath + voice.voicename);
+                    handler.post(runnable);
                 }
                 break;
 

@@ -360,6 +360,34 @@ public class MyNetApiConfig {
 
     };
     /**
+     *
+      */
+    public static MyNetApi findPeople = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/find-people";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+
+    public static MyNetApi getGroups = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/user/get-groups";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+    /**
      * 67、
      */
     public static MyNetApi get_follow_recommend_list = new MyNetApi() {

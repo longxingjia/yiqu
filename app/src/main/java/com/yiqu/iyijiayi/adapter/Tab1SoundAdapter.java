@@ -153,7 +153,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 }
 
             }
-            h.tea_listen.setText("1元偷偷听");
+        //    h.tea_listen.setText("1元偷偷听");
 
             if (likes != null) {
                 for (int i = 0; i < likes.size(); i++) {
@@ -321,13 +321,11 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         }
 
         Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+        i.putExtra("fragment", ItemDetailFragment.class.getName());
         Bundle bundle = new Bundle();
         bundle.putSerializable("Sound", f);
         i.putExtras(bundle);
-        i.putExtra("position", arg2 - 2);
         fragment.startActivityForResult(i, 0);
-
 
     }
 

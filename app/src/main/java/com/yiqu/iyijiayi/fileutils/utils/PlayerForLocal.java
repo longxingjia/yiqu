@@ -91,6 +91,13 @@ public class PlayerForLocal implements OnBufferingUpdateListener, OnCompletionLi
     };
 
 
+    public int getCurrentPosition()  {
+          return   mediaPlayer.getCurrentPosition();
+    }
+    public int getDuration()  {
+          return   mediaPlayer.getDuration();
+    }
+
     public void play() {
         mediaPlayer.start();
     }

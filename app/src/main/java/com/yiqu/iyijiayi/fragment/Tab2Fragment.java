@@ -1,41 +1,36 @@
 package com.yiqu.iyijiayi.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
-import android.os.Handler;
 
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.adapter.Tab2StudentAdapter;
-import com.yiqu.iyijiayi.adapter.Tab2TeacherAdapter;
+import com.yiqu.iyijiayi.adapter.Tab2ListAdapter;
+import com.yiqu.iyijiayi.adapter.Tab2UserInfoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
-import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Student;
+import com.yiqu.iyijiayi.model.Tab2Info;
 import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.model.ZhaoRen;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;
 
@@ -46,25 +41,26 @@ import butterknife.OnClick;
 public class Tab2Fragment extends TabContentFragment {
 
     private String tag = "Tab2Fragment";
-    private int flag = 0;
+    private int flag = 2;
     private String uid;
 
     private ArrayList<Teacher> teacher;
     private ArrayList<Student> student;
 
-    private Tab2TeacherAdapter tab2TeacherAdapter;
-    private Tab2StudentAdapter tab2StudentAdapter;
 
     @BindView(R.id.tab_teacher)
     public TextView tab_teacher;
     @BindView(R.id.tab_student)
     public TextView tab_student;
-    @BindView(R.id.shengyue)
-    public TextView shengyue;
-    @BindView(R.id.boyin)
-    public TextView boyin;
-    @BindView(R.id.yueqi)
-    public TextView yueqi;
+
+    @BindView(R.id.gridview)
+    public GridView gridview;
+
+    @BindView(R.id.listView)
+    public ListView listView;
+    private Context mContext;
+    private Tab2UserInfoAdapter tab2UserInfoAdapter;
+    private Tab2ListAdapter tab2ListAdapter;
 
 
     @Override
@@ -90,6 +86,14 @@ public class Tab2Fragment extends TabContentFragment {
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
+        mContext = getActivity();
+        tab2UserInfoAdapter = new Tab2UserInfoAdapter(mContext);
+        gridview.setAdapter(tab2UserInfoAdapter);
+        gridview.setOnItemClickListener(tab2UserInfoAdapter);
+
+        tab2ListAdapter = new Tab2ListAdapter(mContext);
+        listView.setAdapter(tab2ListAdapter);
+        listView.setOnItemClickListener(tab2ListAdapter);
 
     }
 
@@ -107,15 +111,21 @@ public class Tab2Fragment extends TabContentFragment {
     }
 
     private void initData() {
-        if (flag==0){
-            shengyue.setText("资深声乐导师 TOP10");
-            boyin.setText("资深播音导师 TOP10");
-            yueqi.setText("资深乐器导师 TOP10");
-        }else {
-            shengyue.setText("优秀声乐学生");
-            boyin.setText("优秀播音学生");
-            yueqi.setText("优秀乐器学生");
+
+        if (AppShare.getIsLogin(getActivity())) {
+            uid = AppShare.getUserInfo(getActivity()).uid;
+        } else {
+            uid = "0";
         }
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.findPeople,
+                MyNetRequestConfig.findPeople(getActivity(), uid, flag),
+                "findPeople", Tab2Fragment.this, false, true);
+
+
+
 
     }
 
@@ -125,14 +135,6 @@ public class Tab2Fragment extends TabContentFragment {
         MobclickAgent.onPageStart("找人"); //统计页面，"MainScreen"为页面名称，可自定义
 
 
-        if (AppShare.getIsLogin(getActivity())) {
-            uid = AppShare.getUserInfo(getActivity()).uid;
-        } else {
-            uid = "0";
-        }
-
-        tab2TeacherAdapter = new Tab2TeacherAdapter(getActivity(), uid);
-        tab2StudentAdapter = new Tab2StudentAdapter(getActivity(), uid);
 
 
     }
@@ -147,23 +149,19 @@ public class Tab2Fragment extends TabContentFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (netResponse != null) {
-            if (netResponse.bool == 1) {
+        if (id.equals("findPeople")) {
+            if (type == TYPE_SUCCESS) {
+                LogUtils.LOGE(tag, netResponse.toString());
 
-                Gson gson = new Gson();
-                ZhaoRen zhaoRen = gson.fromJson(netResponse.data, ZhaoRen.class);
-                AppShare.setZhaoRenList(getActivity(), zhaoRen);
-                teacher = zhaoRen.teacher;
-                student = zhaoRen.student;
+                Tab2Info tab2Info = new Gson().fromJson(netResponse.data, Tab2Info.class);
 
-                tab2TeacherAdapter.setData(zhaoRen);
+                tab2UserInfoAdapter.setData(tab2Info.topusers);
 
-                tab2StudentAdapter.setData(zhaoRen);
-
-            } else {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                tab2ListAdapter.setData(tab2Info.groups);
             }
         }
+
+
         super.onNetEnd(id, type, netResponse);
     }
 
@@ -232,7 +230,7 @@ public class Tab2Fragment extends TabContentFragment {
 
     }
 
-    @OnClick({R.id.tab_teacher, R.id.tab_student, R.id.boyin, R.id.shengyue, R.id.yueqi})
+    @OnClick({R.id.tab_teacher, R.id.tab_student})
     public void onClick(View v) {
         switch (v.getId()) {
 
@@ -241,7 +239,7 @@ public class Tab2Fragment extends TabContentFragment {
                 tab_student.setSelected(false);
                 tab_teacher.setTextColor(getResources().getColor(R.color.white));
                 tab_student.setTextColor(getResources().getColor(R.color.tab_text_color));
-                flag=0;
+                flag = 2;
                 initData();
 
                 break;
@@ -250,19 +248,8 @@ public class Tab2Fragment extends TabContentFragment {
                 tab_student.setSelected(true);
                 tab_student.setTextColor(getResources().getColor(R.color.white));
                 tab_teacher.setTextColor(getResources().getColor(R.color.tab_text_color));
-                flag=1;
+                flag = 1;
                 initData();
-
-                break;
-            case R.id.boyin:
-
-
-                break;
-            case R.id.shengyue:
-
-
-                break;
-            case R.id.yueqi:
 
 
                 break;

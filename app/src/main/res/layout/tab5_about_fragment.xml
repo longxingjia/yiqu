@@ -20,12 +20,26 @@
             android:layout_marginTop="40dp"
             android:background="@mipmap/logo" />
 
-        <TextView
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="艺加艺V1.1.1" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="艺加艺V" />
+            <TextView
+                android:id="@+id/version"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="" />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="match_parent"

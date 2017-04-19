@@ -2,6 +2,7 @@ package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.umeng.analytics.MobclickAgent;
@@ -9,6 +10,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
+import com.yiqu.iyijiayi.utils.AppVersionCode;
 import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 /**
@@ -65,6 +67,9 @@ public class Tab5AboutFragment extends AbsAllFragment {
 
     @Override
     protected void initView(View v) {
+        TextView version = (TextView) v.findViewById(R.id.version);
+
+        version.setText(AppVersionCode.getVersionName(getActivity()));
 
 
     }

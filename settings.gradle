@@ -1,1 +1,1 @@
-include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':waveview'
+include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':waveview', ':LyricView'

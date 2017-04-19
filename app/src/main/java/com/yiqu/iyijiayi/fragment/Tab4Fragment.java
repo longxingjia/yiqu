@@ -40,7 +40,7 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     @BindView(R.id.listView)
     public ListView listView;
 
-    private LoadMoreView mLoadMoreView;
+  //  private LoadMoreView mLoadMoreView;
     private int count = 0;
     private int rows = 10;
     private Tab4Adapter tab4Adapter;
@@ -75,16 +75,16 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
         listView.setAdapter(tab4Adapter);
         listView.setOnItemClickListener(tab4Adapter);
 //
-        mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
-        mLoadMoreView.setOnMoreListener(this);
+//        mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
+//        mLoadMoreView.setOnMoreListener(this);
 //        listView.addFooterView(mLoadMoreView);
 //        listView.setOnScrollListener(mLoadMoreView);
 //
 //        listView.setFooterDividersEnabled(false);
 //        listView.setHeaderDividersEnabled(false);
 
-        mLoadMoreView.end();
-        mLoadMoreView.setMoreAble(false);
+//        mLoadMoreView.end();
+//        mLoadMoreView.setMoreAble(false);
 
 
         RestNetCallHelper.callNet(

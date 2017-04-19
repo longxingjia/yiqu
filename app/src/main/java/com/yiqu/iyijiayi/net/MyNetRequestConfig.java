@@ -88,6 +88,20 @@ public class MyNetRequestConfig {
         return r;
     }
 
+    /**
+     *
+     * @param c
+     * @param uid
+     * @param type 1学生 2导师
+     * @return
+     */
+    public static NetRequest findPeople(Context c, String uid,int type) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("type", String.valueOf(type));
+        return r;
+    }
+
     public static NetRequest searchByText(Context c, String text) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("text", text);
@@ -97,6 +111,13 @@ public class MyNetRequestConfig {
     public static NetRequest searchItems(Context c, String text, int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("text", text);
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
+        return r;
+    }
+   public static NetRequest getGroups(Context c, String gid, int count, int rows) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("gid", gid);
         r.addHttpParam("count", String.valueOf(count));
         r.addHttpParam("rows", String.valueOf(rows));
         return r;

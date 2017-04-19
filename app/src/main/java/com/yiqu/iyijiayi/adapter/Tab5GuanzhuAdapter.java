@@ -47,7 +47,7 @@ public class Tab5GuanzhuAdapter extends BaseAdapter implements OnItemClickListen
     private ArrayList<Teacher> datas = new ArrayList<Teacher>();
     private Context mContext;
     private String uid;
-    private String tag = "Tab2TeacherAdapter";
+    private String tag = "Tab2UserInfoAdapter";
 
     public Tab5GuanzhuAdapter(Context context, String uid) {
         mLayoutInflater = LayoutInflater.from(context);

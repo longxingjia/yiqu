@@ -112,6 +112,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public ImageView musictype;
     @BindView(R.id.worth_type)
     public ImageView worth_type;
+    @BindView(R.id.add_follow)
+    public ImageView add_follow;
     @BindView(R.id.tea_listen)
     public TextView tea_listen;
     @BindView(R.id.worth_desc)
@@ -508,6 +510,15 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             musictype.setImageResource(R.mipmap.boyin);
         }
 
+//        if (sound.isfollow.equals("0")){  //没有关注
+//            h.follow.setBackgroundResource(R.mipmap.follow);
+//
+//
+//        }else {
+//            h.follow.setBackgroundResource(R.mipmap.followed);
+//        }
+
+
         LogUtils.LOGE(tag, sound.toString());
         if (sound.touid == 0) {
             teacher_info.setVisibility(View.GONE);
@@ -611,9 +622,13 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         super.init(savedInstanceState);
     }
 
-    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header, R.id.video_play, R.id.back})
+    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header, R.id.video_play, R.id.back,R.id.add_follow})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.add_follow:
+
+
+                break;
             case R.id.back:
                 getActivity().finish();
                 break;

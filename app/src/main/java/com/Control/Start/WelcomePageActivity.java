@@ -201,7 +201,7 @@ public class WelcomePageActivity extends Activity {
                        public void onNetEnd(String id, int type, NetResponse netResponse) {
 
                            updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
-                           LogUtils.LOGE("1",updateInfo.toString());
+                         //  LogUtils.LOGE("1",updateInfo.toString());
 //                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
                            fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
 

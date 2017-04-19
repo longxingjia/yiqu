@@ -14,6 +14,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.yiqu.Tool.Function.VoiceFunction;
@@ -26,6 +28,8 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.adapter.UploaderTask;
+import com.yiqu.iyijiayi.fileutils.utils.Player;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -53,6 +57,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -66,7 +73,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private TextView like;
     private TextView musicname;
     private TextView desc;
-    private TextView soundtime;
 
     private TextView created;
     private TextView views;
@@ -80,7 +86,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             switch (msg.what) {
                 case 0:
                     //更新进度
-                    soundtime.setText(--totalTime + "\"");
+                  //  soundtime.setText(--totalTime + "\"");
                     if (totalTime == 0) {
                         totalTime = 1;
                     }
@@ -96,7 +102,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private File mFile;
     private Timer mTimer;
     private TimerTask mTimerTask;
-    private DownLoaderTask task;
     private ImageView musictype;
     private Sound sound;
     private ImageView send;
@@ -116,6 +121,23 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private ImageView recording;
     private TextView stop_text;
     private ImageView rejuse;
+
+    @BindView(R.id.question_type)
+    public LinearLayout question_type;
+    @BindView(R.id.tips)
+    public LinearLayout tips;
+    @BindView(R.id.close_tips)
+    public ImageView close_tips;
+    @BindView(R.id.video_play)
+    public ImageView video_play;
+    @BindView(R.id.seekbar)
+    public SeekBar seekbar;
+    @BindView(R.id.now_time)
+    public TextView now_time;
+    @BindView(R.id.soundtime)
+    public TextView soundtime;
+    private Player player;
+
 
     @Override
     protected int getTitleBarType() {
@@ -162,13 +184,12 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     @Override
     protected void initView(View v) {
-
+        ButterKnife.bind(this, v);
         sound = (Sound) getActivity().getIntent().getExtras().getSerializable("data");
 
         musicname = (TextView) v.findViewById(R.id.musicname);
 
         desc = (TextView) v.findViewById(R.id.desc);
-        soundtime = (TextView) v.findViewById(R.id.soundtime);
 
         msecond = (TextView) v.findViewById(R.id.msecond);
         created = (TextView) v.findViewById(R.id.created);
@@ -191,18 +212,50 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         play.setOnClickListener(this);
     }
 
+    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
+        int progress;
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress,
+                                      boolean fromUser) {
+            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+            this.progress = (int) (progress * player.mediaPlayer.getDuration()
+                    / seekBar.getMax());
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
+            player.mediaPlayer.seekTo(progress);
+        }
+    }
+
     @Override
     protected void init(Bundle savedInstanceState) {
         desc.setText(sound.desc);
-        soundtime.setText(sound.soundtime + "\"");
         musicname.setText(sound.musicname);
 
 
         if (sound.type == 1) {
             musictype.setImageResource(R.mipmap.shengyue);
-        } else {
+        } else if ((sound.type ==2)){
             musictype.setImageResource(R.mipmap.boyin);
+        }else {
+            question_type.setVisibility(View.GONE);
         }
+
+        seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
+            @Override
+            public void completion() {
+
+            }
+        });
 
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
@@ -236,17 +289,27 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     }
 
-    @Override
+    @OnClick({R.id.close_tips,R.id.video_play})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.stu_listen:
+            case R.id.close_tips:
 
-                if (mFile.exists()) {
-                    palyVoice();
+                tips.setVisibility(View.GONE);
+
+                break;
+            case R.id.video_play:
+                if (player.isPlaying()) {
+                    video_play.setImageResource(R.mipmap.video_play);
+                    player.pause();
                 } else {
-                    task = new DownLoaderTask(url, Variable.StorageMusicCachPath, fileName, getActivity());
-                    task.execute();
+                    video_play.setImageResource(R.mipmap.video_pause);
+                    if (url.equals(player.getUrl())){
+                        player.rePlay();
+                    }else {
+                        player.playUrl(url);
+                    }
                 }
+
                 break;
             case R.id.send:
                 final Map<String, String> params = new HashMap<String, String>();
@@ -270,7 +333,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 if (mIsRecording) {
                     StopRecording();
                 }
-                msecond.setText("剩余" + 120 + "\"");
+                msecond.setText("0");
                 record.setVisibility(View.VISIBLE);
                 recording.setVisibility(View.GONE);
                 stop_text.setVisibility(View.GONE);
@@ -314,7 +377,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        msecond.setText("剩余" + i + "\"");
+                        msecond.setText(mSecond+ "");
 
                     }
                 });
@@ -372,209 +435,53 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             mTimerTask.cancel();
             mTimerTask = null;
         }
-
         currentTime = 0;
-
-        soundtime.setText(sound.soundtime + "\"");
-
     }
 
-    public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
-
-        private final String TAG = "DownLoaderTask";
-        private URL mUrl;
-        private File mFile;
-        private int mProgress = 0;
-        private ProgressReportingOutputStream mOutputStream;
-        private Activity mContext = null;
-        private int contentLength = 1;
-
-        public DownLoaderTask(String downloadPath, String out, String fileName, Activity context) {
-            super();
-            mContext = context;
-            try {
-                mUrl = new URL(downloadPath);
-
-                mFile = new File(out, fileName);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            progressBar.setProgress(0);
 
 
 //
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-            return download();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-//            if (mDialog == null)
-//                return;
-            if (values.length > 1) {
-
-                contentLength = values[1];
-                if (contentLength == -1) {
-//                    progressBar.setIndeterminate(true);
-                } else {
-//                    progressBar.setMax(contentLength);
-                }
-            } else {
-//                progressBar.setProgress(values[0].intValue());
-                if (contentLength == -1) {
-
-                } else {
-                 //   stu_listen.setText(values[0].intValue() * 100 / contentLength + "%");
-                }
-            }
-
-            if (isCancelled()) {
-                mFile.delete();
-                return;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            if (isCancelled()) {
-                return;
-            }
-            palyVoice();
-
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length() */) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-                File directory = new File(Variable.StorageMusicCachPath);
-                if (null != directory && !directory.exists()) {
-                    directory.mkdir();
-                }
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output,
-                    1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends
-                FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
-
-    }
-
-
-    private void palyVoice() {
-
-        totalTime = sound.soundtime;
-
-        if (VoiceFunction.IsPlayingVoice(mFile.getAbsolutePath())) {  //正在播放，点击暂停
-            currentTime = VoiceFunction.pauseVoice(mFile.getAbsolutePath());
-            if (mTimer != null) {
-                mTimer.cancel();
-                mTimer = null;
-            }
-            if (mTimerTask != null) {
-                mTimerTask.cancel();
-                mTimerTask = null;
-            }
-
-        } else {     //暂停，点击播放
-
-            if (mTimer == null) {
-                mTimer = new Timer();
-            }
-            if (mTimerTask == null) {
-                mTimerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        mHandler.sendEmptyMessage(0);
-                    }
-                };
-                mTimer.schedule(mTimerTask, 1000, 1000);
-
-            }
-
-            if (currentTime > 0) {
-
-                totalTime = sub(sound.soundtime, currentTime);
-                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, currentTime);
-            } else {
-                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, 0);
-            }
-
-        }
-    }
+//    private void palyVoice() {
+//
+//        totalTime = sound.soundtime;
+//
+//        if (VoiceFunction.IsPlayingVoice(mFile.getAbsolutePath())) {  //正在播放，点击暂停
+//            currentTime = VoiceFunction.pauseVoice(mFile.getAbsolutePath());
+//            if (mTimer != null) {
+//                mTimer.cancel();
+//                mTimer = null;
+//            }
+//            if (mTimerTask != null) {
+//                mTimerTask.cancel();
+//                mTimerTask = null;
+//            }
+//
+//        } else {     //暂停，点击播放
+//
+//            if (mTimer == null) {
+//                mTimer = new Timer();
+//            }
+//            if (mTimerTask == null) {
+//                mTimerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        mHandler.sendEmptyMessage(0);
+//                    }
+//                };
+//                mTimer.schedule(mTimerTask, 1000, 1000);
+//
+//            }
+//
+//            if (currentTime > 0) {
+//
+//                totalTime = sub(sound.soundtime, currentTime);
+//                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, currentTime);
+//            } else {
+//                VoiceFunction.PlayToggleVoice(mFile.getAbsolutePath(), this, 0);
+//            }
+//
+//        }
+//    }
 
     public static int sub(int totalTime, int currentTime) {
         BigDecimal b1 = new BigDecimal(Double.valueOf(totalTime));
@@ -585,17 +492,12 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     @Override
     public void onDestroy() {
-
+        player.stop();
         VoiceFunction.StopVoice();
         currentTime = 0;
         if (mIsRecording) {
             StopRecording();
         }
-
-        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
-            task.cancel(true); // 如果Task还在运行，则先取消它
-        }
-
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
@@ -657,7 +559,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             if (type == TYPE_SUCCESS) {
                 ToastManager.getInstance(getActivity()).showText("回复成功");
             } else {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                ToastManager.getInstance(getActivity()).showText("回复失败");
             }
         }
 

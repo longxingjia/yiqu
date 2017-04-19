@@ -18,7 +18,7 @@
    
     <!-- title next text -->
     <color name="title_next_txt_eable_color">#ffffff</color>
-    <color name="title_next_txt_disable_color">#cecece</color>
+    <color name="circle_imageview_border">#eeeeee</color>
     
     <!-- menu text -->
     <color name="menu_text_enable_color">#000000</color>

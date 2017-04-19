@@ -112,7 +112,6 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
             if (f.isfollow.equals("0")){  //没有关注
                 h.follow.setBackgroundResource(R.mipmap.follow);
 
-
             }else {
                 h.follow.setBackgroundResource(R.mipmap.followed);
             }
