@@ -22,10 +22,10 @@
     <LinearLayout
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="260dp"
         android:orientation="vertical"
         android:background="@drawable/edit_bg">
 
@@ -33,9 +33,17 @@
             android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/dd_gray"
             android:text="热门作品"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tab_bg_color"/>
+
         <ListView
+            android:scrollbars="none"
             android:id="@+id/head_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

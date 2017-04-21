@@ -21,20 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
-import com.fwrestnet.NetResponse;
-import com.squareup.picasso.Picasso;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -169,7 +161,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
         }
         if (AppShare.getIsLogin(mContext)){
             Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
             i.putExtra("data",f.sid+"");
 
             mContext.startActivity(i);

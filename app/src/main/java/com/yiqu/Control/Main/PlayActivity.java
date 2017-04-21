@@ -237,7 +237,6 @@ public class PlayActivity extends Activity
                     }
                     voice = composeVoices.get(position);
                     initData();
-
                     break;
                 case Mode_ONE:
                     player.playUrl(Variable.StorageMusicPath + voice.voicename);
@@ -249,8 +248,6 @@ public class PlayActivity extends Activity
                     initData();
                     break;
             }
-
-
         }
     };
 

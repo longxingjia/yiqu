@@ -31,7 +31,6 @@ import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.HomePage;
@@ -53,13 +52,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private Context mContext;
     private Fragment fragment;
     private String tag = "Tab1SoundAdapter";
-    private ArrayList<Like> likes;
+  //  private ArrayList<Like> likes;
 
-    public Tab1SoundAdapter(Fragment fragment, ArrayList<Like> likes) {
+    public Tab1SoundAdapter(Fragment fragment) {
         mContext = fragment.getActivity();
         mLayoutInflater = LayoutInflater.from(mContext);
         this.fragment = fragment;
-        this.likes = likes;
+     //   this.likes = likes;
 
     }
 
@@ -114,7 +113,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                v = mLayoutInflater.inflate(R.layout.tab1_sound_list_adapter, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.desc = (TextView) v.findViewById(R.id.desc);
                 h.time = (TextView) v.findViewById(R.id.time);
@@ -155,17 +154,17 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             }
         //    h.tea_listen.setText("1元偷偷听");
 
-            if (likes != null) {
-                for (int i = 0; i < likes.size(); i++) {
-                    Like dz = likes.get(i);
-                    if (dz.sid == f.sid) {
-//                     int likesIndex = i;
-                        f.isLike = 1;
-                        break;
-                    }
-
-                }
-            }
+//            if (likes != null) {
+//                for (int i = 0; i < likes.size(); i++) {
+//                    Like dz = likes.get(i);
+//                    if (dz.sid == f.sid) {
+////                     int likesIndex = i;
+//                        f.isLike = 1;
+//                        break;
+//                    }
+//
+//                }
+//            }
             if (f.isLike == 1) {
 
                 initDianZan(h.like, true);
@@ -215,11 +214,11 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                                         f.like++;
 
                                         notifyDataSetChanged();
-                                        if (likes == null) {
-                                            likes = new ArrayList<Like>();
-                                        }
-                                        likes.add(l);
-                                        AppShare.setLikeList(mContext, likes);
+//                                        if (likes == null) {
+//                                            likes = new ArrayList<Like>();
+//                                        }
+//                                        likes.add(l);
+//                                        AppShare.setLikeList(mContext, likes);
                                     }
 
                                 }

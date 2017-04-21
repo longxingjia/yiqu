@@ -9,7 +9,6 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,13 +26,11 @@ import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.service.MusicService;
-import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 
 import java.util.ArrayList;
@@ -92,9 +89,15 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     private class HoldChild {
 
-        TextView name;
+        TextView musicname;
         TextView content;
+        TextView author;
+        TextView comment;
+        TextView like;
+        TextView listener;
         ImageView icon;
+        ImageView album;
+        TextView publish_time;
         ImageView musictype;
         ImageView play_status;
 
@@ -107,18 +110,29 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_xizuo, null);
-                h.name = (TextView) v.findViewById(R.id.musicname);
+                v = mLayoutInflater.inflate(R.layout.tab1_zuoping_adapter, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.content = (TextView) v.findViewById(R.id.desc);
+                h.author = (TextView) v.findViewById(R.id.author);
+                h.publish_time = (TextView) v.findViewById(R.id.publish_time);
+                h.comment = (TextView) v.findViewById(R.id.comment);
+                h.listener = (TextView) v.findViewById(R.id.listener);
+                h.like = (TextView) v.findViewById(R.id.like);
                 h.icon = (ImageView) v.findViewById(R.id.header);
+                h.album = (ImageView) v.findViewById(R.id.album);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.play_status = (ImageView) v.findViewById(R.id.play_status);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
             Sound f = getItem(position);
-            h.name.setText(f.musicname);
+            h.musicname.setText(f.musicname);
             h.content.setText(f.desc);
+//            h.comment.setText(String.valueOf(f.co));
+            h.like.setText(String.valueOf(f.like));
+            h.listener.setText(String.valueOf(f.views));
+            h.author.setText(f.stuname);
+            h.publish_time.setText(String2TimeUtils.longToString(f.created*1000,"yyyy/MM/dd HH:mm"));
             if (f.type == 1) {
                 h.musictype.setImageResource(R.mipmap.shengyue);
             } else {
@@ -127,7 +141,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
             if (mCurrent == position) {
                 // h.play_status.setImageResource(R.mipmap.xizuo_pause);
-                h.name.setTextColor(mContext.getResources().getColor(R.color.redMain));
+                h.musicname.setTextColor(mContext.getResources().getColor(R.color.redMain));
                 mMusicname.setText(f.musicname);
                 mAuthor.setText(f.stuname);
                 String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
@@ -139,7 +153,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
             } else {
                 //   h.play_status.setImageResource(R.mipmap.xizuo_play);
-                h.name.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
+                h.musicname.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
 
             }
 
@@ -157,6 +171,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             });
 
             PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
+            PictureUtils.showPicture(mContext, f.stuimage, h.album, 75);
 
 
         } catch (Exception e) {

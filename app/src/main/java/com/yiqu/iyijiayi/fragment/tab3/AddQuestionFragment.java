@@ -291,7 +291,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.addSound,
-                        MyNetRequestConfig.addSound(getActivity(), userInfo.uid, "1", isfree, composeVoice),
+                        MyNetRequestConfig.addSound(getActivity(), userInfo.uid, "1","0", isfree, composeVoice),
                         "addSound", AddQuestionFragment.this);
 
             } else {
@@ -358,14 +358,14 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                 }
             }
         } else if (id.equals("orderQuery")) {
-            LogUtils.LOGE(tag, netResponse.result);
+
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ToastManager.getInstance(getActivity()).showText("提问成功,请等待老师回答");
                 userInfo.free_question--;
                 AppShare.setUserInfo(getActivity(), userInfo);
                 getActivity().finish();
             } else {
-                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                ToastManager.getInstance(getActivity()).showText("提问失败，请重试");
             }
         }
     }

@@ -24,12 +24,11 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
-import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
 
 import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
 
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Sound;
@@ -156,7 +155,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(this,null);
+        tab1SoundAdapter = new Tab1SoundAdapter(this);
 
         tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity());
 
@@ -422,7 +421,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
                                 if (AppShare.getIsLogin(mContext)) {
                                     Intent i = new Intent(mContext, StubActivity.class);
-                                    i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                                    i.putExtra("fragment", ItemDetailFragment.class.getName());
                                     i.putExtra("data", xizuo.sid + "");
                                     mContext.startActivity(i);
                                 } else {

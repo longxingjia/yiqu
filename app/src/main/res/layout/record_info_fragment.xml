@@ -28,7 +28,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/edit_bg"
         android:drawablePadding="5dp"
-        android:hint="请填写您的内容详情"
+        android:hint="请输入录制内容（选填）"
         android:gravity="top"
         android:maxLength="15"
         android:paddingLeft="5dp"

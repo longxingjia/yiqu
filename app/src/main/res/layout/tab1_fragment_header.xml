@@ -7,65 +7,107 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/dark_gray"/>
+        android:background="@color/dark_gray" />
 
     <include
-        android:visibility="gone"
         android:id="@+id/top_play"
         layout="@layout/top_play"
-        android:background="#11000000" />
+        android:background="#11000000"
+        android:visibility="gone" />
 
-    <com.ui.views.AutoScrollViewPager
+    <com.yiqu.iyijiayi.view.AutoPlayViewPager
         android:id="@+id/vp_spinner"
         android:layout_width="match_parent"
         android:layout_height="144dp">
 
-    </com.ui.views.AutoScrollViewPager>
+    </com.yiqu.iyijiayi.view.AutoPlayViewPager>
 
-    <RelativeLayout
-        android:layout_marginLeft="10dp"
+    <LinearLayout
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:background="@drawable/red_circle"
+            android:id="@+id/question"
+            android:layout_marginLeft="30dp"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:drawableTop="@mipmap/icon_quetion"
             android:gravity="center"
-            android:text="最新作品"
-            android:textSize="16sp"
-            android:textColor="@color/white" />
+            android:text="热门问答" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/more_xizuo"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:drawableRight="@mipmap/arrow"
+            android:id="@+id/raokouling"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:drawableTop="@mipmap/icon_rkl"
             android:gravity="center"
-            android:text="更多"
-            android:textColor="@color/dd_gray"
-            android:textSize="13sp" />
+            android:text="挑战绕口令" />
 
-    </RelativeLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-    <ListView
-        android:layout_marginTop="10dp"
-        android:id="@+id/lv_xizuo"
-        android:layout_width="match_parent"
-        android:layout_height="208dp"
-        android:dividerHeight="8dp"
-        android:divider="#00000000"
-        android:choiceMode="singleChoice"
-        android:minHeight="55dp"
-        android:scrollbars="none"></ListView>
+        <TextView
+            android:id="@+id/reader"
+            android:layout_width="80dp"
+            android:layout_marginRight="30dp"
+            android:layout_height="100dp"
+            android:drawableTop="@mipmap/icon_read"
+            android:gravity="center"
+            android:text="为你朗诵" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-         />
+        android:background="@color/tab_bg_color"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="最新作品"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/more_xizuo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:drawableRight="@mipmap/top_arrow"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="TOP"
+            android:textColor="@color/dd_gray"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab_bg_color" />
+
+
+
+
 </LinearLayout>

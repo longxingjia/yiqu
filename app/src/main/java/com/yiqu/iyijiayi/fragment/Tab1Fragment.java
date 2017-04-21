@@ -30,11 +30,14 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
+import com.yiqu.iyijiayi.adapter.BannerAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
+import com.yiqu.iyijiayi.fragment.tab1.Tab1SoundListFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
+import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
 import com.yiqu.iyijiayi.model.Banner;
+import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
@@ -48,6 +51,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.view.AutoPlayViewPager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +66,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private static final int TAB_1 = 1;
     //	List<>
 
-    private AutoScrollViewPager vp_spinner;
+    private AutoPlayViewPager vp_spinner;
     private LoadMoreView mLoadMoreView;
     /**
      * 图片资源id
@@ -86,10 +90,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private String uid;
     private ArrayList<Sound> sound;
     private ArrayList<Sound> xizuo;
-    private ListView lvXizuo;
-    private Tab1XizuoAdapter tab1XizuoAdapter;
+
+    //  private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;
-    private Tab1SoundAdapter tab1SoundAdapter;
+    private Tab1XizuoAdapter tab1XizuoAdapter;
     private TextView more_xizuo;
     private ArrayList<Like> likes;
     private int count = 0;
@@ -102,6 +106,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private TextView musicplaying;
     private TextView authorName;
     private ImageView stop;
+    private BannerAdapter bannerAdapter;
+    private TextView question;
+    private TextView raokouling;
+    private TextView reader;
 
 
     @Override
@@ -147,7 +155,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 //            Bundle bundle=intent.getExtras();
 //            int count=bundle.getInt("count");
 //            editText.setText(count+"");
-          //  LogUtils.LOGE("tag","fs");
+            //  LogUtils.LOGE("tag","fs");
 
             String data = intent.getStringExtra("data");
             switch (data) {
@@ -171,24 +179,30 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("热门"); //统计页面，"MainScreen"为页面名称，可自定义
+        MobclickAgent.onPageStart(getString(R.string.home_page)); //统计页面，"MainScreen"为页面名称，可自定义
 
     }
 
     private Intent intent = new Intent();
 
     private void initHeadView(View v) {
-        vp_spinner = (AutoScrollViewPager) v.findViewById(R.id.vp_spinner);
-        lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
+        vp_spinner = (AutoPlayViewPager) v.findViewById(R.id.vp_spinner);
+//        lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
         musicplaying = (TextView) v.findViewById(R.id.musicname);
         authorName = (TextView) v.findViewById(R.id.name);
+        question = (TextView) v.findViewById(R.id.question);
+        raokouling = (TextView) v.findViewById(R.id.raokouling);
+        reader = (TextView) v.findViewById(R.id.reader);
         top_play = (LinearLayout) v.findViewById(R.id.top_play);
         play = (ImageView) v.findViewById(R.id.play);
         stop = (ImageView) v.findViewById(R.id.stop);
 
         play.setOnClickListener(playListener);
         stop.setOnClickListener(stopListener);
+        question.setOnClickListener(this);
+        raokouling.setOnClickListener(this);
+        reader.setOnClickListener(this);
 
         more_xizuo.setOnClickListener(this);
     }
@@ -222,27 +236,29 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        bannerAdapter = new BannerAdapter(getActivity());
 
         banners = AppShare.getBannerList(getActivity());
         if (banners != null && banners.size() > 0) {
-            List<Map<String, Object>> data = getData(banners);
-            vp_spinner.setAdapter(new MyAdapter(data));
+            bannerAdapter.update(banners);
+            vp_spinner.setAdapter(bannerAdapter);
+            vp_spinner.start();
         }
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
-        lvXizuo.setAdapter(tab1XizuoAdapter);
+        //   tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
+        //lvXizuo.setAdapter(tab1XizuoAdapter);
         likes = AppShare.getLikeList(getActivity());
-        tab1SoundAdapter = new Tab1SoundAdapter(this, likes);
-        lvSound.setAdapter(tab1SoundAdapter);
-        lvSound.setOnItemClickListener(tab1SoundAdapter);
-        lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
+        lvSound.setAdapter(tab1XizuoAdapter);
+        lvSound.setOnItemClickListener(tab1XizuoAdapter);
+        //  lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
         nsDictionary.status = "1";
-        nsDictionary.stype = "1";
+        nsDictionary.stype = "2";
         Gson gson = new Gson();
         arr = gson.toJson(nsDictionary);
 
@@ -253,28 +269,35 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             uid = "0";
         }
 
-        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
-            Remen remen = AppShare.getRemenList(getActivity());
-            if (remen != null) {
-                tab1XizuoAdapter.setData(remen.xizuo);
-                tab1SoundAdapter.setData(remen.sound);
-            }
-        } else {
-            count = 0;
-            RestNetCallHelper.callNet(
-                    getActivity(),
-                    MyNetApiConfig.remen,
-                    MyNetRequestConfig.remen(getActivity(), uid),
-                    "Remen", Tab1Fragment.this, false, true);
+//        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
+//            Remen remen = AppShare.getRemenList(getActivity());
+//            if (remen != null) {
+//                //tab1XizuoAdapter.setData(remen.xizuo);
+//                tab1XizuoAdapter.setData(remen.sound);
+//            }
+//        } else {
+//            count = 0;
+////            RestNetCallHelper.callNet(
+////                    getActivity(),
+////                    MyNetApiConfig.remen,
+////                    MyNetRequestConfig.remen(getActivity(), uid),
+////                    "Remen", Tab1Fragment.this, false, true);
+//
+//
+//
+//        }
+        count = 0;
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                "getSoundList", Tab1Fragment.this);
 
-
-            RestNetCallHelper.callNet(
-                    getActivity(),
-                    MyNetApiConfig.getBannerList,
-                    MyNetRequestConfig.getBannerList(getActivity()),
-                    "getBannerList", Tab1Fragment.this, false, true);
-        }
-
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getBannerList,
+                MyNetRequestConfig.getBannerList(getActivity()),
+                "getBannerList", Tab1Fragment.this, false, true);
 
     }
 
@@ -286,36 +309,65 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT | FLAG_BTN;
+        return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
     protected boolean onPageBack() {
-        if (mOnFragmentListener != null) {
-            mOnFragmentListener.onFragmentBack(this);
-        }
-        return true;
-    }
-
-    @Override
-    protected boolean onPageNext() {
-        // pageNextComplete();
         Model.startNextAct(getActivity(),
                 SearchAllFragment.class.getName());
         return true;
     }
 
     @Override
+    protected boolean onPageNext() {
+        // pageNextComplete();
+
+        return true;
+    }
+
+    @Override
     protected void initTitle() {
-        setTitleText("热门");
+        setTitleText(getString(R.string.home_page));
     }
 
     @Override
     public void onClick(View v) {
+        Intent i = new Intent(getActivity(), StubActivity.class);
         switch (v.getId()) {
             case R.id.more_xizuo:
-                Intent i = new Intent(getActivity(), StubActivity.class);
+                //    Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", Tab1XizuoListFragment.class.getName());
+                getActivity().startActivity(i);
+
+                break;
+            case R.id.question:
+
+                i.putExtra("fragment", Tab1SoundListFragment.class.getName());
+                getActivity().startActivity(i);
+
+                break;
+            case R.id.raokouling:
+                Events events = new Events();
+                events.id =1;
+                events.title ="挑战绕口令";
+
+                i.putExtra("fragment", EventFragment.class.getName());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", events);
+                i.putExtras(bundle);
+                getActivity().startActivity(i);
+
+                break;
+            case R.id.reader:
+                Events e = new Events();
+                e.id =2;
+                e.title ="为你读诗";
+
+                i.putExtra("fragment", EventFragment.class.getName());
+                Bundle b = new Bundle();
+                b.putSerializable("data", e);
+                i.putExtras(b);
                 getActivity().startActivity(i);
 
                 break;
@@ -327,7 +379,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("热门");
+        MobclickAgent.onPageEnd(getString(R.string.home_page));
     }
 
     @Override
@@ -351,7 +403,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 //
 //                LogUtils.LOGE("tab1f", sound.toString());
 
-//                tab1SoundAdapter.updateSingleRow(lvSound, 107);
+//                tab1XizuoAdapter.updateSingleRow(lvSound, 107);
 
                 break;
             default:
@@ -363,15 +415,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
         //  LogUtils.LOGE("2",netResponse.toString());
-        if (netResponse != null && "Remen".equals(id)) {
+        if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
-                Gson gson = new Gson();
-                remen = gson.fromJson(netResponse.data, Remen.class);
-                AppShare.setRemenList(getActivity(), remen);
-                sound = remen.sound;
-                xizuo = remen.xizuo;
-                tab1XizuoAdapter.setData(xizuo);
-                tab1SoundAdapter.setData(sound);
+
+                sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+                //tab1XizuoAdapter.setData(xizuo);
+                tab1XizuoAdapter.setData(sound);
 
                 if (sound.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
@@ -383,7 +433,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 resfreshFail();
             }
 
-        } else if (id.equals("getSoundList")) {
+        } else if (id.equals("getSoundList_more")) {
 
 
             if (type == TYPE_SUCCESS) {
@@ -392,8 +442,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
                 //  remen.sound.addAll(sound);
                 //    AppShare.setRemenList(getActivity(), remen);
-//                tab1SoundAdapter.setData(sound);
-                tab1SoundAdapter.addData(sound);
+//                tab1XizuoAdapter.setData(sound);
+                tab1XizuoAdapter.addData(sound);
                 if (sound.size() < rows) {
                     mLoadMoreView.setMoreAble(false);
                 }
@@ -411,8 +461,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                         }.getType());
                 AppShare.setBannerList(getActivity(), banners);
 
-                List<Map<String, Object>> data = getData(banners);
-                vp_spinner.setAdapter(new MyAdapter(data));
+                bannerAdapter.update(banners);
+                //    LogUtils.LOGE("tag",banners.toString());
+                vp_spinner.setAdapter(bannerAdapter);
+
+                vp_spinner.setDirection(AutoPlayViewPager.Direction.LEFT);// 设置播放方向
+                vp_spinner.setCurrentItem(200); // 设置每个Item展示的时间
+                vp_spinner.start(); // 开始轮播
+                vp_spinner.setAdapter(bannerAdapter);
+
             }
             //    LogUtils.LOGE("tab1", netResponse.toString());
         }
@@ -420,19 +477,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         super.onNetEnd(id, type, netResponse);
     }
 
-    public List<Map<String, Object>> getData(ArrayList<Banner> banners) {
-        List<Map<String, Object>> mdata = new ArrayList<Map<String, Object>>();
-        for (Banner banner : banners) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("url", banner.image);
-            map.put("view", new ImageView(getActivity()));
-            mdata.add(map);
-        }
-        vp_spinner.startAutoScroll();
-        // vp_spinner.setCycle(false);
-        vp_spinner.setSlideBorderMode(SLIDE_BORDER_MODE_CYCLE);
-        return mdata;
-    }
 
     @Override
     public void onRefresh() {
@@ -441,13 +485,18 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
-
-
         RestNetCallHelper.callNet(
                 getActivity(),
-                MyNetApiConfig.remen,
-                MyNetRequestConfig.remen(getActivity(), uid),
-                "Remen", Tab1Fragment.this, false, true);
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                "getSoundList", Tab1Fragment.this);
+
+
+//        RestNetCallHelper.callNet(
+//                getActivity(),
+//                MyNetApiConfig.remen,
+//                MyNetRequestConfig.remen(getActivity(), uid),
+//                "Remen", Tab1Fragment.this, false, true);
 
     }
 
@@ -462,72 +511,14 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getSoundList,
-                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "asc"),
-                        "getSoundList", Tab1Fragment.this, false, true);
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                        "getSoundList_more", Tab1Fragment.this, false, true);
 
             }
         }
 
 
         return false;
-    }
-
-    // PagerAdapter是object的子类
-    class MyAdapter extends PagerAdapter {
-
-        List<Map<String, Object>> viewLists;
-
-        public MyAdapter(List<Map<String, Object>> viewLists) {
-            this.viewLists = viewLists;
-        }
-
-        /**
-         * PagerAdapter管理数据大小
-         */
-        @Override
-        public int getCount() {
-            return viewLists.size();
-        }
-
-        /**
-         * 关联key 与 obj是否相等，即是否为同一个对象
-         */
-        @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj; // key
-        }
-
-        /**
-         * 销毁当前page的相隔2个及2个以上的item时调用
-         */
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object); // 将view 类型 的object熊容器中移除,根据key
-        }
-
-        /**
-         * 当前的page的前一页和后一页也会被调用，如果还没有调用或者已经调用了destroyItem
-         */
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-
-//            View view = viewLists.get(position);
-//            // 如果访问网络下载图片，此处可以进行异步加载
-//            ImageView img = (ImageView) view.findViewById(R.id.spinner);
-////            img.setImageBitmap(BitmapFactory.decodeFile(dir + getFile(position)));
-//            img.setBackgroundResource(imgIdArray[position]);
-//            container.addView(view);
-//            return viewLists.get(position); // 返回该view对象，作为key
-            ImageView x = (ImageView) viewLists.get(position).get("view");
-            x.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            //   imageLoader.displayImage(viewLists.get(position).get("url").toString(), x,options);
-            PictureUtils.showBannersPicture(getActivity(), viewLists.get(position).get("url").toString(), x);
-            ((ViewPager) container).addView(x, 0);
-
-            return viewLists.get(position).get("view");
-
-        }
-
     }
 
 

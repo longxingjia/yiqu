@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -44,17 +47,13 @@ public class Tab2Fragment extends TabContentFragment {
     private int flag = 2;
     private String uid;
 
-    private ArrayList<Teacher> teacher;
-    private ArrayList<Student> student;
-
-
     @BindView(R.id.tab_teacher)
     public TextView tab_teacher;
     @BindView(R.id.tab_student)
     public TextView tab_student;
 
     @BindView(R.id.gridview)
-    public GridView gridview;
+    public PullToRefreshGridView gridview;
 
     @BindView(R.id.listView)
     public ListView listView;
@@ -87,9 +86,23 @@ public class Tab2Fragment extends TabContentFragment {
     protected void initView(View v) {
         ButterKnife.bind(this, v);
         mContext = getActivity();
+      //  View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_gv_header, null);
+
+
         tab2UserInfoAdapter = new Tab2UserInfoAdapter(mContext);
         gridview.setAdapter(tab2UserInfoAdapter);
         gridview.setOnItemClickListener(tab2UserInfoAdapter);
+        gridview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+
+            }
+        });
 
         tab2ListAdapter = new Tab2ListAdapter(mContext);
         listView.setAdapter(tab2ListAdapter);
@@ -106,7 +119,7 @@ public class Tab2Fragment extends TabContentFragment {
     protected void init(Bundle savedInstanceState) {
         tab_teacher.setSelected(true);
 
-        initData();
+
 
     }
 
@@ -123,20 +136,13 @@ public class Tab2Fragment extends TabContentFragment {
                 MyNetApiConfig.findPeople,
                 MyNetRequestConfig.findPeople(getActivity(), uid, flag),
                 "findPeople", Tab2Fragment.this, false, true);
-
-
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("找人"); //统计页面，"MainScreen"为页面名称，可自定义
-
-
-
-
+        initData();
     }
 
 

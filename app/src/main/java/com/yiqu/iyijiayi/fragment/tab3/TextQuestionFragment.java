@@ -12,20 +12,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Constant;
+import com.yiqu.iyijiayi.model.Order;
+import com.yiqu.iyijiayi.model.PayInfo;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.UserInfo;
+import com.yiqu.iyijiayi.model.Wx_arr;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.LogUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,11 +48,16 @@ import static android.app.Activity.RESULT_OK;
 public class TextQuestionFragment extends AbsAllFragment implements View.OnClickListener, TextWatcher {
     private static final String TAG = "TextQuestionFragment";
 
-    @BindView(R.id.ll_select) public LinearLayout ll_select;
-    @BindView(R.id.txt02)  public EditText questionDesc;
-    @BindView(R.id.tea_name)  public TextView tea_name;
-    @BindView(R.id.tea_price)  public TextView tea_price;
-    @BindView(R.id.times)  public TextView times;
+    @BindView(R.id.ll_select)
+    public LinearLayout ll_select;
+    @BindView(R.id.txt02)
+    public EditText questionDesc;
+    @BindView(R.id.tea_name)
+    public TextView tea_name;
+    @BindView(R.id.tea_price)
+    public TextView tea_price;
+    @BindView(R.id.times)
+    public TextView times;
     @BindView(R.id.submit)
     public ImageView submit;
     private static int requestCode = 2;
@@ -59,11 +72,15 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
         switch (v.getId()) {
 
             case R.id.submit:
-               // LogUtils.LOGE("t",userInfo.uid+"-"+uid);
+                // LogUtils.LOGE("t",userInfo.uid+"-"+uid);
+                String isfree = "1";
+                if (userInfo.free_question<=0){
+                    isfree = "0";
+                }
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.addSound,
-                        MyNetRequestConfig.addSound(getActivity(), userInfo.uid, uid, "1", questionDesc.getText().toString(),price),
+                        MyNetRequestConfig.addSound(getActivity(), userInfo.uid, uid, isfree, questionDesc.getText().toString(), price),
                         "addSound", TextQuestionFragment.this);
                 break;
             default:
@@ -98,6 +115,7 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
         userInfo = AppShare.getUserInfo(getActivity());
         times.setText(String.valueOf(userInfo.free_question));
 
+
         ll_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,19 +137,75 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        if (id.equals("addSound")){
-            if (type==TYPE_SUCCESS){
-                LogUtils.LOGE("tagiiiii",netResponse.toString());
-                ToastManager.getInstance(getActivity()).showText("提问成功");
-                getActivity().finish();
+        if (id.equals("addSound")) {
+            if (type == TYPE_SUCCESS) {
 
-            }else {
-              //  ToastManager.getInstance(getActivity()).showText("");
+                try {
+                    JSONObject jsonObject = new JSONObject(netResponse.data);
+                    String sid = jsonObject.getString("sid");
+
+                    RestNetCallHelper.callNet(
+                            getActivity(),
+                            MyNetApiConfig.getNewOrder,
+                            MyNetRequestConfig.getNewOrder(getActivity(), userInfo.uid, sid, price),
+                            "getNewOrder", TextQuestionFragment.this);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
             }
 
-        }
+        } else if (id.equals("getNewOrder"))
 
+        {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+
+                try {
+
+                    if (netResponse.data.contains("wx_arr")) {
+                        PayInfo payInfo = new Gson().fromJson(netResponse.data, PayInfo.class);
+                        Order order = payInfo.order;
+                        Wx_arr wx_arr = payInfo.wx_arr;
+
+                        Intent i = new Intent(getActivity(), StubActivity.class);
+                        i.putExtra("fragment", PayforFragment.class.getName());
+                        Bundle b = new Bundle();
+                        b.putSerializable("data", payInfo);
+                        i.putExtras(b);
+                        startActivityForResult(i, requestCode);
+                    } else {
+                        Order order = new Gson().fromJson(netResponse.data, Order.class);
+                        RestNetCallHelper.callNet(
+                                getActivity(),
+                                MyNetApiConfig.orderQuery,
+                                MyNetRequestConfig.orderQuery(getActivity(), order.order_number),
+                                "orderQuery", TextQuestionFragment.this);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (id.equals("orderQuery"))
+
+        {
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                ToastManager.getInstance(getActivity()).showText("提问成功,请等待老师回答");
+                userInfo.free_question--;
+                AppShare.setUserInfo(getActivity(), userInfo);
+                getActivity().finish();
+            } else {
+                ToastManager.getInstance(getActivity()).showText("提问失败，请重试");
+            }
+        }
     }
+
+
 
     @Override
     public void onPause() {

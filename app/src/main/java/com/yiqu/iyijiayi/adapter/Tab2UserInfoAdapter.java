@@ -92,7 +92,7 @@ public class Tab2UserInfoAdapter extends BaseAdapter implements OnItemClickListe
         HoldChild h;
         if (v == null) {
             h = new HoldChild();
-            v = mLayoutInflater.inflate(R.layout.tab2_adapter, null);
+            v = mLayoutInflater.inflate(R.layout.tab2_adapter, parent, false);
             h.name = (TextView) v.findViewById(R.id.name);
             h.header = (ImageView) v.findViewById(R.id.header);
             v.setTag(h);

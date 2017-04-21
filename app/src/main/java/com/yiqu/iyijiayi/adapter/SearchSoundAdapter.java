@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +23,10 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -123,7 +119,7 @@ public class SearchSoundAdapter extends BaseAdapter implements OnItemClickListen
 
             if (sound.stype == 1) {   //
                 Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+                i.putExtra("fragment", ItemDetailFragment.class.getName());
                 i.putExtra("data",sound.sid+"");
 
                 mContext.startActivity(i);
@@ -131,7 +127,7 @@ public class SearchSoundAdapter extends BaseAdapter implements OnItemClickListen
 //            h.pl.setText("评论了");
             } else {
                 Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                i.putExtra("fragment", ItemDetailFragment.class.getName());
                 i.putExtra("data", sound.sid + "");
                 mContext.startActivity(i);
             }

@@ -114,9 +114,9 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 Sound f = datas.get(position - 1);
                 if (AppShare.getIsLogin(mContext)) {
                     Intent i = new Intent(mContext, StubActivity.class);
-                    i.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                    i.putExtra("fragment", ItemDetailFragment.class.getName());
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("xizuo",f);
+                    bundle.putSerializable("Sound",f);
                     i.putExtras(bundle);
                     mContext.startActivity(i);
                 } else {

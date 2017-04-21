@@ -22,7 +22,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 
 	@Override
 	protected int getTitleView() {
-		return R.layout.titlebar_tab1;
+		return R.layout.titlebar_tab5;
 	}
 
 	@Override

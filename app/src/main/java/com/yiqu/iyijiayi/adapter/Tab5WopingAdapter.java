@@ -25,13 +25,9 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingListFragment;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -181,7 +177,7 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
             mContext.startActivity(intent);
         } else if (f.isreply == 1) {
             Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
             i.putExtra("data",f.sid+"");
             mContext.startActivity(i);
 

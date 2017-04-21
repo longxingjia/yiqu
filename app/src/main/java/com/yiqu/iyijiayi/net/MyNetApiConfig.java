@@ -378,7 +378,7 @@ public class MyNetApiConfig {
     public static MyNetApi getGroups = new MyNetApi() {
         @Override
         public String getPath() {
-            return ServerAddr + "/user/get-groups";
+            return ServerAddr + "/user/get-group-list";
         }
 
         @Override

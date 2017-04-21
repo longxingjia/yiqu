@@ -98,7 +98,7 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
         super.init(savedInstanceState);
 
         musicname.addTextChangedListener(this);
-        musicdesc.addTextChangedListener(this);
+       // musicdesc.addTextChangedListener(this);
 
     }
 
@@ -155,7 +155,7 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (TextUtils.isEmpty(musicname.getText().toString()) || TextUtils.isEmpty(musicdesc.getText().toString())) {
+        if (TextUtils.isEmpty(musicname.getText().toString())) {
 
             submit.setBackgroundResource(R.mipmap.submit_unclick);
             submit.setEnabled(false);

@@ -154,6 +154,7 @@ public class RecordOnlyActivity extends Activity
     private PlayUtils playUtils;
     private String desc;
     private String2TimeUtils string2TimeUtils;
+    private String eid;
 
 
     @Override
@@ -212,6 +213,10 @@ public class RecordOnlyActivity extends Activity
         Intent intent = getIntent();
         String name = intent.getStringExtra("musicname");
         desc = intent.getStringExtra("musicdesc");
+        eid = intent.getStringExtra("eid");
+        if (TextUtils.isEmpty(eid)){
+            eid ="0";
+        }
         playUtils = new PlayUtils(this);
 
         rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
@@ -324,6 +329,7 @@ public class RecordOnlyActivity extends Activity
                                     Intent i = new Intent(instance, StubActivity.class);
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                     i.putExtras(bundle);
+                                    i.putExtra("eid",eid);
                                     instance.startActivity(i);
 
                                     break;
@@ -340,6 +346,7 @@ public class RecordOnlyActivity extends Activity
                         icon_finish.setImageResource(R.mipmap.upload);
                         playUtils.playUrl(mRecorderPath);
                         icon_record.setImageResource(R.mipmap.icon_pause);
+                        recordComFinish = true;
                     } else {
                         ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
                     }

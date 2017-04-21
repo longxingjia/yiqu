@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true">
 
 
     <LinearLayout
@@ -46,9 +46,11 @@
         </LinearLayout>
 
         <GridView
-            android:id="@+id/gridview"
+
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="225dp"
+            android:layout_height="235dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:columnWidth="90dp"
@@ -58,6 +60,22 @@
             android:numColumns="4"
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp"/>
+        <com.handmark.pulltorefresh.library.PullToRefreshGridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:horizontalSpacing="5dp"
+            android:numColumns="4"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp"
+            ptr:ptrMode="pullFromStart"/>
+        <!--可选值为：disabled（禁用下拉刷新），pullFromStart（仅支持下拉刷新），pullFromEnd（仅支持上拉刷新），both（二者都支持），manualOnly（只允许手动触发）-->
 
         <View
             android:layout_width="match_parent"

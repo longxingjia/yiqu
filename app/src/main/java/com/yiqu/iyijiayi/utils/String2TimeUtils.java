@@ -50,6 +50,34 @@ public class String2TimeUtils {
         }
     }
 
+    public static String pulishTime(long seconds){
+        long currentTimeMillis = System.currentTimeMillis() / 1000;
+        long time = currentTimeMillis - seconds;
+
+        long minutes = seconds / 60;
+        long hours = seconds / 3600;
+        long days = seconds / 86400;
+        long weeks = seconds / 604800;
+        StringBuilder   mFormatBuilder = new StringBuilder();
+        Formatter     mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+        if (weeks > 0 ) {
+            return "1星期前";
+
+        } else if (days > 0) {
+            return mFormatter.format("%d", days).toString() + "天前";
+
+        } else if (hours > 0) {
+            return mFormatter.format("%d", hours).toString() + "小时前";
+
+        } else if (minutes > 0) {
+            return mFormatter.format("%d", minutes).toString() + "分钟前";
+
+        } else {
+            return "刚刚";
+
+        }
+
+    }
 
     public String long2Time(long seconds) {
 

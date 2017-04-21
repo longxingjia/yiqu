@@ -87,11 +87,6 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
 //        mLoadMoreView.setMoreAble(false);
 
 
-        RestNetCallHelper.callNet(
-                getActivity(),
-                MyNetApiConfig.getEventList,
-                MyNetRequestConfig.getEventList(getActivity(), 0, 10),
-                "getEventList", Tab4Fragment.this);
 
     }
 
@@ -116,6 +111,11 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getEventList,
+                MyNetRequestConfig.getEventList(getActivity(), 0, 10),
+                "getEventList", Tab4Fragment.this,false,true);
 
 
     }

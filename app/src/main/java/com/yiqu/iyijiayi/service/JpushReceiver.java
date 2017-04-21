@@ -9,9 +9,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.JpushInfo;
 
 import org.json.JSONException;
@@ -65,9 +63,9 @@ public class JpushReceiver extends BroadcastReceiver {
 
                 in.putExtra("data", jpushInfo.id + "");
                 if (jpushInfo.type.equals("sound")) {
-                    in.putExtra("fragment", XizuoItemDetailFragment.class.getName());
+                    in.putExtra("fragment", ItemDetailFragment.class.getName());
                 } else {
-                    in.putExtra("fragment", SoundItemDetailFragment.class.getName());
+                    in.putExtra("fragment", ItemDetailFragment.class.getName());
                 }
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );

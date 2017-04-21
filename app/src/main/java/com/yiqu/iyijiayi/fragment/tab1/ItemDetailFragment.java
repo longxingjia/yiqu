@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.abs.AbsFragment;
 import com.ui.views.DialogUtil;
+import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.yiqu.Tool.Global.Variable;
@@ -74,7 +77,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/2/20.
  */
 
-public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack {
+public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack ,ObservableScrollView.ScrollViewListener {
     String tag = "ItemDetailFragment";
     @BindView(R.id.back)
     public ImageView back;
@@ -136,10 +139,16 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public ImageView stu_header;
     @BindView(R.id.tea_header)
     public ImageView tea_header;
+//    @BindView(R.id.ll_backgroud)
+//    public LinearLayout ll_backgroud;
+    @BindView(R.id.ll_title)
+    public LinearLayout ll_title;
     @BindView(R.id.listview)
     public ListView listview;
     @BindView(R.id.teacher_info)
     public LinearLayout teacher_info;
+    @BindView(R.id.scrollView)
+    public ObservableScrollView scrollView;
 
     @BindView(R.id.no_comments)
     public TextView no_comments;
@@ -271,43 +280,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private int payforTag = 0;
     private int position;
     private Player player;
-
-
-//    @Override
-//    protected boolean onPageBack() {
-////        if (payforTag == 1) {
-////            Intent intent = new Intent();
-////            if (position!=-1){
-////                intent.putExtra("position", position);
-////                getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-////                getActivity().finish();//此处一定要调用finish()方法
-////            }
-////
-////        }
-//        Intent intent = new Intent();
-//        if (position!=-1){
-//            intent.putExtra("position", position);
-//            getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-//            getActivity().finish();//此处一定要调用finish()方法
-//        }
-//        return false;
-//    }
-//
-//
-//    @Override
-//    protected boolean onPageNext() {
-//        return false;
-//    }
-//
-//    @Override
-//    protected void initTitle() {
-//        setTitleText("问题详情");
-//    }
-
-//    @Override
-//    protected int getTitleView() {
-//        return R.layout.titlebar_tab5;
-//    }
+    private Sound soundWorth;
 
     @Override
     protected int getContentView() {
@@ -320,11 +293,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         likes = AppShare.getLikeList(getActivity());
 
-//        like.setOnClickListener(this);
-//        comment.setOnClickListener(this);
-//
-//        stu_header.setOnClickListener(this);
-//        tea_header.setOnClickListener(this);
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
         player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
             @Override
@@ -332,7 +300,44 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
             }
         });
+        initListeners();
 
+    }
+    private int imageHeight;
+
+    private void initListeners() {
+        // 获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = ll_title.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+
+            @Override
+            public void onGlobalLayout() {
+                ll_title.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                imageHeight = ll_title.getHeight();
+
+                scrollView.setScrollViewListener(ItemDetailFragment.this);
+            }
+        });
+    }
+
+    @Override
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+        if (y <= 0) {
+            title.setTextColor(getResources().getColor(R.color.white));
+            back.setImageResource(R.mipmap.back_write);
+            ll_title.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));//AGB由相关工具获得，或者美工提供
+        } else if (y > 0 && y <= imageHeight) {
+            float scale = (float) y / imageHeight;
+            float alpha = (255 * scale);
+            // 只是layout背景透明(仿知乎滑动效果)
+            ll_title.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+        } else {
+            ll_title.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+            title.setTextColor(getResources().getColor(R.color.normal_text_color));
+            back.setImageResource(R.mipmap.back);
+        }
     }
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
@@ -453,25 +458,25 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
-                Sound sound = sounds.get(0);
+                soundWorth = sounds.get(0);
                 if (sound != null) {
-                    LogUtils.LOGE(tag, netResponse.toString());
-                    worth_name.setText(sound.musicname);
-                    if (!TextUtils.isEmpty(sound.desc))
-                        worth_desc.setText(sound.desc);
-                    if (sound.type == 1) {
+                    //   LogUtils.LOGE(tag, netResponse.toString());
+                    worth_name.setText(soundWorth.musicname);
+                    if (!TextUtils.isEmpty(soundWorth.desc))
+                        worth_desc.setText(soundWorth.desc);
+                    if (soundWorth.type == 1) {
                         worth_type.setImageResource(R.mipmap.shengyue);
 
                     } else {
                         worth_type.setImageResource(R.mipmap.boyin);
                     }
-                    PictureUtils.showPicture(getActivity(), sound.tecimage, worth_header, 40);
-                    worth_teacher_name.setText(sound.tecname);
+                    PictureUtils.showPicture(getActivity(), soundWorth.tecimage, worth_header, 40);
+                    worth_teacher_name.setText(soundWorth.tecname);
                     worth_teacher_desc.setText(sound.tectitle);
 
                     // worth_comment.setText(sound.);
-                    worth_like.setText(String.valueOf(sound.like));
-                    worth_listener.setText(String.valueOf(sound.views));
+                    worth_like.setText(String.valueOf(soundWorth.like));
+                    worth_listener.setText(String.valueOf(soundWorth.views));
 
                 }
 
@@ -622,9 +627,22 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         super.init(savedInstanceState);
     }
 
-    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header, R.id.video_play, R.id.back,R.id.add_follow})
+    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header,
+            R.id.video_play, R.id.back, R.id.add_follow, R.id.ll_worth})
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ll_worth:
+                LogUtils.LOGE(tag,"ss");
+                if (soundWorth != null) {
+                    Intent i = new Intent(getActivity(), StubActivity.class);
+                    i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Sound", soundWorth);
+                    i.putExtras(bundle);
+                    getActivity().startActivity(i);
+                    LogUtils.LOGE(tag,"sss");
+                }
+                break;
             case R.id.add_follow:
 
 
@@ -638,9 +656,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     player.pause();
                 } else {
                     video_play.setImageResource(R.mipmap.video_pause);
-                    if (stuUrl.equals(player.getUrl())){
+                    if (stuUrl.equals(player.getUrl())) {
                         player.rePlay();
-                    }else {
+                    } else {
                         player.playUrl(stuUrl);
                     }
                 }

@@ -1,6 +1,9 @@
 package com.yiqu.iyijiayi.model;
 
+import org.w3c.dom.Comment;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2017/2/13.
@@ -44,6 +47,7 @@ public class Sound implements Serializable {
     public String tecimage;
     public String tectitle;
     public int isLike;
+    public ArrayList<CommentsInfo> top_comments;
 
     @Override
     public String toString() {

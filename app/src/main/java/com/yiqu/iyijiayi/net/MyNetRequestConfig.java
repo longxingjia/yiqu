@@ -115,9 +115,10 @@ public class MyNetRequestConfig {
         r.addHttpParam("rows", String.valueOf(rows));
         return r;
     }
-   public static NetRequest getGroups(Context c, String gid, int count, int rows) {
+   public static NetRequest getGroups(Context c, String gid, String myuid, int count, int rows) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("gid", gid);
+        r.addHttpParam("myuid", myuid);
         r.addHttpParam("count", String.valueOf(count));
         r.addHttpParam("rows", String.valueOf(rows));
         return r;
@@ -310,9 +311,10 @@ public class MyNetRequestConfig {
      * @param stype  1问题 2习作
      * @param isfree 1 免费
      */
-    public static NetRequest addSound(Context c, String uid, String stype, String isfree, ComposeVoice composeVoice) {
+    public static NetRequest addSound(Context c, String uid, String stype,String eid, String isfree, ComposeVoice composeVoice) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("stype", stype);
+        r.addHttpParam("eid", eid);
         r.addHttpParam("type", composeVoice.type);
         r.addHttpParam("musicname", composeVoice.musicname);
         r.addHttpParam("musictype", composeVoice.musictype);
@@ -343,13 +345,13 @@ public class MyNetRequestConfig {
      */
     public static NetRequest addSound(Context c, String fromuid, String touid, String isfree,String questionStr,String questionprice) {
         MyNetRequest r = new MyNetRequest(c);
-        r.addHttpParam("fromuid", fromuid);
+
         r.addHttpParam("type","3");
         r.addHttpParam("mid", "0");
         r.addHttpParam("musicname", "");
+        r.addHttpParam("musictype", "");
         r.addHttpParam("chapter", "");
         r.addHttpParam("accompaniment", "");
-        r.addHttpParam("musictype", "");
         r.addHttpParam("commentpath", "");
         r.addHttpParam("commenttime","0");
         r.addHttpParam("isformulation", "0");
@@ -357,15 +359,15 @@ public class MyNetRequestConfig {
         r.addHttpParam("isopen", "1");
         r.addHttpParam("ispay", "0");
         r.addHttpParam("isreply", "0");
-        r.addHttpParam("stype", "1");
         r.addHttpParam("status", "1");
         r.addHttpParam("touid",touid);
         r.addHttpParam("questionprice",questionprice);
         r.addHttpParam("desc", questionStr);
         r.addHttpParam("soundpath", "");
-        r.addHttpParam("isfree", isfree);
         r.addHttpParam("soundtime", "0");
-
+        r.addHttpParam("isfree", isfree);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("stype", "1");
         return r;
     }
 

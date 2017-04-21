@@ -9,9 +9,8 @@
         android:id="@+id/title_back"
         android:layout_width="@dimen/title_touch_area"
         android:layout_height="40dp"
-        android:background="@drawable/pic_menu_bitmap"
-        android:visibility="invisible"
-        
+        android:src="@mipmap/find"
+        android:scaleType="center"
         />
 
     <TextView
@@ -35,8 +34,7 @@
             android:id="@+id/title_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="center"
-            android:src="@mipmap/find"
+
             android:visibility="invisible" />
 
         <ProgressBar

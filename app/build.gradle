@@ -136,4 +136,5 @@ dependencies {
     compile 'cn.jiguang.sdk:jcore:1.1.1'
     // 此处以JCore 1.1.1 版本为例。
     compile project(':LyricView')
+    compile project(':base_library_pullToRefresh_chenyoca')
 }

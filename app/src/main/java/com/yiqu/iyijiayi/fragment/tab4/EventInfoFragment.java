@@ -30,6 +30,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
     public EditText musicdesc;
     @BindView(R.id.submit)
     public ImageView submit;
+    private String eid;
 
     @OnClick(R.id.submit)
     public void onClick(View v) {
@@ -42,6 +43,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
                 Intent intent = new Intent(getActivity(), RecordOnlyActivity.class);
                 intent.putExtra("musicname",musicname.getText().toString());
                 intent.putExtra("musicdesc",musicdesc.getText().toString());
+                intent.putExtra("eid",eid);
                 getActivity().startActivity(intent);
 
 
@@ -66,7 +68,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
     protected void initView(View v) {
         ButterKnife.bind(this, v);
         //  UserInfo userInfo = (UserInfo) getActivity().getIntent().getSerializableExtra("data");
-
+        eid = getActivity().getIntent().getStringExtra("eid");
     }
 
     @Override

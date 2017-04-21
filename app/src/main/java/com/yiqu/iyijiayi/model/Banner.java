@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/3/29.
  */
 
-public class Banner {
+public class Banner implements Serializable{
 
     public int id;
     public int status;

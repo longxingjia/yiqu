@@ -24,13 +24,19 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.Tab2Fragment;
+import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
 import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
+import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Tab2_groups;
+import com.yiqu.iyijiayi.model.Teacher;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -104,7 +110,7 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
             h = (HoldChild) v.getTag();
             Tab2_groups f = getItem(position);
             h.title.setText(f.group_name);
-            PictureUtils.showPicture(mContext,f.image,h.icon,25);
+            PictureUtils.showPicture(mContext, f.image, h.icon, 25);
 
 
         } catch (Exception e) {
@@ -117,7 +123,11 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-        Tab2_groups f = getItem(arg2);
+        if (arg2-2<=0){
+            return;
+        }
+
+        Tab2_groups f = getItem(arg2-2);
 
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
@@ -125,32 +135,12 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
             return;
         }
 
-        RestNetCallHelper.callNet(
-                mContext,
-                MyNetApiConfig.getGroups,
-                MyNetRequestConfig.getGroups(mContext, f.id+"", 0,10),
-                "getGroups", new NetCallBack() {
-                    @Override
-                    public void onNetNoStart(String id) {
-
-                    }
-
-                    @Override
-                    public void onNetStart(String id) {
-
-                    }
-
-                    @Override
-                    public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-                        LogUtils.LOGE(tag,netResponse.toString());
-
-                    }
-                }, false, true);
-
-
-
-
+        Intent in = new Intent(mContext, StubActivity.class);
+        in.putExtra("fragment", Tab2ListFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data",f);
+        in.putExtras(bundle);
+        mContext.startActivity(in);
 
 
 

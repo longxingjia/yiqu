@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
@@ -17,8 +19,19 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab4DiscoveryAdapter;
+import com.yiqu.iyijiayi.adapter.Tab4HotAdapter;
+import com.yiqu.iyijiayi.adapter.Tab4NewAdapter;
+import com.yiqu.iyijiayi.fragment.Tab1Fragment;
+import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.Events;
+import com.yiqu.iyijiayi.model.NSDictionary;
+import com.yiqu.iyijiayi.model.Remen;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.JsonUtils;
 import com.yiqu.iyijiayi.utils.LogUtils;
 
@@ -44,10 +57,14 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     //刷新
     private RefreshList listView;
-    private Tab4DiscoveryAdapter tab4DiscoveryAdapter;
+    private Tab4HotAdapter tab4HotAdapter;
+    private Tab4NewAdapter tab4NewAdapter;
+
     private String uid;
 
     private ArrayList<Discovery> discoveries;
+    private Events events;
+    private String arr;
 
     @Override
     protected int getTitleView() {
@@ -62,31 +79,26 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
+        events = (Events) getActivity().getIntent().getSerializableExtra("data");
         listView = (RefreshList) v.findViewById(R.id.lv_sound);
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab4_event_fragment_header, null);
         initHeadView(headerView);
 
-        tab4DiscoveryAdapter = new Tab4DiscoveryAdapter(getActivity());
-        listView.setAdapter(tab4DiscoveryAdapter);
-        //      listView.setOnItemClickListener(tab4DiscoveryAdapter);
+
+        tab4NewAdapter = new Tab4NewAdapter(getActivity());
+        listView.setAdapter(tab4NewAdapter);
+              listView.setOnItemClickListener(tab4NewAdapter);
         listView.setRefreshListListener(this);
 //
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
-        listView.addHeaderView(headerView);
-
+      //  listView.addHeaderView(headerView);
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
-
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
-
-        Intent intent = getActivity().getIntent();
-        Events events = (Events) intent.getSerializableExtra("data");
-        LogUtils.LOGE(tag, events.toString());
-
 
     }
 
@@ -96,6 +108,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             case R.id.join_in:
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", EventInfoFragment.class.getName());
+                i.putExtra("eid",String.valueOf(events.id));
 //                Bundle bundle = new Bundle();
 //                bundle.putSerializable("data",f);
 //                i.putExtras(bundle);
@@ -108,7 +121,10 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
 
     private void initHeadView(View v) {
+        tab4HotAdapter = new Tab4HotAdapter(getActivity());
         ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
+        head_listview.setAdapter(tab4HotAdapter);
+
     }
 
     @Override
@@ -127,36 +143,27 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         super.onResume();
         MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
 
-//        if (count>0){
-//
-//            listView.setVisibility(View.VISIBLE);
-//        }else {
-//
-//            listView.setVisibility(View.GONE);
-//        }
-//
-//        count = 0;
-//        if (AppShare.getIsLogin(getActivity())) {
-//            uid = AppShare.getUserInfo(getActivity()).uid;
-//            NSDictionary nsDictionary = new NSDictionary();
-//            nsDictionary.isopen = "1";
-//            nsDictionary.ispay = "1";
-//            nsDictionary.isreply = "1";
-//            nsDictionary.status = "1";
-//            Gson gson = new Gson();
-//
-//            listView.setVisibility(View.VISIBLE);
-//
-//            RestNetCallHelper.callNet(
-//                    getActivity(),
-//                    MyNetApiConfig.getFollowSoundList,
-//                    MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-//                    "getSoundList", EventFragment.this,false,true);
-//        } else {
-//
-//            listView.setVisibility(View.GONE);
-//
-//        }
+//        RestNetCallHelper.callNet(
+//                getActivity(),
+//                MyNetApiConfig.remen,
+//                MyNetRequestConfig.remen(getActivity(), uid),
+//                "Remen", EventFragment.this, false, true);
+
+        NSDictionary nsDictionary = new NSDictionary();
+        nsDictionary.isopen = "1";
+        nsDictionary.ispay = "1";
+        nsDictionary.isreply = "1";
+        nsDictionary.status = "1";
+        nsDictionary.stype = "2";
+        nsDictionary.eid = events.id;
+        Gson gson = new Gson();
+        arr = gson.toJson(nsDictionary);
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
+                "getSoundList", EventFragment.this);
 
 
     }
@@ -175,7 +182,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override
@@ -192,52 +199,28 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected void initTitle() {
-        setTitleText(getString(R.string.label_tab4));
+        setTitleText(events.title);
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (id.equals("getSoundList")) {
-            if (type == NetCallBack.TYPE_SUCCESS) {
-
-                try {
-                    discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
-                    tab4DiscoveryAdapter.setData(discoveries);
-                    if (discoveries.size() == rows) {
-                        mLoadMoreView.setMoreAble(true);
-                    }
-                    count += rows;
-                    resfreshOk();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-
-                listView.setVisibility(View.GONE);
-                resfreshFail();
-
+        if (id.equals("Remen")) {
+            if (type == TYPE_SUCCESS) {
+                Gson gson = new Gson();
+                Remen remen = gson.fromJson(netResponse.data, Remen.class);
+             //   LogUtils.LOGE(tag, remen.toString());
+                tab4HotAdapter.setData(remen.xizuo);
+                tab4NewAdapter.setData(remen.sound);
             }
-        } else if ("getSoundList_more".equals(id)) {
-            if (TYPE_SUCCESS == type) {
-                try {
-                    discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
-                    tab4DiscoveryAdapter.addData(discoveries);
-                    if (discoveries.size() < rows) {
-                        mLoadMoreView.setMoreAble(false);
-                    }
-                    count += rows;
-                    mLoadMoreView.end();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                mLoadMoreView.setMoreAble(false);
-                mLoadMoreView.end();
+        } else if (id.equals("getSoundList")) {
+            if (type == TYPE_SUCCESS) {
+                ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+                tab4NewAdapter.setData(sounds);
             }
+
+//            LogUtils.LOGE(tag, netResponse.toString());
         }
         super.onNetEnd(id, type, netResponse);
     }

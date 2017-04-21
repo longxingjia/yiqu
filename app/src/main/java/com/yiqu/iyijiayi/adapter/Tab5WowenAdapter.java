@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,8 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab5.Tab5WopingDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
@@ -146,7 +142,7 @@ public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener
         }
         if (f.isreply == 1) {//问题
             Intent intent = new Intent(mContext, StubActivity.class);
-            intent.putExtra("fragment", SoundItemDetailFragment.class.getName());
+            intent.putExtra("fragment", ItemDetailFragment.class.getName());
             intent.putExtra("data",f.sid+"");
 
             mContext.startActivity(intent);

@@ -42,6 +42,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
     private Music music;
     private String fileUrl;
     private ComposeVoice composeVoice;
+    private String eid;
 
     @Override
     protected int getTitleBarType() {
@@ -96,6 +97,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         super.init(savedInstanceState);
         Intent intent = getActivity().getIntent();
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
+        eid = intent.getStringExtra("eid");
 
         fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
 
@@ -179,7 +181,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.addSound,
-                        MyNetRequestConfig.addSound(getActivity(), AppShare.getUserInfo(getActivity()).uid, "2", "0", composeVoice),
+                        MyNetRequestConfig.addSound(getActivity(), AppShare.getUserInfo(getActivity()).uid, "2",eid, "0", composeVoice),
                         "addSound", UploadXizuoFragment.this);
 
             } else{

@@ -27,15 +27,10 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.tab1.SoundItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.XizuoItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.HomePage;
-import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Listened;
-import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -247,7 +242,7 @@ public class Tab5WotingAdapter extends BaseAdapter implements OnItemClickListene
             return;
         }
         Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", SoundItemDetailFragment.class.getName());
+        i.putExtra("fragment", ItemDetailFragment.class.getName());
         i.putExtra("data", f.sid + "");
 
         mContext.startActivity(i);

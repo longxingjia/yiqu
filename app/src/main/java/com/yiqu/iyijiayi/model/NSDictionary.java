@@ -14,5 +14,6 @@ public class NSDictionary {
     public String stype;
     public String touid;
     public String fromuid;
+    public int eid;
 
 }

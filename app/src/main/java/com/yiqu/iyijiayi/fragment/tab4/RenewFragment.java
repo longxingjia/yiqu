@@ -148,7 +148,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override
