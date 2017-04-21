@@ -132,21 +132,29 @@ public class RecordComActivity extends Activity
     private AudioManager audoManager;
 
 
-    @BindView(R.id.background) public ImageView background;
+    @BindView(R.id.background)
+    public ImageView background;
     @BindView(R.id.lyricview)
     public LyricView lyricView;
 
-    @BindView(R.id.icon_record)public ImageView icon_record;
-    @BindView(R.id.icon_finish)public ImageView icon_finish;
-    @BindView(R.id.back)public CircleImageView back;
-    @BindView(R.id.record)public CircleImageView recordVoiceButton;
-    @BindView(R.id.finish)public CircleImageView finish;
+    @BindView(R.id.icon_record)
+    public ImageView icon_record;
+    @BindView(R.id.icon_finish)
+    public ImageView icon_finish;
+    @BindView(R.id.reset)
+    public CircleImageView reset;
+    @BindView(R.id.record)
+    public CircleImageView recordVoiceButton;
+    @BindView(R.id.finish)
+    public CircleImageView finish;
 
 
     private File lrc;
     private String fileName;
     private int INTERVAL = 45;//歌词每行的间隔
     private PlayUtils playUtils;
+    private TextView totaltime;
+    private ProgressBar pb_record;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,12 +180,14 @@ public class RecordComActivity extends Activity
         recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
         musicName = (TextView) findViewById(R.id.musicname);
         musictime = (TextView) findViewById(R.id.musictime);
+        totaltime = (TextView) findViewById(R.id.totaltime);
 
         tv_record = (TextView) findViewById(R.id.tv_record);
         // recordVoiceButton = (TextView) findViewById(R.id.recordVoiceButton);
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
+        pb_record = (ProgressBar) findViewById(R.id.pb_record);
 
         title_back.setOnClickListener(this);
 
@@ -207,6 +217,7 @@ public class RecordComActivity extends Activity
         //    LogUtils.LOGE(tag,music.time+"");
         musicName.setText(music.musicname);
         totalTime = music.time;
+        pb_record.setMax(music.time);
 
 
         Random random = new Random();
@@ -214,7 +225,7 @@ public class RecordComActivity extends Activity
         String color[] = getResources().getStringArray(R.array.color);
         Bitmap bitmap = createColorBitmap(Color.parseColor(color[i]));
 
-        back.setImageBitmap(bitmap);
+        reset.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
 
@@ -317,7 +328,7 @@ public class RecordComActivity extends Activity
         Bitmap b = BitmapUtil.blur(bt, 25f, this);
         Bitmap bb = BitmapUtil.blur(b, 25f, this);
         background.setImageBitmap(bb);
-      //  background.setImageAlpha(120); //0完全透明，255
+        //  background.setImageAlpha(120); //0完全透明，255
     }
 
     @Override
@@ -338,15 +349,16 @@ public class RecordComActivity extends Activity
 
     private void goRecordSuccessState() {
         recordVoiceBegin = false;
-        musictime.setText(string2TimeUtils.stringForTimeS(music.time - actualRecordTime));
+        musictime.setText(string2TimeUtils.stringForTimeS(actualRecordTime));
 //        recordHintTextView.setVisibility(View.VISIBLE);
 //        recordHintTextView.setText("录音完成，正在合成");
+        pb_record.setProgress(actualRecordTime);
 
     }
 
     private void goRecordFailState() {
         recordVoiceBegin = false;
-        musictime.setVisibility(View.INVISIBLE);
+        // musictime.setVisibility(View.INVISIBLE);
 
     }
 
@@ -356,7 +368,8 @@ public class RecordComActivity extends Activity
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 totalTime = vp.getDuration() / 1000;
-                musictime.setText(string2TimeUtils.stringForTimeS(totalTime));
+                totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
+                pb_record.setMax(totalTime);
                 vp.release();
 
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(instance);
@@ -399,8 +412,8 @@ public class RecordComActivity extends Activity
 
             recordTime = 0;
 
-            musictime.setText(string2TimeUtils.stringForTimeS(music.time - recordTime));
-
+            musictime.setText(string2TimeUtils.stringForTimeS(recordTime));
+            pb_record.setProgress(actualRecordTime);
             musictime.setVisibility(View.VISIBLE);
         }
     }
@@ -410,8 +423,9 @@ public class RecordComActivity extends Activity
         if (recordDuration > 0) {
             recordTime = (int) (recordDuration / RecordConstant.OneSecond);
             int leftTime = totalTime - recordTime;
-            musictime.setText(string2TimeUtils.stringForTimeS(leftTime));
+            musictime.setText(string2TimeUtils.stringForTimeS(recordTime));
 
+            pb_record.setProgress(recordTime);
 
             if (leftTime <= 0) {
                 //  mediaPlayer.stop();
@@ -595,7 +609,7 @@ public class RecordComActivity extends Activity
     }
 
 
-    @OnClick({R.id.record, R.id.back, R.id.finish})
+    @OnClick({R.id.record, R.id.reset, R.id.finish})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -647,7 +661,7 @@ public class RecordComActivity extends Activity
                                     intent.putExtras(bundle);
                                     instance.startActivity(intent);
 
-                                //    playUtils.stop();
+                                    //    playUtils.stop();
 
                                     break;
                                 case 1:
@@ -657,7 +671,7 @@ public class RecordComActivity extends Activity
                                     i.putExtras(bundle);
                                     instance.startActivity(i);
                                     //  mediaPlayer.stop();
-                                 //   playUtils.stop();
+                                    //   playUtils.stop();
                                     break;
                             }
 
@@ -698,12 +712,12 @@ public class RecordComActivity extends Activity
 
 
                 break;
-            case R.id.back:
+            case R.id.reset:
                 actualRecordTime = 0;
                 recordVoiceBegin = false;
                 recordComFinish = false;
                 mediaPlayer.stop();
-            //    playUtils.stop();
+                //    playUtils.stop();
                 playUtils.pause();
                 VoiceFunction.StopRecordVoice();
                 icon_finish.setImageResource(R.mipmap.finish);
@@ -711,6 +725,12 @@ public class RecordComActivity extends Activity
                 icon_record.setImageResource(R.mipmap.icon_record);
 
                 break;
+            case R.id.title_back:
+                finish();
+
+                break;
+
+
         }
 
     }

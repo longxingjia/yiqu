@@ -7,6 +7,7 @@
  */
 package com.yiqu.iyijiayi.adapter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -26,9 +27,11 @@ import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.service.MusicService;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -40,6 +43,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
+    private String fragmentName;
     private int mCurrent = -1;
     private ImageView mPlay;
     private TextView mMusicname;
@@ -47,13 +51,16 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private LinearLayout mRoot;
     private Intent intent = new Intent();
 
-    public Tab1XizuoAdapter(Context context, LinearLayout root, ImageView play, TextView musicname, TextView author) {
-        mLayoutInflater = LayoutInflater.from(context);
-        mContext = context;
+    public Tab1XizuoAdapter( Context mContext,String fragmentName ,LinearLayout root, ImageView play, TextView musicname, TextView author) {
+
+       this. mContext = mContext;
+        this.fragmentName = fragmentName;
+        mLayoutInflater = LayoutInflater.from(mContext);
         mPlay = play;
         mMusicname = musicname;
         mAuthor = author;
         mRoot = root;
+//        fragment.getClass().getName()
 
     }
 
@@ -100,6 +107,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         TextView publish_time;
         ImageView musictype;
         ImageView play_status;
+        ImageView iv_status;
 
     }
 
@@ -122,6 +130,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.album = (ImageView) v.findViewById(R.id.album);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.play_status = (ImageView) v.findViewById(R.id.play_status);
+                h.iv_status = (ImageView) v.findViewById(R.id.iv_status);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
@@ -137,6 +146,28 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.musictype.setImageResource(R.mipmap.shengyue);
             } else {
                 h.musictype.setImageResource(R.mipmap.boyin);
+            }
+
+          //  LogUtils.LOGE(fragmentName,fragmentName);
+
+            if (fragmentName.equals("Tab1Fragment")){
+                if (position<9){
+                    h.iv_status.setVisibility(View.VISIBLE);
+                    h.iv_status.setBackgroundResource(R.mipmap.icon_new);
+                }else {
+                    h.iv_status.setVisibility(View.GONE);
+                }
+
+            }else if (fragmentName.equals("Tab1XizuoListFragment")){
+
+                if (position<9){
+                    h.iv_status.setVisibility(View.VISIBLE);
+                    h.iv_status.setBackgroundResource(R.mipmap.icon_hot);
+                }else {
+                    h.iv_status.setVisibility(View.GONE);
+                }
+
+
             }
 
             if (mCurrent == position) {
@@ -182,7 +213,10 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Sound f = getItem(position);
+        if (position < 2) {
+            return;
+        }
+        Sound f = getItem(position - 2);
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(

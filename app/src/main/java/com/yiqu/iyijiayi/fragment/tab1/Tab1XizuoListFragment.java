@@ -105,7 +105,7 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                 "getSoundList", Tab1XizuoListFragment.this);
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),top_play,play,musicplaying,authorName);
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),getClass().getSimpleName(),top_play,play,musicplaying,authorName);
         listView.setAdapter(tab1XizuoAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

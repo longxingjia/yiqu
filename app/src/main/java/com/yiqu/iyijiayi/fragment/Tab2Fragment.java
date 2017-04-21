@@ -64,7 +64,7 @@ public class Tab2Fragment extends TabContentFragment {
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab2;
     }
 
     @Override
@@ -87,7 +87,6 @@ public class Tab2Fragment extends TabContentFragment {
         ButterKnife.bind(this, v);
         mContext = getActivity();
       //  View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab2_gv_header, null);
-
 
         tab2UserInfoAdapter = new Tab2UserInfoAdapter(mContext);
         gridview.setAdapter(tab2UserInfoAdapter);

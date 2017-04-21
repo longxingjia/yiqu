@@ -248,7 +248,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         //   tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
         //lvXizuo.setAdapter(tab1XizuoAdapter);
         likes = AppShare.getLikeList(getActivity());
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
+        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),getClass().getSimpleName(), top_play, play, musicplaying, authorName);
         lvSound.setAdapter(tab1XizuoAdapter);
         lvSound.setOnItemClickListener(tab1XizuoAdapter);
         //  lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
