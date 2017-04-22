@@ -188,7 +188,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
             }
 
-            h.icon.setOnClickListener(new View.OnClickListener() {
+            h.iv_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //    h.play_status =
