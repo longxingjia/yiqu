@@ -21,12 +21,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -75,15 +82,16 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
 
         TextView musicname;
         TextView desc;
-        TextView soundtime;
+        TextView time;
         TextView tea_name;
         TextView tectitle;
         ImageView stu_header;
         ImageView tea_header;
-        TextView listener;
         ImageView musictype;
-        TextView stu_listen;
+        TextView comment;
+        TextView listener;
         TextView tea_listen;
+        TextView like;
     }
 
     @Override
@@ -93,29 +101,31 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_sound, null);
+                v = mLayoutInflater.inflate(R.layout.tab1_sound_list_adapter, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.desc = (TextView) v.findViewById(R.id.desc);
-                h.soundtime = (TextView) v.findViewById(R.id.soundtime);
+                h.time = (TextView) v.findViewById(R.id.time);
                 h.tea_name = (TextView) v.findViewById(R.id.tea_name);
                 h.tectitle = (TextView) v.findViewById(R.id.tectitle);
-                h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
-                h.listener = (TextView) v.findViewById(R.id.listener);
                 h.stu_header = (ImageView) v.findViewById(R.id.stu_header);
+                h.musictype = (ImageView) v.findViewById(R.id.musictype);
+                h.listener = (TextView) v.findViewById(R.id.listener);
+                h.tea_listen = (TextView) v.findViewById(R.id.tea_listen);
+                h.like = (TextView) v.findViewById(R.id.like);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
-                h.stu_listen = (TextView) v.findViewById(R.id.stu_listen);
+                h.comment = (TextView) v.findViewById(R.id.comment);
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+            final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
-            h.soundtime.setText(f.soundtime + "\"");
-            h.listener.setText(f.views+"");
+            h.time.setText(f.commenttime + "\"");
             h.tea_name.setText(f.tecname);
+            h.listener.setText(String.valueOf(f.views));
             h.tectitle.setText(f.tectitle);
+            h.like.setText(String.valueOf(f.like));
             //  LogUtils.LOGE(tag,f.soundpath);
             if (f.type==1){
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
@@ -123,10 +133,9 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 
-            long time = System.currentTimeMillis() / 1000 - f.created;
-//            LogUtils.LOGE(tag,time+"");
+            long time = System.currentTimeMillis() / 1000 - f.edited;
 
-            if (time < 2 * 24 * 60 * 60 && time > 0) {
+            if (time < 2 * 24 * 60 * 60 * 1000 && time > 0) {
                 h.tea_listen.setText("限时免费听");
             } else {
                 if (f.listen == 1) {
@@ -136,6 +145,68 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                 }
 
             }
+
+//            if (f.isLike == 1) {
+//
+//                initDianZan(h.like, true);
+//            } else {
+//                initDianZan(h.like, false);
+//            }
+
+            h.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (!AppShare.getIsLogin(mContext)) {
+                        Intent i = new Intent(mContext, StubActivity.class);
+                        i.putExtra("fragment", SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请登录后再试");
+                        mContext.startActivity(i);
+                        return;
+                    }
+
+
+                    RestNetCallHelper.callNet(mContext,
+                            MyNetApiConfig.like, MyNetRequestConfig
+                                    .like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                            "like", new NetCallBack() {
+                                @Override
+                                public void onNetNoStart(String id) {
+
+                                }
+
+                                @Override
+                                public void onNetStart(String id) {
+
+                                }
+
+                                @Override
+                                public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                    LogUtils.LOGE(tag, f.isLike + "");
+                                    if (f.isLike == 1) {
+
+                                    } else {
+
+                                        Like l = new Like();
+                                        l.sid = f.sid;
+                                        l.islike = 1;
+                                        f.isLike = 1;
+                                        f.like++;
+
+                                        notifyDataSetChanged();
+//                                        if (likes == null) {
+//                                            likes = new ArrayList<Like>();
+//                                        }
+//                                        likes.add(l);
+//                                        AppShare.setLikeList(mContext, likes);
+                                    }
+
+                                }
+                            }, false, true);
+                }
+            });
+
 
 
             PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);

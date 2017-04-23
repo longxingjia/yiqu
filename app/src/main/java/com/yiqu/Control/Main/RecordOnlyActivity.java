@@ -105,11 +105,11 @@ public class RecordOnlyActivity extends Activity
     private TextView musictime;
 
     private String className;
-    private TextView recordHintTextView;
+//    private TextView recordHintTextView;
 
     private boolean mIsRecording = false;
-    private boolean mIsLittleTime = false;
-    private boolean mIsSendVoice = false;
+//    private boolean mIsLittleTime = false;
+//    private boolean mIsSendVoice = false;
     private static RecordOnlyActivity instance;
     private RelativeLayout rlHint;
     private ImageView title_back;
@@ -178,7 +178,7 @@ public class RecordOnlyActivity extends Activity
     }
 
     public void bindView() {
-        recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
+//        recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
 
         rlHint = (RelativeLayout) findViewById(R.id.hint);
 
@@ -227,7 +227,7 @@ public class RecordOnlyActivity extends Activity
 
 
         mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
-        recordHintTextView.setText("按下开始录音");
+        //recordHintTextView.setText("按下开始录音");
         //   File mFile = new File(Variable.StorageMusicCachPath, "红豆词_1474598402.mp3");
         musicName.setText(name);
 
@@ -254,13 +254,19 @@ public class RecordOnlyActivity extends Activity
     }
 
     private void initBackground(File file) {
-        PictureUtils.showPictureFile(instance, file, image_anim, 270);
-        Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
+        try{
+            PictureUtils.showPictureFile(instance, file, image_anim, 270);
+            Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
 
-        //  background.setImageBitmap(bt);
-        Bitmap b = BitmapUtil.blur(bt, 25f, this);
-        Bitmap bb = BitmapUtil.blur(b, 25f, this);
-        background.setImageBitmap(bb);
+            //  background.setImageBitmap(bt);
+            Bitmap b = BitmapUtil.blur(bt, 25f, this);
+            Bitmap bb = BitmapUtil.blur(b, 25f, this);
+            background.setImageBitmap(bb);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         //  background.setImageAlpha(120); //0完全透明，255
 
     }
@@ -361,6 +367,7 @@ public class RecordOnlyActivity extends Activity
                 if (recordComFinish) {
                     if (mIsRecording) {
 
+
                     } else {
                         if (playUtils.isPlaying()) {
                             playUtils.pause();
@@ -371,6 +378,17 @@ public class RecordOnlyActivity extends Activity
                         }
                     }
                 } else if (mIsRecording) {
+                    if (mRecorderUtil.isPause()){
+                        mRecorderUtil.pauseRecording();
+                        icon_record.setImageResource(R.mipmap.icon_record);
+                     //   LogUtils.LOGE(tag,"2ss22");
+                    }else {
+                        mRecorderUtil.restartRecording();
+                        icon_record.setImageResource(R.mipmap.icon_pause);
+                    }
+
+               //     LogUtils.LOGE(tag,"222");
+
 
                 } else {
                     startRecord();
@@ -453,6 +471,7 @@ public class RecordOnlyActivity extends Activity
             // super.onPostExecute(result);
 
             Log.e(TAG, "下载完");
+            if (mFile.exists())
             initBackground(mFile);
             if (isCancelled())
                 return;
@@ -610,9 +629,6 @@ public class RecordOnlyActivity extends Activity
 //                            VoiceFunction.StopRecordVoice();
                             stopAnimation();
 
-
-                            recordHintTextView.setText("按下开始录音");
-
                             break;
                         case 1:
 
@@ -655,13 +671,15 @@ public class RecordOnlyActivity extends Activity
         string2TimeUtils = new String2TimeUtils();
         mSecond = 0;
         mIsRecording = true;
-        mIsLittleTime = true;
         mTimerTask = new TimerTask() {
             int i = 300;
 
             @Override
             public void run() {
-                mIsLittleTime = false;
+
+                if (mRecorderUtil.isPause()){
+                    return;
+                }
                 mSecond += 1;
                 i--;
                 mHandler.post(new Runnable() {
@@ -674,7 +692,7 @@ public class RecordOnlyActivity extends Activity
                     }
                 });
                 if (i == 0) {
-                    mIsSendVoice = true;
+
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -698,6 +716,8 @@ public class RecordOnlyActivity extends Activity
 
         mTimer = new Timer(true);
         mTimer.schedule(mTimerTask, 1000, 1000);
+
+
 
     }
 

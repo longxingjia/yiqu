@@ -44,7 +44,7 @@ dependencies {
     //    compile viewDependencies.videocache compile 'com.android.support:support-annotations:25.1.1'
     compile files('libs/classes.jar')
     // compile 'support:support-annotations:25.1.1'
-    compile 'com.android.support:support-annotations:25.2.0'
+    compile 'com.android.support:support-annotations:25.1.1'
 }
 
 //apply from: '../bintray.gradle'

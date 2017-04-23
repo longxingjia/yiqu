@@ -1,4 +1,4 @@
-package com.yiqu.Tool.Recorder.Mp3;
+package com.yiqu.Tool.Recorder;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -13,7 +13,6 @@ import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Common.CommonThreadPool;
 import com.czt.mp3recorder.PCMFormat;
 import com.yiqu.iyijiayi.utils.LogUtils;
-
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 

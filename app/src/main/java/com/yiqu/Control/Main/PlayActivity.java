@@ -1,5 +1,6 @@
 package com.yiqu.Control.Main;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +31,6 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.fileutils.utils.PlayerForLocal;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
@@ -42,9 +42,12 @@ import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PlayUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
-import com.yiqu.iyijiayi.view.LyricView;
+
+import cn.zhaiyifan.lyric.LyricUtils;
+import cn.zhaiyifan.lyric.widget.LyricView ;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -55,7 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlayActivity extends Activity
-        implements VoicePlayerInterface ,NetCallBack{
+        implements NetCallBack {
 
     private String tag = "PlayActivity";
     //    private int width;
@@ -70,17 +73,19 @@ public class PlayActivity extends Activity
     private ImageView title_back;
     private ImageView image_anim;
     private Animation rotate;
-    private TimerTask mTimerTask = null;
-    private Timer mTimer = null;
+    //   private TimerTask mTimerTask = null;
+    private Timer mTimer = new Timer();
 
     private static final int MSG_TIME_SHORT = 0x123;
-    private EditText desc;
-    private TextView content;
+//    private EditText desc;
+//    private TextView content;
 
     @BindView(R.id.pre)
     public ImageView pre;
     @BindView(R.id.now_time)
     public TextView now_time;
+    @BindView(R.id.totaltime)
+    public TextView totaltime;
     @BindView(R.id.next)
     public ImageView next;
     @BindView(R.id.play)
@@ -106,7 +111,7 @@ public class PlayActivity extends Activity
     private final static int Mode_ONE = 2001;
     private final static int Mode_RANDOM = 2002;
     private int currentMode = Mode_LIST;
-
+    private MediaPlayer voicePlayer;
 
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -120,7 +125,6 @@ public class PlayActivity extends Activity
     };
     private ComposeVoice voice;
     private int mtime;
-    private PlayerForLocal player;
     private ArrayList<ComposeVoice> composeVoices;
     private int position;
 
@@ -131,6 +135,8 @@ public class PlayActivity extends Activity
         instance = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         init(R.layout.play_activity);
+
+
     }
 
     private void init(int layoutId) {
@@ -140,6 +146,17 @@ public class PlayActivity extends Activity
         composeVoices = (ArrayList<ComposeVoice>) getIntent().getSerializableExtra("data");
         position = getIntent().getIntExtra("position", 0);
         voice = composeVoices.get(position);
+        voicePlayer = new MediaPlayer();
+        mTimer.schedule(mTimerTask, 0, 1000);
+        voicePlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                voicePlayer.start();
+            }
+        });
+
+        voicePlayer.setOnCompletionListener(onCompletion);
+
         initData();
     }
 
@@ -148,35 +165,22 @@ public class PlayActivity extends Activity
         rlHint = (RelativeLayout) findViewById(R.id.hint);
         musicName = (TextView) findViewById(R.id.musicname);
         musictime = (TextView) findViewById(R.id.musictime);
-        content = (TextView) findViewById(R.id.content);
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-        player = new PlayerForLocal(this, seekbar, null, now_time, musictime, onPlayCompletion);
 
     }
 
 
     public void initData() {
-        rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
-        LinearInterpolator lin = new LinearInterpolator();
-        rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
-        //   voice = (ComposeVoice) getIntent().getSerializableExtra("ff");
-
-        //    LogUtils.LOGE(tag, composeVoices.toString());
-
+//        rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
+//        LinearInterpolator lin = new LinearInterpolator();
+//        rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
         musicName.setText(voice.musicname);
 
-        startAnimation();
-        //  VoiceFunction.PlayToggleVoice(Variable.StorageMusicPath + voice.voicename, instance);
 
         play.setImageResource(R.mipmap.icon_pause);
-       player.stop();
-
-        player.playUrl(Variable.StorageMusicPath + voice.voicename);
-        handler.post(runnable);
-        // player.onCompletion
 
         Random random = new Random();
         int i = random.nextInt(4);
@@ -188,8 +192,9 @@ public class PlayActivity extends Activity
         play_bg.setImageBitmap(bitmap);
         next_bg.setImageBitmap(bitmap);
 
-       String   fileName = voice.musicname + "_" + voice.mid;
-        File    lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
+        String fileName = voice.musicname + "_" + voice.mid;
+        playUrl(Variable.StorageMusicPath + voice.voicename);
+        File lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
         if (!lrc.exists()) {
 
             MyNetApiConfig myNetApiConfig = new MyNetApiConfig(voice.musicname);
@@ -199,57 +204,34 @@ public class PlayActivity extends Activity
                             .getlyric(this),
                     "getlyric", instance);
         } else {
-            LogUtils.LOGE(tag,fileName);
-            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-            lyricView.invalidate();
+            //  LogUtils.LOGE(tag,fileName);
+//            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
+//            lyricView.invalidate();
+
+            lyricView.setLyric(  LyricUtils.parseLyric(lrc,"utf-8"));
+            lyricView.play();
         }
-
-
 
 
     }
 
     private Handler handler = new Handler();
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if (player.isPlaying()) {
-                int time = player.getCurrentPosition();
+//    private Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (player.isPlaying()) {
+//                int time = player.getCurrentPosition();
+//
+//                LogUtils.LOGE(tag, player.getDuration()+"");
+//                lyricView.updateLyrics( time, player.getDuration());
+//                handler.postDelayed(this, 100);
+//
+//            }
+//
+//        }
+//    };
 
-                LogUtils.LOGE(tag, player.getDuration()+"");
-                lyricView.updateLyrics( time, player.getDuration());
-                handler.postDelayed(this, 100);
-
-            }
-
-        }
-    };
-
-    PlayerForLocal.onPlayCompletion onPlayCompletion = new PlayerForLocal.onPlayCompletion() {
-        @Override
-        public void completion() {
-            switch (currentMode) {
-                case Mode_LIST:
-                    position++;
-                    if (position>=composeVoices.size()){
-                        position =0;
-                    }
-                    voice = composeVoices.get(position);
-                    initData();
-                    break;
-                case Mode_ONE:
-                    player.playUrl(Variable.StorageMusicPath + voice.voicename);
-                    break;
-                case Mode_RANDOM:
-                    Random r = new Random();
-                    position = r.nextInt(composeVoices.size());
-                    voice = composeVoices.get(position);
-                    initData();
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onNetNoStart(String id) {
@@ -272,8 +254,7 @@ public class PlayActivity extends Activity
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
-            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-            this.progress = (int) (progress * player.mediaPlayer.getDuration()
+            this.progress = (int) (progress * voicePlayer.getDuration()
                     / seekBar.getMax());
         }
 
@@ -285,34 +266,101 @@ public class PlayActivity extends Activity
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
-            player.mediaPlayer.seekTo(progress);
+            voicePlayer.seekTo(progress);
         }
     }
 
+    TimerTask mTimerTask = new TimerTask() {
+        @Override
+        public void run() {
 
-    @Override
-    public void playVoiceBegin() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_pause);
+            if (voicePlayer.isPlaying() && seekbar.isPressed() == false) {
+                handleProgress.sendEmptyMessage(0);
+            }
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
+    Handler handleProgress = new Handler() {
+
+
+        public void handleMessage(Message msg) {
+            int position = voicePlayer.getCurrentPosition();
+            int duration = voicePlayer.getDuration();
+
+            if (duration > 0) {
+                long pos = seekbar.getMax() * position / duration;
+                seekbar.setProgress((int) pos);
+                now_time.setText("" + changeNum(position / (60 * 1000)) + ":" + changeNum(position % (60 * 1000) / 1000));
+                totaltime.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
+            }
+
+
+        }
+
+        ;
+    };
+
+    public String changeNum(int num) {
+        if (num == 0) {
+            return "00";
+        }
+        if (num == 1) {
+            return "01";
+        }
+        if (num == 2) {
+            return "02";
+        }
+        if (num == 3) {
+            return "03";
+        }
+        if (num == 4) {
+            return "04";
+        }
+        if (num == 5) {
+            return "05";
+        }
+        if (num == 6) {
+            return "06";
+        }
+        if (num == 7) {
+            return "07";
+        }
+        if (num == 8) {
+            return "08";
+        }
+        if (num == 9) {
+            return "09";
+        }
+
+        return "" + num;
     }
 
-    @Override
-    public void playVoiceFail() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
-    }
 
-    @Override
-    public void playVoicePause() {
-
-    }
-
-    @Override
-    public void playVoiceFinish() {
-        stopAnimation();
-        musictime.setText(0 + "\"");
-        mTimer.cancel();
-        mTimerTask.cancel();
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
-    }
+    MediaPlayer.OnCompletionListener onCompletion = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            switch (currentMode) {
+                case Mode_LIST:
+                    position++;
+                    if (position >= composeVoices.size()) {
+                        position = 0;
+                    }
+                    voice = composeVoices.get(position);
+                    initData();
+                    break;
+                case Mode_ONE:
+                    initData();
+                    break;
+                case Mode_RANDOM:
+                    Random r = new Random();
+                    position = r.nextInt(composeVoices.size());
+                    voice = composeVoices.get(position);
+                    initData();
+                    break;
+            }
+        }
+    };
 
 
     @OnClick({R.id.play_bg, R.id.next_bg, R.id.pre_bg, R.id.upload, R.id.mode, R.id.title_back})
@@ -330,7 +378,6 @@ public class PlayActivity extends Activity
                         voice = composeVoices.get(position);
                         initData();
 
-                        //   player.playUrl(Variable.StorageMusicPath + voice.voicename);
                         break;
                     case Mode_RANDOM:
                         Random r = new Random();
@@ -349,7 +396,7 @@ public class PlayActivity extends Activity
                     case Mode_LIST:
                     case Mode_ONE:
                         position++;
-                        if (position>=composeVoices.size()) {
+                        if (position >= composeVoices.size()) {
                             position = 0;
                         }
                         voice = composeVoices.get(position);
@@ -370,19 +417,20 @@ public class PlayActivity extends Activity
 
             case R.id.play_bg:
 
-                if (player.isPlaying()) {
+                if (voicePlayer.isPlaying()) {
                     play.setImageResource(R.mipmap.icon_play);
-                    player.pause();
-                //    handler.removeCallbacks(runnable);
+                    voicePlayer.pause();
+                    //    handler.removeCallbacks(runnable);
                 } else {
                     play.setImageResource(R.mipmap.icon_pause);
-                    player.playUrl(Variable.StorageMusicPath + voice.voicename);
-                    handler.post(runnable);
+                    voicePlayer.start();
+
+                    //    handler.post(runnable);
                 }
                 break;
 
             case R.id.title_back:
-                VoiceFunction.StopVoice();
+                //  VoiceFunction.StopVoice();
                 finish();
 
 
@@ -418,7 +466,7 @@ public class PlayActivity extends Activity
                                 intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                 intent.putExtras(bundle);
                                 instance.startActivity(intent);
-                                VoiceFunction.StopVoice();
+                                //   VoiceFunction.StopVoice();
 
                                 break;
                             case 1:
@@ -427,7 +475,6 @@ public class PlayActivity extends Activity
                                 i.putExtra("fragment", UploadXizuoFragment.class.getName());
                                 i.putExtras(bundle);
                                 instance.startActivity(i);
-                                VoiceFunction.StopVoice();
 
                                 break;
                         }
@@ -440,23 +487,31 @@ public class PlayActivity extends Activity
 
     }
 
+    private void playUrl(String url) {
+        try {
+            voicePlayer.reset();
+            voicePlayer.setDataSource(url);
+            voicePlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     @Override
     protected void onDestroy() {
 
-        player.stop();
+        //  player.stop();
+        if (voicePlayer != null) {
+            voicePlayer.stop();
+            voicePlayer.release();
+            voicePlayer = null;
+        }
+
         super.onDestroy();
     }
 
-
-    private void startAnimation() {
-        image_anim.startAnimation(rotate);
-
-    }
-
-    private void stopAnimation() {
-        image_anim.clearAnimation();
-
-    }
 
     @Override
     protected void onResume() {

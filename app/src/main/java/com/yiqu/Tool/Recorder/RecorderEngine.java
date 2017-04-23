@@ -15,7 +15,6 @@ import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Global.RecordConstant;
 
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
-import com.yiqu.Tool.Recorder.Mp3.MP3Recorder;
 
 public class RecorderEngine {
     private boolean recording;

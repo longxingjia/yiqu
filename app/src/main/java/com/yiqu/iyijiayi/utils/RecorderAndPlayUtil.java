@@ -90,16 +90,39 @@ public class RecorderAndPlayUtil {
     /**
      * 暂停
      */
-    private void pauseRecording() {
+    public void pauseRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
-            if (mRecorder.isPause()) {
+//            if (mRecorder.isPause()) {
                 mRecorder.setPause(false);
-            } else {
-                mRecorder.setPause(true);
-            }
+//            } else {
+//                mRecorder.setPause(true);
+//            }
+
         }
 
     }
+
+
+    public boolean isPause(){
+
+        if (mRecorder != null && mRecorder.isRecording()) {
+        //    LogUtils.LOGE("1",String.valueOf(mRecorder.isPause()));
+            return mRecorder.isPause();
+
+        }
+        return false;
+    }
+
+    /**
+     * 暂停
+     */
+    public void restartRecording() {
+        if (mRecorder != null && mRecorder.isRecording()) {
+                mRecorder.setPause(true);
+
+        }
+    }
+
 
 
     public void release() {

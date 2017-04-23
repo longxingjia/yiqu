@@ -30,6 +30,7 @@ import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
 
@@ -74,11 +75,18 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     private class HoldChild {
 
-        TextView name;
+        TextView musicname;
         TextView content;
+        TextView author;
+        TextView comment;
+        TextView like;
+        TextView listener;
         ImageView icon;
+        ImageView album;
+        TextView publish_time;
         ImageView musictype;
         ImageView play_status;
+        ImageView iv_status;
 
     }
 
@@ -89,48 +97,37 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.remen_xizuo, null);
-                h.name = (TextView) v.findViewById(R.id.musicname);
+                v = mLayoutInflater.inflate(R.layout.tab1_zuoping_adapter, null);
+                h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.content = (TextView) v.findViewById(R.id.desc);
+                h.author = (TextView) v.findViewById(R.id.author);
+                h.publish_time = (TextView) v.findViewById(R.id.publish_time);
+                h.comment = (TextView) v.findViewById(R.id.comment);
+                h.listener = (TextView) v.findViewById(R.id.listener);
+                h.like = (TextView) v.findViewById(R.id.like);
                 h.icon = (ImageView) v.findViewById(R.id.header);
+                h.album = (ImageView) v.findViewById(R.id.album);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.play_status = (ImageView) v.findViewById(R.id.play_status);
+                h.iv_status = (ImageView) v.findViewById(R.id.iv_status);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
             Sound f = getItem(position);
-            h.name.setText(f.musicname);
+            h.musicname.setText(f.musicname);
             h.content.setText(f.desc);
-            if (f.type==1){
+//            h.comment.setText(String.valueOf(f.co));
+            h.like.setText(String.valueOf(f.like));
+            h.listener.setText(String.valueOf(f.views));
+            h.author.setText(f.stuname);
+            h.publish_time.setText(String2TimeUtils.longToString(f.created*1000,"yyyy/MM/dd HH:mm"));
+            if (f.type == 1) {
                 h.musictype.setImageResource(R.mipmap.shengyue);
-            }else {
+            } else {
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
-            if (mCurrent>=0){
-                if (mCurrent==position){
-                    h.play_status.setImageResource(R.mipmap.xizuo_pause);
-                    h.name.setTextColor(mContext.getResources().getColor(R.color.redMain));
-                }else {
-                    h.play_status.setImageResource(R.mipmap.xizuo_play);
-                    h.name.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
-                }
-
-            }
-
-            h.icon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                //    h.play_status =
-                    mCurrent = position;
-                    notifyDataSetChanged();
-
-
-
-                }
-            });
-
-            PictureUtils.showPicture(mContext,f.stuimage,h.icon,47);
-
+            PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
+            PictureUtils.showPicture(mContext, f.stuimage, h.album, 75);
 
         } catch (Exception e) {
             e.printStackTrace();
