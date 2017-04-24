@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -35,19 +38,31 @@ import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.PlayUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
 
 import cn.zhaiyifan.lyric.LyricUtils;
 import cn.zhaiyifan.lyric.widget.LyricView ;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -97,7 +112,8 @@ public class PlayActivity extends Activity
 
     @BindView(R.id.lyricview)
     public LyricView lyricView;
-
+    @BindView(R.id.background)
+    public ImageView background;
     @BindView(R.id.pre_bg)
     public CircleImageView pre_bg;
     @BindView(R.id.play_bg)
@@ -157,7 +173,42 @@ public class PlayActivity extends Activity
 
         voicePlayer.setOnCompletionListener(onCompletion);
 
+        UserInfo userInfo = AppShare.getUserInfo(this);
+        String url = userInfo.userimage;
+        if (url != null) {
+            if (!url.contains("http://wx.qlogo.cn")) {
+                url = MyNetApiConfig.ImageServerAddr + url;
+            }
+            String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
+            File file = new File(Variable.StorageImagePath, fileName);
+            //   background.setBackgroundResource(R.color.wechat_green);
+            if (file.exists()) {
+                initBackground(file);
+            } else {
+                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                downLoaderTask.execute();
+            }
+        }
+
         initData();
+    }
+
+    private void initBackground(File file) {
+        try{
+            PictureUtils.showPictureFile(instance, file, image_anim, 270);
+            Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            //  background.setImageBitmap(bt);
+            Bitmap b = BitmapUtil.blur(bt, 25f, this);
+            Bitmap bb = BitmapUtil.blur(b, 25f, this);
+            background.setImageBitmap(bb);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //  background.setImageAlpha(120); //0完全透明，255
+
     }
 
     public void bindView() {
@@ -273,6 +324,8 @@ public class PlayActivity extends Activity
     TimerTask mTimerTask = new TimerTask() {
         @Override
         public void run() {
+            if (voicePlayer==null)
+                return;
 
             if (voicePlayer.isPlaying() && seekbar.isPressed() == false) {
                 handleProgress.sendEmptyMessage(0);
@@ -456,12 +509,14 @@ public class PlayActivity extends Activity
 
                 final Bundle bundle = new Bundle();
                 bundle.putSerializable("composeVoice", voice);
-                MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
+                String title = "找个导师点评一下吗？";
+                String[] items = new String[]{"免费上传作品","找导师请教"};
+                MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance,title,items, new MenuDialogSelectTeaHelper.TeaListener() {
                     @Override
                     public void onTea(int tea) {
                         switch (tea) {
 
-                            case 0:
+                            case 1:
                                 Intent intent = new Intent(instance, StubActivity.class);
                                 intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                 intent.putExtras(bundle);
@@ -469,7 +524,7 @@ public class PlayActivity extends Activity
                                 //   VoiceFunction.StopVoice();
 
                                 break;
-                            case 1:
+                            case 0:
 
                                 Intent i = new Intent(instance, StubActivity.class);
                                 i.putExtra("fragment", UploadXizuoFragment.class.getName());
@@ -496,11 +551,14 @@ public class PlayActivity extends Activity
             e.printStackTrace();
         }
 
-
     }
 
     @Override
     protected void onDestroy() {
+        if (mTimerTask!=null){
+            mTimerTask.cancel();
+            mTimer.cancel();
+        }
 
         //  player.stop();
         if (voicePlayer != null) {
@@ -527,5 +585,139 @@ public class PlayActivity extends Activity
         super.onPause();
         MobclickAgent.onPageEnd("播放录音或者声乐页面");
         MobclickAgent.onPause(this);
+    }
+
+    public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
+
+        private final String TAG = "DownLoaderTask";
+        private URL mUrl;
+        private File mFile;
+        private ImageView cicle;
+        private ImageView background;
+        private DownLoaderTask.ProgressReportingOutputStream mOutputStream;
+
+        private int mProgress = 0;
+
+        public DownLoaderTask(String downloadPath, String fileName, String out, ImageView cicle, ImageView background) {
+            super();
+            this.cicle = cicle;
+            this.background = background;
+
+            try {
+                mUrl = new URL(downloadPath);
+
+                mFile = new File(out, fileName);
+            } catch (MalformedURLException e) {
+
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+
+            return download();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+
+            // super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Long result) {
+            // TODO Auto-generated method stub
+            // super.onPostExecute(result);
+
+            Log.e(TAG, "下载完");
+            if (mFile.exists())
+                initBackground(mFile);
+            if (isCancelled())
+                return;
+        }
+
+        private long download() {
+            URLConnection connection = null;
+            int bytesCopied = 0;
+            try {
+                connection = mUrl.openConnection();
+                int length = connection.getContentLength();
+                if (mFile.exists()/* && length == mFile.length()*/) {
+                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
+                    mFile.delete();
+                }
+
+                mOutputStream = new DownLoaderTask.ProgressReportingOutputStream(mFile);
+                publishProgress(0, length);
+                bytesCopied = copy(connection.getInputStream(), mOutputStream);
+                if (bytesCopied != length && length != -1) {
+                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
+                            + ", length" + length);
+                }
+                mOutputStream.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return bytesCopied;
+        }
+
+        private int copy(InputStream input, OutputStream output) {
+            byte[] buffer = new byte[1024 * 8];
+            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
+            BufferedOutputStream out = new BufferedOutputStream(output, 1024 * 8);
+            int count = 0, n = 0;
+            try {
+                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
+                    out.write(buffer, 0, n);
+                    count += n;
+                }
+                out.flush();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            return count;
+        }
+
+        private final class ProgressReportingOutputStream extends FileOutputStream {
+
+            public ProgressReportingOutputStream(File file)
+                    throws FileNotFoundException {
+                super(file);
+                // TODO Auto-generated constructor stub
+            }
+
+            @Override
+            public void write(byte[] buffer, int byteOffset, int byteCount)
+                    throws IOException {
+                // TODO Auto-generated method stub
+                super.write(buffer, byteOffset, byteCount);
+                mProgress += byteCount;
+                publishProgress(mProgress);
+            }
+
+        }
+
     }
 }

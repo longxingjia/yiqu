@@ -64,9 +64,6 @@
             android:name="com.yiqu.Control.Main.PlayActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.yiqu.Control.Main.RecordActivityForRecordFrag"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name="com.yiqu.Control.Main.RecordOnlyActivity"
             android:screenOrientation="portrait"/>
         <activity

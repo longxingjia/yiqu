@@ -523,8 +523,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 //            h.follow.setBackgroundResource(R.mipmap.followed);
 //        }
 
-
-        LogUtils.LOGE(tag, sound.toString());
         if (sound.touid == 0) {
             teacher_info.setVisibility(View.GONE);
             title.setText("作品详情");
@@ -598,6 +596,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "edited", "desc", "0"),
                 "getSoundList", ItemDetailFragment.this, false, true);
+
+        video_play.setImageResource(R.mipmap.video_pause);
+        player.playUrl(stuUrl);
     }
 
     @Override
@@ -632,7 +633,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_worth:
-                LogUtils.LOGE(tag,"ss");
+
                 if (soundWorth != null) {
                     Intent i = new Intent(getActivity(), StubActivity.class);
                     i.putExtra("fragment", ItemDetailFragment.class.getName());
@@ -640,7 +641,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     bundle.putSerializable("Sound", soundWorth);
                     i.putExtras(bundle);
                     getActivity().startActivity(i);
-                    LogUtils.LOGE(tag,"sss");
+
                 }
                 break;
             case R.id.add_follow:
@@ -656,6 +657,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     player.pause();
                 } else {
                     video_play.setImageResource(R.mipmap.video_pause);
+
                     if (stuUrl.equals(player.getUrl())) {
                         player.rePlay();
                     } else {

@@ -1,42 +1,20 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.ui.abs.AbsFragment;
-import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Control.Main.PlayActivity;
-import com.yiqu.Control.Main.RecordActivityForRecordFrag;
 
 import com.yiqu.Control.Main.RecordOnlyActivity;
 
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.UserInfo;
-
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
-
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -10,7 +10,9 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -356,7 +358,7 @@
                     android:paddingRight="10dp"
                     android:text=""
                     android:textColor="@color/dd_gray"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:layout_width="0dp"

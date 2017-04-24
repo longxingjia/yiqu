@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -65,6 +66,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private ArrayList<Discovery> discoveries;
     private Events events;
     private String arr;
+    private ArrayList<Sound> sounds;
 
     @Override
     protected int getTitleView() {
@@ -215,12 +217,40 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             }
         } else if (id.equals("getSoundList")) {
             if (type == TYPE_SUCCESS) {
-                ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
                 tab4NewAdapter.setData(sounds);
+                if (sounds.size() == rows) {
+                    mLoadMoreView.setMoreAble(true);
+                }
+                count += rows;
+                resfreshOk();
+            } else {
+                ToastManager.getInstance(getActivity()).showText(netResponse.result);
+                resfreshFail();
             }
-
 //            LogUtils.LOGE(tag, netResponse.toString());
+        } else if (id.equals("getSoundList_more")) {
+
+
+            if (type == TYPE_SUCCESS) {
+                sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+
+                //  remen.sound.addAll(sound);
+                //    AppShare.setRemenList(getActivity(), remen);
+//                tab1XizuoAdapter.setData(sound);
+                tab4NewAdapter.addData(sounds);
+                if (sounds.size() < rows) {
+                    mLoadMoreView.setMoreAble(false);
+                }
+                count += rows;
+                mLoadMoreView.end();
+
+            } else {
+                mLoadMoreView.setMoreAble(false);
+                mLoadMoreView.end();
+            }
         }
         super.onNetEnd(id, type, netResponse);
     }
@@ -233,16 +263,14 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 // 正在加载中
             } else {
                 mLoadMoreView.loading();
-
-//                RestNetCallHelper.callNet(
-//                        getActivity(),
-//                        MyNetApiConfig.getFollowSoundList,
-//                        MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-//                        "getSoundList_more", EventFragment.this,false,true);
+                RestNetCallHelper.callNet(
+                        getActivity(),
+                        MyNetApiConfig.getSoundList,
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
+                        "getSoundList_more", EventFragment.this, false, true);
 
             }
         }
-
         return false;
     }
 
@@ -252,11 +280,11 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         mLoadMoreView.setMoreAble(false);
 
         count = 0;
-//        RestNetCallHelper.callNet(
-//                getActivity(),
-//                MyNetApiConfig.getFollowSoundList,
-//                MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
-//                "getSoundList", EventFragment.this,false,true);
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
+                "getSoundList", EventFragment.this);
 
 
     }

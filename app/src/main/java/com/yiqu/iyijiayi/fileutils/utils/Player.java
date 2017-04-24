@@ -82,6 +82,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
 
         public void handleMessage(Message msg) {
+            if (mediaPlayer == null)
+                return;
             int position = mediaPlayer.getCurrentPosition();
             duration = mediaPlayer.getDuration();
            // LogUtils.LOGE("ff",String.valueOf(mediaPlayer.isPlaying()));

@@ -26,6 +26,7 @@
     
     <!-- tab  -->
     <color name="tab_bg_color">#f2f2f2</color>
+    <color name="bg_color">#22f2f2f2</color>
    <color name="text_bg">#f7f7f7</color>
     <color name="tab_txt_eable_color">#ff0000</color>
     <color name="tab_txt_disable_color">#b3b3b3</color>

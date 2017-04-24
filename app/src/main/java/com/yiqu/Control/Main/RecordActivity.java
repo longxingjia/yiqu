@@ -447,11 +447,13 @@ public class RecordActivity extends Activity
 
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
-                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
+                    String title = "找个导师点评一下吗？";
+                    String[] items = new String[]{"免费上传作品","找导师请教"};
+                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance,title,items, new MenuDialogSelectTeaHelper.TeaListener() {
                         @Override
                         public void onTea(int tea) {
                             switch (tea) {
-                                case 0:
+                                case 1:
                                     Intent intent = new Intent(instance, StubActivity.class);
                                     intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                     intent.putExtras(bundle);
@@ -459,7 +461,7 @@ public class RecordActivity extends Activity
                                     VoiceFunction.StopVoice();
 
                                     break;
-                                case 1:
+                                case 0:
 
                                     Intent i = new Intent(instance, StubActivity.class);
                                     i.putExtra("fragment", UploadXizuoFragment.class.getName());

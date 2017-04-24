@@ -66,7 +66,6 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  */
 public class WelcomePageActivity extends Activity {
     private Intent intent;
-
     private Handler handler;
     private String apkName;
     private CommonApplication application;

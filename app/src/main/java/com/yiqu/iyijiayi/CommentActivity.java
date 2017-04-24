@@ -28,7 +28,6 @@ public class CommentActivity extends Activity implements NetCallBack {
 
     private Button butt2;
     private EditText edit;
-    private TextView test_emoji;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +44,6 @@ public class CommentActivity extends Activity implements NetCallBack {
         getWindow().setAttributes(p);
         getWindow().setGravity(Gravity.BOTTOM);       //设置靠右对齐
         edit = (EditText) findViewById(R.id.edit_text);
-        test_emoji = (TextView) findViewById(R.id.test_emoji);
-
-//        edit.setFocusable(true);
-//        edit.setFocusableInTouchMode(true);
-//        edit.requestFocus();
-//        InputMethodManager inputManager = (InputMethodManager) edit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//   //     inputManager.showSoftInput(edit, 0);
-//        inputManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-//        try{
-//            Typeface typefaceDroidSansFallback= Typeface.createFromAsset(getResources().getAssets(), "fonts/NotoColorEmoji.ttf");
-//            edit.setTypeface(typefaceDroidSansFallback);
-////                mContentTextView.setTypeface(typefaceDroidSansFallback);
-//        }catch(Exception ex){
-//            Log.i("EmojiTest", "Catch Exception!");
-//        }
-
 
         Intent intent = getIntent();
         final String sid = intent.getStringExtra("sid");
@@ -98,17 +81,9 @@ public class CommentActivity extends Activity implements NetCallBack {
                         MyNetApiConfig.addComment, MyNetRequestConfig
                                 .addComment(CommentActivity.this, sid, fromuid, touid, s),
                         "addComment", CommentActivity.this, false, true);
-//                去除软键盘显示
-//                edit.clearFocus();
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
-            }
-        });
+    }
+});
 
-
-//        View decorView = getWindow().getDecorView();
-//        View contentView = findViewById(Window.ID_ANDROID_CONTENT);
-//        decorView.getViewTreeObserver().addOnGlobalLayoutListener(getGlobalLayoutListener(decorView, contentView));
     }
 
     public void onResume() {
