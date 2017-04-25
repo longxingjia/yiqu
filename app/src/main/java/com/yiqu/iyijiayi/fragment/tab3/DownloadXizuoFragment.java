@@ -16,18 +16,23 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.service.DownloadService;
 import com.yiqu.Control.Main.RecordComActivity;
+import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Global.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
 import java.io.File;
+import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -155,7 +160,11 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 //        String fileName = Url.substring(
 //                Url.lastIndexOf("/") + 1,
 //                Url.length());
-        fileName = music.musicname + "_" + music.mid+".mp3";
+        URI uri = URI.create(Url);
+
+
+        fileName = FileFunction.getValidFileName(uri);
+     //   LogUtils.LOGE(tag,fileName);
 //        AppShare
 
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
@@ -167,6 +176,15 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
                 dowoload(Url, fileName);
+//                StubActivity mActivity = (StubActivity) getActivity();
+////                LogUtils.LOGE(tag,"t1");
+////                LogUtils.LOGE(music.mid+"_"+Url,Variable.StorageMusicCachPath);
+//                DownloadService downloadService =   mActivity.getDownloadService();
+//                if (downloadService!=null){
+//                    LogUtils.LOGE(tag,downloadService.toString());
+//                }
+//                downloadService.download(music.mid, Url,Variable.StorageMusicCachPath,
+//                        "ssssssssssss"+".mp3");
             }
         }
 
@@ -180,6 +198,8 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         });
 
     }
+
+
 
     private void dowoload(String downloadUrl, String fileName) {
         downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);

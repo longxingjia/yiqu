@@ -455,6 +455,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         } else if (id.equals("getSoundList")) {
 
+            video_play.setImageResource(R.mipmap.video_pause);
+            player.playUrl(stuUrl);
+
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
@@ -597,8 +600,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "edited", "desc", "0"),
                 "getSoundList", ItemDetailFragment.this, false, true);
 
-        video_play.setImageResource(R.mipmap.video_pause);
-        player.playUrl(stuUrl);
+//        video_play.setImageResource(R.mipmap.video_pause);
+//        player.playUrl(stuUrl);
     }
 
     @Override

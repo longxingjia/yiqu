@@ -14,6 +14,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 
 import com.ui.abs.AbsFragment;
+import com.ui.abs.AbsFragmentAct;
 import com.ui.abs.AbsFragmentActForMainAct;
 import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
@@ -23,7 +24,7 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.ServiceUtils;
 
-public class MainActivity extends AbsFragmentActForMainAct implements Handler.Callback,
+public class MainActivity extends AbsFragmentAct implements Handler.Callback,
         NetCallBack {
 
     private String[] classNames;
@@ -36,10 +37,7 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
         return R.layout.act_main;
     }
 
-    @Override
-    protected int getBehindContentView() {
-        return R.layout.menu_frame;
-    }
+
 
     @Override
     protected void initView() {
@@ -70,6 +68,16 @@ public class MainActivity extends AbsFragmentActForMainAct implements Handler.Ca
         super.onPause();
         MobclickAgent.onPause(this);
         isForeground = false;
+    }
+
+    @Override
+    public void onPublish(int progress) {
+
+    }
+
+    @Override
+    public void onChange(int position) {
+
     }
 
 

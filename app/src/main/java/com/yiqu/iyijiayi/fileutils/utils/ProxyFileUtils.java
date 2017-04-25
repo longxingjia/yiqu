@@ -228,7 +228,7 @@ public class ProxyFileUtils {
 	 * @param uri
 	 * @return
 	 */
-	static protected String getValidFileName(URI uri) {
+	static public String getValidFileName(URI uri) {
 		String path = uri.getRawPath();
 		String name = path.substring(path.lastIndexOf("/"));
 		name = name.replace("\\", "");

@@ -97,7 +97,6 @@ public class MP3Recorder extends BaseRecorder {
                 while (mIsRecording) {
                     int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
 
-
                     if (readSize == AudioRecord.ERROR_INVALID_OPERATION ||
                             readSize == AudioRecord.ERROR_BAD_VALUE) {
                         if (errorHandler != null && !mSendError) {
@@ -258,7 +257,6 @@ public class MP3Recorder extends BaseRecorder {
         this.dataList = dataList;
         this.mMaxSize = maxSize;
     }
-
 
     public boolean isPause() {
         return mPause;

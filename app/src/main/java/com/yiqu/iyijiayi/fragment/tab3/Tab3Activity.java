@@ -63,6 +63,16 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
     }
 
     @Override
+    public void onPublish(int progress) {
+
+    }
+
+    @Override
+    public void onChange(int position) {
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sounds:

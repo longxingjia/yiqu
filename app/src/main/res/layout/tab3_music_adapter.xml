@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="60dp"
+              xmlns:android_app="http://schemas.android.com/apk/res-auto"
+              android:gravity="center_vertical"
+              android:minHeight="60dp"
+              android:orientation="horizontal"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp">
+
+        <com.ui.views.RoundProgressBar
+            android:id="@+id/round_pb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android_app:startAngle="0"
+            android_app:roundColor="@color/transparent"
+            android_app:roundWidth="5dip"
+            android_app:roundProgressColor="@color/redMain"
+            android_app:textIsDisplayable="false"
+            android_app:max="100"
+            />
+
+        <ImageView
+            android:id="@+id/music_play"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/music_play"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/musicname"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="bottom"
+            android:singleLine="true"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/chapter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:singleLine="true"
+            android:textColor="@color/dd_gray"
+            android:textSize="14sp"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -382,6 +382,23 @@ public class MyNetRequestConfig {
         r.addHttpParam("count", count);
         return r;
     }
+    public static NetRequest getBackgroundMusicList(Context c, String typename, String rows,
+                                                    String count) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("typename", typename);
+        r.addHttpParam("rows", rows);
+        r.addHttpParam("count", count);
+        return r;
+    }
+    public static NetRequest getSoundArticleList(Context c, String class_id, String event_id,
+                                                 String rows,String count) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("class_id", class_id);
+        r.addHttpParam("event_id", event_id);
+        r.addHttpParam("rows", rows);
+        r.addHttpParam("count", count);
+        return r;
+    }
 
     public static NetRequest getFollowTeacherList(Context c, String myuid, String rows,
                                                   String count) {

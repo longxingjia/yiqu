@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * Created by zhengtongyu on 16/5/23.
@@ -41,7 +42,7 @@ public class FileFunction {
             Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
 
         } else {
-            Variable.StorageDirectoryPath =application.getExternalCacheDir().getAbsolutePath();
+            Variable.StorageDirectoryPath = application.getExternalCacheDir().getAbsolutePath();
 
 //                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
         }
@@ -49,7 +50,7 @@ public class FileFunction {
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
-        Variable.StorageQandAPath = Variable.StorageDirectoryPath + "/musicQ/";
+        Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
 
         CreateDirectory(Variable.StorageDirectoryPath);
@@ -210,5 +211,27 @@ public class FileFunction {
                 }
             }
         }
+    }
+
+    /**
+     * 获取有效的文件名
+     *
+     * @param uri
+     * @return
+     */
+    static public String getValidFileName(URI uri) {
+        String path = uri.getRawPath();
+        String name = path.substring(path.lastIndexOf("/"));
+        name = name.replace("\\", "");
+        name = name.replace("/", "");
+        name = name.replace(":", "");
+        name = name.replace("*", "");
+        name = name.replace("?", "");
+        name = name.replace("\"", "");
+        name = name.replace("<", "");
+        name = name.replace(">", "");
+        name = name.replace("|", "");
+        name = name.replace(" ", "_"); // 前面的替换会产生空格,最后将其一并替换掉
+        return name;
     }
 }

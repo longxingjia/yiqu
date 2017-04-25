@@ -50,6 +50,8 @@ import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
+import com.yiqu.iyijiayi.fragment.tab3.TeacherListFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
 
@@ -103,10 +105,7 @@ public class RecordOnlyActivity extends Activity
     private TextView tv_record;
     private TextView musicName;
     private TextView musictime;
-
     private String className;
-
-
     private boolean mIsRecording = false;
     //    private boolean mIsLittleTime = false;
 //    private boolean mIsSendVoice = false;
@@ -137,7 +136,6 @@ public class RecordOnlyActivity extends Activity
     @BindView(R.id.finish)
     public CircleImageView finish;
 
-
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -160,16 +158,13 @@ public class RecordOnlyActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         PermissionGen.needPermission(this, 100, Manifest.permission.RECORD_AUDIO);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
     }
 
     private void init(int layoutId) {
         setContentView(layoutId);
-
         ButterKnife.bind(this);
         bindView();
         className = getClass().getSimpleName();
@@ -186,11 +181,8 @@ public class RecordOnlyActivity extends Activity
 //        musicSize = (TextView) findViewById(R.id.musicSize);
         tv_record = (TextView) findViewById(R.id.tv_record);
         content = (TextView) findViewById(R.id.content);
-
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
-//        composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
-
         title_back.setOnClickListener(this);
 
         Random random = new Random();
@@ -217,14 +209,10 @@ public class RecordOnlyActivity extends Activity
             eid = "0";
         }
         playUtils = new PlayUtils(this);
-
         rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
-
         mRecorderUtil = new RecorderAndPlayUtil(this);
-
-        //mHandler.sendEmptyMessageDelayed(POPUPWINDOW, 200);
         musicName.setText(name);
 
         UserInfo userInfo = AppShare.getUserInfo(this);
@@ -235,7 +223,7 @@ public class RecordOnlyActivity extends Activity
             }
             String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
             File file = new File(Variable.StorageImagePath, fileName);
-            //   background.setBackgroundResource(R.color.wechat_green);
+
             if (file.exists()) {
                 initBackground(file);
             } else {
@@ -377,7 +365,10 @@ public class RecordOnlyActivity extends Activity
 
                 break;
             case R.id.select_music:
-                
+                Intent i = new Intent(this, StubActivity.class);
+                i.putExtra("fragment", SelectBgMusicFragment.class.getName());
+              //  startActivityForResult(i, requestCode);
+                startActivity(i);
 
                 break;
 

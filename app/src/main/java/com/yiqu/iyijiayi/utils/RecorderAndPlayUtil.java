@@ -35,7 +35,6 @@ public class RecorderAndPlayUtil {
      */
     public void startRecording() {
 
-
         mRecorder.setErrorHandler(new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -48,10 +47,8 @@ public class RecorderAndPlayUtil {
         });
 
         //audioWave.setBaseRecorder(mRecorder);
-
         try {
             mRecorder.start();
-
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "录音出现异常", Toast.LENGTH_SHORT).show();
@@ -119,7 +116,6 @@ public class RecorderAndPlayUtil {
     public void restartRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
                 mRecorder.setPause(true);
-
         }
     }
 

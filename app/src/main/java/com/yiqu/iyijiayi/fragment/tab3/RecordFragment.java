@@ -13,6 +13,8 @@ import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.PlayActivity;
+import com.yiqu.Control.Main.RecordAllActivity;
+import com.yiqu.Control.Main.RecordOnlyActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
@@ -124,8 +126,13 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
 
     private void record() {
 
-        Model.startNextAct(getActivity(),
-                RecordInfoFragment.class.getName());
+//        Model.startNextAct(getActivity(),
+//                RecordInfoFragment.class.getName());
+
+        Intent intent = new Intent(getActivity(), RecordAllActivity.class);
+        getActivity().startActivity(intent);
+//        Intent intent = new Intent(getActivity(), RecordOnlyActivity.class);
+//        getActivity().startActivity(intent);
 
 
     }

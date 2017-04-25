@@ -31,7 +31,9 @@ import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -139,7 +141,10 @@ public class WelcomePageActivity extends Activity {
 
     private void begin() {
 
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, MainActivity.class);//
+//        intent = new Intent(this, StubActivity.class);
+//        intent.putExtra("fragment", SelectBgMusicFragment.class.getName());
+       // startActivityForResult(i, REQUESTMUSIC);
 
         Message.obtain(handler).sendToTarget();
     }

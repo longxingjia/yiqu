@@ -34,13 +34,13 @@ public class RecorderEngine {
 
     private static MP3Recorder recorder;
 
-        //    private static NativeRecorder recorder;
+    //    private static NativeRecorder recorder;
 
-        private static RecorderEngine instance;
+    private static RecorderEngine instance;
 
     private RecorderEngine() {
-            audioManager = (AudioManager) CommonApplication.getInstance()
-                    .getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) CommonApplication.getInstance()
+                .getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
 
@@ -159,7 +159,7 @@ public class RecorderEngine {
 
             if (stopRecordSuccess) {
                 if (voiceRecorderInterface != null) {
-                 //   voiceRecorderInterface.recordVoiceFinish();
+                    //   voiceRecorderInterface.recordVoiceFinish();
                 }
             } else {
                 if (voiceRecorderInterface != null) {
@@ -174,6 +174,40 @@ public class RecorderEngine {
             }
         }
     }
+
+//    public void setPause(boolean pause) {
+//        if (recording) {
+//            recorder.setPause(pause);
+//        }
+//    }
+    /**
+     * 暂停
+     */
+    public void pauseRecording() {
+        if (recording) {
+            recorder.setPause(false);
+        }
+
+    }
+
+
+    public boolean isPause(){
+        if (recording) {
+            return recorder.isPause();
+        }
+        return false;
+    }
+
+    /**
+     * 暂停
+     */
+    public void restartRecording() {
+        if (recording) {
+            recorder.setPause(true);
+        }
+    }
+
+
 
     public void prepareGiveUpRecordVoice(boolean fromHand) {
         if (voiceRecorderInterface != null) {
@@ -192,6 +226,7 @@ public class RecorderEngine {
             voiceRecorderInterface.recordVoiceStateChanged(volume, recordDuration);
         }
     }
+
 
     private void updateMicStatus() {
         int volume = recorder.getVolume();

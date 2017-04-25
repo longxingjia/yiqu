@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color_rating_grey"
+              android:orientation="vertical"
+              android:gravity="center_horizontal"
+              tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingMultiplier="2"
+                android:textSize="15sp"
+                android:textColor="@color/dd_gray"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="105dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="开始阅读"
+        android:id="@+id/submit"
+        android:textSize="16sp"
+        android:background="@drawable/red_circle"
+        android:textColor="@color/white"
+        android:layout_height="30dp"/>
+
+</LinearLayout>

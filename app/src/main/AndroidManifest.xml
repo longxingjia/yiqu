@@ -64,6 +64,9 @@
             android:name="com.yiqu.Control.Main.PlayActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name="com.yiqu.Control.Main.RecordAllActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name="com.yiqu.Control.Main.RecordOnlyActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -126,7 +129,12 @@
         <service
             android:name=".service.MusicService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
+        </service>
+        <service
+            android:name="com.service.DownloadService"
+            android:enabled="true"
+            android:exported="false">
         </service>
 
         <receiver

@@ -462,6 +462,30 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi getBackgroundMusicList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-back-ground-music-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+    public static MyNetApi getSoundArticleList = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-sound-article-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
 
     public static MyNetApi getUserPage = new MyNetApi() {
         @Override

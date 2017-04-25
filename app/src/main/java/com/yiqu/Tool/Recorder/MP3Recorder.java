@@ -39,6 +39,7 @@ public class MP3Recorder {
     private AudioRecord audioRecord = null;
 
     private RecordThread recordThread;
+    private boolean mPause;
 
     public MP3Recorder() {
         init();
@@ -121,10 +122,22 @@ public class MP3Recorder {
     public boolean stopRecordVoice() {
         if (recordThread != null) {
             recordThread.stopRecordVoice();
-
+            mPause = false;
         }
 
         return true;
+    }
+
+
+    public boolean isPause() {
+        return mPause;
+    }
+
+    /**
+     * 是否暂停
+     */
+    public void setPause(boolean pause) {
+        this.mPause = pause;
     }
 
     /**
@@ -209,6 +222,10 @@ public class MP3Recorder {
                                 audioRecord.read(audioRecordBuffer, 0, audioRecordBufferSize);
 
                         if (audioRecordReadDataSize > 0) {
+                            if (mPause) {
+                                continue;
+                            }
+
                             calculateRealVolume(audioRecordBuffer, audioRecordReadDataSize);
                             if (bufferedOutputStream != null) {
                                 try {

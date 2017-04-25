@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color_rating_grey"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:background="@drawable/white_box"
+        android:orientation="horizontal">
+
+        <ImageView
+
+            android:scaleType="center"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@mipmap/find" />
+
+        <TextView
+            android:id="@+id/buttonOne"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:text="输入范文名称或者作者名搜索"
+            android:textColor="@color/dd_gray"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+    <com.ui.views.RefreshList
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    </com.ui.views.RefreshList>
+
+
+</LinearLayout>

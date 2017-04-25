@@ -1,4 +1,4 @@
-<resources>
+<resources >
     <string name="app_name">艺加艺</string>
     <string name="resend_verification_code_normal">获取验证码</string>
 
@@ -8,11 +8,11 @@
     <string name="label_tab4">发现</string>
     <string name="label_tab5">我</string>
     <string name="register_label">注册</string>
-    <string name="fm_net_call_no_network">没有网络</string>
+    <string name="fm_net_call_no_network" translatable="false">没有网络</string>
     <string name="login">登录我的艺加艺</string>
     <string name="common_dialog_loading_data">请稍候&#8230;</string>
     <string name="start_recording">开始录制</string>
-    <string name="download">已下载</string>
+    <string name="download" translatable="false">已下载</string>
     <string name="app_tip">提示</string>
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
 

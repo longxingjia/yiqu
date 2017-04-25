@@ -13,16 +13,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -32,8 +27,6 @@ import android.widget.Toast;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.AudioFunction;
@@ -57,14 +50,14 @@ import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SelectArticalFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.LyricDownInfo;
 import com.yiqu.iyijiayi.model.Music;
+import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
@@ -89,7 +82,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -99,7 +91,7 @@ import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 
-public class RecordComActivity extends Activity
+public class RecordAllActivity extends Activity
         implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface,
         VoiceRecorderOperateInterface, View.OnClickListener, NetCallBack {
     private boolean recordVoiceBegin;
@@ -121,18 +113,20 @@ public class RecordComActivity extends Activity
     private String composeVoiceUrl;
     private TextView recordHintTextView;
     private ProgressBar composeProgressBar;
-    private static RecordComActivity instance;
-    private Music music;
+    private static RecordAllActivity instance;
+    private final static int REQUESTMUSIC = 0x2001;
+    private final static int REQUESTARTICLE = 0x2002;
+
     private RelativeLayout rlHint;
     private ImageView title_back;
     private ImageView image_anim;
-    private Animation rotate;
+    //    private Animation rotate;
     private String fileNameCom;
     private ComposeVoice composeVoice;
     private String2TimeUtils string2TimeUtils;
     private int totalTime;
+    private Music music;
     private AudioManager audoManager;
-
 
     @BindView(R.id.background)
     public ImageView background;
@@ -149,21 +143,27 @@ public class RecordComActivity extends Activity
     public CircleImageView recordVoiceButton;
     @BindView(R.id.finish)
     public CircleImageView finish;
+    @BindView(R.id.select_music)
+    public TextView select_music;
+    @BindView(R.id.select_article)
+    public TextView select_article;
+    @BindView(R.id.add_music)
+    public ImageView add_music;
+    @BindView(R.id.add_article)
+    public ImageView add_article;
 
-
-    private File lrc;
     private String fileName;
-    private int INTERVAL = 45;//歌词每行的间隔
     private PlayUtils playUtils;
     private TextView totaltime;
     private ProgressBar pb_record;
+    private int mid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         instance = this;
-        init(R.layout.record_and_com_fragment);
+        init(R.layout.record_all_fragment);
 
     }
 
@@ -189,6 +189,7 @@ public class RecordComActivity extends Activity
         image_anim = (ImageView) findViewById(R.id.image_anim);
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
         pb_record = (ProgressBar) findViewById(R.id.pb_record);
+
         title_back.setOnClickListener(this);
 
     }
@@ -196,34 +197,12 @@ public class RecordComActivity extends Activity
     public void initView() {
 //        composeProgressBar.getLayoutParams().width = (int) (width * 0.72);
         playUtils = new PlayUtils(this);
-    }
-
-    private Bitmap createColorBitmap(int color) {
-        Bitmap bmp = Bitmap.createBitmap(DensityUtil.dip2px(this, 60), DensityUtil.dip2px(this, 60), Bitmap.Config.ARGB_8888);
-        bmp.eraseColor(color);
-        return bmp;
-    }
-
-    public void initData() {
-        rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
-        LinearInterpolator lin = new LinearInterpolator();
-        rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
         audoManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-        Intent intent = getIntent();
-        music = (Music) intent.getSerializableExtra("music");
-        string2TimeUtils = new String2TimeUtils();
-        //  musictime.setText(string2TimeUtils.stringForTimeS(music.time));
-        //    LogUtils.LOGE(tag,music.time+"");
-        musicName.setText(music.musicname);
-        totalTime = music.time;
-        pb_record.setMax(music.time);
-
-
         Random random = new Random();
         int i = random.nextInt(4);
         String color[] = getResources().getStringArray(R.array.color);
         Bitmap bitmap = createColorBitmap(Color.parseColor(color[i]));
+
         reset.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
@@ -247,27 +226,49 @@ public class RecordComActivity extends Activity
             //  Picasso.with(context).load(R.mipmap.home_bg).into(icon);
         }
 
+        Intent intent = getIntent();
+         music = (Music) intent.getSerializableExtra("music");
+        if (music==null){
+
+        }
+
+    }
+
+    private Bitmap createColorBitmap(int color) {
+        Bitmap bmp = Bitmap.createBitmap(DensityUtil.dip2px(this, 60), DensityUtil.dip2px(this, 60), Bitmap.Config.ARGB_8888);
+        bmp.eraseColor(color);
+        return bmp;
+    }
+
+    public void initMusicData() {
+
+
+        string2TimeUtils = new String2TimeUtils();
+        mid = music.mid;
+        musicName.setText(music.musicname);
+        totalTime = music.time;
+        pb_record.setMax(music.time);
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         URI uri = URI.create(Url);
         fileName = FileFunction.getValidFileName(uri);
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
 
-        if (mFile.exists())
-
-        {
+        if (mFile.exists()) {
             musicFileUrl = mFile.getAbsolutePath();
             getDuration(musicFileUrl);//设置音乐总时间
-            //    LogUtils.LOGE(tag+"11", VoiceFunction.getVoiceDuration(musicFileUrl)+"");
-            decodeFileUrl = Variable.StorageMusicPath + fileName + ".pcm";
+
+            String tempfileName = fileName.substring(fileName.lastIndexOf("."),fileName.length());
+
+            decodeFileUrl = Variable.StorageMusicPath + tempfileName + ".pcm";
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
-
             tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
             fileNameCom = music.musicname + t + "_composeVoice.mp3";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
-
         }
+        select_music.setText(music.musicname);
+
 
 //        lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
 //        if (!lrc.exists()) {
@@ -295,22 +296,19 @@ public class RecordComActivity extends Activity
             e.printStackTrace();
         }
     }
-
-    private Handler handler = new Handler();
-
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if (VoiceFunction.IsRecordingVoice()) {
-
-
-                long time = mediaPlayer.getCurrentPosition();
-
-                lyricView.updateLyrics((int) time, mediaPlayer.getDuration());
-            }
-            handler.postDelayed(this, 100);
-        }
-    };
+//
+//    private Handler handler = new Handler();
+//
+//    private Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (VoiceFunction.IsRecordingVoice()) {
+//                long time = mediaPlayer.getCurrentPosition();
+//                lyricView.updateLyrics((int) time, mediaPlayer.getDuration());
+//            }
+//            handler.postDelayed(this, 100);
+//        }
+//    };
 
     private void initBackground(File file) {
         PictureUtils.showPictureFile(instance, file, image_anim, 270);
@@ -365,18 +363,18 @@ public class RecordComActivity extends Activity
                 vp.release();
 
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(instance);
-                Music m = downloadMusicInfoDBHelper.getDecode(music.mid);
+                Music m = downloadMusicInfoDBHelper.getDecode(mid);
                 downloadMusicInfoDBHelper.close();
                 if (m.isdecode == -1) {
                     AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
                             totalTime, instance);
-                    downloadMusicInfoDBHelper.updateDecode(music.mid, 0, System.currentTimeMillis());
+                    downloadMusicInfoDBHelper.updateDecode(mid, 0, System.currentTimeMillis());
                 } else if (m.isdecode == 0 && System.currentTimeMillis() - m.decodetime > 2 * 60 * 1000) { //解码超过两分钟,重新解码。
                     File file = new File(decodeFileUrl);
                     file.delete();
                     AudioFunction.DecodeMusicFile(musicFileUrl, decodeFileUrl, 0,
                             totalTime, instance);
-                    downloadMusicInfoDBHelper.updateDecode(music.mid, 0, System.currentTimeMillis());
+                    downloadMusicInfoDBHelper.updateDecode(mid, 0, System.currentTimeMillis());
                 }
                 downloadMusicInfoDBHelper.close();
             }
@@ -519,7 +517,7 @@ public class RecordComActivity extends Activity
 //                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
         //    ToastManager.getInstance(instance).showText("解码成功");
         DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(this);
-        downloadMusicInfoDBHelper.updateDecode(music.mid, 1, System.currentTimeMillis());
+        downloadMusicInfoDBHelper.updateDecode(mid, 1, System.currentTimeMillis());
         downloadMusicInfoDBHelper.close();
 
 
@@ -556,10 +554,10 @@ public class RecordComActivity extends Activity
         // recordHintTextView.setVisibility(View.INVISIBLE);
 
         recordComFinish = true;
-        clearAnimation();
+        //clearAnimation();
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
-        composeVoice.mid = music.mid;
+        composeVoice.mid = mid;
         composeVoice.musicname = music.musicname;
         composeVoice.musictype = music.musictype;
         composeVoice.chapter = music.chapter;
@@ -581,7 +579,6 @@ public class RecordComActivity extends Activity
         composeVoice.createtime = System.currentTimeMillis();
 
         if (AppInfo.isForeground(instance, "RecordComActivity")) {
-
 //          mediaPlayer
             playUtils.playUrl(composeVoiceUrl);
             icon_record.setImageResource(R.mipmap.icon_pause);
@@ -601,7 +598,7 @@ public class RecordComActivity extends Activity
     }
 
 
-    @OnClick({R.id.record, R.id.reset, R.id.finish})
+    @OnClick({R.id.record, R.id.reset, R.id.finish, R.id.select_music, R.id.select_article})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -624,17 +621,11 @@ public class RecordComActivity extends Activity
 
                 } else {
                     VoiceFunction.StartRecordVoice(tempVoicePcmUrl, instance);
-                    //   VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
+
                     initMediaPlayer();
                     mediaPlayer.start();
-                    handler.post(runnable);
+                    //handler.post(runnable);
                 }
-
-
-                //   startAnimation();
-
-
-                //  recordVoiceButton.setText("完成录制");
 
 
                 break;
@@ -644,8 +635,8 @@ public class RecordComActivity extends Activity
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
                     String title = "找个导师点评一下吗？";
-                    String[] items = new String[]{"免费上传作品","找导师请教"};
-                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title,items,new MenuDialogSelectTeaHelper.TeaListener() {
+                    String[] items = new String[]{"免费上传作品", "找导师请教"};
+                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
                         @Override
                         public void onTea(int tea) {
                             switch (tea) {
@@ -723,6 +714,18 @@ public class RecordComActivity extends Activity
                 finish();
 
                 break;
+            case R.id.select_music:
+                Intent i = new Intent(this, StubActivity.class);
+                i.putExtra("fragment", SelectBgMusicFragment.class.getName());
+                startActivityForResult(i, REQUESTMUSIC);
+
+                break;
+            case R.id.select_article:
+                Intent intent = new Intent(this, StubActivity.class);
+                intent.putExtra("fragment", SelectArticalFragment.class.getName());
+                startActivityForResult(intent, REQUESTARTICLE);
+
+                break;
 
 
         }
@@ -730,8 +733,34 @@ public class RecordComActivity extends Activity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUESTMUSIC:
+                    Bundle b = data.getExtras(); //data为B中回传的Intent
+                    //str即为回传的值
+                    music = (Music) b.getSerializable("data");
+                    //  LogUtils.LOGE(tag, backgroudMusic.toString());
+                    initMusicData( );
+                    break;
+
+                case REQUESTARTICLE:
+                    Bundle bundle = data.getExtras(); //data为B中回传的Intent
+                    //str即为回传的值
+                    SelectArticle selectArticle = (SelectArticle) bundle.getSerializable("data");
+                    LogUtils.LOGE(tag, selectArticle.toString());
+                    break;
+            }
+        }
+
+
+    }
+
+    @Override
     protected void onDestroy() {
-        handler.removeCallbacks(runnable);
+        //handler.removeCallbacks(runnable);
         mediaPlayer.reset();
         mediaPlayer.release();
         mediaPlayer = null;
@@ -754,7 +783,7 @@ public class RecordComActivity extends Activity
                             mediaPlayer.stop();
                             //    playUtils.stop();
                             VoiceFunction.StopRecordVoice();
-                            clearAnimation();
+                            //clearAnimation();
                             //   recordVoiceButton.setText(getResources().getString(R.string.start_recording));
 
                             break;
@@ -788,21 +817,21 @@ public class RecordComActivity extends Activity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void startAnimation() {
-        image_anim.startAnimation(rotate);
+//    private void startAnimation() {
+//        image_anim.startAnimation(rotate);
+//
+//    }
 
-    }
-
-    private void clearAnimation() {
-        image_anim.clearAnimation();
-
-    }
+//    private void clearAnimation() {
+//        image_anim.clearAnimation();
+//
+//    }
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
         bindView();
         initView();
-        initData();
+      //  initData();
     }
 
     @PermissionFail(requestCode = 100)
@@ -832,21 +861,21 @@ public class RecordComActivity extends Activity
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        if (id.equals("getlyric")) {
-            if (!TextUtils.isEmpty(netResponse.result)) {
-                ArrayList<LyricDownInfo> lyricDownInfos = new Gson().fromJson(netResponse.result, new TypeToken<ArrayList<LyricDownInfo>>() {
-                }.getType());
-                String url = lyricDownInfos.get(0).lrc;
-                LogUtils.LOGE(tag, url);
-                if (!TextUtils.isEmpty(url)) {
-                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordComActivity.this, url, Variable.StorageMusicCachPath + "/" + fileName + ".lrc");
-                    downLoaderlrcTask.execute();
-                }
-
-            }
-
-
-        }
+//        if (id.equals("getlyric")) {
+//            if (!TextUtils.isEmpty(netResponse.result)) {
+//                ArrayList<LyricDownInfo> lyricDownInfos = new Gson().fromJson(netResponse.result, new TypeToken<ArrayList<LyricDownInfo>>() {
+//                }.getType());
+//                String url = lyricDownInfos.get(0).lrc;
+//                LogUtils.LOGE(tag, url);
+//                if (!TextUtils.isEmpty(url)) {
+//                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordAllActivity.this, url, Variable.StorageMusicCachPath + "/" + fileName + ".lrc");
+//                    downLoaderlrcTask.execute();
+//                }
+//
+//            }
+//
+//
+//        }
 
     }
 
@@ -974,7 +1003,6 @@ public class RecordComActivity extends Activity
         }
 
     }
-
 
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {
 

@@ -13,48 +13,48 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab3.ShowArticalFragment;
+import com.yiqu.iyijiayi.model.SelectArticle;
 
 import java.util.ArrayList;
 
-import static android.app.Activity.RESULT_OK;
-
-public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Teacher> datas = new ArrayList<Teacher>();
+    private ArrayList<SelectArticle> datas = new ArrayList<SelectArticle>();
     private Activity mContext;
+    private Fragment fragment;
 
-    private String tag = "SelectTeacherAdapter";
+    private String tag = "Tab3MusicAdapter";
+  //  private ArrayList<Like> likes;
 
-    public SelectTeacherAdapter(Activity context) {
-        mLayoutInflater = LayoutInflater.from(context);
-        mContext = context;
+    public Tab3ArticleAdapter(Fragment fragment) {
+        this.fragment = fragment;
+        mContext = fragment.getActivity();
+        mLayoutInflater = LayoutInflater.from(mContext);
+
     }
 
 
-    public void setData(ArrayList<Teacher> list) {
+    public void setData(ArrayList<SelectArticle> list) {
+
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Teacher> allDatas) {
+    public void addData(ArrayList<SelectArticle> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -65,7 +65,7 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
     }
 
     @Override
-    public Teacher getItem(int position) {
+    public SelectArticle getItem(int position) {
         return datas.get(position);
     }
 
@@ -76,9 +76,10 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
 
     private class HoldChild {
 
-        TextView name;
-        TextView content;
-        ImageView icon;
+        TextView title;
+        TextView author;
+
+
     }
 
     @Override
@@ -88,18 +89,17 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.select_techer_list, null);
-                h.name = (TextView) v.findViewById(R.id.name);
-                h.content = (TextView) v.findViewById(R.id.desc);
-                h.icon = (ImageView) v.findViewById(R.id.header);
+                v = mLayoutInflater.inflate(R.layout.tab3_article_adapter, null);
+                h.title = (TextView) v.findViewById(R.id.title);
+                h.author = (TextView) v.findViewById(R.id.author);
+
                 v.setTag(h);
             }
-            h = (HoldChild) v.getTag();
-            final Teacher f = getItem(position);
-            h.name.setText(f.username);
-            h.content.setText(f.title);
 
-            PictureUtils.showPicture(mContext, f.userimage, h.icon);
+            h = (HoldChild) v.getTag();
+            final SelectArticle f = getItem(position);
+            h.title.setText(f.title);
+            h.author.setText(f.author);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,20 +108,26 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
     }
 
 
+
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        Teacher teacher = getItem(arg2);
-        if (teacher.uid.equals(AppShare.getUserInfo(mContext).uid)){
-            ToastManager.getInstance(mContext).showText("不能向自己提问噢");
-        }else {
-
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("teacher", teacher);
-            intent.putExtras(bundle);
-            mContext.setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-            mContext.finish();//此处一定要调用finish()方法
+        if (arg2 < 1) {
+            return;
         }
+        SelectArticle f = getItem(arg2-1 );//加了头部
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return;
+        }
+
+        Intent intent = new Intent(mContext, StubActivity.class);
+        intent.putExtra("fragment", ShowArticalFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", f);
+        intent.putExtras(bundle);
+        fragment.startActivityForResult(intent,0);
 
     }
 
@@ -136,6 +142,8 @@ public class SelectTeacherAdapter extends BaseAdapter implements OnItemClickList
         }
         return false;
     }
+
+
 
 
 }
