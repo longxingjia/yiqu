@@ -999,12 +999,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
 
     @Override
-    public void playVoiceBegin() {
+    public void playVoiceBegin(long duration) {
 
     }
 
     @Override
     public void playVoiceFail() {
+
+    }
+
+    @Override
+    public void playVoiceStateChanged(long recordDuration) {
 
     }
 

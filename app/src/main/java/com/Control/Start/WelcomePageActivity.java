@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.czt.mp3recorder.util.LameUtil;
+import com.yiqu.Control.Main.RecordAllActivity;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Common.CommonThreadPool;
 
@@ -141,7 +142,8 @@ public class WelcomePageActivity extends Activity {
 
     private void begin() {
 
-        intent = new Intent(this, MainActivity.class);//
+        intent = new Intent(this, RecordAllActivity.class);//
+//        intent = new Intent(this, MainActivity.class);//
 //        intent = new Intent(this, StubActivity.class);
 //        intent.putExtra("fragment", SelectBgMusicFragment.class.getName());
        // startActivityForResult(i, REQUESTMUSIC);

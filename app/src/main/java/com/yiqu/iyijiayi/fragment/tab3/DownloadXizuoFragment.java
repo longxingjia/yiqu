@@ -176,15 +176,16 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
                 dowoload(Url, fileName);
-//                StubActivity mActivity = (StubActivity) getActivity();
-////                LogUtils.LOGE(tag,"t1");
-////                LogUtils.LOGE(music.mid+"_"+Url,Variable.StorageMusicCachPath);
+              //  StubActivity mActivity = (StubActivity) getActivity();
+//                LogUtils.LOGE(tag,"t1");
+//                LogUtils.LOGE(music.mid+"_"+Url,Variable.StorageMusicCachPath);
 //                DownloadService downloadService =   mActivity.getDownloadService();
 //                if (downloadService!=null){
 //                    LogUtils.LOGE(tag,downloadService.toString());
+//                    downloadService.download(music.mid, Url,Variable.StorageMusicCachPath,
+//                            "ssssssssssss"+".mp3");
 //                }
-//                downloadService.download(music.mid, Url,Variable.StorageMusicCachPath,
-//                        "ssssssssssss"+".mp3");
+//
             }
         }
 

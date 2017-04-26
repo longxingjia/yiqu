@@ -17,7 +17,7 @@ public class DownloadService extends Service {
 	private SparseArray<Download> mDownloads = new SparseArray<Download>();
 
 	private RemoteViews mRemoteViews;
-   // private OnDownloadEventListener mListener;
+//    private OnDownloadEventListener mListener;
 
 	public class DownloadBinder extends Binder {
 		public DownloadService getService() {
@@ -27,6 +27,7 @@ public class DownloadService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+	//	Log.e("down","fsfs");
 		return new DownloadBinder();
 	}
 
@@ -41,6 +42,8 @@ public class DownloadService extends Service {
 		d.setOnDownloadListener(mDownloadListener).start(false);
 		mDownloads.put(id, d);
 	}
+
+
 
 //	private void refreshRemoteView() {
 //		Notification notification = new Notification(android.R.drawable.stat_sys_download,
@@ -101,7 +104,7 @@ public class DownloadService extends Service {
 
 				@Override
 				public void onPublish(int downloadId, long size) {
-					Log.w("download", "publish" + size);
+				//	Log.w("download", "publish" + size);
 				}
 
 				@Override
@@ -129,4 +132,23 @@ public class DownloadService extends Service {
 					onDownloadComplete(downloadId);
 				}
 			};
+
+	/**
+	 * 设置回调
+	 * @param l
+	 */
+	public void setOnDownloadEventListener(Download.OnDownloadListener l) {
+		mDownloadListener = l;
+	}
+
+//	/**
+//	 * 音乐播放回调接口
+//	 * @author qibin
+//	 */
+//	public interface OnDownloadEventListener {
+//		public void onSuccess(int downloadId);
+//		public void onPublish(int percent);
+//		public void onComplete(int percent);
+//		public void onChange(int position);
+//	}
 }

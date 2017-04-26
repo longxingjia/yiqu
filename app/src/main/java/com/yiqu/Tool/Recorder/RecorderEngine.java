@@ -6,15 +6,16 @@ import android.os.Handler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
 
+import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Global.RecordConstant;
-
-import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 public class RecorderEngine {
     private boolean recording;
@@ -61,19 +62,19 @@ public class RecorderEngine {
         return instance;
     }
 
-    public synchronized static void Destroy() {
-        if (instance != null) {
-            recorder.release();
-        }
-
-        instance = null;
-    }
+//    public synchronized static void Destroy() {
+//        if (instance != null) {
+//            recorder.release();
+//        }
+//
+//        instance = null;
+//    }
 
     public boolean IsRecording() {
         return recording;
     }
 
-    private boolean startRecordVoice(String recordFileUrl) {
+    private boolean startRecordVoice(String recordFileUrl, String pcmFilePath) {
         if (CommonFunction.isEmpty(recordFileUrl)) {
             CommonFunction.showToast("无法录制语音，请检查您的手机存储", "VoiceRecorder");
             return false;
@@ -84,31 +85,53 @@ public class RecorderEngine {
         if (!recordFile.exists()) {
             try {
                 recordFile.createNewFile();
+                recorder.startRecordVoice(recordFile, pcmFilePath);
+                return true;
             } catch (IOException e) {
                 LogFunction.error("建立语音文件异常:" + recordFileUrl, e);
-
                 CommonFunction.showToast("建立语音文件异常", "VoiceRecorder");
                 return false;
             }
         }
 
-        return recorder.startRecordVoice(recordFileUrl);
+        return false;
     }
 
-    public void startRecordVoice(String recordFileUrl,
+//    public void startRecordVoice(String recordFileUrl,boolean istoMP3,
+//                                 VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
+//        stopRecordVoice();
+//        recordDuration = 0;
+//        recording = startRecordVoice(recordFileUrl);
+//
+//        if (recording) {
+//            this.recordFileUrl = recordFileUrl;
+//            this.voiceRecorderInterface = voiceRecorderOperateInterface;
+//            recordStartTime = System.currentTimeMillis();
+//            updateMicStatus();
+//
+//            if (voiceRecorderOperateInterface != null) {
+//                voiceRecorderOperateInterface.recordVoiceBegin();
+//            }
+//        } else {
+//            CommonFunction.showToast("录音失败", "VoiceRecorder");
+//
+//            if (voiceRecorderOperateInterface != null) {
+//                voiceRecorderOperateInterface.recordVoiceFail();
+//            }
+//        }
+//    }
+
+
+    public void startRecordVoice(String recordFileUrl, String pcmFilePath,
                                  VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
         stopRecordVoice();
-
         recordDuration = 0;
-
-        recording = startRecordVoice(recordFileUrl);
+        recording = startRecordVoice(recordFileUrl, pcmFilePath);
 
         if (recording) {
             this.recordFileUrl = recordFileUrl;
             this.voiceRecorderInterface = voiceRecorderOperateInterface;
-
             recordStartTime = System.currentTimeMillis();
-
             updateMicStatus();
 
             if (voiceRecorderOperateInterface != null) {
@@ -125,7 +148,9 @@ public class RecorderEngine {
 
     public void stopRecordVoice() {
         if (recording) {
-            boolean recordVoiceSuccess = recorder.stopRecordVoice();
+
+            recorder.stopRecordVoice();
+            boolean recordVoiceSuccess = true;
             long recordDuration = System.currentTimeMillis() - recordStartTime;
 
             recording = false;
@@ -153,8 +178,10 @@ public class RecorderEngine {
 
     public void giveUpRecordVoice(boolean fromHand) {
         if (recording) {
-            boolean stopRecordSuccess = recorder.stopRecordVoice();
+//            boolean stopRecordSuccess = recorder.stopRecordVoice();
 
+            recorder.stopRecordVoice();
+            boolean stopRecordSuccess = true;
             recording = false;
 
             if (stopRecordSuccess) {
@@ -180,18 +207,19 @@ public class RecorderEngine {
 //            recorder.setPause(pause);
 //        }
 //    }
+
     /**
      * 暂停
      */
     public void pauseRecording() {
         if (recording) {
-            recorder.setPause(false);
+            recorder.setPause(true);
         }
 
     }
 
 
-    public boolean isPause(){
+    public boolean isPause() {
         if (recording) {
             return recorder.isPause();
         }
@@ -203,10 +231,9 @@ public class RecorderEngine {
      */
     public void restartRecording() {
         if (recording) {
-            recorder.setPause(true);
+            recorder.setPause(false);
         }
     }
-
 
 
     public void prepareGiveUpRecordVoice(boolean fromHand) {
@@ -230,7 +257,6 @@ public class RecorderEngine {
 
     private void updateMicStatus() {
         int volume = recorder.getVolume();
-
         recordVoiceStateChanged(volume);
 
         handler.postDelayed(updateMicStatusThread, sampleDuration);
@@ -240,8 +266,13 @@ public class RecorderEngine {
         public void run() {
             if (recording) {
                 // 判断是否超时
-                recordDuration = System.currentTimeMillis() - recordStartTime;
+                //   recordDuration = System.currentTimeMillis() - recordStartTime;
 
+                if (isPause()) {
+
+                } else {
+                    recordDuration = recordDuration + 500;
+                }
                 updateMicStatus();
             }
         }

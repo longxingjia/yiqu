@@ -1,6 +1,9 @@
 package com.yiqu.Tool.Player;
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Message;
 
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
@@ -8,8 +11,11 @@ import com.yiqu.Tool.Function.UpdateFunction;
 
 import com.yiqu.Tool.Data.MusicData;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -19,18 +25,18 @@ public class VoicePlayerEngine {
 
     private String playingUrl;
     private int currentTime;
-
+    private final int sampleDuration = 500;// 间隔取样时间
     private VoicePlayerInterface voicePlayerInterface;
-
+    //    private Timer mTimer = new Timer();
     private MediaPlayer voicePlayer;
-
+    private Handler handler;
     private static VoicePlayerEngine instance;
 
     private VoicePlayerEngine() {
         musicPlayerState = MusicData.MusicPlayerState.reset;
 
         voicePlayer = new MediaPlayer();
-
+        handler = new Handler();
         voicePlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -47,7 +53,7 @@ public class VoicePlayerEngine {
                 if (voicePlayerInterface != null) {
                     voicePlayerInterface.playVoiceFinish();
                 }
-
+                musicPlayerState = MusicData.MusicPlayerState.pausing;
                 playingUrl = null;
             }
         });
@@ -164,9 +170,11 @@ public class VoicePlayerEngine {
         voicePlayer.start();
 
         musicPlayerState = MusicData.MusicPlayerState.playing;
-
+//        mTimer.schedule(mTimerTask, 0, 1000);
+        updateMicStatus();
         if (voicePlayerInterface != null) {
-            voicePlayerInterface.playVoiceBegin();
+            int position = voicePlayer.getDuration();
+            voicePlayerInterface.playVoiceBegin(position);
         }
     }
 
@@ -175,10 +183,9 @@ public class VoicePlayerEngine {
             return;
         }
 
-        playingUrl = null;
+     //   playingUrl = null;
 
         voicePlayer.pause();
-
         musicPlayerState = MusicData.MusicPlayerState.pausing;
 
         if (voicePlayerInterface != null) {
@@ -219,7 +226,7 @@ public class VoicePlayerEngine {
             if (!voicePlayer.isPlaying()) {
                 return 0;
             }
-            playingUrl = null;
+         //   playingUrl = null;
             voicePlayer.pause();
             musicPlayerState = MusicData.MusicPlayerState.pausing;
 
@@ -234,7 +241,48 @@ public class VoicePlayerEngine {
         return 0;
     }
 
+    public int restartVoice() {
+        if (musicPlayerState == MusicData.MusicPlayerState.pausing) {
+//            if (!voicePlayer.isPlaying()) {
+//                return 0;
+//            }
+            //   playingUrl = null;
+            voicePlayer.start();
+          //  LogUtils.LOGE("vp","fsfs");
+            musicPlayerState = MusicData.MusicPlayerState.playing;
+            int pos = voicePlayer.getCurrentPosition();
+            if (voicePlayerInterface != null) {
+                voicePlayerInterface.playVoiceStateChanged(pos);
+            }
+            return pos;
+        } else if (musicPlayerState == MusicData.MusicPlayerState.preparing) {
+            reset();
+            return 0;
+        }
+        return 0;
+    }
+
     public String getPlayingUrl() {
         return playingUrl == null ? "" : playingUrl;
     }
+
+    private void updateMicStatus() {
+//        int volume = recorder.getVolume();
+//        recordVoiceStateChanged(volume);
+
+        handler.postDelayed(updateMicStatusThread, sampleDuration);
+    }
+
+    private Runnable updateMicStatusThread = new Runnable() {
+        public void run() {
+            if (musicPlayerState == MusicData.MusicPlayerState.playing) {
+                // 判断是否超时
+                int position = voicePlayer.getCurrentPosition();
+                if (voicePlayerInterface != null) {
+                    voicePlayerInterface.playVoiceStateChanged(position);
+                }
+                updateMicStatus();
+            }
+        }
+    };
 }

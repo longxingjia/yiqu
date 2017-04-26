@@ -411,12 +411,17 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     }
 
     @Override
-    public void playVoiceBegin() {
+    public void playVoiceBegin(long duration) {
 
     }
 
     @Override
     public void playVoiceFail() {
+
+    }
+
+    @Override
+    public void playVoiceStateChanged(long currentDuration) {
 
     }
 

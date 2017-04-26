@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Function.AudioFunction;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
@@ -37,7 +38,6 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
@@ -52,7 +52,6 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -304,15 +303,19 @@ public class RecordActivity extends Activity
             goRecordSuccessState();
         }
     }
-
     @Override
-    public void playVoiceBegin() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_pause);
+    public void playVoiceBegin(long duration) {
+
     }
 
     @Override
     public void playVoiceFail() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
+    }
+
+    @Override
+    public void playVoiceStateChanged(long currentDuration) {
+
     }
 
     @Override
@@ -510,7 +513,7 @@ public class RecordActivity extends Activity
                     } else {
 
                         startAnimation();
-                        VoiceFunction.StartRecordVoice(tempVoicePcmUrl, instance);
+                        VoiceFunction.StartRecordVoice( instance);
                         VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
 
                         recordVoiceButton.setText("完成录制");

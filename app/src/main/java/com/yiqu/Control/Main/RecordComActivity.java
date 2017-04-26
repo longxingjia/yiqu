@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.base.utils.ToastManager;
+import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -47,7 +48,6 @@ import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
@@ -63,8 +63,6 @@ import com.yiqu.iyijiayi.model.LyricDownInfo;
 import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
@@ -463,14 +461,20 @@ public class RecordComActivity extends Activity
         }
     }
 
+
     @Override
-    public void playVoiceBegin() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_pause);
+    public void playVoiceBegin(long duration) {
+
     }
 
     @Override
     public void playVoiceFail() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
+    }
+
+    @Override
+    public void playVoiceStateChanged(long currentDuration) {
+
     }
 
     @Override
@@ -623,7 +627,7 @@ public class RecordComActivity extends Activity
                 } else if (recordVoiceBegin) {
 
                 } else {
-                    VoiceFunction.StartRecordVoice(tempVoicePcmUrl, instance);
+                    VoiceFunction.StartRecordVoice(instance);
                     //   VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
                     initMediaPlayer();
                     mediaPlayer.start();
@@ -839,7 +843,7 @@ public class RecordComActivity extends Activity
                 String url = lyricDownInfos.get(0).lrc;
                 LogUtils.LOGE(tag, url);
                 if (!TextUtils.isEmpty(url)) {
-                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordComActivity.this, url, Variable.StorageMusicCachPath + "/" + fileName + ".lrc");
+                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordComActivity.this, url, Variable.StorageMusicCachPath + fileName + ".lrc");
                     downLoaderlrcTask.execute();
                 }
 

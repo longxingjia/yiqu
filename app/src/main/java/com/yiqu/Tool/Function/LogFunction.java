@@ -89,7 +89,7 @@ public class LogFunction {
 	 */
     public static void log(String title, String content) {
         if (RecordConstant.Debug) {
-            Log.e(tag + ":" + title, getStackInformation(content));
+            Log.i(tag + ":" + title, getStackInformation(content));
         }
     }
 
@@ -98,7 +98,7 @@ public class LogFunction {
      */
     public static void error(String title, String content) {
         if (RecordConstant.Debug) {
-            Log.e(tag + " :" + title, getStackInformation(content));
+            Log.i(tag + " :" + title, getStackInformation(content));
         }
 
         try {
@@ -119,7 +119,7 @@ public class LogFunction {
      */
     public static void error(String title, Exception exception) {
         if (RecordConstant.Debug) {
-            Log.e(tag + ":" + title, getStackInformation(exception.toString()));
+            Log.i(tag + ":" + title, getStackInformation(exception.toString()));
         }
 
         try {

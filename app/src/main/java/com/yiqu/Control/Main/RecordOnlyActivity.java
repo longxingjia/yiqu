@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.base.utils.ToastManager;
 
+import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Global.Variable;
@@ -99,7 +100,7 @@ import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class RecordOnlyActivity extends Activity
-        implements VoicePlayerInterface, View.OnClickListener {
+        implements VoicePlayerInterface, VoiceRecorderOperateInterface,View.OnClickListener {
     private boolean recordComFinish = false;
     private String tag = "RecordOnlyActivity";
     private TextView tv_record;
@@ -268,14 +269,20 @@ public class RecordOnlyActivity extends Activity
         MobclickAgent.onPause(this);
     }
 
+
     @Override
-    public void playVoiceBegin() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_pause);
+    public void playVoiceBegin(long duration) {
+
     }
 
     @Override
     public void playVoiceFail() {
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
+    }
+
+    @Override
+    public void playVoiceStateChanged(long currentDuration) {
+
     }
 
     @Override
@@ -412,6 +419,41 @@ public class RecordOnlyActivity extends Activity
             }
         });
         menuDialogSelectTeaHelper.show(recordVoiceButton);
+    }
+
+    @Override
+    public void recordVoiceBegin() {
+
+    }
+
+    @Override
+    public void recordVoiceStateChanged(int volume, long recordDuration) {
+
+    }
+
+    @Override
+    public void prepareGiveUpRecordVoice() {
+
+    }
+
+    @Override
+    public void recoverRecordVoice() {
+
+    }
+
+    @Override
+    public void giveUpRecordVoice() {
+
+    }
+
+    @Override
+    public void recordVoiceFail() {
+
+    }
+
+    @Override
+    public void recordVoiceFinish() {
+
     }
 
 

@@ -181,7 +181,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
         } else if (id.equals("getSoundArticleList_more")) {
             if (TYPE_SUCCESS == type) {
 
-                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Music>>() {
+                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
                 }.getType());
                 tab3ArticleAdapter.addData(selectArticles);
                 if (selectArticles.size() < rows) {

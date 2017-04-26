@@ -4,9 +4,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
+
+import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Global.Variable;
-import com.czt.mp3recorder.MP3Recorder;
 import com.shuyu.waveview.FileUtils;
+import com.yiqu.Tool.Recorder.MP3Recorder;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -21,14 +24,16 @@ public class RecorderAndPlayUtil {
     private String mPlayingPath = null;
     private MP3Recorder mRecorder;
     private Context context;
-    private String filePath;
+    private String mp3FilePath;
+    private String pcmFilePath;
 
     public RecorderAndPlayUtil(Context context) {
         this.context = context;
-        filePath = Variable.StorageMusicPath + System.currentTimeMillis() + ".mp3";
-        mRecorder = new MP3Recorder(new File(filePath));
+        String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
+        mp3FilePath = tmp  + ".mp3";
+        pcmFilePath = tmp  + ".pcm";
+        mRecorder = new MP3Recorder();
     }
-
 
     /**
      * 开始录音
@@ -48,7 +53,7 @@ public class RecorderAndPlayUtil {
 
         //audioWave.setBaseRecorder(mRecorder);
         try {
-            mRecorder.start();
+            mRecorder.startRecordVoice(new File(mp3FilePath),pcmFilePath);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "录音出现异常", Toast.LENGTH_SHORT).show();
@@ -64,7 +69,7 @@ public class RecorderAndPlayUtil {
     public void stopRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
             mRecorder.setPause(false);
-            mRecorder.stop();
+            mRecorder.stopRecordVoice();
 //            audioWave.stopView();
         }
     }
@@ -75,10 +80,10 @@ public class RecorderAndPlayUtil {
      */
     private void resolveError() {
 //        resolveNormalUI();
-        FileUtils.deleteFile(filePath);
+        FileUtils.deleteFile(mp3FilePath);
 
         if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.stop();
+            mRecorder.stopRecordVoice();
 //            audioWave.stopView();
         }
     }
@@ -132,7 +137,7 @@ public class RecorderAndPlayUtil {
      * @return
      */
     public String getRecorderPath() {
-        return filePath;
+        return mp3FilePath;
     }
 
     /**

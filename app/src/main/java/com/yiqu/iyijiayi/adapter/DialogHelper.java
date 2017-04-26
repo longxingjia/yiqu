@@ -153,6 +153,49 @@ public class DialogHelper {
 
     }
 
+    public DialogHelper(Context context,int max) {
+
+        //重置对话框
+        if (prDialog != null && prDialog.isShowing()) {
+            prDialog.dismiss();
+        }
+        //显示对话框
+        prDialog = ProgressDialog.show(context, null, null, false, false);
+        //注册按键事件
+//        prDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//            @Override
+//            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                //当用户松开BACK按键时，对话框会取消
+//                if (KeyEvent.ACTION_UP == event.getAction() && keyCode == KeyEvent.KEYCODE_BACK) {
+//                    prDialog.dismiss();
+//                }
+//                return false;
+//            }
+//        });
+        prDialog.setCancelable(false);
+        prDialog.setCanceledOnTouchOutside(false);
+        //监听对话框停止事件，把对话框停止视作为接口的取消
+//        prDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            public void onDismiss(DialogInterface arg0) {
+//                if (DialogHelper.this.task != null) {
+//                    DialogHelper.this.task.cancel(false);
+//                    prDialog.cancel();
+//                }
+//
+//            }
+//        });
+        //设置对话框布局
+        prDialog.setContentView(R.layout.progress);
+        prDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        TextView t = (TextView) prDialog.findViewById(com.byron.framework.R.id.text);
+        //设置对话框描述文字为接口的语言配置
+        t.setText(context.getText(R.string.common_dialog_loading_data));
+        progress = (ProgressBar) prDialog.findViewById(com.byron.framework.R.id.progress);
+
+        progress.setMax(max);
+
+    }
+
     public void setProgress(int p) {
         progress.setProgress(p);
     }
