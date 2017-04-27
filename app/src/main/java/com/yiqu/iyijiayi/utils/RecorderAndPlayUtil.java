@@ -5,10 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
+import com.czt.mp3recorder.MP3Recorder;
 import com.yiqu.Tool.Global.Variable;
 import com.shuyu.waveview.FileUtils;
-import com.yiqu.Tool.Recorder.MP3Recorder;
 
 import java.io.File;
 import java.io.IOException;

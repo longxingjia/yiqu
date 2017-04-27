@@ -6,8 +6,8 @@ import android.os.Handler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
 
+import com.czt.mp3recorder.MP3Recorder;
 import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
@@ -15,7 +15,6 @@ import com.yiqu.Tool.Function.LogFunction;
 
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 public class RecorderEngine {
     private boolean recording;
@@ -148,28 +147,21 @@ public class RecorderEngine {
 
     public void stopRecordVoice() {
         if (recording) {
-
             recorder.stopRecordVoice();
             boolean recordVoiceSuccess = true;
             long recordDuration = System.currentTimeMillis() - recordStartTime;
-
             recording = false;
-
             if (recordDuration < RecordConstant.OneSecond) {
                 recordVoiceSuccess = false;
             }
-
             if (!recordVoiceSuccess) {
                 CommonFunction.showToast("录音太短", "VoiceRecorder");
-
                 if (voiceRecorderInterface != null) {
                     voiceRecorderInterface.recordVoiceFail();
                 }
-
                 FileFunction.DeleteFile(recordFileUrl);
                 return;
             }
-
             if (voiceRecorderInterface != null) {
                 voiceRecorderInterface.recordVoiceFinish();
             }

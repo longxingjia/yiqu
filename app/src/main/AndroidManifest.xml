@@ -55,15 +55,17 @@
         <activity
             android:name="com.yiqu.Control.Main.RecordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"/>
+            />
         <activity
             android:name="com.yiqu.Control.Main.RecordComActivity"
             android:screenOrientation="portrait"
            />
         <activity
+            android:hardwareAccelerated="true"
             android:name="com.yiqu.Control.Main.PlayActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:hardwareAccelerated="true"
             android:name="com.yiqu.Control.Main.RecordAllActivity"
             android:screenOrientation="portrait"/>
         <activity

@@ -22,9 +22,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,6 +81,8 @@
             android:layout_marginBottom="1dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
 
             <TextView
@@ -102,30 +105,37 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:scaleType="centerInside"
+                android:visibility="gone"
                 app:border_color="@color/light"
                 app:border_width="7dp"
+
                 />
 
             <com.yiqu.iyijiayi.view.LyricView
                 android:id="@+id/lyricview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/larger_margin"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/larger_margin"
 
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size"/>
-            <ScrollView
 
-                android:layout_marginBottom="60dp"
+
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <TextView
                         android:id="@+id/title"
@@ -134,6 +144,7 @@
                         android:layout_marginTop="25dp"
                         android:gravity="center"
                         android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         />
 
@@ -143,6 +154,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="14sp"
                         />
 
@@ -152,40 +164,51 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:lineSpacingMultiplier="2"
-                        android:textSize="15sp"
                         android:textColor="@color/dd_gray"
+                        android:textSize="15sp"
                         />
                 </LinearLayout>
             </ScrollView>
 
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:gravity="top"
+                android:background="@color/transparent"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/gray_box"
-                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/gray_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/select_music"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
                     android:text="请选择配乐"
                     android:textColor="@color/white"/>
-                
+
                 <ImageView
-                    android:layout_marginRight="15dp"
                     android:id="@+id/add_music"
-                    android:background="@mipmap/add_music"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@mipmap/add_music"/>
 
                 <View
                     android:layout_width="1dp"
@@ -196,26 +219,26 @@
                 <TextView
                     android:id="@+id/select_article"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:text="请选择范文"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:singleLine="true"
+                    android:text="请选择范文"
                     android:textColor="@color/white"/>
 
                 <ImageView
-                    android:layout_marginRight="15dp"
                     android:id="@+id/add_article"
-                    android:background="@mipmap/add_music"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@mipmap/add_music"/>
 
             </LinearLayout>
 
 
-
         </RelativeLayout>
+
         <ProgressBar
             android:id="@+id/composeProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -228,20 +251,19 @@
             android:progressDrawable="@drawable/progress_bar_compose_voice"
             android:visibility="invisible"/>
 
-
         <LinearLayout
-            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/musictime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="1dp"
                 android:gravity="center"
-                android:layout_marginLeft="15dp"
                 android:text="00:00"
                 android:textColor="@color/white"
                 android:textSize="13dp"/>
@@ -250,44 +272,34 @@
                 android:id="@+id/pb_record"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:max="100"
                 android:maxHeight="2dip"
                 android:minHeight="2dip"
+                android:padding="@dimen/compose_progressBar_padding"
                 android:progressDrawable="@drawable/progress_horizontal"
                 android:thumb="@mipmap/video_circle"
-                android:padding="@dimen/compose_progressBar_padding"
                 />
 
             <TextView
                 android:id="@+id/totaltime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_marginRight="15dp"
+                android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/white"
                 android:textSize="13dp"/>
 
         </LinearLayout>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="23dp"
             android:gravity="center"
             android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:scaleType="centerInside"
-                android:src="@mipmap/back_record"
-                android:visibility="gone"
-                />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -307,7 +319,6 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/back_record"/>
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -355,25 +366,6 @@
                     android:src="@mipmap/finish"/>
 
             </RelativeLayout>
-
-
-            <TextView
-                android:id="@+id/recordVoiceButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/start_recording"
-                android:textColor="@color/redMain"
-                android:textSize="18sp"
-                android:visibility="gone"/>
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:scaleType="centerInside"
-                android:src="@mipmap/music_voice"
-                android:visibility="gone"/>
 
         </LinearLayout>
     </LinearLayout>

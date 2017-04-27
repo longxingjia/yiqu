@@ -52,6 +52,7 @@ import com.yiqu.iyijiayi.model.Music;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
+import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -112,8 +113,6 @@ public class RecordActivity extends Activity
     }
 
     public void bindView() {
-
-
         rlHint = (RelativeLayout) findViewById(R.id.hint);
         recordHintTextView = (TextView) findViewById(R.id.recordHintTextView);
         musicName = (TextView) findViewById(R.id.musicname);
@@ -124,7 +123,6 @@ public class RecordActivity extends Activity
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
-
         title_back.setOnClickListener(this);
     }
 
@@ -137,12 +135,10 @@ public class RecordActivity extends Activity
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
         audoManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
         Intent intent = getIntent();
         music = (Music) intent.getSerializableExtra("music");
         string2TimeUtils = new String2TimeUtils();
-        //  musictime.setText(string2TimeUtils.stringForTimeS(music.time));
-        //    LogUtils.LOGE(tag,music.time+"");
+
         musicName.setText(music.musicname);
         totalTime = music.time;
 
@@ -152,8 +148,6 @@ public class RecordActivity extends Activity
         if (mFile.exists()) {
             musicFileUrl = mFile.getAbsolutePath();
             getDuration(musicFileUrl);//设置音乐总时间
-            //    LogUtils.LOGE(tag+"11", VoiceFunction.getVoiceDuration(musicFileUrl)+"");
-
 
             decodeFileUrl = Variable.StorageMusicPath + fileName + ".pcm";
 
@@ -303,6 +297,8 @@ public class RecordActivity extends Activity
             goRecordSuccessState();
         }
     }
+
+
     @Override
     public void playVoiceBegin(long duration) {
 
@@ -446,37 +442,36 @@ public class RecordActivity extends Activity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.recordVoiceButton:
+                LogUtils.LOGE(tag,"sccc");
                 if (recordComFinish) {
 
                     final Bundle bundle = new Bundle();
                     bundle.putSerializable("composeVoice", composeVoice);
-                    String title = "找个导师点评一下吗？";
-                    String[] items = new String[]{"免费上传作品","找导师请教"};
-                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance,title,items, new MenuDialogSelectTeaHelper.TeaListener() {
-                        @Override
-                        public void onTea(int tea) {
-                            switch (tea) {
-                                case 1:
-                                    Intent intent = new Intent(instance, StubActivity.class);
-                                    intent.putExtra("fragment", AddQuestionFragment.class.getName());
-                                    intent.putExtras(bundle);
-                                    instance.startActivity(intent);
-                                    VoiceFunction.StopVoice();
-
-                                    break;
-                                case 0:
-
-                                    Intent i = new Intent(instance, StubActivity.class);
-                                    i.putExtra("fragment", UploadXizuoFragment.class.getName());
-                                    i.putExtras(bundle);
-                                    instance.startActivity(i);
-                                    VoiceFunction.StopVoice();
-                                    break;
-                            }
-
-                        }
-                    });
-                    menuDialogSelectTeaHelper.show(recordVoiceButton);
+//                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, new MenuDialogSelectTeaHelper.TeaListener() {
+//                        @Override
+//                        public void onTea(int tea) {
+//                            switch (tea) {
+//                                case 0:
+//                                    Intent intent = new Intent(instance, StubActivity.class);
+//                                    intent.putExtra("fragment", AddQuestionFragment.class.getName());
+//                                    intent.putExtras(bundle);
+//                                    instance.startActivity(intent);
+//                                    VoiceFunction.StopVoice();
+//
+//                                    break;
+//                                case 1:
+//
+//                                    Intent i = new Intent(instance, StubActivity.class);
+//                                    i.putExtra("fragment", UploadXizuoFragment.class.getName());
+//                                    i.putExtras(bundle);
+//                                    instance.startActivity(i);
+//                                    VoiceFunction.StopVoice();
+//                                    break;
+//                            }
+//
+//                        }
+//                    });
+                   // menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else {
 
 
@@ -501,9 +496,6 @@ public class RecordActivity extends Activity
                                     ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
                                 }
 
-//                                VoiceFunction.StopVoice();
-//                                VoiceFunction.StopRecordVoice();
-//                                compose();
                                 dialog.dismiss();
 
                             }
@@ -511,6 +503,7 @@ public class RecordActivity extends Activity
                         builder.show();
 
                     } else {
+                        LogUtils.LOGE(tag,"ccc");
 
                         startAnimation();
                         VoiceFunction.StartRecordVoice( instance);

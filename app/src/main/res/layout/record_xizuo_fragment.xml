@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_color_rating_grey"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color_rating_grey"
+              android:orientation="vertical"
+              tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -135,7 +135,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_weight="1"
-        >
+       >
 
 
         <TextView

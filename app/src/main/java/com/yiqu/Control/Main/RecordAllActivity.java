@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -98,7 +99,7 @@ import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class RecordAllActivity extends Activity
         implements VoicePlayerInterface, DecodeOperateInterface, ComposeAudioInterface,
-        VoiceRecorderOperateInterface, View.OnClickListener, NetCallBack {
+        VoiceRecorderOperateInterface, NetCallBack {
     private boolean recordVoiceBegin;
     private boolean recordComFinish = false;
     private String tag = "RecordActivity";
@@ -159,6 +160,8 @@ public class RecordAllActivity extends Activity
     public ImageView add_music;
     @BindView(R.id.add_article)
     public ImageView add_article;
+    @BindView(R.id.et_content)
+    public EditText et_content;
 
     private String fileName;
     private TextView tv_totaltime;
@@ -203,7 +206,7 @@ public class RecordAllActivity extends Activity
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
         pb_record = (ProgressBar) findViewById(R.id.pb_record);
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
-        title_back.setOnClickListener(this);
+
     }
 
     public void initView() {
@@ -293,9 +296,8 @@ public class RecordAllActivity extends Activity
         recordTime = 0;
         long t = System.currentTimeMillis() / 1000;
         //   tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
-        fileNameCom = music.musicname + t + "_composeVoice.mp3";
+        fileNameCom = music.musicname + t + "cv.mp3";
         composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
-        recordVoiceButton.setOnClickListener(this);
 
         mid = music.mid;
         musicName.setText(music.musicname);
@@ -490,11 +492,15 @@ public class RecordAllActivity extends Activity
 //                decodeProgress * RecordConstant.MaxDecodeProgress / RecordConstant.NormalMaxProgress);
     }
 
+    private DialogHelper dialogHelper;
     private void compose() {
         composeProgressBar.setProgress(0);
         composeProgressBar.setVisibility(View.VISIBLE);
         recordVoiceButton.setEnabled(false);
         tempVoicePcmUrl = VoiceFunction.getRecorderPcmPath();
+        LogUtils.LOGE(tag,tempVoicePcmUrl);
+        LogUtils.LOGE(tag,decodeFileUrl);
+        LogUtils.LOGE(tag,composeVoiceUrl);
         if (audoManager.isWiredHeadsetOn()) { //true 带了耳机
             AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
                     RecordConstant.VoiceEarWeight, RecordConstant.VoiceEarBackgroundWeight,
@@ -504,16 +510,17 @@ public class RecordAllActivity extends Activity
                     RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
                     0, this);
         }
+
+//        if (dialogHelper == null) {
+//            dialogHelper = new DialogHelper(instance,  100);
+//            dialogHelper.showProgressDialog();
+//        }
     }
 
     @Override
     public void decodeSuccess() {
-        // composeProgressBar.setProgress(RecordConstant.MaxDecodeProgress);
 
-//   AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
-//                RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
-//                -1 * RecordConstant.MusicCutEndOffset / 2 * RecordConstant.RecordDataNumberInOneSecond, this);
-        //    ToastManager.getInstance(instance).showText("解码成功");
+
         DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(this);
         downloadMusicInfoDBHelper.updateDecode(mid, 1, System.currentTimeMillis());
         downloadMusicInfoDBHelper.close();
@@ -535,12 +542,9 @@ public class RecordAllActivity extends Activity
                 composeProgress == 70 || composeProgress == 80 ||
                 composeProgress == 90 || composeProgress == 100) {
             composeProgressBar.setProgress(composeProgress);
+            dialogHelper.setProgress(composeProgress);
         }
 
-
-//        composeProgressBar.setProgress(
-//                composeProgress * (RecordConstant.NormalMaxProgress - RecordConstant.MaxDecodeProgress) /
-//                        RecordConstant.NormalMaxProgress + RecordConstant.MaxDecodeProgress);
     }
 
     private void stopRecording() {
@@ -604,16 +608,22 @@ public class RecordAllActivity extends Activity
         composeVoice.ispay = "0";
         composeVoice.createtime = System.currentTimeMillis();
 
-        if (AppInfo.isForeground(instance, "RecordComActivity")) {
+        if (AppInfo.isForeground(instance, getClass().getSimpleName())) {
 //          mediaPlayer
             VoiceFunction.PlayToggleVoice(fileNameCom, this);
             icon_record.setImageResource(R.mipmap.icon_pause);
             CommonFunction.showToast("合成成功", className);
         }
 
+
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
         composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.COMPOSE);
         composeVoiceInfoDBHelper.close();
+
+        if (dialogHelper != null) {
+            dialogHelper.dismissProgressDialog();
+            dialogHelper = null;
+        }
     }
 
     @Override
@@ -624,7 +634,7 @@ public class RecordAllActivity extends Activity
     }
 
 
-    @OnClick({R.id.record, R.id.reset, R.id.finish, R.id.select_music, R.id.select_article})
+    @OnClick({R.id.record, R.id.reset, R.id.finish, R.id.select_music, R.id.select_article,R.id.title_back})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -664,6 +674,12 @@ public class RecordAllActivity extends Activity
                 } else {
                     VoiceFunction.StartRecordVoice(instance);
                     icon_record.setImageResource(R.mipmap.icon_pause);
+                    if (!TextUtils.isEmpty(et_content.getText().toString())){
+                        content.setText(et_content.getText().toString());
+                    //    et_content.setFocusableInTouchMode(false);
+                        et_content.setVisibility(View.GONE);
+                    }
+
                     if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                         VoiceFunction.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
                     }
@@ -716,6 +732,7 @@ public class RecordAllActivity extends Activity
                 recordComFinish = false;
 //                playUtils.pause();
                 VoiceFunction.StopRecordVoice();
+                VoiceFunction.StopVoice();
                 icon_finish.setImageResource(R.mipmap.finish);
                 icon_record.setImageResource(R.mipmap.icon_record);
                 pb_record.setProgress(0);

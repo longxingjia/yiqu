@@ -22,13 +22,14 @@ public class VoiceFunction {
         return RecorderEngine.getInstance().IsRecording();
     }
 
-    public synchronized static void StartRecordVoice(
+    public synchronized static String StartRecordVoice(
             VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
         String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
         mp3FilePath = tmp + ".mp3";
         pcmFilePath = tmp + ".pcm";
         RecorderEngine.getInstance()
                 .startRecordVoice(mp3FilePath, pcmFilePath, voiceRecorderOperateInterface);
+        return tmp;
 
     }
 

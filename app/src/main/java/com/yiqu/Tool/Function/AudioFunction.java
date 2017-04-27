@@ -125,10 +125,11 @@ public class AudioFunction {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LogUtils.LOGE(tag,"1");
 
         LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
                 RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
-
+        LogUtils.LOGE(tag,"2");
         try {
             while (!firstAudioFinish) {
 //            while (!firstAudioFinish && !secondAudioFinish) {
