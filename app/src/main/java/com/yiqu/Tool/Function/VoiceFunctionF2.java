@@ -22,12 +22,13 @@ public class VoiceFunctionF2 {
         String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
 
         if (is2mp3) {
-            filePath = tmp + ".pcm";
+            filePath = tmp + ".mp3";
             Mp3RecorderEngine.getInstance()
-                    .startRecordVoice(pcmFilePath, voiceRecorderOperateInterface);
+                    .startRecordVoice(filePath, voiceRecorderOperateInterface);
         } else {
+            filePath = tmp + ".pcm";
             RecorderEngine.getInstance()
-                    .startRecordVoice(pcmFilePath, voiceRecorderOperateInterface);
+                    .startRecordVoice(filePath, voiceRecorderOperateInterface);
         }
         return tmp;
 
