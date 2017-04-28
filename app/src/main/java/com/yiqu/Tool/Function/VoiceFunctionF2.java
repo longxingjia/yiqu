@@ -43,7 +43,7 @@ public class VoiceFunctionF2 {
 //        return mp3FilePath;
 //    }
     public static String getRecorderPcmPath() {
-        return pcmFilePath;
+        return filePath;
     }
 
     public static void StopRecordVoice(boolean is2mp3) {
