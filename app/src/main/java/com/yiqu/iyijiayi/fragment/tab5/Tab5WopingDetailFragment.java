@@ -86,7 +86,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             switch (msg.what) {
                 case 0:
                     //更新进度
-                  //  soundtime.setText(--totalTime + "\"");
+                    //  soundtime.setText(--totalTime + "\"");
                     if (totalTime == 0) {
                         totalTime = 1;
                     }

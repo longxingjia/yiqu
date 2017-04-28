@@ -71,7 +71,7 @@ public class Download implements Serializable {
 			new File(localPath).getParentFile().mkdirs();
 		}
 		
-		Log.i("下载地址", url);
+		Log.e("下载地址", url);
 		
 		mDownloadId = downloadId;
 		mUrl = url;
@@ -153,7 +153,7 @@ public class Download implements Serializable {
 	 */
 	private void download(boolean isGoon, Handler handler) {
 		Message msg = null;
-		//Log.w("","开始下载。。。");
+		Log.w("","开始下载。。。");
 		try {
 			RandomAccessFile localFile = new RandomAccessFile(new File(mLocalPath), "rwd");
 

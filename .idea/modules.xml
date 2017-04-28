@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\iyijiayi\Git.iml" filepath="D:\iyijiayi\Git.iml" />
       <module fileurl="file://$PROJECT_DIR$/LyricView/LyricView.iml" filepath="$PROJECT_DIR$/LyricView/LyricView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/badgeView/badgeView.iml" filepath="$PROJECT_DIR$/badgeView/badgeView.iml" />

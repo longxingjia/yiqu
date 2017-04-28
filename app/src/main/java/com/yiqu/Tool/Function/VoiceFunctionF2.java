@@ -4,27 +4,30 @@ import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Player.VoicePlayerEngine;
+import com.yiqu.Tool.Recorder.Mp3RecorderEngine;
 import com.yiqu.Tool.Recorder.RecorderEngine;
 
 
 /**
  * Created by zhengtongyu on 16/5/29.
  */
-public class VoiceFunction {
-    private static String mp3FilePath;
+public class VoiceFunctionF2 {
     private static String pcmFilePath;
 
     public static boolean IsRecordingVoice() {
         return RecorderEngine.getInstance().IsRecording();
     }
 
-    public synchronized static String StartRecordVoice(
-            VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
+    public synchronized static String StartRecordVoice(boolean is2mp3, VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
         String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
-        mp3FilePath = tmp + ".mp3";
         pcmFilePath = tmp + ".pcm";
-        RecorderEngine.getInstance()
-                .startRecordVoice( pcmFilePath, voiceRecorderOperateInterface);
+        if (is2mp3) {
+            Mp3RecorderEngine.getInstance()
+                    .startRecordVoice(pcmFilePath, voiceRecorderOperateInterface);
+        } else {
+            RecorderEngine.getInstance()
+                    .startRecordVoice(pcmFilePath, voiceRecorderOperateInterface);
+        }
         return tmp;
 
     }
@@ -34,26 +37,50 @@ public class VoiceFunction {
      *
      * @return
      */
-    public static String getRecorderMp3Path() {
-        return mp3FilePath;
-    }
-
+    // public static String getRecorderMp3Path() {
+//        return mp3FilePath;
+//    }
     public static String getRecorderPcmPath() {
         return pcmFilePath;
     }
 
-    public static void StopRecordVoice() {
-        RecorderEngine.getInstance().stopRecordVoice();
+    public static void StopRecordVoice(boolean is2mp3) {
+        if (is2mp3) {
+            Mp3RecorderEngine.getInstance().stopRecordVoice();
+        } else {
+            RecorderEngine.getInstance().stopRecordVoice();
+        }
     }
 
-    public static boolean isPauseRecordVoice() {
-        return  RecorderEngine.getInstance().isPause();
+    public static boolean isPauseRecordVoice(boolean is2mp3) {
+        if (is2mp3) {
+            return Mp3RecorderEngine.getInstance().isPause();
+        } else {
+
+            return RecorderEngine.getInstance().isPause();
+        }
+
     }
-    public static void pauseRecordVoice() {
-        RecorderEngine.getInstance().pauseRecording();
+
+    public static void pauseRecordVoice(boolean is2mp3) {
+
+
+        if (is2mp3) {
+            Mp3RecorderEngine.getInstance().pauseRecording();
+        } else {
+
+            RecorderEngine.getInstance().pauseRecording();
+        }
     }
-    public static void restartRecording() {
-        RecorderEngine.getInstance().restartRecording();
+
+    public static void restartRecording(boolean is2mp3) {
+        if (is2mp3) {
+            Mp3RecorderEngine.getInstance().restartRecording();
+        } else {
+
+            RecorderEngine.getInstance().restartRecording();
+        }
+
     }
 
     public synchronized static void PrepareGiveUpRecordVoice(boolean fromHand) {
@@ -65,7 +92,13 @@ public class VoiceFunction {
     }
 
     public synchronized static void GiveUpRecordVoice(boolean fromHand) {
-        RecorderEngine.getInstance().giveUpRecordVoice();
+
+        if (fromHand) {
+            Mp3RecorderEngine.getInstance().giveUpRecordVoice();
+        } else {
+
+            RecorderEngine.getInstance().giveUpRecordVoice();
+        }
     }
 
     public synchronized static String getPlayingUrl() {

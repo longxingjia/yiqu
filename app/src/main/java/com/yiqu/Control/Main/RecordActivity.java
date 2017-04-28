@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Function.AudioFunction;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
@@ -38,6 +37,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
@@ -471,7 +471,7 @@ public class RecordActivity extends Activity
 //
 //                        }
 //                    });
-                   // menuDialogSelectTeaHelper.show(recordVoiceButton);
+                    // menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else {
 
 

@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.base.utils.ToastManager;
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.service.Download;
@@ -41,12 +40,13 @@ import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
-import com.yiqu.Tool.Function.VoiceFunction;
+import com.yiqu.Tool.Function.VoiceFunctionF2;
 import com.yiqu.Tool.Global.RecordConstant;
 import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
@@ -72,6 +72,7 @@ import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.PlayUtils;
+import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
@@ -169,6 +170,8 @@ public class RecordAllActivity extends Activity
     private int mid;
     protected DownloadService mDownloadService;
     private File backgroudMusciFile;
+    private RecorderAndPlayUtil recorderUtil;
+    private boolean is2mp3 = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -206,7 +209,7 @@ public class RecordAllActivity extends Activity
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
         pb_record = (ProgressBar) findViewById(R.id.pb_record);
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
-
+        recorderUtil = new RecorderAndPlayUtil(this);
     }
 
     public void initView() {
@@ -314,7 +317,7 @@ public class RecordAllActivity extends Activity
 //    private Runnable runnable = new Runnable() {
 //        @Override
 //        public void run() {
-//            if (VoiceFunction.IsRecordingVoice()) {
+//            if (VoiceFunctionF2.IsRecordingVoice()) {
 //                long time = mediaPlayer.getCurrentPosition();
 //                lyricView.updateLyrics((int) time, mediaPlayer.getDuration());
 //            }
@@ -367,8 +370,6 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void recordVoiceBegin() {
-        //   mediaPlayer.stop();
-        //  playUtils.stop();
         pb_record.setMax(totalTime);
         if (!recordVoiceBegin) {
             recordVoiceBegin = true;
@@ -385,18 +386,13 @@ public class RecordAllActivity extends Activity
             recordTime = (int) (recordDuration / RecordConstant.OneSecond);
             int leftTime = totalTime - recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(recordTime));
-
             pb_record.setProgress(recordTime);
-
             if (leftTime <= 0) {
-                //  mediaPlayer.stop();
-                //   playUtils.stop();
-                VoiceFunction.StopRecordVoice();
+                VoiceFunctionF2.StopRecordVoice(is2mp3);
                 if (backgroudMusciFile!=null&&backgroudMusciFile.exists()){
                     compose();
                 }
             }
-
         }
     }
 
@@ -436,7 +432,7 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void playVoiceBegin(long duration) {
-      int  pTotalTime = (int) duration / 1000;
+        int  pTotalTime = (int) duration / 1000;
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(pTotalTime));
         pb_record.setMax(pTotalTime);
 
@@ -468,11 +464,11 @@ public class RecordAllActivity extends Activity
     public void playVoiceStateChanged(long currentDuration) {
 
         if (currentDuration > 0) {
-          int  playtime = (int) (currentDuration / RecordConstant.OneSecond);
+            int  playtime = (int) (currentDuration / RecordConstant.OneSecond);
             musictime.setText(string2TimeUtils.stringForTimeS(playtime));
             pb_record.setProgress(playtime);
         }
-     //   LogUtils.LOGE(tag, currentDuration + "");
+        //   LogUtils.LOGE(tag, currentDuration + "");
     }
 
     @Override
@@ -497,7 +493,7 @@ public class RecordAllActivity extends Activity
         composeProgressBar.setProgress(0);
         composeProgressBar.setVisibility(View.VISIBLE);
         recordVoiceButton.setEnabled(false);
-        tempVoicePcmUrl = VoiceFunction.getRecorderPcmPath();
+        tempVoicePcmUrl = VoiceFunctionF2.getRecorderPcmPath();
         LogUtils.LOGE(tag,tempVoicePcmUrl);
         LogUtils.LOGE(tag,decodeFileUrl);
         LogUtils.LOGE(tag,composeVoiceUrl);
@@ -548,8 +544,7 @@ public class RecordAllActivity extends Activity
     }
 
     private void stopRecording() {
-//        VoiceFunction.StopVoice();
-//        VoiceFunction.StopRecordVoice();
+
         recordComFinish = true;
         recordVoiceBegin = false;
         composeVoice = new ComposeVoice();
@@ -560,7 +555,7 @@ public class RecordAllActivity extends Activity
         composeVoice.musictype = "";
         composeVoice.chapter = "";
         //     composeVoice.desc = desc;
-        composeVoice.voicename = VoiceFunction.getRecorderMp3Path();
+     //   composeVoice.voicename = VoiceFunctionF2.getRecorderMp3Path();
         composeVoice.accompaniment = "";
         composeVoice.soundtime = actualRecordTime;
         composeVoice.isformulation = "0";
@@ -610,7 +605,7 @@ public class RecordAllActivity extends Activity
 
         if (AppInfo.isForeground(instance, getClass().getSimpleName())) {
 //          mediaPlayer
-            VoiceFunction.PlayToggleVoice(fileNameCom, this);
+            VoiceFunctionF2.PlayToggleVoice(fileNameCom, this);
             icon_record.setImageResource(R.mipmap.icon_pause);
             CommonFunction.showToast("合成成功", className);
         }
@@ -639,50 +634,49 @@ public class RecordAllActivity extends Activity
 
         switch (v.getId()) {
             case R.id.record:
-
                 if (recordComFinish) {
                     if (recordVoiceBegin) {
 
                     } else {
-                        if (VoiceFunction.IsPlaying()) {
-                            VoiceFunction.pauseVoice();
+                        if (VoiceFunctionF2.IsPlaying()) {
+                            VoiceFunctionF2.pauseVoice();
                             LogUtils.LOGE(tag,"pauseVoice");
                             icon_record.setImageResource(R.mipmap.icon_play);
                         } else {
-                            VoiceFunction.startPlayVoice();
+                            VoiceFunctionF2.startPlayVoice();
                             LogUtils.LOGE(tag,"startPlayVoice");
                             icon_record.setImageResource(R.mipmap.icon_pause);
                         }
                     }
                 } else if (recordVoiceBegin) {
-                    //     LogUtils.LOGE(tag, String.valueOf(VoiceFunction.isPauseRecordVoice()));
-                    if (VoiceFunction.isPauseRecordVoice()) {
-                        VoiceFunction.restartRecording();
+
+                    if (VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
+                        VoiceFunctionF2.restartRecording(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_pause);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                            VoiceFunction.startPlayVoice();
+                            VoiceFunctionF2.startPlayVoice();
                             LogUtils.LOGE(tag,"startPlayVoice");
                         }
                     } else {
-                        VoiceFunction.pauseRecordVoice();
+                        VoiceFunctionF2.pauseRecordVoice(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_record);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                            VoiceFunction.pauseVoice();
-                         //   LogUtils.LOGE(tag,"pauseVoice");
+                            VoiceFunctionF2.pauseVoice();
+                            //   LogUtils.LOGE(tag,"pauseVoice");
                         }
                     }
                 } else {
-                    VoiceFunction.StartRecordVoice(instance);
+
                     icon_record.setImageResource(R.mipmap.icon_pause);
                     if (!TextUtils.isEmpty(et_content.getText().toString())){
                         content.setText(et_content.getText().toString());
-                    //    et_content.setFocusableInTouchMode(false);
                         et_content.setVisibility(View.GONE);
                     }
-
                     if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                        VoiceFunction.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
+                        is2mp3 = false;
+                        VoiceFunctionF2.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
                     }
+                    VoiceFunctionF2.StartRecordVoice(is2mp3,instance);
                     select_music.setEnabled(false);
                     select_article.setEnabled(false);
 
@@ -704,8 +698,8 @@ public class RecordAllActivity extends Activity
                         public void onClick(DialogInterface dialog, int which) {
                             //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                             if (recordTime > 9) {
-                                VoiceFunction.StopRecordVoice();
-                                VoiceFunction.StopVoice();
+                                VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                VoiceFunctionF2.StopVoice();
                                 select_music.setEnabled(true);
                                 select_article.setEnabled(true);
 
@@ -713,7 +707,7 @@ public class RecordAllActivity extends Activity
                                     compose();
                                 } else {
                                     stopRecording();
-                                    VoiceFunction.PlayToggleVoice(VoiceFunction.getRecorderMp3Path(), instance);
+
                                 }
                                 icon_finish.setImageResource(R.mipmap.upload);
 
@@ -731,8 +725,8 @@ public class RecordAllActivity extends Activity
                 recordVoiceBegin = false;
                 recordComFinish = false;
 //                playUtils.pause();
-                VoiceFunction.StopRecordVoice();
-                VoiceFunction.StopVoice();
+                VoiceFunctionF2.StopRecordVoice(is2mp3);
+                VoiceFunctionF2.StopVoice();
                 icon_finish.setImageResource(R.mipmap.finish);
                 icon_record.setImageResource(R.mipmap.icon_record);
                 pb_record.setProgress(0);
@@ -833,8 +827,8 @@ public class RecordAllActivity extends Activity
     @Override
     protected void onDestroy() {
         //handler.removeCallbacks(runnable);
-        VoiceFunction.StopRecordVoice();
-        VoiceFunction.StopVoice();
+        VoiceFunctionF2.StopRecordVoice(is2mp3);
+        VoiceFunctionF2.StopVoice();
         unbindService(mDownloadServiceConnection);
         super.onDestroy();
     }
@@ -855,7 +849,7 @@ public class RecordAllActivity extends Activity
                 public void onPublish(int downloadId, long size) {
                     //   Log.w("download", "publish" + size);
                     dialogHelper.setProgress((int) size);
-                 //  LogUtils.LOGE(tag,"onPublish");
+                    //  LogUtils.LOGE(tag,"onPublish");
                 }
 
                 @Override
@@ -915,13 +909,13 @@ public class RecordAllActivity extends Activity
                             actualRecordTime = 0;
                             recordVoiceBegin = false;
 
-                            VoiceFunction.StopRecordVoice();
+                            VoiceFunctionF2.StopRecordVoice(is2mp3);
 
 
                             break;
                         case 1:
                             finish();
-                            VoiceFunction.GiveUpRecordVoice(true);
+                            VoiceFunctionF2.GiveUpRecordVoice(true);
 
                             break;
                     }

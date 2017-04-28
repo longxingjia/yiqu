@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.base.utils.ToastManager;
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -48,6 +47,7 @@ import com.yiqu.Tool.Global.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
@@ -74,7 +74,6 @@ import com.yiqu.iyijiayi.utils.PlayUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -326,6 +325,7 @@ public class RecordComActivity extends Activity
 //        recordHintTextView.setVisibility(View.VISIBLE);
 //        recordHintTextView.setText("录音完成，正在合成");
         pb_record.setProgress(actualRecordTime);
+        compose();
 
     }
 
@@ -586,7 +586,8 @@ public class RecordComActivity extends Activity
                 } else if (recordVoiceBegin) {
 
                 } else {
-                    tempVoicePcmUrl = VoiceFunction.StartRecordVoice(instance) + ".pcm";
+                    VoiceFunction.StartRecordVoice(instance);
+                    tempVoicePcmUrl = VoiceFunction.getRecorderPcmPath();
                 }
                 break;
             case R.id.finish:
@@ -623,7 +624,7 @@ public class RecordComActivity extends Activity
                     menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else if (recordVoiceBegin) {
                     VoiceFunction.StopRecordVoice();
-                    compose();
+
                     icon_finish.setImageResource(R.mipmap.upload);
 
 //                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);

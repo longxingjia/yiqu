@@ -37,9 +37,7 @@ public class AudioRecordFunc {
     private AudioRecord audioRecord;
     private boolean isRecord = false;// 设置正在录制的状态
 
-
     private static AudioRecordFunc mInstance;
-
     private AudioRecordFunc() {
 
     }
@@ -100,8 +98,6 @@ public class AudioRecordFunc {
 
     private void creatAudioRecord() {
         // 获取音频文件路径
-
-
         // 获得缓冲区字节大小
         bufferSizeInBytes = AudioRecord.getMinBufferSize(AUDIO_SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);

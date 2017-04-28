@@ -27,7 +27,7 @@ public class DownloadService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-	//	Log.e("down","fsfs");
+		//	Log.e("down","fsfs");
 		return new DownloadBinder();
 	}
 
@@ -104,7 +104,7 @@ public class DownloadService extends Service {
 
 				@Override
 				public void onPublish(int downloadId, long size) {
-				//	Log.w("download", "publish" + size);
+					//	Log.w("download", "publish" + size);
 				}
 
 				@Override

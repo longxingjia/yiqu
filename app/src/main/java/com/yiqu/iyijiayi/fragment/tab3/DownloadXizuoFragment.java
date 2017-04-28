@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.service.DownloadService;
-import com.yiqu.Control.Main.RecordActivity;
 import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Global.Variable;
@@ -154,19 +153,43 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         submit.setEnabled(false);
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
+   //     LogUtils.LOGE(tag, music.toString());
         musicName.setText(music.musicname + "");
+
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
+//        String fileName = Url.substring(
+//                Url.lastIndexOf("/") + 1,
+//                Url.length());
         URI uri = URI.create(Url);
+
+
         fileName = FileFunction.getValidFileName(uri);
+     //   LogUtils.LOGE(tag,fileName);
+//        AppShare
+
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        // LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
+
         if (mFile.exists()) {
+            //   Log.d(tag, "file " + mFile.getName() + " already exits!!");
             nextPage();
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
                 dowoload(Url, fileName);
+//                StubActivity mActivity = (StubActivity) getActivity();
+////                LogUtils.LOGE(tag,"t1");
+////                LogUtils.LOGE(music.mid+"_"+Url,Variable.StorageMusicCachPath);
+//                DownloadService downloadService =   mActivity.getDownloadService();
+//                if (downloadService!=null){
+//                    LogUtils.LOGE(tag,downloadService.toString());
+//                }
+//                downloadService.download(music.mid, Url,Variable.StorageMusicCachPath,
+//                        "ssssssssssss"+".mp3");
             }
         }
+
         super.init(savedInstanceState);
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,7 +289,10 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 downloadMusicInfoDBHelper.insert(music);
                 downloadMusicInfoDBHelper.close();
 
-
+//                File mFile = new File(Variable.StorageMusicCachPath, fileName);
+//            String    decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_" + music.mid + "_decodeTem.pcm";
+//                AudioFunction.DecodeMusicFile(mFile.getAbsolutePath(), decodeFileUrl, 0,
+//                        music.time, getActivity());
 
             }
         }
@@ -288,7 +314,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     }
 
     private void nextPage() {
-        //     Intent i = new Intent(getActivity(), RecordActivity.class);
         Intent i = new Intent(getActivity(), RecordComActivity.class);
 //        i.putExtra("fragment", RecordXizuoFragment.class.getName());
         Bundle bundle = new Bundle();

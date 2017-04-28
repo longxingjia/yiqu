@@ -4,19 +4,18 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.czt.mp3recorder.MP3Recorder;
+import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
-
-import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Global.RecordConstant;
-
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 
-public class RecorderEngine {
+import java.io.File;
+import java.io.IOException;
+
+public class Mp3RecorderEngine {
     private boolean recording;
 
     private final int sampleDuration = 500;// 间隔取样时间
@@ -32,25 +31,25 @@ public class RecorderEngine {
 
     private Handler handler;
 
-    private static PCMRecorder recorder;
+    private static MP3Recorder recorder;
 
     //    private static NativeRecorder recorder;
 
-    private static RecorderEngine instance;
+    private static Mp3RecorderEngine instance;
 
-    private RecorderEngine() {
+    private Mp3RecorderEngine() {
         audioManager = (AudioManager) CommonApplication.getInstance()
                 .getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
-        recorder = new PCMRecorder();
+        recorder = new MP3Recorder();
     }
 
-    public static RecorderEngine getInstance() {
+    public static Mp3RecorderEngine getInstance() {
         if (instance == null) {
-            synchronized (RecorderEngine.class) {
+            synchronized (Mp3RecorderEngine.class) {
                 if (instance == null) {
-                    instance = new RecorderEngine();
+                    instance = new Mp3RecorderEngine();
                 }
             }
         }
@@ -59,9 +58,9 @@ public class RecorderEngine {
     }
 
     public synchronized static void Destroy() {
-        if (instance != null) {
-            recorder.release();
-        }
+//        if (instance != null) {
+//            recorder.release();
+//        }
 
         instance = null;
     }
@@ -81,6 +80,7 @@ public class RecorderEngine {
         if (!recordFile.exists()) {
             try {
                 recordFile.createNewFile();
+                recorder.startRecordVoice(recordFile);
             } catch (IOException e) {
                 LogFunction.error("建立语音文件异常:" + recordFileUrl, e);
 
@@ -89,7 +89,8 @@ public class RecorderEngine {
             }
         }
 
-        return recorder.startRecordVoice(recordFileUrl);
+
+        return true;
     }
 
     public void startRecordVoice(String recordFileUrl,
@@ -122,7 +123,7 @@ public class RecorderEngine {
 
     public void stopRecordVoice() {
         if (recording) {
-            boolean recordVoiceSuccess = recorder.stopRecordVoice();
+            boolean recordVoiceSuccess = recorder.stop();
             long recordDuration = System.currentTimeMillis() - recordStartTime;
 
             recording = false;
@@ -137,7 +138,6 @@ public class RecorderEngine {
                 if (voiceRecorderInterface != null) {
                     voiceRecorderInterface.recordVoiceFail();
                 }
-
                 FileFunction.DeleteFile(recordFileUrl);
                 return;
             }
@@ -150,7 +150,7 @@ public class RecorderEngine {
 
     public void giveUpRecordVoice() {
         if (recording) {
-            boolean stopRecordSuccess = recorder.stopRecordVoice();
+            boolean stopRecordSuccess = recorder.stop();
 
             recording = false;
 
@@ -177,6 +177,7 @@ public class RecorderEngine {
 //            recorder.setPause(pause);
 //        }
 //    }
+
     /**
      * 暂停
      */
@@ -188,7 +189,7 @@ public class RecorderEngine {
     }
 
 
-    public boolean isPause(){
+    public boolean isPause() {
         if (recording) {
             return recorder.isPause();
         }
@@ -203,7 +204,6 @@ public class RecorderEngine {
             recorder.setPause(true);
         }
     }
-
 
 
     public void prepareGiveUpRecordVoice(boolean fromHand) {

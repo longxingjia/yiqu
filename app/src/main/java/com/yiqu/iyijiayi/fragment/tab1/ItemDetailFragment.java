@@ -42,6 +42,7 @@ import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
@@ -139,7 +140,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public ImageView stu_header;
     @BindView(R.id.tea_header)
     public ImageView tea_header;
-//    @BindView(R.id.ll_backgroud)
+    //    @BindView(R.id.ll_backgroud)
 //    public LinearLayout ll_backgroud;
     @BindView(R.id.ll_title)
     public LinearLayout ll_title;
@@ -742,15 +743,20 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
 
             case R.id.like:
-                RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.like, MyNetRequestConfig
-                                .like(getActivity(), AppShare.getUserInfo(getActivity()).uid, sid),
-                        "like", ItemDetailFragment.this, false, true);
+                if (AppShare.getIsLogin(getActivity())){
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.like, MyNetRequestConfig
+                                    .like(getActivity(), AppShare.getUserInfo(getActivity()).uid, sid),
+                            "like", ItemDetailFragment.this, false, true);
+                }else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+                }
+
                 break;
             case R.id.comment:
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
-//                Bundle bundle = new Bundle();
-
                 intent.putExtra("sid", sid + "");
                 intent.putExtra("fromuid", AppShare.getUserInfo(getActivity()).uid + "");
                 LogUtils.LOGE(tag, sound.toString());

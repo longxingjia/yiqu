@@ -1,4 +1,4 @@
-package com.czt.mp3recorder;
+package com.yiqu.Tool.Interface;
 
 public interface VoiceRecorderOperateInterface {
     public void recordVoiceBegin();

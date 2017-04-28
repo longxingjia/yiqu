@@ -183,7 +183,7 @@ public class VoicePlayerEngine {
             return;
         }
 
-     //   playingUrl = null;
+        //   playingUrl = null;
 
         voicePlayer.pause();
         musicPlayerState = MusicData.MusicPlayerState.pausing;
@@ -226,7 +226,7 @@ public class VoicePlayerEngine {
             if (!voicePlayer.isPlaying()) {
                 return 0;
             }
-         //   playingUrl = null;
+            //   playingUrl = null;
             voicePlayer.pause();
             musicPlayerState = MusicData.MusicPlayerState.pausing;
 
@@ -248,7 +248,7 @@ public class VoicePlayerEngine {
 //            }
             //   playingUrl = null;
             voicePlayer.start();
-          //  LogUtils.LOGE("vp","fsfs");
+            //  LogUtils.LOGE("vp","fsfs");
             musicPlayerState = MusicData.MusicPlayerState.playing;
             int pos = voicePlayer.getCurrentPosition();
             if (voicePlayerInterface != null) {
