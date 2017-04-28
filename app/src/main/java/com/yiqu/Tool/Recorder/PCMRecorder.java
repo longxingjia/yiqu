@@ -3,6 +3,7 @@ package com.yiqu.Tool.Recorder;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
@@ -47,7 +48,7 @@ public class PCMRecorder {
 
     private void init() {
         initAudioRecord();
-
+        Log.e("PCMRecorder","ff");
         recordThread = new RecordThread();
 
         CommonThreadPool.getThreadPool().addCachedTask(recordThread);

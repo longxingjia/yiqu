@@ -69,7 +69,7 @@ public class MP3Recorder extends BaseRecorder {
      */
     public MP3Recorder() {
       //  mRecordFile = recordFile;
-        Log.e("MP3Recorder","ff");
+
     }
 
     /**
@@ -82,6 +82,7 @@ public class MP3Recorder extends BaseRecorder {
         if (mIsRecording) {
             return;
         }
+        Log.e("MP3Recorder","startRecordVoice");
         mIsRecording = true; // 提早，防止init或startRecording被多次调用
         initAudioRecorder(mRecordFile);
         try {
@@ -182,6 +183,7 @@ public class MP3Recorder extends BaseRecorder {
     public boolean stop() {
         mPause = false;
         mIsRecording = false;
+        Log.e("MP3Recorder","stop");
         return true;
     }
 

@@ -12,7 +12,7 @@ import com.yiqu.Tool.Recorder.RecorderEngine;
  * Created by zhengtongyu on 16/5/29.
  */
 public class VoiceFunctionF2 {
-    private static String pcmFilePath;
+    private static String filePath;
 
     public static boolean IsRecordingVoice() {
         return RecorderEngine.getInstance().IsRecording();
@@ -20,8 +20,9 @@ public class VoiceFunctionF2 {
 
     public synchronized static String StartRecordVoice(boolean is2mp3, VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
         String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
-        pcmFilePath = tmp + ".pcm";
+
         if (is2mp3) {
+            filePath = tmp + ".pcm";
             Mp3RecorderEngine.getInstance()
                     .startRecordVoice(pcmFilePath, voiceRecorderOperateInterface);
         } else {
