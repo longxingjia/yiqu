@@ -1,9 +1,7 @@
 package com.yiqu.Tool.Player;
 
-import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Handler;
-import android.os.Message;
 
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
@@ -11,11 +9,8 @@ import com.yiqu.Tool.Function.UpdateFunction;
 
 import com.yiqu.Tool.Data.MusicData;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -183,7 +178,7 @@ public class VoicePlayerEngine {
             return;
         }
 
-     //   playingUrl = null;
+        //   playingUrl = null;
 
         voicePlayer.pause();
         musicPlayerState = MusicData.MusicPlayerState.pausing;
@@ -226,7 +221,7 @@ public class VoicePlayerEngine {
             if (!voicePlayer.isPlaying()) {
                 return 0;
             }
-         //   playingUrl = null;
+            //   playingUrl = null;
             voicePlayer.pause();
             musicPlayerState = MusicData.MusicPlayerState.pausing;
 
@@ -248,7 +243,7 @@ public class VoicePlayerEngine {
 //            }
             //   playingUrl = null;
             voicePlayer.start();
-          //  LogUtils.LOGE("vp","fsfs");
+            //  LogUtils.LOGE("vp","fsfs");
             musicPlayerState = MusicData.MusicPlayerState.playing;
             int pos = voicePlayer.getCurrentPosition();
             if (voicePlayerInterface != null) {

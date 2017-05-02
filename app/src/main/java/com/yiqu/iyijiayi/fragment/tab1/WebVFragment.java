@@ -1,87 +1,26 @@
 package com.yiqu.iyijiayi.fragment.tab1;
 
-import android.app.AlertDialog;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
-import com.fwrestnet.NetResponse;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.ui.abs.AbsFragment;
-import com.ui.views.DialogUtil;
-import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Tool.Function.VoiceFunction;
-import com.yiqu.Tool.Global.Variable;
-import com.yiqu.Tool.Interface.VoicePlayerInterface;
-import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
-import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.model.Banner;
-import com.yiqu.iyijiayi.model.CommentsInfo;
-import com.yiqu.iyijiayi.model.Constant;
-import com.yiqu.iyijiayi.model.HomePage;
-import com.yiqu.iyijiayi.model.Like;
-import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.model.NSDictionary;
-import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.MathUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
-import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**

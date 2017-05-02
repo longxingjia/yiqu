@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="110dp"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:descendantFocusability="blocksDescendants"
+              android:minHeight="110dp"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,16 +32,16 @@
                 android:padding="24dp"
                 android:src="@mipmap/menu_head"
                 app:border_color="@color/circle_imageview_border"
-                app:border_width="3dp" />
+                app:border_width="3dp"/>
 
 
             <LinearLayout
-                android:layout_width="160dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="2dp"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -52,7 +53,7 @@
                     android:duplicateParentState="true"
                     android:maxWidth="180dp"
                     android:singleLine="true"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -68,7 +69,7 @@
                         android:gravity="center"
                         android:textColor="@color/dd_gray"
                         android:textSize="14sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -80,7 +81,7 @@
                         android:text="228"
                         android:textColor="@color/dd_gray"
                         android:textSize="14sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
 
                 </LinearLayout>
@@ -95,33 +96,36 @@
                 android:background="@color/transparent"
                 android:gravity="center"
                 android:textColor="@color/dd_gray"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <RelativeLayout
                 android:layout_width="40dp"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:gravity="center">
 
                 <ImageView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:id="@+id/play_status"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/roundProgressBar"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/play_event" />
+                    android:src="@mipmap/music_play"/>
 
-                <com.ui.views.RoundProgressBar
-                    android:id="@+id/roundProgressBar"
-                    android:layout_width="25dip"
-                    android:layout_height="25dip"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone"
-                    app:max="100"
-                    app:roundColor="@color/transparent"
-                    app:roundProgressColor="@color/redMain"
-                    app:roundWidth="2dip"
-                    app:startAngle="0"
-                    app:textColor="#9A32CD"
-                    app:textIsDisplayable="false"
-                    app:textSize="18sp" />
+                <!--<com.ui.views.RoundProgressBar-->
+                <!--android:id="@+id/roundProgressBar"-->
+                <!--android:layout_width="25dip"-->
+                <!--android:layout_height="25dip"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:visibility="gone"-->
+                <!--app:max="100"-->
+                <!--app:roundColor="@color/transparent"-->
+                <!--app:roundProgressColor="@color/redMain"-->
+                <!--app:roundWidth="2dip"-->
+                <!--app:startAngle="0"-->
+                <!--app:textColor="#9A32CD"-->
+                <!--app:textIsDisplayable="false"-->
+                <!--app:textSize="18sp"/>-->
             </RelativeLayout>
 
         </LinearLayout>
@@ -129,7 +133,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tab_bg_color" />
+            android:background="@color/tab_bg_color"/>
 
 
         <TextView
@@ -139,12 +143,12 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:textSize="17sp" />
+            android:textSize="17sp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tab_bg_color" />
+            android:background="@color/tab_bg_color"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -162,12 +166,12 @@
                 android:drawableLeft="@mipmap/publish_time"
                 android:gravity="center"
                 android:textColor="@color/dd_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/comment"
@@ -182,12 +186,12 @@
                 android:paddingRight="10dp"
                 android:text=""
                 android:textColor="@color/dd_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
 
             <TextView
@@ -208,19 +212,21 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tab_bg_color" />
+            android:background="@color/tab_bg_color"/>
 
         <ListView
             android:id="@+id/lv_comments"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            >
 
         </ListView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tab_bg_color" />
+            android:background="@color/tab_bg_color"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -228,7 +234,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="更多" />
+            android:text="更多"/>
 
     </LinearLayout>
 

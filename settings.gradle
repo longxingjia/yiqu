@@ -1,3 +1,3 @@
-include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':LyricView', ':waveview'
+include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':waveview', ':LyricView'
 
 include ':base_library_pullToRefresh_chenyoca'

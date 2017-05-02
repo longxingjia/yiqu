@@ -1,7 +1,6 @@
 package com.yiqu.iyijiayi.fragment.tab1;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -20,12 +19,10 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.SearchMusicAdapter;
 import com.yiqu.iyijiayi.adapter.SearchSoundAdapter;
 import com.yiqu.iyijiayi.adapter.SearchUserAdapter;
-import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.model.GlobleSearch;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by Administrator on 2017/3/17.

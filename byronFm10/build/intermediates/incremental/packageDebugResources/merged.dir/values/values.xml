@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="debug">false</bool>
+    <color name="bg_color">#22f2f2f2</color>
+    <color name="circle_imageview_border">#eeeeee</color>
+    <color name="dd_gray">#878787</color>
     <color name="fm_list_item_bg">#ffffff</color>
     <color name="fm_list_item_bg_press">#888888</color>
     <color name="fm_page_bg">#ffffff</color>
+    <color name="font_color_blue">#ff007aff</color>
+    <color name="green">#0BE3A8</color>
+    <color name="launch_image_bg_gray">#F5F4F4</color>
+    <color name="lightgrey">#ff737373</color>
     <color name="menu_bg_color">#f1f0f8</color>
     <color name="menu_text_disable_color">#cecece</color>
     <color name="menu_text_enable_color">#000000</color>
     <color name="page_bg_color">#ffffff</color>
     <color name="page_set_bg_color">#f1eef9</color>
+    <color name="redMain">#fe465b</color>
     <color name="set_item_bg">#ffffff</color>
     <color name="set_item_bg_press">#cecece</color>
     <color name="set_item_edit_color">#898989</color>
     <color name="set_line_color">#999999</color>
-    <color name="tab_bg_color">#f8f8f8</color>
+    <color name="tab_bg_color">#f2f2f2</color>
+    <color name="tab_text_color">#bbbbbb</color>
     <color name="tab_txt_disable_color">#b3b3b3</color>
     <color name="tab_txt_eable_color">#ff0000</color>
-    <color name="title_next_txt_disable_color">#cecece</color>
+    <color name="text_bg">#f7f7f7</color>
     <color name="title_next_txt_eable_color">#ffffff</color>
     <color name="transparent">#00000000</color>
     <declare-styleable name="CircleImageView"><attr format="dimension" name="border_width"/><attr format="color" name="border_color"/></declare-styleable>
@@ -26,6 +35,10 @@
     <declare-styleable name="LockView"><attr format="dimension" name="padding"/></declare-styleable>
     <declare-styleable name="Menu"><attr format="integer" name="content"/></declare-styleable>
     <declare-styleable name="RatioImageView"><attr format="float" name="ratio"/></declare-styleable>
+    <declare-styleable name="RoundProgressBar"><attr format="integer" name="max"/><attr format="integer" name="startAngle"/><attr format="color" name="roundColor"/><attr format="color" name="roundProgressColor"/><attr format="dimension" name="roundWidth"/><attr format="color" name="backColor"/><attr format="color" name="textColor"/><attr format="dimension" name="textSize"/><attr format="boolean" name="textIsDisplayable"/><attr name="style">
+            <enum name="STROKE" value="0"/>
+            <enum name="FILL" value="1"/>
+        </attr></declare-styleable>
     <declare-styleable name="SuperEditView"><attr name="location">
             <enum name="single" value="0"/>
             <enum name="top" value="1"/>
@@ -86,7 +99,13 @@
     <string name="refreshFail">刷新失败</string>
     <string name="refreshOk">刷新成功</string>
     <string name="released_more">松手立即刷新</string>
-    <style name="Theme.fm__Default.AlertDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="Theme.fm__Default.AlertDialog" parent="android:style/Theme.Holo.Light.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
@@ -104,7 +123,7 @@
         <item name="android:background">@drawable/menu_selector_background</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="fm_progressDialog_translucent_NoTitle" parent="android:style/Theme.Dialog">
+    <style name="fm_progressDialog_translucent_NoTitle" parent="android:style/Theme.Holo.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:background">#00000000</item>
         <item name="android:windowBackground">@drawable/dialog_box_background</item>

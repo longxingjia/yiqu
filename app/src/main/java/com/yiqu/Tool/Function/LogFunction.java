@@ -3,7 +3,7 @@ package com.yiqu.Tool.Function;
 import android.util.Log;
 
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.io.BufferedWriter;
 import java.io.File;

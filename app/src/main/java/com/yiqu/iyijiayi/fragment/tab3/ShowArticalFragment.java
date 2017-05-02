@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fwrestnet.NetResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.SelectArticle;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +41,15 @@ public class ShowArticalFragment extends AbsAllFragment {
 
         switch (v.getId()) {
             case R.id.submit:
+
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.plusSoundAriticleReads,
+                        MyNetRequestConfig.plusSoundAriticleReads(getActivity()
+                                ,String.valueOf(selectArticle.id)),
+                        "plusSoundAriticleReads",
+                        ShowArticalFragment.this);
+
+
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data", selectArticle);
@@ -66,6 +79,12 @@ public class ShowArticalFragment extends AbsAllFragment {
         ButterKnife.bind(this, v);
 
 
+    }
+
+    @Override
+    public void onNetEnd(String id, int type, NetResponse netResponse) {
+        super.onNetEnd(id, type, netResponse);
+    //    LogUtils.LOGE("tag",netResponse.toString());
     }
 
     @Override

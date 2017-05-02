@@ -97,7 +97,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
+        MobclickAgent.onPageStart("动态"); //统计页面，"MainScreen"为页面名称，可自定义
 
         if (count>0){
             loadErr.setVisibility(View.GONE);
@@ -138,7 +138,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("发现");
+        MobclickAgent.onPageEnd("动态");
     }
 
     @Override
@@ -165,7 +165,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected void initTitle() {
-        setTitleText(getString(R.string.label_tab4));
+        setTitleText("动态");
     }
 
     @Override

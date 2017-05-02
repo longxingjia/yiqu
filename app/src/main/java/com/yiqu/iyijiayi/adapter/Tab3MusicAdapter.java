@@ -26,9 +26,8 @@ import com.base.utils.ToastManager;
 import com.ui.views.RoundProgressBar;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.service.MusicService;
 
 import java.util.ArrayList;
 
@@ -138,7 +137,7 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
         if (arg2 < 1) {
             return;
         }
-        Music f = getItem(arg2-1);//加了头部
+        Music f = getItem(arg2 - 1);//加了头部
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);

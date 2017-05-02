@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
@@ -14,11 +12,9 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.db.ComposeVoiceInfoDBHelper;
+import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.ArrayList;
 

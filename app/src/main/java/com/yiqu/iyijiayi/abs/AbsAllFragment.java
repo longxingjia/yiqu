@@ -15,6 +15,27 @@ import com.yiqu.iyijiayi.model.Constant;
 
 public abstract class AbsAllFragment extends AbsTitleNetFragment {
 
+
+
+
+//	private ServiceConnection mPlayServiceConnection = new ServiceConnection() {
+//		@Override
+//		public void onServiceDisconnected(ComponentName name) {
+//			mPlayService = null;
+//			LogUtils.LOGE("abs","onServiceDisconnected");
+//		}
+//
+//		@Override
+//		public void onServiceConnected(ComponentName name, IBinder service) {
+//			mPlayService = ((PlayService.PlayBinder) service).getService();
+//			mPlayService.setOnMusicEventListener(mMusicEventListener);
+//			LogUtils.LOGE("abs","hhh");
+//			onChange(mPlayService.getPlayingPosition());
+//		}
+//	};
+
+
+
 	private BroadcastReceiver loginOutReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {

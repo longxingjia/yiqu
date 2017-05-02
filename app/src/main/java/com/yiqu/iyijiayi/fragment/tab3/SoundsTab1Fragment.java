@@ -5,12 +5,10 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.google.gson.Gson;
 import com.ui.abs.AbsFragment;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
@@ -19,16 +17,13 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.JsonUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

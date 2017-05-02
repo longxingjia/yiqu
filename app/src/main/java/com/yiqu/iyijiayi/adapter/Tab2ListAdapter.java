@@ -22,26 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
-import com.fwrestnet.NetResponse;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.Tab2Fragment;
 import com.yiqu.iyijiayi.fragment.tab2.Tab2ListFragment;
-import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
-import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
-import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Tab2_groups;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.net.MyNetRequestConfig;
-import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -87,12 +71,8 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
     }
 
     private class HoldChild {
-
-
         TextView title;
         ImageView icon;
-
-
     }
 
     @Override
@@ -123,12 +103,10 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-        if (arg2-2<=0){
-            return;
-        }
-
-        Tab2_groups f = getItem(arg2-2);
-
+//        if (arg2-2<=0){
+//            return;
+//        }
+        Tab2_groups f = getItem(arg2);
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
@@ -141,9 +119,6 @@ public class Tab2ListAdapter extends BaseAdapter implements OnItemClickListener 
         bundle.putSerializable("data",f);
         in.putExtras(bundle);
         mContext.startActivity(in);
-
-
-
     }
 
     public boolean isNetworkConnected(Context context) {

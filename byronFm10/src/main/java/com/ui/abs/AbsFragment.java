@@ -1,7 +1,13 @@
 package com.ui.abs;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,11 +18,13 @@ import android.view.animation.Animation;
 
 import com.base.utils.ToastManager;
 import com.byron.framework.R;
+import com.service.PlayService;
+import com.utils.LogUtils;
 
 public abstract class AbsFragment extends Fragment {
 
 	private static String tag = "AbsFragment";
-
+	protected PlayService mPlayService;
 	public View menuOrBack;
 
 	protected String getLogTag() {
@@ -31,6 +39,7 @@ public abstract class AbsFragment extends Fragment {
 		tag = getLogTag();
 		View v = null;
 		try {
+		//	allowBindService(getActivity());
 			v = inflater.inflate(getContentView(), container, false);
 			initView(v);
 			init(savedInstanceState);
@@ -42,6 +51,67 @@ public abstract class AbsFragment extends Fragment {
 //		Log.i(tag, "onCreateView");
 		return v;
 	}
+
+	public ServiceConnection mPlayServiceConnection = new  ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			mPlayService = null;
+			LogUtils.LOGE("abs","onServiceDisconnected");
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			mPlayService = ((PlayService.PlayBinder) service).getService();
+			mPlayService.setOnMusicEventListener(mMusicEventListener);
+			LogUtils.LOGE("abs","onServiceConnected");
+			onChange(mPlayService.getPlayingPosition());
+		}
+	};
+
+	/**
+	 * 音乐播放服务回调接口的实现类
+	 */
+	private PlayService.OnMusicEventListener mMusicEventListener =
+			new PlayService.OnMusicEventListener() {
+				@Override
+				public void onPublish(int progress) {
+					AbsFragment.this.onPublish(progress);
+				}
+
+				@Override
+				public void onChange(int position) {
+					AbsFragment.this.onChange(position);
+				}
+			};
+	/**
+	 * Fragment的view加载完成后回调
+	 */
+	public void allowBindService(Context context) {
+		context.bindService(new Intent(context, PlayService.class), mPlayServiceConnection,
+				Context.BIND_AUTO_CREATE);
+	}
+
+	/**
+	 * fragment的view消失后回调
+	 */
+	public void allowUnbindService(Context context) {
+		context.unbindService(mPlayServiceConnection);
+	}
+
+	/**
+	 * 更新进度
+	 * @param progress 进度
+	 */
+	public  void onPublish(int progress){
+
+	};
+	/**
+	 * 切换歌曲
+	 * @param position 歌曲在list中的位置
+	 */
+	public  void onChange(int position){
+
+	};
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

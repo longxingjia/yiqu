@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.czt.mp3recorder.util.LameUtil;
 
 import java.io.File;
@@ -20,7 +20,6 @@ import rx.schedulers.Schedulers;
 import com.yiqu.Tool.Decode.DecodeEngine;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -92,10 +91,8 @@ public class AudioFunction {
         byte[] firstAudioByteBuffer;
         byte[] secondAudioByteBuffer;
         byte[] mp3Buffer;
-
         short resultShort;
         short[] outputShortArray;
-
         int index;
         int firstAudioReadNumber;
         int secondAudioReadNumber;
@@ -125,11 +122,10 @@ public class AudioFunction {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LogUtils.LOGE(tag,"1");
 
         LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
                 RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
-        LogUtils.LOGE(tag,"2");
+
         try {
             while (!firstAudioFinish) {
 //            while (!firstAudioFinish && !secondAudioFinish) {
@@ -183,6 +179,7 @@ public class AudioFunction {
                             outputShortArrayLength, mp3Buffer);
                     if (encodedSize > 0) {
                         composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
+
                     }
                 }
             }

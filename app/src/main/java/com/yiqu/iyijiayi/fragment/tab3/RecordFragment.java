@@ -14,12 +14,10 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordAllActivity;
-import com.yiqu.Control.Main.RecordOnlyActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Model;
+import com.db.ComposeVoiceInfoDBHelper;
+import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.UserInfo;
 
 import java.io.Serializable;

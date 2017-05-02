@@ -15,7 +15,6 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab5WopingAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5WowenAdapter;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
@@ -25,7 +24,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 import java.util.ArrayList;
 

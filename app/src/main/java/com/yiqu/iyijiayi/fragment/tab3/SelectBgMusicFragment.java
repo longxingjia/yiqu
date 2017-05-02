@@ -18,10 +18,11 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab3MusicAdapter;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 
 import java.util.ArrayList;
@@ -221,7 +222,7 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
             }
             selectedTab(index);
             cursor.setPosition(index - 1);
-
+            count = 0;
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getBackgroundMusicList,
                     MyNetRequestConfig.getBackgroundMusicList(getActivity()
@@ -235,12 +236,11 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        //   LogUtils.LOGE(TAG,netResponse.toString());
+        LogUtils.LOGE("tag",netResponse.toString());
         if (id.equals("getBackgroundMusicList")) {
             if (type == TYPE_SUCCESS) {
                 backgroudMusics = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Music>>() {
                 }.getType());
-              //  LogUtils.LOGE(TAG, backgroudMusics.toString());
                 tab3MusicAdapter.setData(backgroudMusics);
                 if (backgroudMusics.size() == rows) {
                     mLoadMoreView.setMoreAble(true);

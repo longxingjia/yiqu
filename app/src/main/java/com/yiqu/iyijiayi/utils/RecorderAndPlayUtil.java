@@ -4,11 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-
+import com.utils.Variable;
 import com.czt.mp3recorder.MP3Recorder;
-import com.yiqu.Tool.Global.Variable;
 import com.shuyu.waveview.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -19,19 +17,15 @@ import java.io.IOException;
  */
 public class RecorderAndPlayUtil {
 
-
     private String mPlayingPath = null;
     private MP3Recorder mRecorder;
     private Context context;
-    private String mp3FilePath;
-    private String pcmFilePath;
+    private String filePath;
 
     public RecorderAndPlayUtil(Context context) {
         this.context = context;
-        String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
-        mp3FilePath = tmp  + ".mp3";
-        pcmFilePath = tmp  + ".pcm";
-        mRecorder = new MP3Recorder();
+        filePath = Variable.StorageMusicPath + System.currentTimeMillis() + ".mp3";
+        //mRecorder = new MP3Recorder(new File(filePath));
     }
 
     /**
@@ -50,16 +44,14 @@ public class RecorderAndPlayUtil {
             }
         });
 
-        //audioWave.setBaseRecorder(mRecorder);
         try {
-            mRecorder.startRecordVoice(new File(mp3FilePath),pcmFilePath);
+            mRecorder.startRecordVoice(new File(filePath));
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "录音出现异常", Toast.LENGTH_SHORT).show();
             resolveError();
             return;
         }
-
     }
 
     /**
@@ -68,21 +60,19 @@ public class RecorderAndPlayUtil {
     public void stopRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
             mRecorder.setPause(false);
-            mRecorder.stopRecordVoice();
+            mRecorder.stop();
 //            audioWave.stopView();
         }
     }
-
 
     /**
      * 录音异常
      */
     private void resolveError() {
 //        resolveNormalUI();
-        FileUtils.deleteFile(mp3FilePath);
-
+        FileUtils.deleteFile(filePath);
         if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.stopRecordVoice();
+            mRecorder.stop();
 //            audioWave.stopView();
         }
     }
@@ -94,7 +84,7 @@ public class RecorderAndPlayUtil {
     public void pauseRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
 //            if (mRecorder.isPause()) {
-                mRecorder.setPause(false);
+            mRecorder.setPause(false);
 //            } else {
 //                mRecorder.setPause(true);
 //            }
@@ -107,7 +97,7 @@ public class RecorderAndPlayUtil {
     public boolean isPause(){
 
         if (mRecorder != null && mRecorder.isRecording()) {
-        //    LogUtils.LOGE("1",String.valueOf(mRecorder.isPause()));
+            //    LogUtils.LOGE("1",String.valueOf(mRecorder.isPause()));
             return mRecorder.isPause();
 
         }
@@ -119,7 +109,7 @@ public class RecorderAndPlayUtil {
      */
     public void restartRecording() {
         if (mRecorder != null && mRecorder.isRecording()) {
-                mRecorder.setPause(true);
+            mRecorder.setPause(true);
         }
     }
 
@@ -136,7 +126,7 @@ public class RecorderAndPlayUtil {
      * @return
      */
     public String getRecorderPath() {
-        return mp3FilePath;
+        return filePath;
     }
 
     /**

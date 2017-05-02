@@ -1,12 +1,9 @@
 package com.yiqu.iyijiayi.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -14,17 +11,14 @@ import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
-import com.yiqu.iyijiayi.adapter.Tab4DiscoveryAdapter;
-import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
 import com.yiqu.iyijiayi.fragment.tab4.RenewFragment;
 import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 import java.util.ArrayList;
 

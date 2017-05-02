@@ -20,9 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.czt.mp3recorder.util.LameUtil;
-import com.yiqu.Control.Main.RecordActivity;
-import com.yiqu.Control.Main.RecordAllActivity;
+import com.service.PlayService;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Common.CommonThreadPool;
 
@@ -33,14 +31,11 @@ import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
-import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 
@@ -59,7 +54,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import cn.jpush.android.api.JPushInterface;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -86,9 +80,8 @@ public class WelcomePageActivity extends Activity {
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_NORMAL);
 
         init(R.layout.activity_welcome_page);
-
-
-
+        Intent it=new Intent(this, PlayService.class);
+        startService(it);
 
     }
 
@@ -143,9 +136,9 @@ public class WelcomePageActivity extends Activity {
 
     private void begin() {
 
-        //     intent = new Intent(this, RecordActivity.class);//
+        //      intent = new Intent(this, RecordAacActivity.class);//
            intent = new Intent(this, MainActivity.class);//
-//        intent = new Intent(this, StubActivity.class);
+        //    intent = new Intent(this, StubActivity.class);
 //        intent.putExtra("fragment", SelectBgMusicFragment.class.getName());
        // startActivityForResult(i, REQUESTMUSIC);
 

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.czt.mp3recorder.util.LameUtil;
 
@@ -40,6 +41,7 @@ public class DataEncodeThread extends HandlerThread implements AudioRecord.OnRec
                 while (encodeThread.processData() > 0) ;
                 // Cancel any event left in the queue
                 removeCallbacksAndMessages(null);
+              //  Log.e("Dataenc","ff");
                 encodeThread.flushAndRelease();
                 getLooper().quit();
             } else if (msg.what == PROCESS_ERROR) {

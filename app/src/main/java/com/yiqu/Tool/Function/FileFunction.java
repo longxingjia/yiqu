@@ -3,7 +3,7 @@ package com.yiqu.Tool.Function;
 import android.app.Application;
 import android.os.Environment;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -51,7 +51,7 @@ public class FileFunction {
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
         Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+ "/"; //audio
+        Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
 
         CreateDirectory(Variable.StorageDirectoryPath);
         CreateDirectory(Variable.StorageMusicPath);

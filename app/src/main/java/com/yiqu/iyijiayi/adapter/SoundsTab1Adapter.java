@@ -22,10 +22,7 @@ import android.widget.TextView;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.model.Music;
 
 import java.util.ArrayList;
 

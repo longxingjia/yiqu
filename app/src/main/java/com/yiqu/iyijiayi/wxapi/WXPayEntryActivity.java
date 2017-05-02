@@ -2,28 +2,21 @@ package com.yiqu.iyijiayi.wxapi;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Constant;
-import com.yiqu.iyijiayi.model.PayInfo;
 import com.yiqu.iyijiayi.model.Wx_arr;
-import com.yiqu.iyijiayi.net.NetworkRestClient;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {

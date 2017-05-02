@@ -18,9 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
-import com.yiqu.iyijiayi.adapter.MenuDialogSelectPicHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogSexHelper;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -28,7 +26,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 

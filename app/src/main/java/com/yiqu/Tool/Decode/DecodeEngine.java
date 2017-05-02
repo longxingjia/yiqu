@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -22,7 +22,6 @@ import com.yiqu.Tool.Function.LogFunction;
 
 import vavi.sound.pcm.resampling.ssrc.SSRC;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by  on 2016/03/04.

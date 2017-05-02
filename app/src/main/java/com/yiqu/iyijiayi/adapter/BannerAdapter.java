@@ -15,15 +15,12 @@ import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewFragment;
 import android.widget.ImageView;
 
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.WebVFragment;
-import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.model.Banner;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.List;

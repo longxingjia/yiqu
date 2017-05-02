@@ -22,14 +22,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Function.AudioFunction;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.io.File;
 
@@ -38,21 +37,18 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
-import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
-import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
-import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Music;
+import com.db.ComposeVoiceInfoDBHelper;
+import com.db.DownloadMusicInfoDBHelper;
+import com.model.ComposeVoice;
+import com.model.Music;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.FileSizeUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -471,13 +467,12 @@ public class RecordActivity extends Activity
 //
 //                        }
 //                    });
-                   // menuDialogSelectTeaHelper.show(recordVoiceButton);
+                    // menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else {
 
 
                     rlHint.setVisibility(View.INVISIBLE);
                     if (recordVoiceBegin) {
-
 
                         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("完成录制");

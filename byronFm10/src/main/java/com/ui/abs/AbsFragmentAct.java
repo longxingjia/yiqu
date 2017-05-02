@@ -13,7 +13,6 @@ import android.view.Window;
 import com.base.utils.ToastManager;
 import com.base.utils.Utils;
 import com.byron.framework.R;
-import com.service.Download;
 import com.service.DownloadService;
 import com.service.PlayService;
 import com.ui.App;
@@ -31,17 +30,13 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-
-			if (mDownloadService==null){
-				bindService(new Intent(this, com.service.DownloadService.class), mDownloadServiceConnection,Context.BIND_AUTO_CREATE);
-			}
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(getContentView());
 			
 			initView();
 			init(savedInstanceState);
-		//	Log.e("ss","fsfs");
 
+			bindService(new Intent(this, DownloadService.class), mDownloadServiceConnection,Context.BIND_AUTO_CREATE);
 		} catch (Exception e) {
 			ToastManager.getInstance(this).showText(
 					R.string.fm_indeterminism_error);
@@ -142,12 +137,10 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
-		//	Log.e("111","ssss");
+			Log.e("","ssss");
 			mDownloadService = ((DownloadService.DownloadBinder) service).getService();
 		}
 	};
-
-	//public abstract ServiceConnection mDownloadServiceConnection ();
 
 	/**
 	 * 音乐播放服务回调接口的实现类
@@ -164,47 +157,6 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 					AbsFragmentAct.this.onChange(position);
 				}
 			};
-
-	private Download.OnDownloadListener downloadListener =
-			new Download.OnDownloadListener() {
-
-
-				@Override
-				public void onStart(int downloadId, long fileSize) {
-
-				}
-
-				@Override
-				public void onPublish(int downloadId, long size) {
-
-				}
-
-				@Override
-				public void onSuccess(int downloadId) {
-
-				}
-
-				@Override
-				public void onPause(int downloadId) {
-
-				}
-
-				@Override
-				public void onError(int downloadId) {
-
-				}
-
-				@Override
-				public void onCancel(int downloadId) {
-
-				}
-
-				@Override
-				public void onGoon(int downloadId, long localSize) {
-
-				}
-			};
-
 
 	/**
 	 * Fragment的view加载完成后回调

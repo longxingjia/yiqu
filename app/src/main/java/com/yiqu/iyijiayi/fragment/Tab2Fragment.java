@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -16,26 +15,18 @@ import android.widget.TextView;
 
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2ListAdapter;
 import com.yiqu.iyijiayi.adapter.Tab2UserInfoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.SearchFragment;
-import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Tab2Info;
-import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import java.util.ArrayList;
+import com.utils.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +44,7 @@ public class Tab2Fragment extends TabContentFragment {
     public TextView tab_student;
 
     @BindView(R.id.gridview)
-    public PullToRefreshGridView gridview;
+    public GridView gridview;
 
     @BindView(R.id.listView)
     public ListView listView;
@@ -91,17 +82,17 @@ public class Tab2Fragment extends TabContentFragment {
         tab2UserInfoAdapter = new Tab2UserInfoAdapter(mContext);
         gridview.setAdapter(tab2UserInfoAdapter);
         gridview.setOnItemClickListener(tab2UserInfoAdapter);
-        gridview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-
-            }
-        });
+//        gridview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+//
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+//
+//            }
+//        });
 
         tab2ListAdapter = new Tab2ListAdapter(mContext);
         listView.setAdapter(tab2ListAdapter);

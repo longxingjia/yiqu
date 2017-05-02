@@ -12,11 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -86,7 +82,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
                 return;
             int position = mediaPlayer.getCurrentPosition();
             duration = mediaPlayer.getDuration();
-           // LogUtils.LOGE("ff",String.valueOf(mediaPlayer.isPlaying()));
 
             if (duration > 0) {
                 if (skbProgress != null) {
@@ -122,7 +117,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
     public void playUrl(String url) {
         if (oldUrl!=null && oldUrl.equals(url)) {
-            LogUtils.LOGE("f",url);
         } else {
             if (USE_PROXY) {
                 startProxy();
@@ -130,22 +124,16 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
                 url = proxy.getProxyURL(url);
             }
             try {
-          //      LogUtils.LOGE("ff",String.valueOf(mediaPlayer.isPlaying()));
                 if (mediaPlayer.isPlaying()){
                     mediaPlayer.pause();
-               //     LogUtils.LOGE("f","pause");
                 }
-             //   LogUtils.LOGE("f","d");
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
-//                long p = System.currentTimeMillis();
-//                Log.e("P", String.valueOf(p));
+//
                 mediaPlayer.prepare();
-//                long s = System.currentTimeMillis();
-//                Log.e("S", String.valueOf(s) + " " + (p - s));
+//
                 mediaPlayer.start();
-//                long x = System.currentTimeMillis();
-//                Log.e("X", String.valueOf(x) + " " + (x - s));
+//
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalStateException e) {
@@ -154,7 +142,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
                 e.printStackTrace();
             }
         }
-     //   LogUtils.LOGE("oldUrl",oldUrl);
     }
 
 

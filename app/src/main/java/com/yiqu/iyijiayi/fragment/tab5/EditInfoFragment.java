@@ -1,6 +1,5 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Gravity;
@@ -8,14 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
@@ -24,7 +21,6 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.DensityUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by Administrator on 2017/2/15.

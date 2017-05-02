@@ -4,12 +4,12 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.util.Log;
+
 import com.BaseRecorder;
-import com.czt.mp3recorder.PCMFormat;
 import com.czt.mp3recorder.util.LameUtil;
-import java.io.BufferedOutputStream;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -49,34 +49,28 @@ public class MP3Recorder extends BaseRecorder {
 
     private AudioRecord mAudioRecord = null;
     private DataEncodeThread mEncodeThread;
- //   private File mRecordFile;
+  //  private File mRecordFile;
     private ArrayList<Short> dataList;
     private Handler errorHandler;
+
+
     private int mBufferSize;
     private short[] mPCMBuffer;
     private boolean mIsRecording = false;
     private int mMaxSize;
     private boolean mSendError;
     private boolean mPause;
-    private long recordStartTime;
-    private long recordDuration;
-   // private String mPcmPath;
 
-//    /**
-//     * Default constructor. Setup recorder with default sampling rate 1 channel,
-//     * 16 bits pcm
-//     *
-//     * @param recordFile target file
-//     */
-//    public MP3Recorder(File recordFile, String pcmPath) {
-//        mRecordFile = recordFile;
-//        mPcmPath = pcmPath;
-//    }
-
+    /**
+     * Default constructor. Setup recorder with default sampling rate 1 channel,
+     * 16 bits pcm
+     *
+    // * @param recordFile target file
+     */
     public MP3Recorder() {
+      //  mRecordFile = recordFile;
 
     }
-
 
     /**
      * Start recording. Create an encoding thread. Start record from this
@@ -84,16 +78,15 @@ public class MP3Recorder extends BaseRecorder {
      *
      * @throws IOException initAudioRecorder throws
      */
-    public void startRecordVoice(File recordFile,final String pcmPath) throws IOException {
+    public void startRecordVoice(File mRecordFile) throws IOException {
         if (mIsRecording) {
             return;
         }
+        Log.e("MP3Recorder","startRecordVoice");
         mIsRecording = true; // 提早，防止init或startRecording被多次调用
-        initAudioRecorder(recordFile);
-
+        initAudioRecorder(mRecordFile);
         try {
             mAudioRecord.startRecording();
-            recordStartTime = System.currentTimeMillis();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -104,8 +97,6 @@ public class MP3Recorder extends BaseRecorder {
             public void run() {
                 //设置线程权限
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-                BufferedOutputStream bufferedOutputStream = GetBufferedOutputStreamFromFile(pcmPath);
-
                 while (mIsRecording) {
                     int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
 
@@ -123,23 +114,9 @@ public class MP3Recorder extends BaseRecorder {
                             if (mPause) {
                                 continue;
                             }
-                            recordDuration = System.currentTimeMillis() - recordStartTime;
-                            int volume = getVolume();
-
-
                             mEncodeThread.addTask(mPCMBuffer, readSize);
                             calculateRealVolume(mPCMBuffer, readSize);
                             sendData(mPCMBuffer, readSize);
-                            if (bufferedOutputStream != null) {
-                                try {
-                                    byte[] outputByteArray = GetByteBuffer(mPCMBuffer,
-                                                    readSize, false);
-                                    bufferedOutputStream.write(outputByteArray);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
                         } else {
                             if (errorHandler != null && !mSendError) {
                                 mSendError = true;
@@ -169,56 +146,6 @@ public class MP3Recorder extends BaseRecorder {
 
         }.start();
     }
-
-    public static byte[] GetByteBuffer(short[] shortArray, int shortArrayLength,
-                                       boolean bigEnding) {
-        int actualShortArrayLength = shortArray.length;
-
-        if (shortArrayLength > actualShortArrayLength) {
-            shortArrayLength = actualShortArrayLength;
-        }
-
-        short shortValue;
-        byte[] byteArray = new byte[2 * shortArrayLength];
-
-        for (int i = 0; i < shortArrayLength; i++) {
-            shortValue = shortArray[i];
-
-            if (bigEnding) {
-                byteArray[i * 2 + 1] = (byte) (shortValue & 0x00ff);
-                shortValue >>= 8;
-                byteArray[i * 2] = (byte) (shortValue & 0x00ff);
-            } else {
-                byteArray[i * 2] = (byte) (shortValue & 0x00ff);
-                shortValue >>= 8;
-                byteArray[i * 2 + 1] = (byte) (shortValue & 0x00ff);
-            }
-        }
-
-        return byteArray;
-    }
-
-    public static BufferedOutputStream GetBufferedOutputStreamFromFile(String fileUrl) {
-        BufferedOutputStream bufferedOutputStream = null;
-
-        try {
-            File file = new File(fileUrl);
-
-            if (file.exists()) {
-                file.delete();
-            }
-
-            file.createNewFile();
-
-            bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-        } catch (Exception e) {
-          //  LogFunction.error("GetBufferedOutputStreamFromFile异常", e);
-        }
-
-        return bufferedOutputStream;
-    }
-
-
 
     /**
      * 获取真实的音量。 [算法来自三星]
@@ -253,11 +180,11 @@ public class MP3Recorder extends BaseRecorder {
         return MAX_VOLUME;
     }
 
-    public void stopRecordVoice() {
-
+    public boolean stop() {
         mPause = false;
         mIsRecording = false;
-
+        Log.e("MP3Recorder","stop");
+        return true;
     }
 
     public boolean isRecording() {
@@ -287,14 +214,12 @@ public class MP3Recorder extends BaseRecorder {
                 DEFAULT_SAMPLING_RATE, DEFAULT_CHANNEL_CONFIG, DEFAULT_AUDIO_FORMAT.getAudioFormat(),
                 mBufferSize);
 
-
-
         mPCMBuffer = new short[mBufferSize];
         /*
          * Initialize lame buffer
-		 * mp3 sampling rate is the same as the recorded pcm sampling rate 
+		 * mp3 sampling rate is the same as the recorded pcm sampling rate
 		 * The bit rate is 32kbps
-		 * 
+		 *
 		 */
         LameUtil.init(DEFAULT_SAMPLING_RATE, DEFAULT_LAME_IN_CHANNEL, DEFAULT_SAMPLING_RATE, DEFAULT_LAME_MP3_BIT_RATE, DEFAULT_LAME_MP3_QUALITY);
         // Create and run thread used to encode data

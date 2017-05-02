@@ -2,9 +2,6 @@ package com.yiqu.Control.Main;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
@@ -20,14 +17,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,33 +30,28 @@ import android.widget.Toast;
 
 import com.base.utils.ToastManager;
 
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Tool.Global.Variable;
-
-import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Tool.Function.VoiceFunction;
+import com.utils.Variable;
 
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
+import com.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
-import com.yiqu.iyijiayi.fragment.tab3.TeacherListFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.model.ComposeVoice;
 
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.DensityUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.PlayUtils;
@@ -86,14 +76,6 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
 import butterknife.OnClick;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
@@ -108,8 +90,6 @@ public class RecordOnlyActivity extends Activity
     private TextView musictime;
     private String className;
     private boolean mIsRecording = false;
-    //    private boolean mIsLittleTime = false;
-//    private boolean mIsSendVoice = false;
     private static RecordOnlyActivity instance;
     private RelativeLayout rlHint;
     private ImageView title_back;
@@ -374,7 +354,7 @@ public class RecordOnlyActivity extends Activity
             case R.id.select_music:
                 Intent i = new Intent(this, StubActivity.class);
                 i.putExtra("fragment", SelectBgMusicFragment.class.getName());
-              //  startActivityForResult(i, requestCode);
+                //  startActivityForResult(i, requestCode);
                 startActivity(i);
 
                 break;
@@ -633,7 +613,7 @@ public class RecordOnlyActivity extends Activity
         mRecorderUtil.stopRecording();
 
         mIsRecording = false;
-      //  mSecond = 0;
+        //  mSecond = 0;
 //        mRecorderUtil.getRecorderPath();
     }
 

@@ -2,7 +2,7 @@ package com.yiqu.Tool.Function;
 
 import android.app.Application;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.nio.ByteOrder;
 

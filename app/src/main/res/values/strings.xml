@@ -51,5 +51,6 @@
     <string name="pref_key_notification" translatable="false">pref_notifications</string>
     <string name="notification_expand_summary">已拉伸</string>
     <string name="home_page">首页</string>
+    <string name="record_save_dialog_title">给你的作品取个名吧</string>
 
 </resources>

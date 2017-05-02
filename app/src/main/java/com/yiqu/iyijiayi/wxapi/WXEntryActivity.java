@@ -14,7 +14,6 @@ import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.fragment.Tab5Fragment;
-import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SetPhoneFragment;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.Model;
@@ -26,7 +25,6 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.NetworkRestClient;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 import android.app.Activity;
 import android.content.Context;

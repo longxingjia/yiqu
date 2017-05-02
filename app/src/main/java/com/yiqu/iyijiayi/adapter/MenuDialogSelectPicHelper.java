@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.ui.views.MenuDialog;
 import com.ui.views.MenuDialog.OnMenuListener;
 

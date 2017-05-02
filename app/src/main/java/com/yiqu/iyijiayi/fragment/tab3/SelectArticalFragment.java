@@ -17,11 +17,12 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab3ArticleAdapter;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -107,6 +108,12 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
                         , class_id, event_id, String.valueOf(rows), String.valueOf(count)),
                 "getSoundArticleList",
                 SelectArticalFragment.this);
+
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getSoundArticleClass,
+                MyNetRequestConfig.getSoundArticleClass(getActivity()),
+                "getSoundArticleClass",
+                SelectArticalFragment.this);
     }
 
 
@@ -162,7 +169,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        //   LogUtils.LOGE(TAG,netResponse.toString());
+         LogUtils.LOGE(TAG,netResponse.toString());
         if (id.equals("getSoundArticleList")) {
             if (type == TYPE_SUCCESS) {
                 selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
@@ -181,7 +188,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
         } else if (id.equals("getSoundArticleList_more")) {
             if (TYPE_SUCCESS == type) {
 
-                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
+                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Music>>() {
                 }.getType());
                 tab3ArticleAdapter.addData(selectArticles);
                 if (selectArticles.size() < rows) {
@@ -193,6 +200,10 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
             } else {
                 mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
+            }
+        }else if(id.equals("getSoundArticleClass")){
+            if (type == TYPE_SUCCESS){
+
             }
         }
     }

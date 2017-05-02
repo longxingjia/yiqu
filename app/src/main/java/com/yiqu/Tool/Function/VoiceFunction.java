@@ -1,15 +1,11 @@
 package com.yiqu.Tool.Function;
 
-import android.widget.Toast;
-
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Player.VoicePlayerEngine;
 import com.yiqu.Tool.Recorder.RecorderEngine;
 
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -28,7 +24,7 @@ public class VoiceFunction {
         mp3FilePath = tmp + ".mp3";
         pcmFilePath = tmp + ".pcm";
         RecorderEngine.getInstance()
-                .startRecordVoice(mp3FilePath, pcmFilePath, voiceRecorderOperateInterface);
+                .startRecordVoice( pcmFilePath, voiceRecorderOperateInterface);
         return tmp;
 
     }
@@ -51,7 +47,7 @@ public class VoiceFunction {
     }
 
     public static boolean isPauseRecordVoice() {
-      return  RecorderEngine.getInstance().isPause();
+        return  RecorderEngine.getInstance().isPause();
     }
     public static void pauseRecordVoice() {
         RecorderEngine.getInstance().pauseRecording();
@@ -69,7 +65,7 @@ public class VoiceFunction {
     }
 
     public synchronized static void GiveUpRecordVoice(boolean fromHand) {
-        RecorderEngine.getInstance().giveUpRecordVoice(fromHand);
+        RecorderEngine.getInstance().giveUpRecordVoice();
     }
 
     public synchronized static String getPlayingUrl() {

@@ -2,9 +2,7 @@ package com.yiqu.Control.Main;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.base.utils.ToastManager;
-import com.czt.mp3recorder.VoiceRecorderOperateInterface;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -44,37 +41,36 @@ import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
+import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
+import com.db.ComposeVoiceInfoDBHelper;
+import com.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.LyricDownInfo;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.DensityUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
-import com.yiqu.iyijiayi.utils.PlayUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -326,6 +322,7 @@ public class RecordComActivity extends Activity
 //        recordHintTextView.setVisibility(View.VISIBLE);
 //        recordHintTextView.setText("录音完成，正在合成");
         pb_record.setProgress(actualRecordTime);
+        compose();
 
     }
 
@@ -586,7 +583,8 @@ public class RecordComActivity extends Activity
                 } else if (recordVoiceBegin) {
 
                 } else {
-                    tempVoicePcmUrl = VoiceFunction.StartRecordVoice(instance) + ".pcm";
+                    VoiceFunction.StartRecordVoice(instance);
+                    tempVoicePcmUrl = VoiceFunction.getRecorderPcmPath();
                 }
                 break;
             case R.id.finish:
@@ -623,7 +621,7 @@ public class RecordComActivity extends Activity
                     menuDialogSelectTeaHelper.show(recordVoiceButton);
                 } else if (recordVoiceBegin) {
                     VoiceFunction.StopRecordVoice();
-                    compose();
+
                     icon_finish.setImageResource(R.mipmap.upload);
 
 //                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);

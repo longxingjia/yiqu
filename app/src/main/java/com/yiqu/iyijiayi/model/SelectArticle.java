@@ -16,6 +16,7 @@ public class SelectArticle implements Serializable{
     public String status;
     public String class_name;
     public String event_name;
+    public int reads;
     public long created;
     public long edited;
 

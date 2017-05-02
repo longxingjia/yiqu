@@ -42,9 +42,8 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
 							TextQuestionFragment.class.getName());
 
 				}else {
-					Intent i = new Intent(getActivity(), StubActivity.class);
-					i.putExtra("fragment", SelectLoginFragment.class.getName());
-					getActivity().startActivity(i);
+					Model.startNextAct(getActivity(),
+							SelectLoginFragment.class.getName());
 					ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
 				}
 			}

@@ -6,7 +6,11 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.utils.Player;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,12 +23,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 	
 	//private SensorManager mSensorManager;
 	
-	private MediaPlayer mPlayer;
+	private Player mPlayer;
 	private OnMusicEventListener mListener;
-	private int mPlayingPosition; // 当前正在播放
-	
-	private boolean isShaking;
-	
+	private int sid; // 当前正在播放
+
+
 	private ExecutorService mProgressUpdatedListener = Executors.newSingleThreadExecutor();
 	
 	public class PlayBinder extends Binder {
@@ -49,48 +52,18 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 //		MusicUtils.initMusicList();
 //		mPlayingPosition = (Integer) SpUtils.get(this, Constants.PLAY_POS, 0);
 		
-		mPlayer = new MediaPlayer();
-		mPlayer.setOnCompletionListener(this);
+		mPlayer = new Player(this, null, null, null, null, new Player.onPlayCompletion() {
+			@Override
+			public void completion() {
+
+			}
+		});
+		//mPlayer.setOnCompletionListener(this);
 		// 开始更新进度的线程
 		mProgressUpdatedListener.execute(mPublishProgressRunnable);
 //		mPlayer.setOnBufferingUpdateListener(mBufferUpdateListener);
 	}
-	
-//	private OnBufferingUpdateListener mBufferUpdateListener = 
-//			new OnBufferingUpdateListener() {
-//		@Override
-//		public void onBufferingUpdate(MediaPlayer mp, int percent) {
-//			L.l("percent", percent);
-//			if(mListener != null) mListener.onPublish(percent);
-//		}
-//	};
-	
-//	private SensorEventListener mSensorEventListener = new SensorEventListener() {
-//		@Override
-//		public void onSensorChanged(SensorEvent event) {
-//			if(isShaking) return;
-//
-//			if (Sensor.TYPE_ACCELEROMETER == event.sensor.getType()) {
-//				float[] values = event.values;
-//				if (Math.abs(values[0]) > 8 && Math.abs(values[1]) > 8
-//						&& Math.abs(values[2]) > 8) {
-//					isShaking = true;
-//					next();
-//					new Handler().postDelayed(new Runnable() {
-//						@Override
-//						public void run() {
-//							isShaking = false;
-//						}
-//					}, 200);
-//				}
-//			}
-//		}
-//
-//		@Override
-//		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//
-//		}
-//	};
+
 	
 	/**
 	 * 更新进度的线程
@@ -99,11 +72,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 		@Override
 		public void run() {
 			for(;;) {
-				if(mPlayer != null && mPlayer.isPlaying() && 
+				if(mPlayer != null && mPlayer.isPlaying() &&
 						mListener != null) {
 					mListener.onPublish(mPlayer.getCurrentPosition());
 				}
-				
+
 				SystemClock.sleep(200);
 			}
 		}
@@ -117,54 +90,30 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 		mListener = l;
 	}
 	
-//	/**
-//	 * 播放
-//	 * @param position 音乐列表的位置
-//	 * @return 当前播放的位置
-//	 */
-//	public int play(int position) {
-//		if(position < 0) position = 0;
-//		if(position >= MusicUtils.sMusicList.size()) position = MusicUtils.sMusicList.size() - 1;
-//
-//		try {
-//			mPlayer.reset();
-//			mPlayer.setDataSource(MusicUtils.sMusicList.get(position).getUri());
-//			mPlayer.prepare();
-//
-//			start();
-//			if(mListener != null) mListener.onChange(position);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		mPlayingPosition = position;
-//	//	SpUtils.put(Constants.PLAY_POS, mPlayingPosition);
-//		return mPlayingPosition;
-//	}
 
 	/**
 	 * 播放
 	 * @param path 音乐列表的位置
 	 * @return 当前播放的位置
 	 */
-	public int play(String path) {
+	public int play(String path,int sid) {
 //		if(position < 0) position = 0;
 //		if(position >= MusicUtils.sMusicList.size()) position = MusicUtils.sMusicList.size() - 1;
 
-		try {
-			mPlayer.reset();
-			mPlayer.setDataSource(path);
-			mPlayer.prepare();
-
-			start();
-			//if(mListener != null) mListener.onChange(position);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!TextUtils.isEmpty(path)) {
+			if (mPlayer.isPlaying()) {
+				if (!mPlayer.getUrl().equals(path)) {
+					mPlayer.pause();
+					mPlayer.playUrl(path);
+				}
+			} else {
+				mPlayer.playUrl(path);
+			}
 		}
 
-	//	mPlayingPosition = position;
+		this.sid = sid;
 		//	SpUtils.put(Constants.PLAY_POS, mPlayingPosition);
-		return mPlayingPosition;
+		return sid;
 	}
 	
 	/**
@@ -173,9 +122,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 	 */
 	public int resume() {
 		if(isPlaying()) return -1;
-		mPlayer.start();
-
-		return mPlayingPosition;
+		mPlayer.rePlay();
+		return sid;
 	}
 	
 	/**
@@ -186,32 +134,9 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 		if(!isPlaying()) return -1;
 		mPlayer.pause();
 		
-		return mPlayingPosition;
+		return sid;
 	}
-	
-	/**
-	 * 下一曲
-	 * @return 当前播放的位置
-	 */
-//	public int next() {
-//		if(mPlayingPosition >= MusicUtils.sMusicList.size() - 1) {
-//			return play(0);
-//		}
-//
-//		return play(mPlayingPosition + 1);
-//	}
-//
-//	/**
-//	 * 上一曲
-//	 * @return 当前播放的位置
-//	 */
-//	public int pre() {
-//		if(mPlayingPosition <= 0) {
-//			return play(MusicUtils.sMusicList.size() - 1);
-//		}
-//
-//		return play(mPlayingPosition - 1);
-//	}
+
 	
 	/**
 	 * 是否正在播放
@@ -226,7 +151,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 	 * @return
 	 */
 	public int getPlayingPosition() {
-		return mPlayingPosition;
+		return sid;
 	}
 	
 	/**
@@ -247,7 +172,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 	 * 开始播放
 	 */
 	private void start() {
-		mPlayer.start();
+		mPlayer.rePlay();
 	}
 	
 	/**
@@ -275,7 +200,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 	@Override
 	public void onRebind(Intent intent) {
 		super.onRebind(intent);
-		if(mListener != null) mListener.onChange(mPlayingPosition);
+		if(mListener != null) mListener.onChange(sid);
 	}
 	
 	@Override
@@ -292,7 +217,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 		if(!mProgressUpdatedListener.isShutdown()) mProgressUpdatedListener.shutdownNow();
 		mProgressUpdatedListener = null;
 		
-		if(mPlayer != null) mPlayer.release();
+		if(mPlayer != null) mPlayer.stop();
 		mPlayer = null;
 	}
 	
@@ -305,109 +230,3 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 		public void onChange(int position);
 	}
 }
-
-/**
-public class PlayService extends MusicService implements OnClickListener {
-	
-	public class PlayBinder extends Binder {
-		public PlayService getService() {
-			return PlayService.this;
-		}
-	}
-	
-//	private WindowManager mWindowManager;
-//	private WindowManager.LayoutParams mLayoutParams;
-//	private WidgetTouchLayout mLayout;
-//	
-//	private Timer mTimer;
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-		return new PlayBinder();
-	}
-	
-	@Override
-	public void onCreate() {
-		super.onCreate();
-//		setupWindowManager();
-//		mLayout = (WidgetTouchLayout) View.inflate(this, R.layout.widget_layout, null);
-//		mLayout.setOnWidgetTouchListener(new OnWidgetTouchListener() {
-//			@Override
-//			public boolean onTouch(int distanceX, int distanceY) {
-//				mLayoutParams.x += distanceX;
-//				mLayoutParams.y += distanceY;
-//				mWindowManager.updateViewLayout(mLayout, mLayoutParams);
-//				
-//				return true;
-//			}
-//		});
-//		
-//		mLayout.findViewById(R.id.iv_widget_normal).setOnClickListener(this);
-//		mWindowManager.addView(mLayout, mLayoutParams);
-//		
-//		if(mTimer == null) mTimer = new Timer();
-//		mTimer.scheduleAtFixedRate(mCheckTimeTask, 0, 500);
-	}
-
-//	private void setupWindowManager() {
-//		mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-//		mLayoutParams = new WindowManager.LayoutParams();
-//		mLayoutParams.type = LayoutParams.TYPE_PHONE;
-//		mLayoutParams.format = PixelFormat.RGBA_8888;
-//		mLayoutParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE
-//				|LayoutParams.FLAG_NOT_TOUCH_MODAL;
-//		
-//		mLayoutParams.gravity = Gravity.TOP|Gravity.LEFT;
-//		mLayoutParams.width = LayoutParams.WRAP_CONTENT;
-//		mLayoutParams.height = LayoutParams.WRAP_CONTENT;
-//		mLayoutParams.x = (int) (App.sScreenWidth * 0.8);
-//		mLayoutParams.y = (int) (App.sScreenHeight * 0.6);
-//	}
-//	
-//	private boolean isLauncher() {
-//		ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//		// 获取栈顶的package
-//		String topPackage = activityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
-//		System.out.println(topPackage);
-//		return topPackage.equalsIgnoreCase("com.android.launcher");
-//	}
-//	
-//	private void setLayoutVisible(final boolean visible) {
-//		final int v = visible ? View.VISIBLE : View.GONE;
-//		if(mLayout.getVisibility() == v) return;
-//
-//		new Handler(PlayService.this.getMainLooper()).post(new Runnable() {
-//			@Override
-//			public void run() {
-//				mLayout.setVisibility(v);
-//			}
-//		});
-//	}
-//	
-//	private TimerTask mCheckTimeTask = new TimerTask() {
-//		@Override
-//		public void run() {
-//			setLayoutVisible(isLauncher());
-//		}
-//	};
-//
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.iv_widget_normal:
-			System.out.println("normal model...");
-			break;
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	public void onDestroy() {
-		System.out.println("destory");
-//		mTimer.cancel();
-//		mTimer = null;
-		super.onDestroy();
-	}
-}
-*/

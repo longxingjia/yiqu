@@ -48,9 +48,6 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.NetWorkUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.view.AutoPlayViewPager;
 
 import java.util.ArrayList;
