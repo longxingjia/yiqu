@@ -25,10 +25,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;

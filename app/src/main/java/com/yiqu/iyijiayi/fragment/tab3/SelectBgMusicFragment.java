@@ -18,11 +18,11 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab3MusicAdapter;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 
 import java.util.ArrayList;

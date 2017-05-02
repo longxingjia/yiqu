@@ -1,6 +1,6 @@
 package com.yiqu.Tool.Function;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Player.VoicePlayerEngine;

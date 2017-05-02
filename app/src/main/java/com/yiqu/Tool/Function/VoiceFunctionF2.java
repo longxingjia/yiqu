@@ -1,12 +1,12 @@
 package com.yiqu.Tool.Function;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Player.VoicePlayerEngine;
 import com.yiqu.Tool.Recorder.Mp3RecorderEngine;
 import com.yiqu.Tool.Recorder.RecorderEngine;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 
 /**
@@ -66,19 +66,15 @@ public class VoiceFunctionF2 {
         if (is2mp3) {
             return Mp3RecorderEngine.getInstance().isPause();
         } else {
-
             return RecorderEngine.getInstance().isPause();
         }
 
     }
 
     public static void pauseRecordVoice(boolean is2mp3) {
-
-
         if (is2mp3) {
             Mp3RecorderEngine.getInstance().pauseRecording();
         } else {
-
             RecorderEngine.getInstance().pauseRecording();
         }
     }

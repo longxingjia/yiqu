@@ -28,7 +28,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
 import java.util.regex.Matcher;

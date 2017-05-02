@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -38,11 +37,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.AudioFunction;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
-import com.yiqu.Tool.Function.LogFunction;
-import com.yiqu.Tool.Function.UpdateFunction;
 import com.yiqu.Tool.Function.VoiceFunctionF2;
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -53,14 +50,14 @@ import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
+import com.db.ComposeVoiceInfoDBHelper;
+import com.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectArticalFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.ComposeVoice;
+import com.model.Music;
 import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -68,10 +65,9 @@ import com.yiqu.iyijiayi.utils.AppInfo;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.DensityUtil;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
-import com.yiqu.iyijiayi.utils.PlayUtils;
 import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
@@ -129,7 +125,7 @@ public class RecordAllActivity extends Activity
     private ComposeVoice composeVoice;
     private String2TimeUtils string2TimeUtils;
 
-    private static int  TOTALTIME = 600;  //默认录音600s
+    private static int TOTALTIME = 600;  //默认录音600s
     private int totalTime = TOTALTIME;  //默认录音600s
     private Music music;
     private AudioManager audoManager;
@@ -174,6 +170,9 @@ public class RecordAllActivity extends Activity
     private File backgroudMusciFile;
     private RecorderAndPlayUtil recorderUtil;
     private boolean is2mp3 = true;
+    private String eventName;
+    private String musicdesc;
+    private SelectArticle selectArticle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -195,9 +194,19 @@ public class RecordAllActivity extends Activity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Intent intent = getIntent();
         eid = intent.getStringExtra("eid");
+        eventName = intent.getStringExtra("musicname");
+        musicdesc = intent.getStringExtra("musicdesc");
         if (TextUtils.isEmpty(eid)) {
             eid = "0";
         }
+        if (!TextUtils.isEmpty(eventName)) {
+            musicName.setText(eventName);
+        }
+        if (!TextUtils.isEmpty(musicdesc)) {
+            content.setText(musicdesc);
+            et_content.setVisibility(View.GONE);
+        }
+
     }
 
     public void bindView() {
@@ -311,11 +320,12 @@ public class RecordAllActivity extends Activity
         select_music.setText(music.musicname);
         add_music.setBackgroundResource(R.mipmap.cancle_music);
     }
+
     private void deleteMusicUI() {
 
         recordTime = 0;
         fileNameCom = "";
-        composeVoiceUrl ="";
+        composeVoiceUrl = "";
         mid = 0;
         totalTime = TOTALTIME;
         pb_record.setMax(totalTime);
@@ -327,11 +337,15 @@ public class RecordAllActivity extends Activity
     private void initArticleData(SelectArticle selectArticle) {
         select_article.setText(selectArticle.title);
         title.setText(selectArticle.title);
+
         author.setText(selectArticle.author);
         content.setText(selectArticle.content);
         image_anim.setVisibility(View.GONE);
-        musicName.setText(selectArticle.title);
+        if (TextUtils.isEmpty(eventName)) {
+            musicName.setText(selectArticle.title);
+        }
         add_article.setBackgroundResource(R.mipmap.cancle_music);
+        et_content.setVisibility(View.GONE);
     }
 
     private void deleteArticleData() {
@@ -341,6 +355,7 @@ public class RecordAllActivity extends Activity
         content.setText("");
         image_anim.setVisibility(View.GONE);
         musicName.setText("录制");
+        et_content.setVisibility(View.VISIBLE);
         add_article.setBackgroundResource(R.mipmap.cancle_music);
     }
 
@@ -359,7 +374,7 @@ public class RecordAllActivity extends Activity
 //        }
 //    };
 
-    private void initBackground(File file) throws Exception{
+    private void initBackground(File file) throws Exception {
         PictureUtils.showPictureFile(instance, file, image_anim, 270);
         Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
 
@@ -421,7 +436,7 @@ public class RecordAllActivity extends Activity
             pb_record.setProgress(recordTime);
             if (leftTime <= 0) {
                 VoiceFunctionF2.StopRecordVoice(is2mp3);
-                if (backgroudMusciFile!=null&&backgroudMusciFile.exists()){
+                if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                     compose();
                 }
             }
@@ -464,7 +479,7 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void playVoiceBegin(long duration) {
-        int  pTotalTime = (int) duration / 1000;
+        int pTotalTime = (int) duration / 1000;
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(pTotalTime));
         pb_record.setMax(pTotalTime);
 
@@ -496,7 +511,7 @@ public class RecordAllActivity extends Activity
     public void playVoiceStateChanged(long currentDuration) {
 
         if (currentDuration > 0) {
-            int  playtime = (int) (currentDuration / RecordConstant.OneSecond);
+            int playtime = (int) (currentDuration / RecordConstant.OneSecond);
             musictime.setText(string2TimeUtils.stringForTimeS(playtime));
             pb_record.setProgress(playtime);
         }
@@ -510,7 +525,7 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void playVoiceFinish() {
-        if (recordComFinish){
+        if (recordComFinish) {
             upload();
         }
 //        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
@@ -523,14 +538,15 @@ public class RecordAllActivity extends Activity
     }
 
     private DialogHelper dialogHelper;
+
     private void compose() {
         composeProgressBar.setProgress(0);
         composeProgressBar.setVisibility(View.VISIBLE);
         recordVoiceButton.setEnabled(false);
         tempVoicePcmUrl = VoiceFunctionF2.getRecorderPath();
-        LogUtils.LOGE(tag,tempVoicePcmUrl);
-        LogUtils.LOGE(tag,decodeFileUrl);
-        LogUtils.LOGE(tag,composeVoiceUrl);
+        LogUtils.LOGE(tag, tempVoicePcmUrl);
+        LogUtils.LOGE(tag, decodeFileUrl);
+        LogUtils.LOGE(tag, composeVoiceUrl);
         if (audoManager.isWiredHeadsetOn()) { //true 带了耳机
             AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
                     RecordConstant.VoiceEarWeight, RecordConstant.VoiceEarBackgroundWeight,
@@ -542,7 +558,7 @@ public class RecordAllActivity extends Activity
         }
 
         if (dialogHelper == null) {
-            dialogHelper = new DialogHelper(instance,  100);
+            dialogHelper = new DialogHelper(instance, 100);
             dialogHelper.showProgressDialog();
         }
     }
@@ -583,7 +599,7 @@ public class RecordAllActivity extends Activity
         composeVoice.musicname = musicName.getText().toString();
         composeVoice.musictype = "";
         composeVoice.chapter = "";
-        if (!TextUtils.isEmpty(content.getText().toString())){
+        if (!TextUtils.isEmpty(content.getText().toString())) {
             composeVoice.desc = content.getText().toString();
         }
         composeVoice.voicename = VoiceFunctionF2.getRecorderName();
@@ -604,7 +620,7 @@ public class RecordAllActivity extends Activity
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
         composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.UNCOMPOSE);
         composeVoiceInfoDBHelper.close();
-        VoiceFunctionF2.PlayToggleVoice(VoiceFunctionF2.getRecorderPath(),instance);
+        VoiceFunctionF2.PlayToggleVoice(VoiceFunctionF2.getRecorderPath(), instance);
     }
 
     @Override
@@ -662,7 +678,7 @@ public class RecordAllActivity extends Activity
 
 
     @OnClick({R.id.record, R.id.reset, R.id.finish, R.id.select_music,
-            R.id.select_article,R.id.add_article,R.id.title_back,R.id.add_music})
+            R.id.select_article, R.id.add_article, R.id.title_back, R.id.add_music})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -673,35 +689,36 @@ public class RecordAllActivity extends Activity
                     } else {
                         if (VoiceFunctionF2.IsPlaying()) {
                             VoiceFunctionF2.pauseVoice();
-                            LogUtils.LOGE(tag,"pauseVoice");
                             icon_record.setImageResource(R.mipmap.icon_play);
                         } else {
                             VoiceFunctionF2.startPlayVoice();
-                            LogUtils.LOGE(tag,"startPlayVoice");
+                            //  LogUtils.LOGE(tag,"startPlayVoice");
                             icon_record.setImageResource(R.mipmap.icon_pause);
                         }
                     }
                 } else if (recordVoiceBegin) {
+                    //    LogUtils.LOGE(tag,VoiceFunctionF2.isPauseRecordVoice(is2mp3)+"");
 
                     if (VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
                         VoiceFunctionF2.restartRecording(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_pause);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                             VoiceFunctionF2.startPlayVoice();
-                            LogUtils.LOGE(tag,"startPlayVoice");
+//                            LogUtils.LOGE(tag,"startPlayVoice");
                         }
                     } else {
                         VoiceFunctionF2.pauseRecordVoice(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_record);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                             VoiceFunctionF2.pauseVoice();
-                            //   LogUtils.LOGE(tag,"pauseVoice");
+
                         }
+//                           LogUtils.LOGE(tag,"pauseRecordVoice");
                     }
                 } else {
 
                     icon_record.setImageResource(R.mipmap.icon_pause);
-                    if (!TextUtils.isEmpty(et_content.getText().toString())){
+                    if (!TextUtils.isEmpty(et_content.getText().toString())) {
                         content.setText(et_content.getText().toString());
                         et_content.setVisibility(View.GONE);
                     }
@@ -711,11 +728,11 @@ public class RecordAllActivity extends Activity
                         select_music.setText("无配乐");
 
                     }
-                   LogUtils.LOGE(tag, String.valueOf(is2mp3));
-                    VoiceFunctionF2.StartRecordVoice(is2mp3,instance);
+                    LogUtils.LOGE(tag, String.valueOf(is2mp3));
+                    VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
                     select_music.setEnabled(false);
                     select_article.setEnabled(false);
-                    if(select_article.equals("请选择范文")){
+                    if (select_article.equals("请选择范文")) {
                         select_article.setText("无范文");
                     }
 
@@ -738,17 +755,35 @@ public class RecordAllActivity extends Activity
                         public void onClick(DialogInterface dialog, int which) {
                             //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                             if (recordTime > 9) {
-                                VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                VoiceFunctionF2.StopVoice();
-                                select_music.setEnabled(true);
-                                select_article.setEnabled(true);
+                                if (TextUtils.isEmpty(eventName) || selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
+                                    final EditText inputServer = new EditText(RecordAllActivity.this);
+                                    inputServer.setFocusable(true);
 
-                                if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                                    compose();
+                                    AlertDialog.Builder b = new AlertDialog.Builder(RecordAllActivity.this);
+                                    b.setTitle(getString(R.string.record_save_dialog_title));
+                                    b.setNegativeButton("取消", null);
+                                    b.setPositiveButton("确定",
+                                            new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    String inputName = inputServer.getText().toString();
+                                                    LogUtils.LOGE(tag, inputName);
+                                                }
+                                            });
+                                    builder.show();
                                 } else {
-                                    stopRecording();
+                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                    VoiceFunctionF2.StopVoice();
+                                    select_music.setEnabled(true);
+                                    select_article.setEnabled(true);
+
+                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
+                                        compose();
+                                    } else {
+                                        stopRecording();
+                                    }
+                                    icon_finish.setImageResource(R.mipmap.upload);
                                 }
-                                icon_finish.setImageResource(R.mipmap.upload);
 
                             } else {
                                 ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
@@ -865,14 +900,13 @@ public class RecordAllActivity extends Activity
                 case REQUESTARTICLE:
                     Bundle bundle = data.getExtras(); //data为B中回传的Intent
                     //str即为回传的值
-                    SelectArticle selectArticle = (SelectArticle) bundle.getSerializable("data");
+                    selectArticle = (SelectArticle) bundle.getSerializable("data");
                     // LogUtils.LOGE(tag, selectArticle.toString());
                     initArticleData(selectArticle);
                     break;
             }
         }
     }
-
 
 
     @Override
@@ -910,27 +944,27 @@ public class RecordAllActivity extends Activity
                         dialogHelper = null;
                     }
                     initMusicUI();
-                    LogUtils.LOGE(tag,"onSuccess");
+                    LogUtils.LOGE(tag, "onSuccess");
                 }
 
                 @Override
                 public void onPause(int downloadId) {
-                    LogUtils.LOGE(tag,"onPause");
+                    LogUtils.LOGE(tag, "onPause");
                 }
 
                 @Override
                 public void onError(int downloadId) {
-                    LogUtils.LOGE(tag,"onError");
+                    LogUtils.LOGE(tag, "onError");
                 }
 
                 @Override
                 public void onCancel(int downloadId) {
-                    LogUtils.LOGE(tag,"onCancel");
+                    LogUtils.LOGE(tag, "onCancel");
                 }
 
                 @Override
                 public void onGoon(int downloadId, long localSize) {
-                    LogUtils.LOGE(tag,"onGoon");
+                    LogUtils.LOGE(tag, "onGoon");
                 }
             };
 

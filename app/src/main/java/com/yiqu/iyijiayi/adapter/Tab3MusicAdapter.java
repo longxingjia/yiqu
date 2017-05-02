@@ -26,9 +26,8 @@ import com.base.utils.ToastManager;
 import com.ui.views.RoundProgressBar;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.service.MusicService;
 
 import java.util.ArrayList;
 

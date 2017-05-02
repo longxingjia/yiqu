@@ -5,25 +5,26 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab4DiscoveryAdapter;
 import com.yiqu.iyijiayi.adapter.Tab4HotAdapter;
 import com.yiqu.iyijiayi.adapter.Tab4NewAdapter;
-import com.yiqu.iyijiayi.fragment.Tab1Fragment;
-import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
+import com.yiqu.iyijiayi.fileutils.utils.Player;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.NSDictionary;
@@ -32,11 +33,6 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -54,11 +50,11 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private LoadMoreView mLoadMoreView;
     private int count = 0;
     private int rows = 10;
-    private String tag = "Tab4Fragment";
+    private String tag = "EventFragment";
 
     //刷新
     private RefreshList listView;
-    private Tab4HotAdapter tab4HotAdapter;
+  //  private Tab4HotAdapter tab4HotAdapter;
     private Tab4NewAdapter tab4NewAdapter;
 
     private String uid;
@@ -67,6 +63,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private Events events;
     private String arr;
     private ArrayList<Sound> sounds;
+    private Player player;
 
     @Override
     protected int getTitleView() {
@@ -85,18 +82,24 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         listView = (RefreshList) v.findViewById(R.id.lv_sound);
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab4_event_fragment_header, null);
         initHeadView(headerView);
+        player = new Player(getActivity(), null, null, null, null, new Player.onPlayCompletion() {
+            @Override
+            public void completion() {
 
+            }
+        });
 
-        tab4NewAdapter = new Tab4NewAdapter(getActivity());
+        tab4NewAdapter = new Tab4NewAdapter(getActivity(), player);
         listView.setAdapter(tab4NewAdapter);
-              listView.setOnItemClickListener(tab4NewAdapter);
+        listView.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        listView.setOnItemClickListener(tab4NewAdapter);
         listView.setRefreshListListener(this);
 //
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
-      //  listView.addHeaderView(headerView);
+        //  listView.addHeaderView(headerView);
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
         mLoadMoreView.end();
@@ -110,7 +113,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             case R.id.join_in:
                 Intent i = new Intent(getActivity(), StubActivity.class);
                 i.putExtra("fragment", EventInfoFragment.class.getName());
-                i.putExtra("eid",String.valueOf(events.id));
+                i.putExtra("eid", String.valueOf(events.id));
 //                Bundle bundle = new Bundle();
 //                bundle.putSerializable("data",f);
 //                i.putExtras(bundle);
@@ -123,9 +126,9 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
 
     private void initHeadView(View v) {
-        tab4HotAdapter = new Tab4HotAdapter(getActivity());
-        ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
-        head_listview.setAdapter(tab4HotAdapter);
+//        tab4HotAdapter = new Tab4HotAdapter(getActivity());
+//        ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
+//        head_listview.setAdapter(tab4HotAdapter);
 
     }
 
@@ -137,20 +140,6 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected void init(Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
-
-//        RestNetCallHelper.callNet(
-//                getActivity(),
-//                MyNetApiConfig.remen,
-//                MyNetRequestConfig.remen(getActivity(), uid),
-//                "Remen", EventFragment.this, false, true);
-
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
@@ -166,6 +155,18 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
                 "getSoundList", EventFragment.this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
+
+//        RestNetCallHelper.callNet(
+//                getActivity(),
+//                MyNetApiConfig.remen,
+//                MyNetRequestConfig.remen(getActivity(), uid),
+//                "Remen", EventFragment.this, false, true);
 
 
     }
@@ -180,11 +181,12 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onDestroy() {
         super.onDestroy();
+        player.pause();
     }
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT|FLAG_BACK;
+        return FLAG_TXT | FLAG_BACK;
     }
 
     @Override
@@ -211,8 +213,8 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             if (type == TYPE_SUCCESS) {
                 Gson gson = new Gson();
                 Remen remen = gson.fromJson(netResponse.data, Remen.class);
-             //   LogUtils.LOGE(tag, remen.toString());
-                tab4HotAdapter.setData(remen.xizuo);
+                //   LogUtils.LOGE(tag, remen.toString());
+                //tab4HotAdapter.setData(remen.xizuo);
                 tab4NewAdapter.setData(remen.sound);
             }
         } else if (id.equals("getSoundList")) {

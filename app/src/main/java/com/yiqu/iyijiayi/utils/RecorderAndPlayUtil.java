@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.czt.mp3recorder.MP3Recorder;
 import com.shuyu.waveview.FileUtils;
 import java.io.File;

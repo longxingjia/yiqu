@@ -33,7 +33,7 @@ import com.ui.views.DialogUtil;
 import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.VoiceFunction;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
@@ -54,8 +54,9 @@ import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -301,6 +302,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         });
         initListeners();
+
+        Intent intent = new Intent();
+        intent.putExtra("choice", "stop");
+       // top_play.setVisibility(View.GONE);
+        intent.setClass(getActivity(), MusicService.class);
+        getActivity().startService(intent);
+
+     //   if (mPlayService)
 
     }
     private int imageHeight;

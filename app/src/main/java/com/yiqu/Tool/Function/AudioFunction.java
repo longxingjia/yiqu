@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.czt.mp3recorder.util.LameUtil;
 
 import java.io.File;
@@ -20,8 +20,6 @@ import rx.schedulers.Schedulers;
 import com.yiqu.Tool.Decode.DecodeEngine;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
-import com.yiqu.iyijiayi.utils.AudioCodec;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 /**
  * Created by zhengtongyu on 16/5/29.

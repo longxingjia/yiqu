@@ -12,10 +12,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
-
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;

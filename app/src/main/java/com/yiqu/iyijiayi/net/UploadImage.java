@@ -1,30 +1,18 @@
 package com.yiqu.iyijiayi.net;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.media.Image;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.TextView;
 
-import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 import java.util.UUID;
 
 

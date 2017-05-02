@@ -1,18 +1,14 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ui.abs.AbsFragment;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;

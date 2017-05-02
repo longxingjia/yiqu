@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="34dp"
-    android:minHeight="34dp"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="34dp"
+              android:descendantFocusability="blocksDescendants"
+              android:minHeight="34dp"
+              android:orientation="horizontal">
 
     <TextView
-        android:layout_marginLeft="15dp"
         android:id="@+id/fromuser"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
         android:gravity="center"
         android:text=""
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_to"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -23,7 +23,8 @@
         android:gravity="center"
         android:text="回复 "
         android:textColor="@color/dd_gray"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/touser"
@@ -31,13 +32,14 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text=""
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="："
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/comment"
@@ -45,10 +47,10 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text=""
         android:singleLine="true"
+        android:text=""
         android:textColor="@color/dd_gray"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
 
 </LinearLayout>

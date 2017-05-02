@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.yiqu.iyijiayi.model.Discovery;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.Teacher;
 

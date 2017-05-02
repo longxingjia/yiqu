@@ -1,16 +1,13 @@
 package com.yiqu.iyijiayi;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.fragment.tab5.RegisterFragment;
 import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
 public class StubActivity extends AbsFragmentAct {
 
@@ -25,6 +22,7 @@ public class StubActivity extends AbsFragmentAct {
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onResume(this);          //统计时长
+
 	}
 	@Override
 	public void onPause() {

@@ -5,10 +5,6 @@ import android.annotation.SuppressLint;
 
 
 import com.fwrestnet.NetMethod;
-import com.yiqu.iyijiayi.model.Constant;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
-import org.json.JSONException;
 
 /**
  * @comments 接口的具体配置
@@ -486,11 +482,36 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi plusSoundAriticleReads = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/plus-sound-article-reads";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
 
     public static MyNetApi getUserPage = new MyNetApi() {
         @Override
         public String getPath() {
             return ServerAddr + "/user/get-user-page";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+
+    public static MyNetApi getSoundArticleClass = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-sound-article-class";
         }
 
         @Override

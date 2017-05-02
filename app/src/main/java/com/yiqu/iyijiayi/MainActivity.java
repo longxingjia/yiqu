@@ -15,13 +15,11 @@ import com.fwrestnet.NetResponse;
 
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
-import com.ui.abs.AbsFragmentActForMainAct;
 import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.ServiceUtils;
 
 public class MainActivity extends AbsFragmentAct implements Handler.Callback,

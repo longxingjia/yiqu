@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.model;
+package com.model;
 
 import java.io.Serializable;
 

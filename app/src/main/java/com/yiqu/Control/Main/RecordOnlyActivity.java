@@ -32,7 +32,7 @@ import com.base.utils.ToastManager;
 
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
@@ -41,11 +41,11 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
 import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
-import com.yiqu.iyijiayi.db.ComposeVoiceInfoDBHelper;
+import com.db.ComposeVoiceInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.model.ComposeVoice;
 
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;

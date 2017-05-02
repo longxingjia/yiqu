@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.utils;
+package com.utils;
 
 import android.util.Log;
 

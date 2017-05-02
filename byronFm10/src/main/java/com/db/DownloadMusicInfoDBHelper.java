@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.db;
+package com.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 
 import java.util.ArrayList;
 

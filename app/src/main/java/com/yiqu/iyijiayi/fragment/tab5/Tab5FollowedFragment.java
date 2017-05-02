@@ -19,15 +19,12 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab5GuanzhuAdapter;
-import com.yiqu.iyijiayi.fragment.TabContentFragment;
-import com.yiqu.iyijiayi.model.Student;
 import com.yiqu.iyijiayi.model.Teacher;
 import com.yiqu.iyijiayi.model.ZhaoRen;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.view.ScrollViewWithListView;
 
 import java.util.ArrayList;

@@ -20,7 +20,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.base.utils.ToastManager;
 import com.google.gson.Gson;
 import com.ui.views.MenuDialog;
@@ -29,7 +29,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.UploadImage;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

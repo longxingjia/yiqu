@@ -7,8 +7,6 @@ import android.net.NetworkInfo;
 
 import java.util.Map;
 
-import static com.yiqu.iyijiayi.utils.LogUtils.LOGE;
-
 
 public class NetworkRestClient {
 

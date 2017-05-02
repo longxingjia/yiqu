@@ -235,7 +235,9 @@ public class RecorderEngine {
         public void run() {
             if (recording) {
                 // 判断是否超时
-                recordDuration = System.currentTimeMillis() - recordStartTime;
+                if (!recorder.isPause()){
+                    recordDuration += sampleDuration;
+                }
                 updateMicStatus();
             }
         }

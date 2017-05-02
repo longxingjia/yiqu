@@ -9,10 +9,10 @@ import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.PermissionFunction;
 import com.yiqu.Tool.Global.RecordConstant;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.yiqu.Tool.Common.CommonThreadPool;
 import com.czt.mp3recorder.PCMFormat;
-import com.yiqu.iyijiayi.utils.LogUtils;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 

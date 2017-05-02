@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.db;
+package com.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.ui.App;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-
-import java.util.ArrayList;
 
 /**
  * @version 1.0

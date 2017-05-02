@@ -3,9 +3,7 @@ package com.yiqu.iyijiayi.net;
 import android.content.Context;
 
 import com.fwrestnet.NetRequest;
-import com.yiqu.iyijiayi.model.ComposeVoice;
-import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.model.ComposeVoice;
 
 /**
  * @comments 接口的参数配置
@@ -397,6 +395,15 @@ public class MyNetRequestConfig {
         r.addHttpParam("event_id", event_id);
         r.addHttpParam("rows", rows);
         r.addHttpParam("count", count);
+        return r;
+    }
+    public static NetRequest plusSoundAriticleReads(Context c, String id) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("id", id);
+        return r;
+    }
+    public static NetRequest getSoundArticleClass(Context c) {
+        MyNetRequest r = new MyNetRequest(c);
         return r;
     }
 

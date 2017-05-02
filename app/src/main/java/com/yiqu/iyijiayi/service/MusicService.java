@@ -2,13 +2,12 @@ package com.yiqu.iyijiayi.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 public class MusicService extends Service {
     boolean flag = true;

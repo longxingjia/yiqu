@@ -1,4 +1,4 @@
-package com.yiqu.iyijiayi.db;
+package com.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.yiqu.iyijiayi.model.ComposeVoice;
+
+import com.model.ComposeVoice;
 
 import java.util.ArrayList;
 
@@ -14,9 +15,9 @@ import java.util.ArrayList;
  * @version 1.0
  * @comments 数据库
  */
-public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
+public class VoiceInfoDBHelper extends AbsDBHelper {
 
-    public static final String TAG = "ComposeVoiceInfoDBHelp";
+    public static final String TAG = "VoiceInfoDBHelper";
     public static final String TABLE_NAME = "upload_voice_info";
     public static final String FROMUID = "fromuid";
     public static final String TOUID = "touid";
@@ -38,13 +39,9 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
     public static final String TYPE = "type";
     public static final String ISPAY = "ispay";
     public static final String ISREPLY = "isreply";
-    public static final String CREATETIME = "createtime";
-    public static final String ISCOMPOSE = "isCompose";
-    public static final String COMPOSE = "1";
-    public static final String UNCOMPOSE = "2";
-    public static final String DESC = "desc";
 
-    public ComposeVoiceInfoDBHelper(Context context) {
+
+    public VoiceInfoDBHelper(Context context) {
         super(context);
     }
 
@@ -59,7 +56,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
         Cursor c = null;
         try {
             SQLiteDatabase db = getReadableDatabase();
-            c = db.query(TABLE_NAME, null, ISCOMPOSE + " = " + isCompose + " ", null, null, null, CREATETIME +" desc ");
+            c = db.query(TABLE_NAME, null, MID + " = " + isCompose + " ", null, null, null, null);
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 ComposeVoice music = new ComposeVoice();
@@ -83,8 +80,6 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
                 music.type = c.getString(c.getColumnIndex(TYPE));
                 music.ispay = c.getString(c.getColumnIndex(ISPAY));
                 music.isreply = c.getString(c.getColumnIndex(ISREPLY));
-                music.createtime = c.getLong(c.getColumnIndex(CREATETIME));
-                music.desc = c.getString(c.getColumnIndex(DESC));
                 ds.add(music);
                 c.moveToNext();
             }
@@ -169,7 +164,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
      * @comments 插入一个
      * @version 1.0
      */
-    public long insert(ComposeVoice cc,String isCompose) {
+    public long insert(ComposeVoice cc) {
         long count = 0;
         try {
             SQLiteDatabase db = getWritableDatabase();
@@ -194,9 +189,6 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(TYPE, cc.type);
             c.put(ISPAY, cc.ispay);
             c.put(ISREPLY, cc.isreply);
-            c.put(CREATETIME, cc.createtime);
-            c.put(ISCOMPOSE, isCompose);
-            c.put(DESC, cc.desc);
 
             count = db.insert(TABLE_NAME, null, c);
         } catch (Exception e) {
@@ -234,7 +226,6 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(LISTENPRICE, cc.listenprice);
             c.put(STATUS, cc.status);
             c.put(ISOPEN, cc.isopen);
-            c.put(DESC, cc.desc);
 
             return db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
         } catch (Exception e) {

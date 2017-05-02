@@ -1,14 +1,11 @@
 package com.yiqu.iyijiayi.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
 import java.util.ArrayList;
 

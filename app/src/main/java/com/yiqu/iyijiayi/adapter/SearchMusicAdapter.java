@@ -25,7 +25,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.DownloadXizuoFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.utils.AppShare;
 
 import java.util.ArrayList;

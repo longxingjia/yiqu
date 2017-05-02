@@ -2,7 +2,7 @@ package com.yiqu.iyijiayi.fileutils.utils;
 
 import android.os.Environment;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 public class Constants {
 	/** SD卡路径 */

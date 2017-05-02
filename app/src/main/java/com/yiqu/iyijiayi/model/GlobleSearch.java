@@ -1,5 +1,7 @@
 package com.yiqu.iyijiayi.model;
 
+import com.model.Music;
+
 import java.util.ArrayList;
 
 /**

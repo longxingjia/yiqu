@@ -2,10 +2,7 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
@@ -13,11 +10,8 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab1Adapter;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
-import com.yiqu.iyijiayi.model.Music;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.NoScollViewPager;
+import com.db.DownloadMusicInfoDBHelper;
+import com.model.Music;
 
 import java.util.ArrayList;
 

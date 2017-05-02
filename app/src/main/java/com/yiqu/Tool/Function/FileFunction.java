@@ -3,7 +3,7 @@ package com.yiqu.Tool.Function;
 import android.app.Application;
 import android.os.Environment;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

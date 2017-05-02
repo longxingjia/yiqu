@@ -183,7 +183,7 @@ public class Mp3RecorderEngine {
      */
     public void pauseRecording() {
         if (recording) {
-            recorder.setPause(false);
+            recorder.setPause(true);
         }
 
     }
@@ -201,7 +201,7 @@ public class Mp3RecorderEngine {
      */
     public void restartRecording() {
         if (recording) {
-            recorder.setPause(true);
+            recorder.setPause(false);
         }
     }
 
@@ -235,7 +235,9 @@ public class Mp3RecorderEngine {
         public void run() {
             if (recording) {
                 // 判断是否超时
-                recordDuration = System.currentTimeMillis() - recordStartTime;
+                if (!recorder.isPause()){
+                    recordDuration += sampleDuration;
+                }
                 updateMicStatus();
             }
         }

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.yiqu.iyijiayi.net.HttpRequest;
-import com.yiqu.iyijiayi.utils.LogUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

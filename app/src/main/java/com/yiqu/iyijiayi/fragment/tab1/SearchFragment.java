@@ -3,9 +3,7 @@ package com.yiqu.iyijiayi.fragment.tab1;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,16 +18,13 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SearchMusicAdapter;
 import com.yiqu.iyijiayi.adapter.SearchSoundAdapter;
 import com.yiqu.iyijiayi.adapter.SearchUserAdapter;
-import com.yiqu.iyijiayi.model.GlobleSearch;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.utils.LogUtils;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 

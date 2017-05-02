@@ -24,10 +24,8 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
-import com.yiqu.iyijiayi.model.ComposeVoice;
+import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.UserInfo;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.io.Serializable;

@@ -1,10 +1,4 @@
-/**
- * @filename PersonAll.java
- * @author byron(linbochuan@hopsun.cn)
- * @date 2013-9-2
- * @vsersion 1.0
- * Copyright (C) 2013 辉盛科技发展责任有限公司
- */
+
 package com.yiqu.iyijiayi.adapter;
 
 import android.app.Fragment;
@@ -24,14 +18,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.service.MusicService;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -53,7 +55,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     public Tab1XizuoAdapter( Context mContext,String fragmentName ,LinearLayout root, ImageView play, TextView musicname, TextView author) {
 
-       this. mContext = mContext;
+        this. mContext = mContext;
         this.fragmentName = fragmentName;
         mLayoutInflater = LayoutInflater.from(mContext);
         mPlay = play;
@@ -134,7 +136,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+           final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.content.setText(f.desc);
 //            h.comment.setText(String.valueOf(f.co));
@@ -148,7 +150,47 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
 
-          //  LogUtils.LOGE(fragmentName,fragmentName);
+
+
+            h.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (AppShare.getIsLogin(mContext)){
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.like,
+                                MyNetRequestConfig.like(mContext, AppShare.getUserInfo(mContext).uid,String.valueOf(f.sid)),
+                                "getSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                      //  LogUtils.LOGE(tag,netResponse.toString());
+                                        if (type==TYPE_SUCCESS){
+                                            f.like ++;
+                                            notifyDataSetChanged();
+                                        }
+
+                                    }
+                                });
+                    }else {
+                        Model.startNextAct(mContext,
+                                SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                    }
+
+                }
+            });
+
+            //  LogUtils.LOGE(fragmentName,fragmentName);
 
             if (fragmentName.equals("Tab1Fragment")){
                 if (position<9){
@@ -177,7 +219,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 mAuthor.setText(f.stuname);
                 String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
                 intent.setClass(mContext, MusicService.class);
-          //      mContext.stopService(intent);
+                //      mContext.stopService(intent);
                 intent.putExtra("choice", "play");
                 intent.putExtra("url", url);
                 mContext.startService(intent);
@@ -188,15 +230,13 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
             }
 
-            h.iv_status.setOnClickListener(new View.OnClickListener() {
+            h.play_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //    h.play_status =
                     mCurrent = position;
                     mRoot.setVisibility(View.VISIBLE);
-
                     notifyDataSetChanged();
-
 
                 }
             });

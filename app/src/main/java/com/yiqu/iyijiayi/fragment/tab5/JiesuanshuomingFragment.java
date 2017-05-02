@@ -1,26 +1,16 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.base.utils.ToastManager;
-import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
-import com.ui.views.CircleImageView;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
-import com.yiqu.iyijiayi.adapter.MenuDialogSexHelper;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.model.YzmKey;
@@ -29,14 +19,8 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.LogUtils;
-import com.yiqu.iyijiayi.utils.PermissionUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
-
-import kr.co.namee.permissiongen.PermissionFail;
-import kr.co.namee.permissiongen.PermissionGen;
-import kr.co.namee.permissiongen.PermissionSuccess;
 
 import static android.app.Activity.RESULT_OK;
 

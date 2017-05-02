@@ -16,19 +16,16 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.service.DownloadService;
 import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Function.FileFunction;
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.db.DownloadMusicInfoDBHelper;
+import com.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.model.Constant;
-import com.yiqu.iyijiayi.model.Music;
+import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.Tools;
 
 import java.io.File;

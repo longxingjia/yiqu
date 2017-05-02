@@ -1,13 +1,11 @@
 package com.yiqu.iyijiayi.fragment.tab2;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ImageView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -17,25 +15,18 @@ import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
-import com.yiqu.iyijiayi.fragment.Tab4Fragment;
-import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.Tab2_groups;
 import com.yiqu.iyijiayi.model.Teacher;
-import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
-import com.yiqu.iyijiayi.utils.ImageLoaderHm;
 import com.yiqu.iyijiayi.utils.JsonUtils;
-import com.yiqu.iyijiayi.utils.LogUtils;
+import com.utils.LogUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

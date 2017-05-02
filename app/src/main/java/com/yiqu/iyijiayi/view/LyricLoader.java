@@ -4,7 +4,7 @@ import java.io.File;
 
 import android.os.Environment;
 
-import com.yiqu.Tool.Global.Variable;
+import com.utils.Variable;
 
 public class LyricLoader {
 

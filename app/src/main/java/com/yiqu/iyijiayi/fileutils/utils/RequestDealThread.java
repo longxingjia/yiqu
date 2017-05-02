@@ -3,7 +3,7 @@ package com.yiqu.iyijiayi.fileutils.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.yiqu.iyijiayi.db.CachFileDBHelper;
+import com.db.CachFileDBHelper;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
