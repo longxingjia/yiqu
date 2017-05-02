@@ -684,6 +684,8 @@ public class RecordAllActivity extends Activity
                         VoiceFunction.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
                     }
                     select_music.setEnabled(false);
+
+
                     select_article.setEnabled(false);
 
                 }
