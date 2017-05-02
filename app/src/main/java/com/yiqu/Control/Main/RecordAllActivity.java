@@ -646,7 +646,6 @@ public class RecordAllActivity extends Activity
         composeVoice.touid = 0;
         composeVoice.soundpath = "";
         composeVoice.voicename = fileNameCom;
-        
         composeVoice.type = music.type + "";
         composeVoice.isreply = "0";
         composeVoice.ispay = "0";
