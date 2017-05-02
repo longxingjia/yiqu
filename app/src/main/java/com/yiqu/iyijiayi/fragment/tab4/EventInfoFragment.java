@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Control.Main.RecordAllActivity;
 import com.yiqu.Control.Main.RecordOnlyActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -40,7 +41,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
             case R.id.submit:
 
          //       LogUtils.LOGE("22", "hhhh");
-                Intent intent = new Intent(getActivity(), RecordOnlyActivity.class);
+                Intent intent = new Intent(getActivity(), RecordAllActivity.class);
                 intent.putExtra("musicname",musicname.getText().toString());
                 intent.putExtra("musicdesc",musicdesc.getText().toString());
                 intent.putExtra("eid",eid);

@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
     private Fragment fragment;
 
     private String tag = "Tab3MusicAdapter";
-  //  private ArrayList<Like> likes;
+    //  private ArrayList<Like> likes;
 
     public Tab3ArticleAdapter(Fragment fragment) {
         this.fragment = fragment;
@@ -77,7 +78,9 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
     private class HoldChild {
 
         TextView title;
+        TextView class_name;
         TextView author;
+        TextView reads;
 
 
     }
@@ -92,6 +95,8 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
                 v = mLayoutInflater.inflate(R.layout.tab3_article_adapter, null);
                 h.title = (TextView) v.findViewById(R.id.title);
                 h.author = (TextView) v.findViewById(R.id.author);
+                h.class_name = (TextView) v.findViewById(R.id.class_name);
+                h.reads = (TextView) v.findViewById(R.id.reads);
 
                 v.setTag(h);
             }
@@ -99,7 +104,14 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
             h = (HoldChild) v.getTag();
             final SelectArticle f = getItem(position);
             h.title.setText(f.title);
-            h.author.setText(f.author);
+            if (TextUtils.isEmpty(f.author)) {
+                h.author.setVisibility(View.GONE);
+            } else {
+                h.author.setVisibility(View.VISIBLE);
+                h.author.setText(f.author);
+            }
+            h.class_name.setText(f.class_name);
+            h.reads.setText(String.valueOf(f.reads));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,14 +120,12 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
     }
 
 
-
-
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         if (arg2 < 1) {
             return;
         }
-        SelectArticle f = getItem(arg2-1 );//加了头部
+        SelectArticle f = getItem(arg2 - 1);//加了头部
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
@@ -127,7 +137,7 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
         Bundle bundle = new Bundle();
         bundle.putSerializable("data", f);
         intent.putExtras(bundle);
-        fragment.startActivityForResult(intent,0);
+        fragment.startActivityForResult(intent, 0);
 
     }
 
@@ -142,8 +152,6 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
         }
         return false;
     }
-
-
 
 
 }

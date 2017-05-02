@@ -291,7 +291,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
-
         likes = AppShare.getLikeList(getActivity());
 
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());

@@ -22,6 +22,7 @@ import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -162,7 +163,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        //   LogUtils.LOGE(TAG,netResponse.toString());
+         LogUtils.LOGE(TAG,netResponse.toString());
         if (id.equals("getSoundArticleList")) {
             if (type == TYPE_SUCCESS) {
                 selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {

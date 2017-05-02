@@ -9,7 +9,8 @@
 
     <LinearLayout
         android:layout_marginLeft="15dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
@@ -20,17 +21,57 @@
             android:singleLine="true"
             android:textSize="16sp"
          />
-        <TextView
-            android:id="@+id/author"
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:textColor="@color/dd_gray"
-         />
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:textColor="@color/dd_gray"
+                android:paddingRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/class_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:textColor="@color/dd_gray"
+                />
+
+        </LinearLayout>
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/reads"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:textColor="@color/dd_gray"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginRight="15dp"
+        android:textSize="13sp"
+        android:singleLine="true"
+        android:text="人读过"
+        android:textColor="@color/dd_gray"
+        />
+
 
 </LinearLayout>

@@ -38,7 +38,7 @@ public class DownloadService extends Service {
 
 	public void download(final int id, final String url,final String path ,final String name) {
 		//	L.l("download", url);
-		Download d = new Download(id, url, path + name);
+		Download d = new Download(id, url, path +"/"+name);
 		d.setOnDownloadListener(mDownloadListener).start(false);
 		mDownloads.put(id, d);
 	}

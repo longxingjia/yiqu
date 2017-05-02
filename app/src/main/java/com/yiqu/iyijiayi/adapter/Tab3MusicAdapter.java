@@ -135,10 +135,10 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//        if (arg2 < 2) {
-//            return;
-//        }
-        Music f = getItem(arg2);//加了头部
+        if (arg2 < 1) {
+            return;
+        }
+        Music f = getItem(arg2 - 1);//加了头部
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);

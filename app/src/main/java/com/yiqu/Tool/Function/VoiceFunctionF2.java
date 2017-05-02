@@ -6,6 +6,7 @@ import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.Tool.Player.VoicePlayerEngine;
 import com.yiqu.Tool.Recorder.Mp3RecorderEngine;
 import com.yiqu.Tool.Recorder.RecorderEngine;
+import com.yiqu.iyijiayi.utils.LogUtils;
 
 
 /**
@@ -13,24 +14,27 @@ import com.yiqu.Tool.Recorder.RecorderEngine;
  */
 public class VoiceFunctionF2 {
     private static String filePath;
+    private static String tmpName;
 
     public static boolean IsRecordingVoice() {
         return RecorderEngine.getInstance().IsRecording();
     }
 
     public synchronized static String StartRecordVoice(boolean is2mp3, VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
-        String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
+        tmpName = System.currentTimeMillis()+"";
 
         if (is2mp3) {
-            filePath = tmp + ".mp3";
+            filePath =  Variable.StorageMusicPath +tmpName + ".mp3";
             Mp3RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
+            LogUtils.LOGE("path",filePath);
         } else {
-            filePath = tmp + ".pcm";
+            filePath = Variable.StorageMusicPath + tmpName + ".pcm";
             RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
+            LogUtils.LOGE("path",filePath);
         }
-        return tmp;
+        return tmpName;
 
     }
 
@@ -39,11 +43,15 @@ public class VoiceFunctionF2 {
      *
      * @return
      */
-    // public static String getRecorderMp3Path() {
+//     public static String getRecorderMp3Path() {
 //        return mp3FilePath;
 //    }
-    public static String getRecorderPcmPath() {
+    public static String getRecorderPath() {
         return filePath;
+    }
+
+    public static String getRecorderName() {
+        return tmpName;
     }
 
     public static void StopRecordVoice(boolean is2mp3) {
