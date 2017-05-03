@@ -50,7 +50,6 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
 
 
     public void setData(ArrayList<SelectArticle> list) {
-
         datas = list;
         notifyDataSetChanged();
     }
@@ -122,10 +121,10 @@ public class Tab3ArticleAdapter extends BaseAdapter implements OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (arg2 < 1) {
+        if (arg2 < 2) {
             return;
         }
-        SelectArticle f = getItem(arg2 - 1);//加了头部
+        SelectArticle f = getItem(arg2 - 2);//加了头部
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);

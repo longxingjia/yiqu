@@ -28,6 +28,7 @@ import com.ui.views.AutoScrollViewPager;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
@@ -359,7 +360,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             case R.id.reader:
                 Events e = new Events();
                 e.id =2;
-                e.title ="为你读诗";
+                e.title ="为你朗诵";
 
                 i.putExtra("fragment", EventFragment.class.getName());
                 Bundle b = new Bundle();
@@ -411,7 +412,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        //  LogUtils.LOGE("2",netResponse.toString());
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
 
@@ -431,7 +431,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             }
 
         } else if (id.equals("getSoundList_more")) {
-
 
             if (type == TYPE_SUCCESS) {
                 sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {

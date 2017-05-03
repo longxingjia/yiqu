@@ -39,14 +39,20 @@
                 android:layout_centerInParent="true"
                 android:background="@mipmap/tab_bg"/>
 
+
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="2dp"
                 android:src="@mipmap/main_tab3_an"/>
 
-
+            <ImageView
+                android:id="@+id/image_anim"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/bottom_an"/>
         </RelativeLayout>
 
         <RelativeLayout

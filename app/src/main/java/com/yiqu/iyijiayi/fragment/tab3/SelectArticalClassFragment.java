@@ -3,28 +3,30 @@ package com.yiqu.iyijiayi.fragment.tab3;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab3ArticleAdapter;
-import com.model.Music;
 import com.yiqu.iyijiayi.model.Article_class_name;
 import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.utils.LogUtils;
 import com.yiqu.iyijiayi.view.tagview.Tag;
 import com.yiqu.iyijiayi.view.tagview.TagListView;
 import com.yiqu.iyijiayi.view.tagview.TagView;
@@ -41,7 +43,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/2/15.
  */
 
-public class SelectArticalFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
+public class SelectArticalClassFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
     private static final String TAG = "SelectArticalFragment";
 
 
@@ -51,14 +53,14 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     public RefreshList listView;
 
     private int count = 0;
-    private int rows = 20;
+    private int rows = 10;
     private String class_id = "0";
     private String event_id = "0";
     private LoadMoreView mLoadMoreView;
 
     private Tab3ArticleAdapter tab3ArticleAdapter;
-    private ArrayList<SelectArticle> selectArticles;
-    private TagListView mTagListView;
+    private ArrayList<SelectArticle> selectArticles = new ArrayList<SelectArticle>();
+    private String text;
 
     public void onClick(View v) {
 
@@ -81,20 +83,34 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
 
     @Override
     protected int getBodyView() {
-        return R.layout.select_artical_fragment;
+        return R.layout.select_artical_class_fragment;
     }
 
-    private final List<Tag> mTags = new ArrayList<Tag>();
 
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
-        View headview =  LayoutInflater.from(getActivity()).inflate(R.layout.tab4_article_headview, null);
+        text = getActivity().getIntent().getStringExtra("title");
+        class_id = getActivity().getIntent().getStringExtra("class_id");
         tab3ArticleAdapter = new Tab3ArticleAdapter(this);
         listView.setAdapter(tab3ArticleAdapter);
-        listView.setOnItemClickListener(tab3ArticleAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 1) {
+                    return;
+                }
+                SelectArticle f = selectArticles.get(position - 1);//加了头部
+
+                Intent intent = new Intent(getActivity(), StubActivity.class);
+                intent.putExtra("fragment", ShowArticalFragment.class.getName());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", f);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+            }
+        });
         listView.setRefreshListListener(this);
-        listView.addHeaderView(headview);
 //
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
@@ -103,46 +119,29 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
 
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
-
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
-        mTagListView = (TagListView) headview.findViewById(R.id.tagview);
-        //   setUpData();
-
-        mTagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
-            @Override
-            public void onTagClick(TagView tagView, Tag tag) {
-             //   LogUtils.LOGE("tag", tag.toString());
-
-                Intent intent = new Intent(getActivity(), StubActivity.class);
-                intent.putExtra("fragment", SelectArticalClassFragment.class.getName());
-                intent.putExtra("title",tag.getTitle());
-                intent.putExtra("class_id",String.valueOf(tag.getId()));
-                startActivityForResult(intent,1);
-
-
-            }
-        });
 
     }
 
+    @Override
+    protected void initTitle() {
+        if (!TextUtils.isEmpty(text))
+            setTitleText(text);
+
+    }
 
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+
 
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getSoundArticleList,
                 MyNetRequestConfig.getSoundArticleList(getActivity()
                         , class_id, event_id, String.valueOf(rows), String.valueOf(count)),
                 "getSoundArticleList",
-                SelectArticalFragment.this);
-
-        RestNetCallHelper.callNet(getActivity(),
-                MyNetApiConfig.getSoundArticleClass,
-                MyNetRequestConfig.getSoundArticleClass(getActivity()),
-                "getSoundArticleClass",
-                SelectArticalFragment.this);
+                SelectArticalClassFragment.this);
     }
 
 
@@ -159,7 +158,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
                         MyNetRequestConfig.getSoundArticleList(getActivity()
                                 , class_id, event_id, String.valueOf(rows), String.valueOf(count)),
                         "getSoundArticleList_more",
-                        SelectArticalFragment.this);
+                        SelectArticalClassFragment.this);
 
             }
         }
@@ -178,7 +177,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
                 MyNetRequestConfig.getSoundArticleList(getActivity()
                         , class_id, event_id, String.valueOf(rows), String.valueOf(count)),
                 "getSoundArticleList",
-                SelectArticalFragment.this);
+                SelectArticalClassFragment.this);
 
     }
 
@@ -201,11 +200,11 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
 
         if (id.equals("getSoundArticleList")) {
             if (type == TYPE_SUCCESS) {
-                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
+                ArrayList<SelectArticle> articles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
                 }.getType());
-                //  LogUtils.LOGE(TAG, backgroudMusics.toString());
-                tab3ArticleAdapter.setData(selectArticles);
-                if (selectArticles.size() == rows) {
+                selectArticles.addAll(articles);
+                tab3ArticleAdapter.setData(articles);
+                if (articles.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
                 }
                 count += rows;
@@ -217,10 +216,11 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
         } else if (id.equals("getSoundArticleList_more")) {
             if (TYPE_SUCCESS == type) {
 
-                selectArticles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
+                ArrayList<SelectArticle> articles = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<SelectArticle>>() {
                 }.getType());
-                tab3ArticleAdapter.addData(selectArticles);
-                if (selectArticles.size() < rows) {
+                selectArticles.addAll(articles);
+                tab3ArticleAdapter.addData(articles);
+                if (articles.size() < rows) {
                     mLoadMoreView.setMoreAble(false);
                 }
                 count += rows;
@@ -230,33 +230,15 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
                 mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
-        } else if (id.equals("getSoundArticleClass")) {
-            if (type == TYPE_SUCCESS) {
-             //   LogUtils.LOGE("tag", netResponse.toString());
-               ArrayList<Article_class_name> classNames = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Article_class_name>>() {
-                }.getType());
-                setUpData(classNames);
-                mTagListView.setTags(mTags);
-            }
         }
     }
 
-    private void setUpData(ArrayList<Article_class_name> classNames) {
-        for (int i = 0; i < classNames.size(); i++) {
-            Tag tag = new Tag();
-            Article_class_name article_class_name = classNames.get(i);
-            tag.setId(article_class_name.id);
-            tag.setChecked(true);
-            tag.setTitle(article_class_name.class_name);
-            mTags.add(tag);
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        MobclickAgent.onPageStart("范文");
+        MobclickAgent.onPageStart("范文分类");
 
     }
 
@@ -265,7 +247,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     public void onPause() {
         super.onPause();
 
-        MobclickAgent.onPageEnd("范文");
+        MobclickAgent.onPageEnd("范文分类");
 
 
     }
@@ -285,11 +267,6 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
         return false;
     }
 
-    @Override
-    protected void initTitle() {
-        setTitleText("范文");
-
-    }
 
     public void resfreshOk() {
         listView.refreshOk();

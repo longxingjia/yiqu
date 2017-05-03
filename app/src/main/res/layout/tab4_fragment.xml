@@ -5,11 +5,16 @@
               android:background="@color/tab_bg_color"
               android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/tab_text_color"/>
+
     <LinearLayout
         android:id="@+id/item_renew"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
         android:background="@color/white"
         android:gravity="center"
         android:minHeight="50dp"
@@ -35,14 +40,27 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab_text_color"/>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/tab_text_color"/>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="0dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/white"></ListView>
+        android:background="@color/tab_bg_color"
+        android:divider="@color/tab_text_color"
+        android:dividerHeight="1dp"
+        android:padding="0dp">
+
+    </ListView>
 
 
 </LinearLayout>

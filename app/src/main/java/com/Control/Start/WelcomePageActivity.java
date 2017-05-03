@@ -31,7 +31,9 @@ import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.fragment.tab3.SelectArticalFragment;
 import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -76,11 +78,11 @@ public class WelcomePageActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         MobclickAgent.openActivityDurationTrack(false);
-        MobclickAgent.setDebugMode( true );
-        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_NORMAL);
+        MobclickAgent.setDebugMode(true);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
         init(R.layout.activity_welcome_page);
-        Intent it=new Intent(this, PlayService.class);
+        Intent it = new Intent(this, PlayService.class);
         startService(it);
 
     }
@@ -110,7 +112,7 @@ public class WelcomePageActivity extends Activity {
 
     @Override
     protected void onResume() {
-       // MobclickAgent.setDebugMode( true );
+        // MobclickAgent.setDebugMode( true );
 
         PermissionGen.needPermission(this, 100, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE
@@ -137,10 +139,10 @@ public class WelcomePageActivity extends Activity {
     private void begin() {
 
         //      intent = new Intent(this, RecordAacActivity.class);//
-           intent = new Intent(this, MainActivity.class);//
-        //    intent = new Intent(this, StubActivity.class);
-//        intent.putExtra("fragment", SelectBgMusicFragment.class.getName());
-       // startActivityForResult(i, REQUESTMUSIC);
+            intent = new Intent(this, MainActivity.class);//
+        //  intent = new Intent(this, StubActivity.class);
+        // intent.putExtra("fragment", SelectArticalFragment.class.getName());
+        // startActivityForResult(i, REQUESTMUSIC);
 
         Message.obtain(handler).sendToTarget();
     }
@@ -177,58 +179,55 @@ public class WelcomePageActivity extends Activity {
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
-       if (NetWorkUtils.isNetworkAvailable(this)){
-           RestNetCallHelper.callNet(
-                   this,
-                   MyNetApiConfig.checkUpdate,
-                   MyNetRequestConfig.checkUpdate(this),
-                   "checkUpdate", new NetCallBack() {
+        if (NetWorkUtils.isNetworkAvailable(this)) {
+            RestNetCallHelper.callNet(
+                    this,
+                    MyNetApiConfig.checkUpdate,
+                    MyNetRequestConfig.checkUpdate(this),
+                    "checkUpdate", new NetCallBack() {
 
 
+                        @Override
+                        public void onNetNoStart(String id) {
 
+                        }
 
-                       @Override
-                       public void onNetNoStart(String id) {
+                        @Override
+                        public void onNetStart(String id) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onNetStart(String id) {
+                        @Override
+                        public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-                       }
-
-                       @Override
-                       public void onNetEnd(String id, int type, NetResponse netResponse) {
-
-                           updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
-                         //  LogUtils.LOGE("1",updateInfo.toString());
+                            updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
+                            //  LogUtils.LOGE("1",updateInfo.toString());
 //                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
-                           fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
+                            fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
 
-                           filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
+                            filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
 
-                           String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
-                           if (!updateInfo.version.equals(versionName)) {
+                            String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
+                            if (!updateInfo.version.equals(versionName)) {
 //                            if (updateInfo.ismust.equals("1")) {
 //                                forceUpdate(WelcomePageActivity.this);
 //                            } else {
 //                                normalUpdate(WelcomePageActivity.this);
 //                            }
 
-                               forceUpdate(WelcomePageActivity.this);
+                                forceUpdate(WelcomePageActivity.this);
 
-                           }else {
-                               begin();
-                           }
+                            } else {
+                                begin();
+                            }
 
-                       }
-                   }, false, true);
+                        }
+                    }, false, true);
 
-       }else {
-           ToastManager.getInstance(this).showText("网络故障，请检查网络再试");
+        } else {
+            ToastManager.getInstance(this).showText("网络故障，请检查网络再试");
 
-       }
-
+        }
 
 
 //        begin();
@@ -245,8 +244,8 @@ public class WelcomePageActivity extends Activity {
 //
 //    }
 
-    private  void installApk(String apkPath) {
-        if ( TextUtils.isEmpty(apkPath)) {
+    private void installApk(String apkPath) {
+        if (TextUtils.isEmpty(apkPath)) {
             return;
         }
 
@@ -550,6 +549,7 @@ public class WelcomePageActivity extends Activity {
         }
         return result;
     }
+
     public static String getDeviceInfo(Context context) {
 
         try {
@@ -605,7 +605,6 @@ public class WelcomePageActivity extends Activity {
         }
         return null;
     }
-
 
 
 }

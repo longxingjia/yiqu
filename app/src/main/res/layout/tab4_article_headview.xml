@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yiqu.iyijiayi.view.tagview.TagListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:f="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tagview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/common_margin"
+    android:paddingLeft="@dimen/common_margin"
+    android:paddingRight="@dimen/common_margin"
+    f:horizontalSpacing="@dimen/tag_horizontal_spacing"
+    f:orientation="horizontal"
+    f:verticalSpacing="@dimen/tag_vertical_spacing"/>

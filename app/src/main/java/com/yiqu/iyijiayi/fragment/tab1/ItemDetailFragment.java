@@ -852,6 +852,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
 
+        player.pause();
+
+
     }
 
 
@@ -1049,6 +1052,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         soundtime.setText(sound.soundtime + "\"");
 
     }
+
+
 
     @Override
     public void onDestroy() {

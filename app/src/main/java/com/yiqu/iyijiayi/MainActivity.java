@@ -1,7 +1,9 @@
 package com.yiqu.iyijiayi;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.Message;
@@ -9,6 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
@@ -29,12 +35,12 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
     private String mCurrentTabFragmentTag;
     private TabHostView mTabHostView;
     public static boolean isForeground = false;
+    private ImageView image_anim;
 
     @Override
     protected int getContentView() {
         return R.layout.act_main;
     }
-
 
 
     @Override
@@ -52,6 +58,12 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
                 return false;
             }
         });
+        image_anim = (ImageView) findViewById(R.id.image_anim);
+        Animation rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
+        LinearInterpolator lin = new LinearInterpolator();
+        rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
+        image_anim.startAnimation(rotate);
+
     }
 
     @Override

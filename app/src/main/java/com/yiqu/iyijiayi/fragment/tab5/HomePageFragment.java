@@ -31,6 +31,7 @@ import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -88,7 +89,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab5_edit_info;
     }
 
     @Override
@@ -98,7 +99,12 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_BACK | FLAG_TXT;
+        if (homePage == null) {
+            return FLAG_ALL;
+        } else {
+            return FLAG_BACK | FLAG_TXT;
+        }
+
     }
 
     @Override
@@ -108,6 +114,9 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected boolean onPageNext() {
+
+        Model.startNextAct(getActivity(),
+                InfoFragment.class.getName());
         return false;
     }
 

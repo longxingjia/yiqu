@@ -406,6 +406,15 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         return r;
     }
+    public static NetRequest searchSoundArticles(Context c, String text, String rows,
+                                                 String count) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("text", text);
+        r.addHttpParam("rows", rows);
+        r.addHttpParam("count", count);
+
+        return r;
+    }
 
     public static NetRequest getFollowTeacherList(Context c, String myuid, String rows,
                                                   String count) {

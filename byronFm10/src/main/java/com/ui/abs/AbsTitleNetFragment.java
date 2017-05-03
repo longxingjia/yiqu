@@ -117,13 +117,13 @@ public abstract class AbsTitleNetFragment extends AbsTitleFragment implements
 	@Override
 	public void onNetEnd(String id, int type, NetResponse netResponse) {
 		// TODO Auto-generated method stub
-		 if(mProgress!= null){
-		 mProgress.setVisibility(View.INVISIBLE);
-		 }
-		 if(mNext!= null){
-		 mNext.setVisibility(View.VISIBLE);
-		 }
-		 mTouchMask.setVisibility(View.INVISIBLE);
+//		 if(mProgress!= null){
+//		 mProgress.setVisibility(View.INVISIBLE);
+//		 }
+//		 if(mNext!= null){
+//		 mNext.setVisibility(View.INVISIBLE);
+//		 }
+//		 mTouchMask.setVisibility(View.INVISIBLE);
 
 		// switch(type){
 		// case TYPE_SUCCESS:

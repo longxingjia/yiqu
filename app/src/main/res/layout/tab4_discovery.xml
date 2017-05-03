@@ -67,6 +67,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
+            android:textSize="13sp"
             android:text="点评了" />
     </LinearLayout>
 
@@ -109,7 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:paddingLeft="10dp"
-        android:layout_marginRight="28dp"
+
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:singleLine="true"

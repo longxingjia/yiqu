@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/tab_bg_color"
-        android:text="没有更多了"
+        android:text="已经全部加载完毕"
         android:paddingBottom="1dp"
         android:textColor="#878787"
         android:textSize="12dp" />

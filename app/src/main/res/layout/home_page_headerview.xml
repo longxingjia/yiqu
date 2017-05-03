@@ -178,12 +178,14 @@
 
     <LinearLayout
         android:id="@+id/tea"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
@@ -218,6 +220,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
@@ -227,6 +230,7 @@
             android:textSize="12sp" />
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:layout_marginTop="8dp"
@@ -273,6 +277,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:layout_marginBottom="20dp"
@@ -305,8 +310,8 @@
 
     </LinearLayout>
 
-
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/stu"
         android:layout_width="match_parent"
         android:layout_height="65dp"

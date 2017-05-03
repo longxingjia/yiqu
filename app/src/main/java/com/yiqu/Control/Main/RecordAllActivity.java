@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -759,20 +760,29 @@ public class RecordAllActivity extends Activity
                             if (recordTime > 9) {
                                 if (TextUtils.isEmpty(eventName) || selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
                                     final EditText inputServer = new EditText(RecordAllActivity.this);
+                                    inputServer.setBackgroundResource(R.drawable.edit_bg);
                                     inputServer.setFocusable(true);
+                                    inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
 
                                     AlertDialog.Builder b = new AlertDialog.Builder(RecordAllActivity.this);
                                     b.setTitle(getString(R.string.record_save_dialog_title));
+                                    b.setView(inputServer);
                                     b.setNegativeButton("取消", null);
                                     b.setPositiveButton("确定",
                                             new DialogInterface.OnClickListener() {
 
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     String inputName = inputServer.getText().toString();
-                                                    LogUtils.LOGE(tag, inputName);
+                                                    musicName.setText(inputName+"");
                                                 }
                                             });
-                                    builder.show();
+                                    b.show();
+                                    VoiceFunctionF2.pauseRecordVoice(is2mp3);
+                                    if (!is2mp3) {
+                                        VoiceFunctionF2.pauseVoice();
+                                    }
+                                    icon_record.setImageResource(R.mipmap.icon_record);
+
                                 } else {
                                     VoiceFunctionF2.StopRecordVoice(is2mp3);
                                     VoiceFunctionF2.StopVoice();

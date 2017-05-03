@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:minHeight="210dp"
+    android:layout_height="220dp"
+    android:minHeight="220dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -77,10 +77,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="13dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -126,6 +127,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text=""
+                    android:singleLine="true"
+                    android:maxWidth="200dp"
                     android:textColor="@color/dd_gray"
                     android:textSize="16sp" />
 
@@ -170,7 +173,9 @@
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:drawableLeft="@mipmap/comment_normal"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/dd_gray"
+                    android:drawablePadding="5dp"
                     android:textSize="14sp" />
 
 

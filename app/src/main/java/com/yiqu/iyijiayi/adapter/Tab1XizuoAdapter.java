@@ -139,7 +139,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
            final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.content.setText(f.desc);
-//            h.comment.setText(String.valueOf(f.co));
+            h.comment.setText(f.comments);
             h.like.setText(String.valueOf(f.like));
             h.listener.setText(String.valueOf(f.views));
             h.author.setText(f.stuname);

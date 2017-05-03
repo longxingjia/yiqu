@@ -22,25 +22,25 @@
 
             <TextView
                 android:id="@+id/tab_teacher"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/teacher_selected_selector"
                 android:gravity="center"
                 android:text="导师"
                 android:textColor="@color/white"
-                android:textSize="15dp"/>
+                android:textSize="14dp"/>
 
 
             <TextView
                 android:id="@+id/tab_student"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="-1dp"
                 android:background="@drawable/student_selected_selector"
                 android:gravity="center"
                 android:text="学生"
                 android:textColor="@color/tab_text_color"
-                android:textSize="15dp"/>
+                android:textSize="14dp"/>
 
 
         </LinearLayout>

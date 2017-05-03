@@ -520,6 +520,18 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi searchSoundArticles = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/search-sound-articles";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
 
     public static MyNetApi uploadSounds = new MyNetApi() {
         @Override

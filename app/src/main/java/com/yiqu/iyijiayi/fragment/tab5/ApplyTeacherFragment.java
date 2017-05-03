@@ -1,9 +1,11 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
@@ -36,6 +38,7 @@ public class ApplyTeacherFragment extends AbsAllFragment {
     private EditText phonenum;
     private EditText from;
     private EditText city;
+    private TextView tips;
 
     @Override
     protected int getTitleBarType() {
@@ -78,11 +81,14 @@ public class ApplyTeacherFragment extends AbsAllFragment {
         city = (EditText) v.findViewById(R.id.city);
         from = (EditText) v.findViewById(R.id.from);
         sumbit = (Button) v.findViewById(R.id.submit);
+        tips = (TextView) v.findViewById(R.id.tips);
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
-
+        tips.setText(Html.fromHtml("当您提交了以上真实信息后，" +
+                "我们工作人员会第一时间联系您，还请耐心等候！一般处理周期为" +
+               "<font color=\'#ff0000\'>5个工作日</font>" +"左右"));
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
         } else {

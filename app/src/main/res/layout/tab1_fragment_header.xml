@@ -23,43 +23,51 @@
     </com.yiqu.iyijiayi.view.AutoPlayViewPager>
 
     <LinearLayout
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="20dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/question"
-            android:layout_marginLeft="30dp"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="100dp"
             android:drawableTop="@mipmap/icon_quetion"
             android:gravity="center"
             android:text="热门问答" />
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            android:background="@color/tab_bg_color"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+             />
 
         <TextView
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/raokouling"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="100dp"
             android:drawableTop="@mipmap/icon_rkl"
             android:gravity="center"
             android:text="挑战绕口令" />
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            android:background="@color/tab_bg_color"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            />
 
         <TextView
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/reader"
-            android:layout_width="80dp"
-            android:layout_marginRight="30dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="100dp"
             android:drawableTop="@mipmap/icon_read"
             android:gravity="center"

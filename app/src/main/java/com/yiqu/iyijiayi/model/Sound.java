@@ -46,6 +46,7 @@ public class Sound implements Serializable {
     public String tecname;
     public String tecimage;
     public String tectitle;
+    public String comments;
     public int isLike;
     public ArrayList<CommentsInfo> top_comments;
 
@@ -65,6 +66,7 @@ public class Sound implements Serializable {
                 ", views=" + views +
                 ", followcount=" + followcount +
                 ", like=" + like +
+                ", comments=" + comments +
                 ", isopen=" + isopen +
                 ", listenprice=" + listenprice +
                 ", ispay=" + ispay +
