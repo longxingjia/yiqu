@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.fragment.tab4;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,23 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     protected int getBodyView() {
         return R.layout.tab4_event_fragment;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        allowBindService(getActivity());
+
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        allowUnbindService(getActivity());
     }
 
     @Override
@@ -208,6 +226,11 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
+
+        if (mPlayService != null) {
+            if (mPlayService.isPlaying())
+                mPlayService.pause();
+        }
 
         if (id.equals("Remen")) {
             if (type == TYPE_SUCCESS) {

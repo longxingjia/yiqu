@@ -63,7 +63,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayActivity extends Activity
+public class PlayActivity extends BaseActivity
         implements NetCallBack {
 
     private String tag = "PlayActivity";
@@ -146,6 +146,18 @@ public class PlayActivity extends Activity
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        allowBindService();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        allowUnbindService();
+    }
+
     private void init(int layoutId) {
         setContentView(layoutId);
         ButterKnife.bind(this);
@@ -215,13 +227,8 @@ public class PlayActivity extends Activity
 
 
     public void initData() {
-//        rotate = AnimationUtils.loadAnimation(this, R.anim.recording_animation);
-//        LinearInterpolator lin = new LinearInterpolator();
-//        rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
 
         musicName.setText(voice.musicname);
-
-
         play.setImageResource(R.mipmap.icon_pause);
 
         Random random = new Random();
@@ -236,6 +243,10 @@ public class PlayActivity extends Activity
 
         String fileName = voice.musicname + "_" + voice.mid;
         playUrl(Variable.StorageMusicPath + voice.voicename);
+        if (mPlayService!=null){
+            mPlayService.pause();
+        }
+
         File lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
         if (!lrc.exists()) {
 
@@ -246,9 +257,6 @@ public class PlayActivity extends Activity
                             .getlyric(this),
                     "getlyric", instance);
         } else {
-            //  LogUtils.LOGE(tag,fileName);
-//            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-//            lyricView.invalidate();
 
             lyricView.setLyric(  LyricUtils.parseLyric(lrc,"utf-8"));
             lyricView.play();
@@ -258,21 +266,6 @@ public class PlayActivity extends Activity
     }
 
     private Handler handler = new Handler();
-
-//    private Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            if (player.isPlaying()) {
-//                int time = player.getCurrentPosition();
-//
-//                LogUtils.LOGE(tag, player.getDuration()+"");
-//                lyricView.updateLyrics( time, player.getDuration());
-//                handler.postDelayed(this, 100);
-//
-//            }
-//
-//        }
-//    };
 
 
     @Override
@@ -559,6 +552,16 @@ public class PlayActivity extends Activity
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onPublish(int progress) {
+
+    }
+
+    @Override
+    public void onChange(int position) {
+
     }
 
 

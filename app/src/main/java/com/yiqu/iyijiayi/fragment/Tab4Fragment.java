@@ -34,7 +34,6 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     @BindView(R.id.listView)
     public ListView listView;
 
-  //  private LoadMoreView mLoadMoreView;
     private int count = 0;
     private int rows = 10;
     private Tab4Adapter tab4Adapter;

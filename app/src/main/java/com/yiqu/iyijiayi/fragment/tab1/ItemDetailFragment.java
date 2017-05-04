@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
@@ -281,7 +283,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     private int payforTag = 0;
     private int position;
-    private Player player;
+  //  private Player player;
     private Sound soundWorth;
 
     @Override
@@ -294,13 +296,13 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         ButterKnife.bind(this, v);
         likes = AppShare.getLikeList(getActivity());
 
-        seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
-            @Override
-            public void completion() {
-
-            }
-        });
+  //      seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+//        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
+//            @Override
+//            public void completion() {
+//
+//            }
+//        });
         initListeners();
 
         Intent intent = new Intent();
@@ -349,28 +351,28 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
     }
 
-    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
-        int progress;
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress,
-                                      boolean fromUser) {
-            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-            this.progress = (int) (progress * player.mediaPlayer.getDuration()
-                    / seekBar.getMax());
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
-            player.mediaPlayer.seekTo(progress);
-        }
-    }
+//    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
+//        int progress;
+//
+//        @Override
+//        public void onProgressChanged(SeekBar seekBar, int progress,
+//                                      boolean fromUser) {
+//            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+//            this.progress = (int) (progress * player.mediaPlayer.getDuration()
+//                    / seekBar.getMax());
+//        }
+//
+//        @Override
+//        public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//        }
+//
+//        @Override
+//        public void onStopTrackingTouch(SeekBar seekBar) {
+//            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
+//            player.mediaPlayer.seekTo(progress);
+//        }
+//    }
 
     private void initDianZan() {
         Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed_new);
@@ -465,7 +467,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         } else if (id.equals("getSoundList")) {
 
             video_play.setImageResource(R.mipmap.video_pause);
-            player.playUrl(stuUrl);
+            //player.playUrl(stuUrl);
+          //  mPlayService.pause();
+            mPlayService.play(stuUrl,sound.sid);
+
 
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
@@ -664,18 +669,18 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 getActivity().finish();
                 break;
             case R.id.video_play:
-                if (player.isPlaying()) {
-                    video_play.setImageResource(R.mipmap.video_play);
-                    player.pause();
-                } else {
-                    video_play.setImageResource(R.mipmap.video_pause);
-
-                    if (stuUrl.equals(player.getUrl())) {
-                        player.rePlay();
-                    } else {
-                        player.playUrl(stuUrl);
-                    }
-                }
+//                if (player.isPlaying()) {
+//                    video_play.setImageResource(R.mipmap.video_play);
+//                    player.pause();
+//                } else {
+//                    video_play.setImageResource(R.mipmap.video_pause);
+//
+//                    if (stuUrl.equals(player.getUrl())) {
+//                        player.rePlay();
+//                    } else {
+//                        player.playUrl(stuUrl);
+//                    }
+//                }
 
                 break;
             case R.id.stu_listen:
@@ -852,11 +857,28 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
 
-        player.pause();
+        //player.pause();
 
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        allowBindService(getActivity());
+
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("fragment", "onDestroyView");
+        allowUnbindService(getActivity());
+    }
 
     private long dowoload(String downloadUrl, String fileName, final int tag) {
         downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
@@ -1059,7 +1081,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public void onDestroy() {
 
         VoiceFunction.StopVoice();
-        player.stop();
+        //player.stop();
         stucurrentTime = 0;
         teacurrentTime = 0;
 

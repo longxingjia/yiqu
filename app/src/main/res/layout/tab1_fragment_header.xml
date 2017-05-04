@@ -9,11 +9,7 @@
         android:layout_height="1dp"
         android:background="@color/dark_gray" />
 
-    <include
-        android:id="@+id/top_play"
-        layout="@layout/top_play"
-        android:background="#11000000"
-        android:visibility="gone" />
+
 
     <com.yiqu.iyijiayi.view.AutoPlayViewPager
         android:id="@+id/vp_spinner"

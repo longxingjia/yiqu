@@ -219,6 +219,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 mAuthor.setText(f.stuname);
                 String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
                 intent.setClass(mContext, MusicService.class);
+                //      mContext.stopService(intent);
                 intent.putExtra("choice", "play");
                 intent.putExtra("url", url);
                 mContext.startService(intent);

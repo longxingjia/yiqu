@@ -22,7 +22,7 @@
     <color name="set_item_edit_color">#898989</color>
     <color name="set_line_color">#999999</color>
     <color name="tab_bg_color">#f2f2f2</color>
-    <color name="tab_text_color">#bbbbbb</color>
+    <color name="tab_text_color">#88bbbbbb</color>
     <color name="tab_txt_disable_color">#b3b3b3</color>
     <color name="tab_txt_eable_color">#ff0000</color>
     <color name="text_bg">#f7f7f7</color>

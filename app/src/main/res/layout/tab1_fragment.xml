@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+
 
     <com.ui.views.RefreshList
         android:id="@+id/lv_sound"
@@ -13,5 +15,12 @@
         android:listSelector="#00000000"
         android:scrollbars="none"></com.ui.views.RefreshList>
 
-</LinearLayout>
+    <include
+        android:id="@+id/top_play"
+        layout="@layout/top_play"
+        android:background="#ffffff"
+        android:visibility="gone"
+         />
+
+</RelativeLayout>
 

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +35,8 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1SoundListFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
@@ -86,12 +90,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         ;
     };
     private String uid;
-    private ArrayList<Sound> sound;
+    private ArrayList<Sound> sounds;
     private ArrayList<Sound> xizuo;
 
     //  private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;
-    private Tab1XizuoAdapter tab1XizuoAdapter;
+    private Tab1XizuoAdapterTest tab1XizuoAdapter;
     private TextView more_xizuo;
     private ArrayList<Like> likes;
     private int count = 0;
@@ -128,6 +132,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         lvSound.addFooterView(mLoadMoreView);
+        tab1XizuoAdapter = new Tab1XizuoAdapterTest(getActivity(), getClass().getSimpleName());
+        lvSound.setAdapter(tab1XizuoAdapter);
+        lvSound.setOnItemClickListener(tab1XizuoAdapter);
         lvSound.addHeaderView(headerView);
         lvSound.setOnScrollListener(mLoadMoreView);
         lvSound.setFooterDividersEnabled(false);
@@ -135,11 +142,19 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         mLoadMoreView.setMoreAble(false);
         lvSound.setRefreshListListener(this);
 
+        top_play = (LinearLayout) v.findViewById(R.id.top_play);
+        play = (ImageView) v.findViewById(R.id.play);
+        stop = (ImageView) v.findViewById(R.id.stop);
+        musicplaying = (TextView) v.findViewById(R.id.musicname);
+        authorName = (TextView) v.findViewById(R.id.name);
+        play.setOnClickListener(playListener);
+        stop.setOnClickListener(stopListener);
+
         //注册广播接收器
-        MyReceiver receiver = new MyReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("com.yiqu.iyijiayi.service.MusicService");
-        getActivity().registerReceiver(receiver, filter);
+//        MyReceiver receiver = new MyReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction("com.yiqu.iyijiayi.service.MusicService");
+//        getActivity().registerReceiver(receiver, filter);
     }
 
     /**
@@ -147,31 +162,31 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
      *
      * @author jiqinlin
      */
-    public class MyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            Bundle bundle=intent.getExtras();
-//            int count=bundle.getInt("count");
-//            editText.setText(count+"");
-            //  LogUtils.LOGE("tag","fs");
-
-            String data = intent.getStringExtra("data");
-            switch (data) {
-                case "stop":
-                    top_play.setVisibility(View.GONE);
-                    break;
-
-                case "rePlay":
-                    play.setImageResource(R.mipmap.play_banner);
-
-                    break;
-                case "pause":
-                    play.setImageResource(R.mipmap.pause_banner);
-                    break;
-            }
-
-        }
-    }
+//    public class MyReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+////            Bundle bundle=intent.getExtras();
+////            int count=bundle.getInt("count");
+////            editText.setText(count+"");
+//            //  LogUtils.LOGE("tag","fs");
+//
+//            String data = intent.getStringExtra("data");
+//            switch (data) {
+//                case "stop":
+//                    top_play.setVisibility(View.GONE);
+//                    break;
+//
+//                case "rePlay":
+//                    play.setImageResource(R.mipmap.play_banner);
+//
+//                    break;
+//                case "pause":
+//                    play.setImageResource(R.mipmap.pause_banner);
+//                    break;
+//            }
+//
+//        }
+//    }
 
 
     @Override
@@ -179,25 +194,28 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         super.onResume();
         MobclickAgent.onPageStart(getString(R.string.home_page)); //统计页面，"MainScreen"为页面名称，可自定义
 
+        if (mPlayService != null) {
+            int sid = mPlayService.getPlayingPosition();
+            if (sid > 0) {
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                                .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
+                        "getSoundDetail", Tab1Fragment.this);
+
+            }
+        }
+
     }
 
     private Intent intent = new Intent();
 
     private void initHeadView(View v) {
         vp_spinner = (AutoPlayViewPager) v.findViewById(R.id.vp_spinner);
-//        lvXizuo = (ListView) v.findViewById(R.id.lv_xizuo);
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
-        musicplaying = (TextView) v.findViewById(R.id.musicname);
-        authorName = (TextView) v.findViewById(R.id.name);
         question = (TextView) v.findViewById(R.id.question);
         raokouling = (TextView) v.findViewById(R.id.raokouling);
         reader = (TextView) v.findViewById(R.id.reader);
-        top_play = (LinearLayout) v.findViewById(R.id.top_play);
-        play = (ImageView) v.findViewById(R.id.play);
-        stop = (ImageView) v.findViewById(R.id.stop);
 
-        play.setOnClickListener(playListener);
-        stop.setOnClickListener(stopListener);
         question.setOnClickListener(this);
         raokouling.setOnClickListener(this);
         reader.setOnClickListener(this);
@@ -209,10 +227,21 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         @Override
         public void onClick(View v) {
-            intent.putExtra("choice", "pause");
-            //  play.setImageResource(R.mipmap.play_icon);
-            intent.setClass(getActivity(), MusicService.class);
-            getActivity().startService(intent);
+//            intent.putExtra("choice", "pause");
+//            //  play.setImageResource(R.mipmap.play_icon);
+//            intent.setClass(getActivity(), MusicService.class);
+//            getActivity().startService(intent);
+            if (mPlayService!=null){
+                if (mPlayService.isPlaying()){
+                    mPlayService.pause();
+                    top_play.setBackgroundResource(R.mipmap.play_banner);
+                }else {
+                    mPlayService.resume();
+                    top_play.setBackgroundResource(R.mipmap.pause_banner);
+                }
+            }
+
+
         }
     };
 
@@ -220,12 +249,59 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         @Override
         public void onClick(View v) {
-            intent.putExtra("choice", "stop");
+//            intent.putExtra("choice", "stop");
             top_play.setVisibility(View.GONE);
-            intent.setClass(getActivity(), MusicService.class);
-            getActivity().startService(intent);
+
+//            intent.setClass(getActivity(), MusicService.class);
+//            getActivity().startService(intent);
+            if (mPlayService!=null){
+                mPlayService.pause();
+            }
+
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        allowBindService(getActivity());
+
+        tab1XizuoAdapter.setOnMoreClickListener(new Tab1XizuoAdapterTest.OnMoreClickListener() {
+            @Override
+            public void onMoreClick(int position) {
+
+                String url = MyNetApiConfig.ImageServerAddr + sounds.get(position).soundpath;
+                mPlayService.play(url, sounds.get(position).sid);
+
+                initTopPlayUI(sounds.get(position));
+            }
+
+        });
+
+      //  mPlayService.onCompletion();
+
+    }
+
+    private void initTopPlayUI(Sound sound) {
+        top_play.setVisibility(View.VISIBLE);
+        play.setImageResource(R.mipmap.play_banner);
+        musicplaying.setText(sound.musicname);
+        authorName.setText(sound.stuname);
+    }
+
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("fragment", "onDestroyView");
+        allowUnbindService(getActivity());
+    }
+
+
 
     @Override
     protected boolean isTouchMaskForNetting() {
@@ -242,14 +318,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             vp_spinner.setAdapter(bannerAdapter);
             vp_spinner.start();
         }
-
-        //   tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(), top_play, play, musicplaying, authorName);
-        //lvXizuo.setAdapter(tab1XizuoAdapter);
         likes = AppShare.getLikeList(getActivity());
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),getClass().getSimpleName(), top_play, play, musicplaying, authorName);
-        lvSound.setAdapter(tab1XizuoAdapter);
-        lvSound.setOnItemClickListener(tab1XizuoAdapter);
-        //  lvXizuo.setOnItemClickListener(tab1XizuoAdapter);
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
@@ -290,7 +359,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT | FLAG_BACK;
+        return FLAG_ALL;
     }
 
     @Override
@@ -302,6 +371,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
+        setTitleBtnImg(R.mipmap.edit_tab);
         // pageNextComplete();
 
         return true;
@@ -330,8 +400,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 break;
             case R.id.raokouling:
                 Events events = new Events();
-                events.id =1;
-                events.title ="挑战绕口令";
+                events.id = 1;
+                events.title = "挑战绕口令";
 
                 i.putExtra("fragment", EventFragment.class.getName());
                 Bundle bundle = new Bundle();
@@ -342,8 +412,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 break;
             case R.id.reader:
                 Events e = new Events();
-                e.id =2;
-                e.title ="为你朗诵";
+                e.id = 2;
+                e.title = "为你朗诵";
 
                 i.putExtra("fragment", EventFragment.class.getName());
                 Bundle b = new Bundle();
@@ -368,23 +438,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_OK:
-//                Bundle b=data.getExtras(); //data为B中回传的Intent
-//                String str=b.getString("str1");//str即为回传的值
-
-//                String sid = data.getExtras().getString("data");
-//                LogUtils.LOGE("tab1f",Integer.parseInt(sid)+"");
-//                int position = data.getIntExtra("position", -1);
-
-//                LogUtils.LOGE("s",position+"");
-//                Sound s = sound.get(position);
-//                LogUtils.LOGE("1",s.toString());
-//                s.listen = 1;
-//                sound.remove(position);
-//                sound.add(position,s);
-//
-//                LogUtils.LOGE("tab1f", sound.toString());
-
-//                tab1XizuoAdapter.updateSingleRow(lvSound, 107);
 
                 break;
             default:
@@ -398,12 +451,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
 
-                sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                ArrayList<Sound> s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
                 //tab1XizuoAdapter.setData(xizuo);
-                tab1XizuoAdapter.setData(sound);
+                sounds = s;
+                tab1XizuoAdapter.setData(s);
 
-                if (sound.size() == rows) {
+                if (s.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
                 }
                 count += rows;
@@ -416,14 +470,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         } else if (id.equals("getSoundList_more")) {
 
             if (type == TYPE_SUCCESS) {
-                sound = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                ArrayList<Sound> s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
+                sounds.addAll(s);
 
-                //  remen.sound.addAll(sound);
-                //    AppShare.setRemenList(getActivity(), remen);
-//                tab1XizuoAdapter.setData(sound);
-                tab1XizuoAdapter.addData(sound);
-                if (sound.size() < rows) {
+                tab1XizuoAdapter.addData(s);
+                if (s.size() < rows) {
                     mLoadMoreView.setMoreAble(false);
                 }
                 count += rows;
@@ -451,6 +503,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
             }
             //    LogUtils.LOGE("tab1", netResponse.toString());
+        } else if (id.equals("getSoundDetail")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+
+                Gson gson = new Gson();
+                Sound sound = gson.fromJson(netResponse.data, Sound.class);
+
+                initTopPlayUI(sound);
+
+            }
         }
 
         super.onNetEnd(id, type, netResponse);
@@ -459,8 +520,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     public void onRefresh() {
-//        mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
-//        mImageLoaderHm.stop();
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
@@ -469,13 +528,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
                 "getSoundList", Tab1Fragment.this);
-
-
-//        RestNetCallHelper.callNet(
-//                getActivity(),
-//                MyNetApiConfig.remen,
-//                MyNetRequestConfig.remen(getActivity(), uid),
-//                "Remen", Tab1Fragment.this, false, true);
 
     }
 

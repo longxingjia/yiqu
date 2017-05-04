@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -271,8 +272,30 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        allowBindService(getActivity());
+
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        allowUnbindService(getActivity());
+    }
+
     @Override
     public void onClick(View v) {
+        if (mPlayService != null) {
+            if (mPlayService.isPlaying())
+                mPlayService.pause();
+        }
+
         switch (v.getId()) {
             case R.id.head:
 //                mMenuDialogPicHelper.show(v, head);

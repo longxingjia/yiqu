@@ -137,7 +137,7 @@ public class WelcomePageActivity extends Activity {
     }
 
     private void begin() {
-   
+
         //      intent = new Intent(this, RecordAacActivity.class);//
             intent = new Intent(this, MainActivity.class);//
         //  intent = new Intent(this, StubActivity.class);

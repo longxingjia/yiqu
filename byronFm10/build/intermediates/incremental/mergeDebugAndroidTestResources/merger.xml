@@ -8,7 +8,7 @@
             <enum name="top" value="1"/>
             <enum name="center" value="2"/>
             <enum name="bottom" value="3"/>
-        </attr><attr format="string" name="label_txt"/><attr format="reference|color" name="label_icon"/><attr format="string" name="edit_hint"/><attr format="string" name="edit_txt"/><attr format="reference|color" name="more_icon"/><attr format="reference" name="edit_layout"/></declare-styleable><string name="fm_net_error">系统繁忙，请稍后再试</string><dimen name="view_stepchartview_padding">1dp</dimen><color name="set_item_edit_color">#898989</color><dimen name="view_stepchartview_width_for_week">60dp</dimen><dimen name="view_super_edit_right_width">35dp</dimen><color name="green">#0BE3A8</color><color name="tab_text_color">#bbbbbb</color><color name="menu_bg_color">#f1f0f8</color><style name="tab_host_txt">
+        </attr><attr format="string" name="label_txt"/><attr format="reference|color" name="label_icon"/><attr format="string" name="edit_hint"/><attr format="string" name="edit_txt"/><attr format="reference|color" name="more_icon"/><attr format="reference" name="edit_layout"/></declare-styleable><string name="fm_net_error">系统繁忙，请稍后再试</string><dimen name="view_stepchartview_padding">1dp</dimen><color name="set_item_edit_color">#898989</color><dimen name="view_stepchartview_width_for_week">60dp</dimen><dimen name="view_super_edit_right_width">35dp</dimen><color name="green">#0BE3A8</color><color name="tab_text_color">#88bbbbbb</color><color name="menu_bg_color">#f1f0f8</color><style name="tab_host_txt">
     	<item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
