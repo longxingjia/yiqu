@@ -141,7 +141,6 @@
             android:enabled="true"
             android:exported="false"
             android:persistent="true"
-
         >
         </service>
 

@@ -149,11 +149,15 @@ public class VoiceFunctionF2 {
     public synchronized static void PlayToggleVoice(String fileUrl,
                                                     VoicePlayerInterface voicePlayerInterface) {
         if (IsPlayVoice(fileUrl)) {
-            VoicePlayerEngine.getInstance().stopVoice();
+           VoicePlayerEngine.getInstance().stopVoice();
         } else {
-            VoicePlayerEngine.getInstance()
-                    .playVoice(fileUrl, voicePlayerInterface);
+          //  VoicePlayerEngine.getInstance().stopVoice();
+//            VoicePlayerEngine.getInstance()
+//                    .playVoice(fileUrl, voicePlayerInterface);
         }
+
+        VoicePlayerEngine.getInstance()
+                .playVoice(fileUrl, voicePlayerInterface);
     }
 
     public synchronized static void PlayToggleVoice(String fileUrl,

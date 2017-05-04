@@ -267,23 +267,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             uid = "0";
         }
 
-//        if (!NetWorkUtils.isNetworkAvailable(getActivity())) {
-//            Remen remen = AppShare.getRemenList(getActivity());
-//            if (remen != null) {
-//                //tab1XizuoAdapter.setData(remen.xizuo);
-//                tab1XizuoAdapter.setData(remen.sound);
-//            }
-//        } else {
-//            count = 0;
-////            RestNetCallHelper.callNet(
-////                    getActivity(),
-////                    MyNetApiConfig.remen,
-////                    MyNetRequestConfig.remen(getActivity(), uid),
-////                    "Remen", Tab1Fragment.this, false, true);
-//
-//
-//
-//        }
         count = 0;
         RestNetCallHelper.callNet(
                 getActivity(),
