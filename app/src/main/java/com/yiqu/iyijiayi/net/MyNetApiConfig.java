@@ -541,6 +541,14 @@ public class MyNetApiConfig {
 //        public static String uploadSounds = ServerAddr+"";
 
     };
+    public static MyNetApi views = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/views";
+        }
+//        public static String uploadSounds = ServerAddr+"";
+
+    };
     public static MyNetApi addHistory = new MyNetApi() {
         @Override
         public String getPath() {

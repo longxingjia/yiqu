@@ -35,6 +35,7 @@ import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Like;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -52,13 +53,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
     private Context mContext;
     private Fragment fragment;
     private String tag = "Tab1SoundAdapter";
-  //  private ArrayList<Like> likes;
+    //  private ArrayList<Like> likes;
 
     public Tab1SoundAdapter(Fragment fragment) {
         mContext = fragment.getActivity();
         mLayoutInflater = LayoutInflater.from(mContext);
         this.fragment = fragment;
-     //   this.likes = likes;
+        //   this.likes = likes;
 
     }
 
@@ -152,81 +153,50 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 }
 
             }
-        //    h.tea_listen.setText("1元偷偷听");
 
-//            if (likes != null) {
-//                for (int i = 0; i < likes.size(); i++) {
-//                    Like dz = likes.get(i);
-//                    if (dz.sid == f.sid) {
-////                     int likesIndex = i;
-//                        f.isLike = 1;
-//                        break;
-//                    }
-//
-//                }
-//            }
-            if (f.isLike == 1) {
-
-                initDianZan(h.like, true);
-            } else {
+            if (f.islike == 0) {
                 initDianZan(h.like, false);
+            } else {
+                initDianZan(h.like, true);
             }
 
             h.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (AppShare.getIsLogin(mContext)) {
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.like,
+                                MyNetRequestConfig.like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                                "getSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
 
-
-                    if (!AppShare.getIsLogin(mContext)) {
-                        Intent i = new Intent(mContext, StubActivity.class);
-                        i.putExtra("fragment", SelectLoginFragment.class.getName());
-                        ToastManager.getInstance(mContext).showText("请登录后再试");
-                        mContext.startActivity(i);
-                        return;
-                    }
-
-
-                    RestNetCallHelper.callNet(mContext,
-                            MyNetApiConfig.like, MyNetRequestConfig
-                                    .like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
-                            "like", new NetCallBack() {
-                                @Override
-                                public void onNetNoStart(String id) {
-
-                                }
-
-                                @Override
-                                public void onNetStart(String id) {
-
-                                }
-
-                                @Override
-                                public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                    LogUtils.LOGE(tag, f.isLike + "");
-                                    if (f.isLike == 1) {
-
-                                    } else {
-
-                                        Like l = new Like();
-                                        l.sid = f.sid;
-                                        l.islike = 1;
-                                        f.isLike = 1;
-                                        f.like++;
-
-                                        notifyDataSetChanged();
-//                                        if (likes == null) {
-//                                            likes = new ArrayList<Like>();
-//                                        }
-//                                        likes.add(l);
-//                                        AppShare.setLikeList(mContext, likes);
                                     }
 
-                                }
-                            }, false, true);
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                        //  LogUtils.LOGE(tag,netResponse.toString());
+                                        if (type == TYPE_SUCCESS) {
+                                            f.like++;
+                                            notifyDataSetChanged();
+                                        }
+
+                                    }
+                                });
+                    } else {
+                        Model.startNextAct(mContext,
+                                SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                    }
+
                 }
             });
-
-
             if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
             } else {

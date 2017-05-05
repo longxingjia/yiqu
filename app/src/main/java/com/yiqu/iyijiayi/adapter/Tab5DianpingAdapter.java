@@ -9,6 +9,7 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Like;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -145,68 +147,49 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                 }
 
             }
-
-//            if (f.isLike == 1) {
-//
-//                initDianZan(h.like, true);
-//            } else {
-//                initDianZan(h.like, false);
-//            }
+            if (f.islike==0){
+                initDianZan(h.like,false);
+            }else {
+                initDianZan(h.like,true);
+            }
 
             h.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (AppShare.getIsLogin(mContext)){
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.like,
+                                MyNetRequestConfig.like(mContext, AppShare.getUserInfo(mContext).uid,String.valueOf(f.sid)),
+                                "getSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
 
-
-                    if (!AppShare.getIsLogin(mContext)) {
-                        Intent i = new Intent(mContext, StubActivity.class);
-                        i.putExtra("fragment", SelectLoginFragment.class.getName());
-                        ToastManager.getInstance(mContext).showText("请登录后再试");
-                        mContext.startActivity(i);
-                        return;
-                    }
-
-
-                    RestNetCallHelper.callNet(mContext,
-                            MyNetApiConfig.like, MyNetRequestConfig
-                                    .like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
-                            "like", new NetCallBack() {
-                                @Override
-                                public void onNetNoStart(String id) {
-
-                                }
-
-                                @Override
-                                public void onNetStart(String id) {
-
-                                }
-
-                                @Override
-                                public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                    LogUtils.LOGE(tag, f.isLike + "");
-                                    if (f.isLike == 1) {
-
-                                    } else {
-
-                                        Like l = new Like();
-                                        l.sid = f.sid;
-                                        l.islike = 1;
-                                        f.isLike = 1;
-                                        f.like++;
-
-                                        notifyDataSetChanged();
-//                                        if (likes == null) {
-//                                            likes = new ArrayList<Like>();
-//                                        }
-//                                        likes.add(l);
-//                                        AppShare.setLikeList(mContext, likes);
                                     }
 
-                                }
-                            }, false, true);
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                        //  LogUtils.LOGE(tag,netResponse.toString());
+                                        if (type==TYPE_SUCCESS){
+                                            f.like ++;
+                                            notifyDataSetChanged();
+                                        }
+
+                                    }
+                                });
+                    }else {
+                        Model.startNextAct(mContext,
+                                SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                    }
+
                 }
             });
-
 
 
             PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
@@ -217,6 +200,19 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             e.printStackTrace();
         }
         return v;
+    }
+
+    private void initDianZan(TextView textView, boolean t) {
+        Drawable leftDrawable;
+        if (t) {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan_pressed_new);
+
+        } else {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan__new);
+
+        }
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        textView.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
     }
 
     @Override

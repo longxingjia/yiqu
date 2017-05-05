@@ -19,6 +19,7 @@ import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.utils.LogUtils;
+import com.yiqu.Control.Main.RecordAllActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -57,10 +58,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private RefreshList listView;
   //  private Tab4HotAdapter tab4HotAdapter;
     private Tab4NewAdapter tab4NewAdapter;
-
     private String uid;
-
-    private ArrayList<Discovery> discoveries;
     private Events events;
     private String arr;
     private ArrayList<Sound> sounds;
@@ -129,13 +127,11 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.join_in:
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", EventInfoFragment.class.getName());
-                i.putExtra("eid", String.valueOf(events.id));
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("data",f);
-//                i.putExtras(bundle);
-                getActivity().startActivity(i);
+
+                Intent intent = new Intent(getActivity(), RecordAllActivity.class);
+                intent.putExtra("eid",String.valueOf(events.id));
+                intent.putExtra("title",String.valueOf(events.title));
+                getActivity().startActivity(intent);
 
 
                 break;
@@ -168,11 +164,12 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         Gson gson = new Gson();
         arr = gson.toJson(nsDictionary);
 
-        RestNetCallHelper.callNet(
-                getActivity(),
-                MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
-                "getSoundList", EventFragment.this);
+//        RestNetCallHelper.callNet(
+//                getActivity(),
+//                MyNetApiConfig.getSoundList,
+//                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
+//                "getSoundList", EventFragment.this);
+        onRefresh();
     }
 
     @Override
@@ -180,12 +177,10 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         super.onResume();
         MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
 
-//        RestNetCallHelper.callNet(
-//                getActivity(),
-//                MyNetApiConfig.remen,
-//                MyNetRequestConfig.remen(getActivity(), uid),
-//                "Remen", EventFragment.this, false, true);
-
+        if (mPlayService != null) {
+            if (mPlayService.isPlaying())
+                mPlayService.pause();
+        }
 
     }
 
@@ -227,17 +222,10 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (mPlayService != null) {
-            if (mPlayService.isPlaying())
-                mPlayService.pause();
-        }
-
         if (id.equals("Remen")) {
             if (type == TYPE_SUCCESS) {
                 Gson gson = new Gson();
                 Remen remen = gson.fromJson(netResponse.data, Remen.class);
-                //   LogUtils.LOGE(tag, remen.toString());
-                //tab4HotAdapter.setData(remen.xizuo);
                 tab4NewAdapter.setData(remen.sound);
             }
         } else if (id.equals("getSoundList")) {

@@ -63,9 +63,7 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     public void onClick(View v) {
 
         switch (v.getId()) {
-
             case R.id.submit:
-
 
                 break;
             default:

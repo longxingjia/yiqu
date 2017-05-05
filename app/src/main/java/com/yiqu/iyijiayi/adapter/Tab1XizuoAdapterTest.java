@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -139,8 +140,12 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
             } else {
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
+            if (f.islike==0){
+                initDianZan(h.like,false);
 
-
+            }else {
+                initDianZan(h.like,true);
+            }
 
             h.like.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,10 +168,16 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
 
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                      //  LogUtils.LOGE(tag,netResponse.toString());
+                                        //  LogUtils.LOGE(tag,netResponse.toString());
                                         if (type==TYPE_SUCCESS){
-                                            f.like ++;
-                                            notifyDataSetChanged();
+
+                                            if (f.islike==0){
+                                                f.like ++;
+                                                f.islike = 1;
+                                                notifyDataSetChanged();
+                                            }else {
+
+                                            }
                                         }
 
                                     }
@@ -180,7 +191,7 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
                 }
             });
 
-            //  LogUtils.LOGE(fragmentName,fragmentName);
+
 
             if (fragmentName.equals("Tab1Fragment")){
                 if (position<9){
@@ -250,6 +261,20 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
     public interface OnMoreClickListener {
         public void onMoreClick(int position);
     }
+
+    private void initDianZan(TextView textView, boolean t) {
+        Drawable leftDrawable;
+        if (t) {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan_pressed_new);
+
+        } else {
+            leftDrawable = mContext.getResources().getDrawable(R.mipmap.dianzan__new);
+
+        }
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        textView.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

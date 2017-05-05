@@ -157,9 +157,7 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
                         RenewFragment.class.getName());
                 break;
         }
-
     }
-
 
     @Override
     public boolean onMore(AbsListView view) {

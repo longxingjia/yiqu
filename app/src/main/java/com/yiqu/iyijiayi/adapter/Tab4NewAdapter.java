@@ -9,9 +9,11 @@ package com.yiqu.iyijiayi.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +42,19 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.DianZanUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
+import java.math.MathContext;
 import java.util.ArrayList;
 
 public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag = "Tab1XizuoAdapter";
+    private String tag = "Tab4NewAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
     private int mCurrent = -1;
-    private ImageView mPlay;
     private Intent intent = new Intent();
     private Player player;
 
@@ -101,6 +104,7 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
         TextView title;
         TextView publish_time;
         TextView comment;
+        TextView listener;
         TextView like;
         ImageView icon;
         ListView comments;
@@ -109,7 +113,7 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         try {
             HoldChild h;
@@ -123,6 +127,7 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
                 h.like = (TextView) v.findViewById(R.id.like);
                 h.comment = (TextView) v.findViewById(R.id.comment);
                 h.comments = (ListView) v.findViewById(R.id.lv_comments);
+                h.listener = (TextView) v.findViewById(R.id.listener);
 
                 h.publish_time = (TextView) v.findViewById(R.id.publish_time);
                 h.icon = (ImageView) v.findViewById(R.id.header);
@@ -131,19 +136,32 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
             }
             h = (HoldChild) v.getTag();
             final Sound f = getItem(position);
-            h.name.setText(f.musicname);
+            h.name.setText(f.stuname);
             h.title.setText(f.musicname);
             h.like.setText(String.valueOf(f.like));
-            h.publish_time.setText(String2TimeUtils.pulishTime(f.created));
-            h.content.setText(f.desc);
+            if (TextUtils.isEmpty(f.article_content)) {
+                h.content.setText(f.musicname);
+            } else {
+                h.content.setText(f.article_content);
+            }
+            h.listener.setText(String.valueOf(f.views));
             h.time.setText(f.soundtime + "\"");
+
+            h.comment.setText(String.valueOf(f.comments));
+            h.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
+
             Tab4hotCommentsAdapter tab4hotCommentsAdapter = new Tab4hotCommentsAdapter(mContext, String.valueOf(f.sid), String.valueOf(f.fromuid));
-            setListViewHeightBasedOnChildren(h.comments);
+
             h.comments.setAdapter(tab4hotCommentsAdapter);
-            h.comments.setItemsCanFocus(false);
-
+            //  h.comments.setItemsCanFocus(false);
             tab4hotCommentsAdapter.setData(f.top_comments);
+            setListViewHeightBasedOnChildren(h.comments);
 
+            if (f.islike == 0) {
+                DianZanUtils.initDianZan(mContext, h.like, false);
+            } else {
+                DianZanUtils.initDianZan(mContext, h.like, true);
+            }
             h.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -167,8 +185,14 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
                                         //  LogUtils.LOGE(tag,netResponse.toString());
                                         if (type == TYPE_SUCCESS) {
-                                            f.like++;
-                                            notifyDataSetChanged();
+
+                                            if (f.islike == 0) {
+                                                f.like++;
+                                                f.islike = 1;
+                                                notifyDataSetChanged();
+                                            } else {
+
+                                            }
                                         }
 
                                     }
@@ -178,26 +202,30 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
                                 SelectLoginFragment.class.getName());
                         ToastManager.getInstance(mContext).showText("请您登录后在操作");
                     }
+
                 }
             });
-
+            final int pos = position;
             if (mCurrent == position) {
-                // h.play_status.setImageResource(R.mipmap.xizuo_pause);
                 h.play_status.setImageResource(R.mipmap.music_pause);
-
             } else {
-                //   h.play_status.setImageResource(R.mipmap.xizuo_play);
                 h.play_status.setImageResource(R.mipmap.music_play);
             }
-
-          //  player.onCompletion();
 
             h.play_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //    h.play_status =
-                    player.playUrl(MyNetApiConfig.ImageServerAddr + f.soundpath);
-                    mCurrent = position;
+
+                    if (mCurrent == pos) {
+                        if (player.isPlaying()) {
+                            player.pause();
+                            mCurrent = -1;
+                        }
+                    } else {
+                        player.playUrl(MyNetApiConfig.ImageServerAddr + f.soundpath);
+                        mCurrent = pos;
+                    }
+
 
                     notifyDataSetChanged();
 
@@ -214,9 +242,10 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
         return v;
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position<1){
+        if (position < 1) {
             return;
         }
 
@@ -225,8 +254,8 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
                     R.string.fm_net_call_no_network);
             return;
         }
-        Sound f = getItem(position-1);
-        LogUtils.LOGE(tag,position+"");
+        Sound f = getItem(position - 1);
+        LogUtils.LOGE(tag, position + "");
         Intent i = new Intent(mContext, StubActivity.class);
         i.putExtra("fragment", ItemDetailFragment.class.getName());
         Bundle bundle = new Bundle();

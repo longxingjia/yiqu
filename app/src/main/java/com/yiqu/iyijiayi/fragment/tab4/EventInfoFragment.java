@@ -84,9 +84,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-
         MobclickAgent.onPageStart("录制作品");
-
     }
 
 
@@ -95,10 +93,7 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
     @Override
     public void onPause() {
         super.onPause();
-
         MobclickAgent.onPageEnd("录制作品");
-
-
     }
 
     @Override
@@ -119,7 +114,6 @@ public class EventInfoFragment extends AbsAllFragment implements View.OnClickLis
     @Override
     protected void initTitle() {
         setTitleText("录制作品");
-
     }
 
     @Override

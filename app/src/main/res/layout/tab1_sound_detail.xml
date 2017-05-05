@@ -64,6 +64,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:text=""
                     android:textColor="@color/dd_gray"
                     android:textSize="16sp" />
@@ -368,10 +369,11 @@
                 <TextView
                     android:id="@+id/like"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:drawableLeft="@mipmap/dianzan__new"
                     android:drawablePadding="5dp"
+                    android:padding="5dp"
                     android:gravity="center"
                     android:text=""
                     android:textColor="@color/dd_gray"

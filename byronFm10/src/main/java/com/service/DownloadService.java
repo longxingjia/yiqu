@@ -44,25 +44,6 @@ public class DownloadService extends Service {
 	}
 
 
-
-//	private void refreshRemoteView() {
-//		Notification notification = new Notification(android.R.drawable.stat_sys_download,
-//				"", System.currentTimeMillis());
-//		mRemoteViews = new RemoteViews(getPackageName(), R.layout.download_remote_layout);
-//	    notification.contentView = mRemoteViews;
-//
-//	    StringBuilder builder = new StringBuilder();
-//		for(int i=0,size=mDownloads.size();i<size;i++) {
-//			builder.append(mDownloads.get(mDownloads.keyAt(i)).getLocalFileName());
-//			builder.append("、");
-//		}
-//
-//		mRemoteViews.setTextViewText(R.id.tv_download_name,
-//				builder.substring(0, builder.lastIndexOf("、")));
-//
-//	    startForeground(R.drawable.ic_launcher, notification);
-//	}
-
 	private void onDownloadComplete(int downloadId) {
 		mDownloads.remove(downloadId);
 		if(mDownloads.size() == 0) {

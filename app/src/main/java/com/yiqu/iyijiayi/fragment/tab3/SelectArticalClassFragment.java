@@ -92,6 +92,13 @@ public class SelectArticalClassFragment extends AbsAllFragment implements LoadMo
         ButterKnife.bind(this, v);
         text = getActivity().getIntent().getStringExtra("title");
         class_id = getActivity().getIntent().getStringExtra("class_id");
+        if (TextUtils.isEmpty(class_id)){
+            class_id ="0";
+        }
+        event_id = getActivity().getIntent().getStringExtra("eid");
+        if (TextUtils.isEmpty(event_id)){
+            event_id ="0";
+        }
         tab3ArticleAdapter = new Tab3ArticleAdapter(this);
         listView.setAdapter(tab3ArticleAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

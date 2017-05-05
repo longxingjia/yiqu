@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
@@ -76,12 +77,10 @@ public class Tab4hotCommentsAdapter extends BaseAdapter implements OnItemClickLi
     }
 
     private class HoldChild {
-
         TextView fromuser;
         TextView comment;
         TextView tv_to;
         TextView touser;
-
     }
 
     @Override
@@ -96,23 +95,18 @@ public class Tab4hotCommentsAdapter extends BaseAdapter implements OnItemClickLi
                 h.comment = (TextView) v.findViewById(R.id.comment);
                 h.tv_to = (TextView) v.findViewById(R.id.tv_to);
                 h.touser = (TextView) v.findViewById(R.id.touser);
-
-
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-
             CommentsInfo f = getItem(position);
-
             h.fromuser.setText(f.fromusername);
-
             if (!uid.equals(f.touid)){
                 h.tv_to.setVisibility(View.VISIBLE);
                 h.touser.setText(f.tousername);
             }else {
                 h.tv_to.setVisibility(View.GONE);
-
             }
+
             String s = EmojiCharacterUtil.decode(f.comment);
             h.comment.setText(s);
 

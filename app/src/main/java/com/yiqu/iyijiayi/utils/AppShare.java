@@ -235,30 +235,6 @@ public class AppShare {
         editor.commit();
     }
 
-    public static ArrayList<Like> getLikeList(Context context) {
-
-        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
-        String tmp = p.getString(LIKE, "");
-        ArrayList<Like> result = null;
-        if (tmp != null && tmp.length() > 0) {
-            result = new Gson().fromJson(tmp, new TypeToken<ArrayList<Like>>() {
-            }.getType());
-        }
-        return result;
-    }
-
-    /**
-     * 保存
-     *
-     * @param context
-     * @param likes
-     */
-    public static void setLikeList(Context context, ArrayList<Like> likes) {
-        SharedPreferences p = context.getSharedPreferences(FILE_NAME, Context.MODE_APPEND);
-        SharedPreferences.Editor editor = p.edit();
-        editor.putString(LIKE, new Gson().toJson(likes));
-        editor.commit();
-    }
 
 
     public static ArrayList<Banner> getBannerList(Context context) {

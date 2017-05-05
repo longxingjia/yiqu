@@ -182,7 +182,7 @@ public class RecorderEngine {
      */
     public void pauseRecording() {
         if (recording) {
-            recorder.setPause(false);
+            recorder.setPause(true);
         }
 
     }
@@ -200,7 +200,7 @@ public class RecorderEngine {
      */
     public void restartRecording() {
         if (recording) {
-            recorder.setPause(true);
+            recorder.setPause(false);
         }
     }
 

@@ -72,16 +72,13 @@
                         android:visibility="gone"/>
 
                     <TextView
+                        android:id="@+id/publish_time"
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
-                        android:layout_marginLeft="25dp"
-                        android:drawableLeft="@mipmap/dianzan__new"
-                        android:drawablePadding="5dp"
                         android:gravity="center"
-                        android:text="228"
                         android:textColor="@color/dd_gray"
                         android:textSize="14sp"
-                        android:visibility="gone"/>
+                        />
 
 
                 </LinearLayout>
@@ -139,7 +136,9 @@
         <TextView
             android:id="@+id/desc"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
@@ -148,7 +147,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            
+
             android:background="@color/tab_bg_color"/>
 
         <LinearLayout
@@ -160,12 +159,13 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/publish_time"
+                android:id="@+id/listener"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:drawableLeft="@mipmap/publish_time"
+                android:drawableLeft="@mipmap/listened"
                 android:gravity="center"
+                android:drawablePadding="5dp"
                 android:textColor="@color/dd_gray"
                 android:textSize="14sp"/>
 

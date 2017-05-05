@@ -399,6 +399,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                     recording.setVisibility(View.GONE);
                     record.setVisibility(View.VISIBLE);
                     stop_text.setVisibility(View.GONE);
+                    recordComFinish = true;
                 }
 
 

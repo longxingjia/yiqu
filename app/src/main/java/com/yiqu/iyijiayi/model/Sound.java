@@ -47,14 +47,15 @@ public class Sound implements Serializable {
     public String tecimage;
     public String tectitle;
     public String comments;
-    public int isLike;
+    public String article_content;
+    public int islike;
     public ArrayList<CommentsInfo> top_comments;
 
     @Override
     public String toString() {
         return "Sound{" +
                 "sid=" + sid +
-                ", isLike=" + isLike +
+                ", islike=" + islike +
                 ", stype=" + stype +
                 ", type=" + type +
                 ", mid=" + mid +

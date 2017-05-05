@@ -16,6 +16,7 @@ import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
@@ -258,6 +259,8 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         } else {
             sex.setBackgroundResource(R.mipmap.sex_male);
         }
+
+       // LogUtils.LOGE("t",userInfo.toString());
 
 
         ll_tabs.setVisibility(View.VISIBLE);

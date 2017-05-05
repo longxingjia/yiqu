@@ -54,6 +54,7 @@ import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.db.ComposeVoiceInfoDBHelper;
 import com.db.DownloadMusicInfoDBHelper;
 import com.yiqu.iyijiayi.fragment.tab3.AddQuestionFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SelectArticalClassFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectArticalFragment;
 import com.yiqu.iyijiayi.fragment.tab3.SelectBgMusicFragment;
 import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
@@ -174,6 +175,7 @@ public class RecordAllActivity extends Activity
     private String eventName;
     private String musicdesc;
     private SelectArticle selectArticle;
+    private String event_title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -195,6 +197,7 @@ public class RecordAllActivity extends Activity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Intent intent = getIntent();
         eid = intent.getStringExtra("eid");
+        event_title = intent.getStringExtra("title");
         eventName = intent.getStringExtra("musicname");
         musicdesc = intent.getStringExtra("musicdesc");
         if (TextUtils.isEmpty(eid)) {
@@ -280,10 +283,9 @@ public class RecordAllActivity extends Activity
         backgroudMusciFile = new File(Variable.StorageMusicCachPath, fileName);
         if (backgroudMusciFile.exists()) {
             initMusicUI();
-            is2mp3 = false;
+
         } else {
             if (mDownloadService != null) {
-                //   LogUtils.LOGE(tag,mDownloadService.toString());
                 mDownloadService.download(music.mid, Url, Variable.StorageMusicCachPath,
                         fileName);
             }
@@ -307,7 +309,7 @@ public class RecordAllActivity extends Activity
     }
 
     private void initMusicUI() {
-
+        is2mp3 = false;
         musicFileUrl = backgroudMusciFile.getAbsolutePath();
         String tempfileName = fileName.substring(0, fileName.lastIndexOf("."));
         decodeFileUrl = Variable.StorageMusicPath + tempfileName + ".pcm";
@@ -357,7 +359,7 @@ public class RecordAllActivity extends Activity
         image_anim.setVisibility(View.GONE);
         musicName.setText("录制");
         et_content.setVisibility(View.VISIBLE);
-        add_article.setBackgroundResource(R.mipmap.cancle_music);
+        add_article.setBackgroundResource(R.mipmap.add_music);
     }
 
 
@@ -712,7 +714,6 @@ public class RecordAllActivity extends Activity
                         icon_record.setImageResource(R.mipmap.icon_record);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                             VoiceFunctionF2.pauseVoice();
-
                         }
 //                           LogUtils.LOGE(tag,"pauseRecordVoice");
                     }
@@ -726,16 +727,17 @@ public class RecordAllActivity extends Activity
                     if (!is2mp3) {
                         VoiceFunctionF2.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
 
+                    } else {
                         select_music.setText("无配乐");
-
                     }
                     LogUtils.LOGE(tag, String.valueOf(is2mp3));
                     VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
                     select_music.setEnabled(false);
-
+                    add_article.setEnabled(false);
+                    add_music.setEnabled(false);
 
                     select_article.setEnabled(false);
-                    if (select_article.equals("请选择范文")) {
+                    if (select_article.getText().equals("请选择范文")) {
                         select_article.setText("无范文");
                     }
 
@@ -759,6 +761,22 @@ public class RecordAllActivity extends Activity
                             //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                             if (recordTime > 9) {
                                 if (TextUtils.isEmpty(eventName) || selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
+                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                    VoiceFunctionF2.StopVoice();
+                                    select_music.setEnabled(true);
+                                    select_article.setEnabled(true);
+                                    add_article.setEnabled(true);
+                                    add_music.setEnabled(true);
+
+                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
+                                        compose();
+                                    } else {
+                                        stopRecording();
+                                    }
+                                    icon_finish.setImageResource(R.mipmap.upload);
+
+                                } else {
+
                                     final EditText inputServer = new EditText(RecordAllActivity.this);
                                     inputServer.setBackgroundResource(R.drawable.edit_bg);
                                     inputServer.setFocusable(true);
@@ -773,7 +791,21 @@ public class RecordAllActivity extends Activity
 
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     String inputName = inputServer.getText().toString();
-                                                    musicName.setText(inputName+"");
+                                                    musicName.setText(inputName + "");
+                                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                                    VoiceFunctionF2.StopVoice();
+                                                    select_music.setEnabled(true);
+                                                    select_article.setEnabled(true);
+                                                    add_article.setEnabled(true);
+                                                    add_music.setEnabled(true);
+
+                                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
+                                                        compose();
+                                                    } else {
+                                                        stopRecording();
+                                                    }
+                                                    icon_finish.setImageResource(R.mipmap.upload);
+
                                                 }
                                             });
                                     b.show();
@@ -783,18 +815,7 @@ public class RecordAllActivity extends Activity
                                     }
                                     icon_record.setImageResource(R.mipmap.icon_record);
 
-                                } else {
-                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                    VoiceFunctionF2.StopVoice();
-                                    select_music.setEnabled(true);
-                                    select_article.setEnabled(true);
 
-                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                                        compose();
-                                    } else {
-                                        stopRecording();
-                                    }
-                                    icon_finish.setImageResource(R.mipmap.upload);
                                 }
 
                             } else {
@@ -826,6 +847,8 @@ public class RecordAllActivity extends Activity
                         musictime.setText("00:00");
                         select_music.setEnabled(true);
                         select_article.setEnabled(true);
+                        add_article.setEnabled(true);
+                        add_music.setEnabled(true);
                     }
                 });
                 builder.show();
@@ -850,9 +873,20 @@ public class RecordAllActivity extends Activity
 
                 break;
             case R.id.select_article:
+
                 Intent intent = new Intent(this, StubActivity.class);
-                intent.putExtra("fragment", SelectArticalFragment.class.getName());
+                if (TextUtils.isEmpty(eid)||eid.equals("0")){
+
+                    intent.putExtra("fragment", SelectArticalFragment.class.getName());
+
+                }else {
+                    intent.putExtra("fragment", SelectArticalClassFragment.class.getName());
+                    intent.putExtra("title",event_title);
+                    intent.putExtra("eid",eid);
+
+                }
                 startActivityForResult(intent, REQUESTARTICLE);
+
                 break;
         }
     }
@@ -862,7 +896,7 @@ public class RecordAllActivity extends Activity
         bundle.putSerializable("composeVoice", composeVoice);
         String title = "找个导师点评一下吗？";
         String[] items = new String[]{"免费上传作品", "找导师请教"};
-        if (TextUtils.isEmpty(eid)) {
+        if (TextUtils.isEmpty(eid)||eid.equals("0")) {
             title = "提示";
             items = new String[]{"免费上传作品"};
         }
@@ -905,7 +939,6 @@ public class RecordAllActivity extends Activity
                     Bundle b = data.getExtras(); //data为B中回传的Intent
                     //str即为回传的值
                     music = (Music) b.getSerializable("data");
-                    //  LogUtils.LOGE(tag, backgroudMusic.toString());
                     initMusicData();
                     break;
 
@@ -913,7 +946,6 @@ public class RecordAllActivity extends Activity
                     Bundle bundle = data.getExtras(); //data为B中回传的Intent
                     //str即为回传的值
                     selectArticle = (SelectArticle) bundle.getSerializable("data");
-                    // LogUtils.LOGE(tag, selectArticle.toString());
                     initArticleData(selectArticle);
                     break;
             }
@@ -946,7 +978,6 @@ public class RecordAllActivity extends Activity
                 public void onPublish(int downloadId, long size) {
                     //   Log.w("download", "publish" + size);
                     dialogHelper.setProgress((int) size);
-                    //  LogUtils.LOGE(tag,"onPublish");
                 }
 
                 @Override
@@ -956,7 +987,6 @@ public class RecordAllActivity extends Activity
                         dialogHelper = null;
                     }
                     initMusicUI();
-                    LogUtils.LOGE(tag, "onSuccess");
                 }
 
                 @Override

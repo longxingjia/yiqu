@@ -81,7 +81,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/2/20.
  */
 
-public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack ,ObservableScrollView.ScrollViewListener {
+public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener {
     String tag = "ItemDetailFragment";
     @BindView(R.id.back)
     public ImageView back;
@@ -274,17 +274,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         }
     };
-    private ArrayList<Like> likes;
 
     private Tab1CommentsAdapter tab1CommentsAdapter;
 
-    private int likesIndex = -1;
-
-
     private int payforTag = 0;
     private int position;
-  //  private Player player;
+    //  private Player player;
     private Sound soundWorth;
+    private String2TimeUtils string2TimeUtils;
 
     @Override
     protected int getContentView() {
@@ -294,27 +291,30 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
-        likes = AppShare.getLikeList(getActivity());
 
-  //      seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-//        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
-//            @Override
-//            public void completion() {
-//
-//            }
-//        });
+
+        seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+
         initListeners();
 
-        Intent intent = new Intent();
-        intent.putExtra("choice", "stop");
-       // top_play.setVisibility(View.GONE);
-        intent.setClass(getActivity(), MusicService.class);
-        getActivity().startService(intent);
-
-     //   if (mPlayService)
 
     }
+
     private int imageHeight;
+
+    @Override
+    public void onPublish(final int progress) {
+        super.onPublish(progress);
+        seekbar.setProgress(progress);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
+            }
+        });
+
+
+    }
 
     private void initListeners() {
         // 获取顶部图片高度后，设置滚动监听
@@ -351,28 +351,31 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
     }
 
-//    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
-//        int progress;
-//
-//        @Override
-//        public void onProgressChanged(SeekBar seekBar, int progress,
-//                                      boolean fromUser) {
-//            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-//            this.progress = (int) (progress * player.mediaPlayer.getDuration()
+    class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
+        int pro;
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress,
+                                      boolean fromUser) {
+            // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+
+
+//            this.pro = (int) (progress * mPlayService.getDuration()
 //                    / seekBar.getMax());
-//        }
-//
-//        @Override
-//        public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//        }
-//
-//        @Override
-//        public void onStopTrackingTouch(SeekBar seekBar) {
-//            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
-//            player.mediaPlayer.seekTo(progress);
-//        }
-//    }
+            pro = progress;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
+            mPlayService.seek(pro);
+        }
+    }
 
     private void initDianZan() {
         Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed_new);
@@ -427,19 +430,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-                if (likesIndex == -1) {
-                    Like l = new Like();
-                    l.sid = Integer.parseInt(sid);
-                    l.islike = 1;
-                    if (likes == null) {
-                        likes = new ArrayList<Like>();
-                    }
-                    likes.add(l);
+                if (sound.islike==0){
                     like.setText(String.valueOf(sound.like + 1));
-                    AppShare.setLikeList(getActivity(), likes);
                     initDianZan();
                 }
-
 
             } else {
 
@@ -467,9 +461,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         } else if (id.equals("getSoundList")) {
 
             video_play.setImageResource(R.mipmap.video_pause);
-            //player.playUrl(stuUrl);
-          //  mPlayService.pause();
-            mPlayService.play(stuUrl,sound.sid);
+
+            mPlayService.play(stuUrl, sound.sid);
+            seekbar.setMax(mPlayService.getDuration());
+
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.views, MyNetRequestConfig
+                            .getComments(getActivity(), sid),
+                    "views", ItemDetailFragment.this, false, true);
 
 
             if (type == NetCallBack.TYPE_SUCCESS) {
@@ -500,6 +499,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
 
 
+        }else if (id.equals("views")){
+
+            if (type==TYPE_SUCCESS){
+
+            }
         }
 
 
@@ -513,7 +517,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         musicname.setText(sound.musicname);
         tectitle.setText(sound.tectitle);
         commenttime.setText(sound.commenttime + "\"");
-        String2TimeUtils string2TimeUtils = new String2TimeUtils();
+        string2TimeUtils = new String2TimeUtils();
         soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
         views.setText(sound.views + "");
         like.setText(sound.like + "");
@@ -587,15 +591,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         teafileName = sound.musicname + "_" + teafileName;
         teaFile = new File(Variable.StorageMusicCachPath, teafileName);
 
-        if (likes != null) {
-            for (int i = 0; i < likes.size(); i++) {
-                Like dz = likes.get(i);
-                if (dz.sid == Integer.parseInt(sid)) {
-                    likesIndex = i;
-                    initDianZan();
-                }
-
-            }
+        if (sound.islike != 0) {
+            initDianZan();
         }
 
         NSDictionary nsDictionary = new NSDictionary();
@@ -669,18 +666,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 getActivity().finish();
                 break;
             case R.id.video_play:
-//                if (player.isPlaying()) {
-//                    video_play.setImageResource(R.mipmap.video_play);
-//                    player.pause();
-//                } else {
-//                    video_play.setImageResource(R.mipmap.video_pause);
-//
-//                    if (stuUrl.equals(player.getUrl())) {
-//                        player.rePlay();
-//                    } else {
-//                        player.playUrl(stuUrl);
-//                    }
-//                }
+                if (mPlayService.isPlaying()) {
+                    video_play.setImageResource(R.mipmap.video_play);
+                    mPlayService.pause();
+                } else {
+                    video_play.setImageResource(R.mipmap.video_pause);
+                    mPlayService.resume();
+
+                }
 
                 break;
             case R.id.stu_listen:
@@ -756,12 +749,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
 
             case R.id.like:
-                if (AppShare.getIsLogin(getActivity())){
+                if (AppShare.getIsLogin(getActivity())) {
                     RestNetCallHelper.callNet(getActivity(),
                             MyNetApiConfig.like, MyNetRequestConfig
                                     .like(getActivity(), AppShare.getUserInfo(getActivity()).uid, sid),
                             "like", ItemDetailFragment.this, false, true);
-                }else {
+                } else {
                     Model.startNextAct(getActivity(),
                             SelectLoginFragment.class.getName());
                     ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
@@ -1074,7 +1067,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         soundtime.setText(sound.soundtime + "\"");
 
     }
-
 
 
     @Override

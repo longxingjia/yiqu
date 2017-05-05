@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:lineSpacingMultiplier="2"
-                        android:textColor="@color/dd_gray"
+                        android:textColor="@color/white"
                         android:textSize="15sp"
                         />
                 </LinearLayout>
@@ -178,9 +178,12 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
+                android:padding="5dp"
                 android:textColor="@color/white"
                 android:gravity="top"
-                android:background="@color/transparent"/>
+                android:textColorHint="#aaffffff"
+                android:hint="这里输入或粘贴文本内容"
+                android:background="@drawable/gray_box"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

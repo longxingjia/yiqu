@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.os.Handler;
 
 import com.czt.mp3recorder.MP3Recorder;
+import com.utils.LogUtils;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
@@ -237,6 +238,7 @@ public class Mp3RecorderEngine {
                 // 判断是否超时
                 if (!recorder.isPause()){
                     recordDuration += sampleDuration;
+                 //   LogUtils.LOGE("",recordDuration+"");
                 }
                 updateMicStatus();
             }

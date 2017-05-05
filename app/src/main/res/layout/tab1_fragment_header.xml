@@ -24,22 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
-            android:id="@+id/question"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="100dp"
-            android:drawableTop="@mipmap/icon_quetion"
-            android:gravity="center"
-            android:text="热门问答" />
 
-        <View
-            android:background="@color/tab_bg_color"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-             />
 
         <TextView
             android:layout_marginBottom="15dp"
@@ -56,7 +41,8 @@
             android:background="@color/tab_bg_color"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            />
+             />
+
 
         <TextView
             android:layout_marginBottom="15dp"
@@ -68,6 +54,22 @@
             android:drawableTop="@mipmap/icon_read"
             android:gravity="center"
             android:text="为你朗诵" />
+        <View
+            android:background="@color/tab_bg_color"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            />
+
+        <TextView
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/question"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:drawableTop="@mipmap/icon_quetion"
+            android:gravity="center"
+            android:text="热门问答" />
 
     </LinearLayout>
 
@@ -101,7 +103,7 @@
             android:drawableRight="@mipmap/top_arrow"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:text="TOP"
+            android:text="HOT"
             android:textColor="@color/dd_gray"
             android:textSize="13sp" />
 

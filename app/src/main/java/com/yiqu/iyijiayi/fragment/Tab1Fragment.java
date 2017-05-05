@@ -66,15 +66,11 @@ import static com.ui.views.AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE;
 public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener, OnClickListener, RefreshList.IRefreshListViewListener {
 
     private static final int TAB_1 = 1;
+    private static final String tag = Tab1Fragment.class.getSimpleName();
     //	List<>
 
     private AutoPlayViewPager vp_spinner;
     private LoadMoreView mLoadMoreView;
-    /**
-     * 图片资源id
-     */
-    private int[] imgIdArray;
-    private ArrayList<View> views;
     private static final int REFRESH_COMPLETE = 0X110;
 
     private Handler mHandler = new Handler() {
@@ -93,11 +89,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private ArrayList<Sound> sounds;
     private ArrayList<Sound> xizuo;
 
-    //  private Tab1XizuoAdapter tab1XizuoAdapter;
     private RefreshList lvSound;
     private Tab1XizuoAdapterTest tab1XizuoAdapter;
     private TextView more_xizuo;
-    private ArrayList<Like> likes;
     private int count = 0;
     private int rows = 10;
     private String arr;
@@ -318,7 +312,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             vp_spinner.setAdapter(bannerAdapter);
             vp_spinner.start();
         }
-        likes = AppShare.getLikeList(getActivity());
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
@@ -331,16 +324,17 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
-            likes = AppShare.getLikeList(getActivity());
         } else {
             uid = "0";
         }
+
+       // LogUtils.LOGE(tag,uid+"");
 
         count = 0;
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc",uid),
                 "getSoundList", Tab1Fragment.this);
 
         RestNetCallHelper.callNet(
@@ -447,6 +441,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
+
 
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
