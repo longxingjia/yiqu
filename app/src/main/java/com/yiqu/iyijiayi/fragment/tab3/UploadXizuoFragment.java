@@ -99,7 +99,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
         composeVoice = (ComposeVoice) intent.getSerializableExtra("composeVoice");
         eid = intent.getStringExtra("eid");
 
-        fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
+        fileUrl =  composeVoice.voicename;
 
         musicName.setText(composeVoice.musicname);
 

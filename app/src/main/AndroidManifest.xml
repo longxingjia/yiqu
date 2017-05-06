@@ -60,6 +60,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.yiqu.Control.Main.RecordAllActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.yiqu.Control.Main.RecordOnlyActivity"

@@ -172,7 +172,7 @@ public class RecordAllActivity extends Activity
     private File backgroudMusciFile;
     private RecorderAndPlayUtil recorderUtil;
     private boolean is2mp3 = true;
-    private String eventName;
+    //    private String eventName;
     private String musicdesc;
     private SelectArticle selectArticle;
     private String event_title;
@@ -184,7 +184,7 @@ public class RecordAllActivity extends Activity
         instance = this;
         init(R.layout.record_all_fragment);
         bindService(new Intent(this, com.service.DownloadService.class), mDownloadServiceConnection, Context.BIND_AUTO_CREATE);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
 
@@ -198,18 +198,31 @@ public class RecordAllActivity extends Activity
         Intent intent = getIntent();
         eid = intent.getStringExtra("eid");
         event_title = intent.getStringExtra("title");
-        eventName = intent.getStringExtra("musicname");
-        musicdesc = intent.getStringExtra("musicdesc");
+//        eventName = intent.getStringExtra("musicname");
+//        musicdesc = intent.getStringExtra("musicdesc");
         if (TextUtils.isEmpty(eid)) {
             eid = "0";
         }
-        if (!TextUtils.isEmpty(eventName)) {
-            musicName.setText(eventName);
-        }
+//        if (!TextUtils.isEmpty(eventName)) {
+//            musicName.setText(eventName);
+//        }
         if (!TextUtils.isEmpty(musicdesc)) {
             content.setText(musicdesc);
             et_content.setVisibility(View.GONE);
         }
+
+        et_content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                } else {
+//  activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                }
+
+            }
+        });
 
     }
 
@@ -319,9 +332,12 @@ public class RecordAllActivity extends Activity
         composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
         mid = music.mid;
         totalTime = music.time;
+        tv_totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
         pb_record.setMax(music.time);
         select_music.setText(music.musicname);
         add_music.setBackgroundResource(R.mipmap.cancle_music);
+//        VoiceFunctionF2.PlayToggleVoice(musicFileUrl, this);
+//        VoiceFunctionF2.StopVoice();
     }
 
     private void deleteMusicUI() {
@@ -344,9 +360,9 @@ public class RecordAllActivity extends Activity
         author.setText(selectArticle.author);
         content.setText(selectArticle.content);
         image_anim.setVisibility(View.GONE);
-        if (TextUtils.isEmpty(eventName)) {
-            musicName.setText(selectArticle.title);
-        }
+//        if (TextUtils.isEmpty(eventName)) {
+//            musicName.setText(selectArticle.title);
+//        }
         add_article.setBackgroundResource(R.mipmap.cancle_music);
         et_content.setVisibility(View.GONE);
     }
@@ -547,9 +563,6 @@ public class RecordAllActivity extends Activity
         composeProgressBar.setVisibility(View.VISIBLE);
         recordVoiceButton.setEnabled(false);
         tempVoicePcmUrl = VoiceFunctionF2.getRecorderPath();
-        LogUtils.LOGE(tag, tempVoicePcmUrl);
-        LogUtils.LOGE(tag, decodeFileUrl);
-        LogUtils.LOGE(tag, composeVoiceUrl);
         if (audoManager.isWiredHeadsetOn()) { //true 带了耳机
             AudioFunction.BeginComposeAudio(tempVoicePcmUrl, decodeFileUrl, composeVoiceUrl, false,
                     RecordConstant.VoiceEarWeight, RecordConstant.VoiceEarBackgroundWeight,
@@ -605,7 +618,7 @@ public class RecordAllActivity extends Activity
         if (!TextUtils.isEmpty(content.getText().toString())) {
             composeVoice.desc = content.getText().toString();
         }
-        composeVoice.voicename = VoiceFunctionF2.getRecorderName();
+        composeVoice.voicename = VoiceFunctionF2.getRecorderPath();
         composeVoice.accompaniment = "";
         composeVoice.soundtime = actualRecordTime;
         composeVoice.isformulation = "0";
@@ -648,7 +661,7 @@ public class RecordAllActivity extends Activity
         composeVoice.commentpath = "";
         composeVoice.touid = 0;
         composeVoice.soundpath = "";
-        composeVoice.voicename = fileNameCom;
+        composeVoice.voicename = composeVoiceUrl;
         composeVoice.type = music.type + "";
         composeVoice.isreply = "0";
         composeVoice.ispay = "0";
@@ -695,19 +708,16 @@ public class RecordAllActivity extends Activity
                             icon_record.setImageResource(R.mipmap.icon_play);
                         } else {
                             VoiceFunctionF2.startPlayVoice();
-                            //  LogUtils.LOGE(tag,"startPlayVoice");
                             icon_record.setImageResource(R.mipmap.icon_pause);
                         }
                     }
                 } else if (recordVoiceBegin) {
-                    //    LogUtils.LOGE(tag,VoiceFunctionF2.isPauseRecordVoice(is2mp3)+"");
 
                     if (VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
                         VoiceFunctionF2.restartRecording(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_pause);
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                             VoiceFunctionF2.startPlayVoice();
-//                            LogUtils.LOGE(tag,"startPlayVoice");
                         }
                     } else {
                         VoiceFunctionF2.pauseRecordVoice(is2mp3);
@@ -715,7 +725,6 @@ public class RecordAllActivity extends Activity
                         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                             VoiceFunctionF2.pauseVoice();
                         }
-//                           LogUtils.LOGE(tag,"pauseRecordVoice");
                     }
                 } else {
 
@@ -730,21 +739,17 @@ public class RecordAllActivity extends Activity
                     } else {
                         select_music.setText("无配乐");
                     }
-                    LogUtils.LOGE(tag, String.valueOf(is2mp3));
                     VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
                     select_music.setEnabled(false);
                     add_article.setEnabled(false);
                     add_music.setEnabled(false);
-
+                    add_article.setVisibility(View.INVISIBLE);
+                    add_music.setVisibility(View.INVISIBLE);
                     select_article.setEnabled(false);
                     if (select_article.getText().equals("请选择范文")) {
                         select_article.setText("无范文");
                     }
-
-
                 }
-
-
                 break;
             case R.id.finish:
                 if (recordComFinish) {
@@ -758,24 +763,8 @@ public class RecordAllActivity extends Activity
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                             if (recordTime > 9) {
-                                if (TextUtils.isEmpty(eventName) || selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
-                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                    VoiceFunctionF2.StopVoice();
-                                    select_music.setEnabled(true);
-                                    select_article.setEnabled(true);
-                                    add_article.setEnabled(true);
-                                    add_music.setEnabled(true);
-
-                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                                        compose();
-                                    } else {
-                                        stopRecording();
-                                    }
-                                    icon_finish.setImageResource(R.mipmap.upload);
-
-                                } else {
+                                if (selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
 
                                     final EditText inputServer = new EditText(RecordAllActivity.this);
                                     inputServer.setBackgroundResource(R.drawable.edit_bg);
@@ -794,10 +783,7 @@ public class RecordAllActivity extends Activity
                                                     musicName.setText(inputName + "");
                                                     VoiceFunctionF2.StopRecordVoice(is2mp3);
                                                     VoiceFunctionF2.StopVoice();
-                                                    select_music.setEnabled(true);
-                                                    select_article.setEnabled(true);
-                                                    add_article.setEnabled(true);
-                                                    add_music.setEnabled(true);
+
 
                                                     if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
                                                         compose();
@@ -814,6 +800,22 @@ public class RecordAllActivity extends Activity
                                         VoiceFunctionF2.pauseVoice();
                                     }
                                     icon_record.setImageResource(R.mipmap.icon_record);
+
+                                } else {
+
+                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                    VoiceFunctionF2.StopVoice();
+//                                    select_music.setEnabled(true);
+//                                    select_article.setEnabled(true);
+//                                    add_article.setEnabled(true);
+//                                    add_music.setEnabled(true);
+
+                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
+                                        compose();
+                                    } else {
+                                        stopRecording();
+                                    }
+                                    icon_finish.setImageResource(R.mipmap.upload);
 
 
                                 }
@@ -849,6 +851,8 @@ public class RecordAllActivity extends Activity
                         select_article.setEnabled(true);
                         add_article.setEnabled(true);
                         add_music.setEnabled(true);
+                        add_article.setVisibility(View.VISIBLE);
+                        add_music.setVisibility(View.VISIBLE);
                     }
                 });
                 builder.show();
@@ -875,15 +879,12 @@ public class RecordAllActivity extends Activity
             case R.id.select_article:
 
                 Intent intent = new Intent(this, StubActivity.class);
-                if (TextUtils.isEmpty(eid)||eid.equals("0")){
-
+                if (TextUtils.isEmpty(eid) || eid.equals("0")) {
                     intent.putExtra("fragment", SelectArticalFragment.class.getName());
-
-                }else {
+                } else {
                     intent.putExtra("fragment", SelectArticalClassFragment.class.getName());
-                    intent.putExtra("title",event_title);
-                    intent.putExtra("eid",eid);
-
+                    intent.putExtra("title", event_title);
+                    intent.putExtra("eid", eid);
                 }
                 startActivityForResult(intent, REQUESTARTICLE);
 
@@ -894,11 +895,11 @@ public class RecordAllActivity extends Activity
     private void upload() {
         final Bundle bundle = new Bundle();
         bundle.putSerializable("composeVoice", composeVoice);
-        String title = "找个导师点评一下吗？";
-        String[] items = new String[]{"免费上传作品", "找导师请教"};
-        if (TextUtils.isEmpty(eid)||eid.equals("0")) {
-            title = "提示";
-            items = new String[]{"免费上传作品"};
+        String title = "提示";
+        String[] items = new String[]{"免费上传作品"};
+        if (TextUtils.isEmpty(eid) || eid.equals("0")) {
+            title = "找个导师点评一下吗？";
+            items = new String[]{"免费上传作品", "找导师请教"};
         }
 
         MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {

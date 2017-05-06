@@ -57,6 +57,11 @@
                 android:textColor="@color/dd_gray"
                 android:textSize="12sp"/>
 
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
+
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
@@ -68,7 +73,10 @@
                 android:text=""
                 android:textColor="@color/dd_gray"
                 android:textSize="12sp"/>
-
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
 
             <TextView
                 android:id="@+id/like"
@@ -89,14 +97,14 @@
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="wrap_content"
+        android:layout_width="45dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:background="@color/transparent"
         android:gravity="center"
-        android:text=""
         android:textColor="@color/dd_gray"
         android:textSize="18sp"/>
+
 
     <RelativeLayout
         android:layout_width="40dp"
@@ -106,6 +114,7 @@
             android:id="@+id/play_status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
             android:scaleType="centerInside"
             android:src="@mipmap/play_event"/>
 

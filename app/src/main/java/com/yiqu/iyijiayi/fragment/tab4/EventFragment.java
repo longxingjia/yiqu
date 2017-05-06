@@ -134,7 +134,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 } else {
                     mPlayService.play(url, sound.sid);
                 }
-
+                tab4HotAdapter.setCurrent(-1);
                 sid = sound.sid;
             }
 
@@ -166,6 +166,30 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         tab4HotAdapter = new Tab4HotAdapter(getActivity());
         ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
         head_listview.setAdapter(tab4HotAdapter);
+        head_listview.setOnItemClickListener(tab4HotAdapter);
+
+        tab4HotAdapter.setOnPlayClickListener(new Tab4HotAdapter.OnPlayClickListener() {
+            int sid = 0;
+
+            @Override
+            public void onPlayClick(Sound sound) {
+                String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
+
+                if (sid == sound.sid) {
+                    mPlayService.resume();
+                } else {
+                    mPlayService.play(url, sound.sid);
+                }
+
+                tab4NewAdapter.setCurrent(-1);
+                sid = sound.sid;
+            }
+
+            @Override
+            public void onPauseClick(Sound sound) {
+                mPlayService.pause();
+            }
+        });
 
     }
 

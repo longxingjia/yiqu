@@ -161,6 +161,7 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
             h.like.setText(String.valueOf(f.like));
 
             h.listener.setText(String.valueOf(f.views));
+            h.comments.setText(String.valueOf(f.comments));
             h.time.setText(f.soundtime + "\"");
 
             if (f.islike == 0) {
@@ -248,17 +249,22 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position < 2) {
-            return;
-        }
 
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
-        Sound f = getItem(position - 2);
+        Sound f = getItem(position);
 //        LogUtils.LOGE(tag, position + "");
+//        Intent i = new Intent(mContext, StubActivity.class);
+//        i.putExtra("fragment", ItemDetailFragment.class.getName());
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("Sound", f);
+//        i.putExtras(bundle);
+//        mContext.startActivity(i);
+
+
         Intent i = new Intent(mContext, StubActivity.class);
         i.putExtra("fragment", ItemDetailFragment.class.getName());
         Bundle bundle = new Bundle();

@@ -242,7 +242,7 @@ public class PlayActivity extends BaseActivity
         next_bg.setImageBitmap(bitmap);
 
         String fileName = voice.musicname + "_" + voice.mid;
-        playUrl(Variable.StorageMusicPath + voice.voicename);
+        playUrl( voice.voicename);
         if (mPlayService!=null){
             mPlayService.pause();
         }

@@ -159,6 +159,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView no_comments;
     @BindView(R.id.comment)
     public TextView comment;
+    @BindView(R.id.article_content)
+    public TextView article_content;
 
     private int teatotalTime;
     private int stutotalTime;
@@ -282,7 +284,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private int position;
     //  private Player player;
     private Sound soundWorth;
-    private String2TimeUtils string2TimeUtils  = new String2TimeUtils();;
+    private String2TimeUtils string2TimeUtils = new String2TimeUtils();
+    ;
 
     @Override
     protected int getContentView() {
@@ -306,9 +309,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onPublish(final int progress) {
         super.onPublish(progress);
-     //   LogUtils.LOGE(tag,progress+"");
+        //   LogUtils.LOGE(tag,progress+"");
 
-        seekbar.setProgress(progress*100/mPlayService.getDuration());
+        seekbar.setProgress(progress * 100 / mPlayService.getDuration());
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -404,7 +407,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this,true, true);
+                        "getSoundDetail", ItemDetailFragment.this, true, true);
 
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addHistory, MyNetRequestConfig
@@ -433,7 +436,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-                if (sound.islike==0){
+                if (sound.islike == 0) {
                     like.setText(String.valueOf(sound.like + 1));
                     initDianZan();
                 }
@@ -463,7 +466,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         } else if (id.equals("worthSoundList")) {
 
-            if (mPlayService!=null){
+            if (mPlayService != null) {
                 mPlayService.play(stuUrl, sound.sid);
             }
 
@@ -499,9 +502,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
 
 
-        }else if (id.equals("views")){
+        } else if (id.equals("views")) {
 
-            if (type==TYPE_SUCCESS){
+            if (type == TYPE_SUCCESS) {
 
             }
         }
@@ -513,8 +516,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         desc.setText(sound.desc);
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
+        article_content.setText(sound.article_content);
         try {
-            publish_time.setText(String2TimeUtils.longToString(sound.created*1000,"yyyy/MM/dd HH:mm"));
+            publish_time.setText(String2TimeUtils.longToString(sound.created * 1000, "yyyy/MM/dd HH:mm"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -622,7 +626,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this,true,false);
+                        "getSoundDetail", ItemDetailFragment.this, true, false);
 
             }
         } else {

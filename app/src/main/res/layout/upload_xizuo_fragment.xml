@@ -30,6 +30,7 @@
         android:layout_marginTop="30dp"
         android:textSize="16dp"
         android:hint="描述一下自己的佳作吸引别人聆听"
+        android:text="【我录制了一个作品，大家快来围观点评一下吧。】"
         android:gravity="top"
         android:paddingLeft="5dp"
         android:background="@drawable/white_box"
