@@ -236,10 +236,8 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
                 public void onClick(View v) {
                     //    h.play_status =
                     mCurrent = pos;
-
                     notifyDataSetChanged();
                     if(mListener != null) mListener.onMoreClick(pos);
-
 
                 }
             });

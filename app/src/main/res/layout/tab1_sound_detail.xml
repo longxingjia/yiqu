@@ -122,8 +122,8 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/stu_school"
-                        android:layout_width="100dp"
+                        android:id="@+id/publish_time"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="9dp"
@@ -347,10 +347,10 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/created"
+                    android:id="@+id/comments"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:drawableLeft="@mipmap/publish_time"
+                    android:drawableLeft="@mipmap/comment_normal"
                     android:drawablePadding="5dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
@@ -496,7 +496,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
-                                android:maxWidth="200dp"
+                                android:maxWidth="190dp"
                                 android:singleLine="true"
                                 android:text="ww"
                                 android:textSize="16dp" />
@@ -637,7 +637,8 @@
                         android:layout_centerVertical="true"
                         android:drawableLeft="@mipmap/comment_normal"
                         android:gravity="center"
-                        android:textSize="18sp" />
+                        android:drawablePadding="5dp"
+                        android:textSize="14sp" />
 
 
                     <View

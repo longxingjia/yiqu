@@ -317,15 +317,15 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             }
             TYPE = 2;
 
-            tea.setVisibility(View.VISIBLE);
-            stu.setVisibility(View.GONE);
+//            tea.setVisibility(View.VISIBLE);
+//            stu.setVisibility(View.GONE);
             price.setText(userInfo.price);
             questioncount.setText(userInfo.questioncount);
             questionincome.setText(userInfo.questionincome);
             totalincome.setText(userInfo.totalincome);
         } else {
-            tea.setVisibility(View.GONE);
-            stu.setVisibility(View.VISIBLE);
+//            tea.setVisibility(View.GONE);
+//            stu.setVisibility(View.VISIBLE);
             InitCursor(2);
             dianping_tab.setVisibility(View.GONE);
             if (TextUtils.isEmpty(userInfo.school)) {

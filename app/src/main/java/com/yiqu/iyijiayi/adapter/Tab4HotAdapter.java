@@ -34,17 +34,61 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
+
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.utils.LogUtils;
+import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fileutils.utils.Player;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.service.MusicService;
+import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.DianZanUtils;
+import com.yiqu.iyijiayi.utils.PictureUtils;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
+
+import java.math.MathContext;
+import java.util.ArrayList;
+
 public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag = "Tab1XizuoAdapter";
+    private String tag = "Tab4NewAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
     private int mCurrent = -1;
-    private ImageView mPlay;
-    private TextView mMusicname;
-    private TextView mAuthor;
-    private LinearLayout mRoot;
     private Intent intent = new Intent();
+    private OnPlayClickListener mListener;
+
+    public void setOnPlayClickListener(OnPlayClickListener l) {
+        mListener = l;
+    }
+
+    public interface OnPlayClickListener {
+        public void onPlayClick(Sound sound);
+
+        public void onPauseClick(Sound sound);
+    }
 
     public Tab4HotAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -84,18 +128,18 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
     }
 
     private class HoldChild {
-
+        ImageView icon;
         TextView name;
         TextView listener;
+        TextView comments;
         TextView like;
         TextView time;
-        ImageView icon;
-        RoundProgressBar roundProgressBar;
+        ImageView play_status;
 
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         try {
             HoldChild h;
@@ -103,48 +147,88 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
                 h = new HoldChild();
                 v = mLayoutInflater.inflate(R.layout.tab4_hot_adapter, null);
                 h.name = (TextView) v.findViewById(R.id.musicname);
-                h.listener = (TextView) v.findViewById(R.id.listener);
-                h.like = (TextView) v.findViewById(R.id.like);
                 h.time = (TextView) v.findViewById(R.id.time);
+                h.like = (TextView) v.findViewById(R.id.like);
+                h.comments = (TextView) v.findViewById(R.id.comments);
+                h.listener = (TextView) v.findViewById(R.id.listener);
                 h.icon = (ImageView) v.findViewById(R.id.header);
-
-                h.roundProgressBar = (RoundProgressBar) v.findViewById(R.id.roundProgressBar);
+                h.play_status = (ImageView) v.findViewById(R.id.play_status);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+            final Sound f = getItem(position);
             h.name.setText(f.musicname);
+            h.like.setText(String.valueOf(f.like));
 
             h.listener.setText(String.valueOf(f.views));
-            h.like.setText(String.valueOf(f.like));
             h.time.setText(f.soundtime + "\"");
 
-
-            h.roundProgressBar.setProgress(20);
-            if (mCurrent == position) {
-                // h.play_status.setImageResource(R.mipmap.xizuo_pause);
-                h.name.setTextColor(mContext.getResources().getColor(R.color.redMain));
-                mMusicname.setText(f.musicname);
-                mAuthor.setText(f.stuname);
-                String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
-                intent.setClass(mContext, MusicService.class);
-          //      mContext.stopService(intent);
-                intent.putExtra("choice", "play");
-                intent.putExtra("url", url);
-                mContext.startService(intent);
-
+            if (f.islike == 0) {
+                DianZanUtils.initDianZan(mContext, h.like, false);
             } else {
-                //   h.play_status.setImageResource(R.mipmap.xizuo_play);
-                h.name.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
-
+                DianZanUtils.initDianZan(mContext, h.like, true);
             }
-
-            h.icon.setOnClickListener(new View.OnClickListener() {
+            h.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //    h.play_status =
-                    mCurrent = position;
-                    mRoot.setVisibility(View.VISIBLE);
+                    if (AppShare.getIsLogin(mContext)) {
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.like,
+                                MyNetRequestConfig.like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                                "getSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                        //  LogUtils.LOGE(tag,netResponse.toString());
+                                        if (type == TYPE_SUCCESS) {
+
+                                            if (f.islike == 0) {
+                                                f.like++;
+                                                f.islike = 1;
+                                                notifyDataSetChanged();
+                                            } else {
+
+                                            }
+                                        }
+
+                                    }
+                                });
+                    } else {
+                        Model.startNextAct(mContext,
+                                SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                    }
+
+                }
+            });
+            final int pos = position;
+            if (mCurrent == position) {
+                h.play_status.setImageResource(R.mipmap.music_pause);
+            } else {
+                h.play_status.setImageResource(R.mipmap.music_play);
+            }
+
+            h.play_status.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCurrent == pos) {
+                        mCurrent = -1;
+                        if (mListener != null) mListener.onPauseClick(f);
+                    } else {
+                        if (mListener != null) mListener.onPlayClick(f);
+                        mCurrent = pos;
+                    }
+
 
                     notifyDataSetChanged();
 
@@ -161,25 +245,52 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
         return v;
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Sound f = getItem(position);
-//
+        if (position < 2) {
+            return;
+        }
+
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
                     R.string.fm_net_call_no_network);
             return;
         }
+        Sound f = getItem(position - 2);
+//        LogUtils.LOGE(tag, position + "");
         Intent i = new Intent(mContext, StubActivity.class);
         i.putExtra("fragment", ItemDetailFragment.class.getName());
         Bundle bundle = new Bundle();
-
         bundle.putSerializable("Sound", f);
-
         i.putExtras(bundle);
         mContext.startActivity(i);
     }
 
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+
+        ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10); // 可删除
+
+        listView.setLayoutParams(params);
+    }
 
     public boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -195,3 +306,5 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
 
 
 }
+
+

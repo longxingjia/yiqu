@@ -56,12 +56,19 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
     private Context mContext;
     private int mCurrent = -1;
     private Intent intent = new Intent();
-    private Player player;
+    private OnPlayClickListener mListener;
 
-    public Tab4NewAdapter(Context context, Player player) {
+    public void setOnPlayClickListener(OnPlayClickListener l) {
+        mListener = l;
+    }
+    public interface OnPlayClickListener {
+        public void onPlayClick(Sound sound);
+        public void onPauseClick(Sound sound);
+    }
+
+    public Tab4NewAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        this.player = player;
 
 
     }
@@ -215,14 +222,11 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
             h.play_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (mCurrent == pos) {
-                        if (player.isPlaying()) {
-                            player.pause();
-                            mCurrent = -1;
-                        }
-                    } else {
-                        player.playUrl(MyNetApiConfig.ImageServerAddr + f.soundpath);
+                    if (mCurrent==pos){
+                        mCurrent=-1;
+                        if(mListener != null) mListener.onPauseClick(f);
+                    }else {
+                        if(mListener != null) mListener.onPlayClick(f);
                         mCurrent = pos;
                     }
 
@@ -245,7 +249,7 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position < 1) {
+        if (position < 2) {
             return;
         }
 
@@ -254,8 +258,8 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
                     R.string.fm_net_call_no_network);
             return;
         }
-        Sound f = getItem(position - 1);
-        LogUtils.LOGE(tag, position + "");
+        Sound f = getItem(position - 2);
+//        LogUtils.LOGE(tag, position + "");
         Intent i = new Intent(mContext, StubActivity.class);
         i.putExtra("fragment", ItemDetailFragment.class.getName());
         Bundle bundle = new Bundle();
@@ -273,7 +277,6 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
         }
 
         int totalHeight = 0;
-
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);

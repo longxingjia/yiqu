@@ -103,7 +103,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
                 "getSoundList", Tab1SoundListFragment.this);
 
         tab1SoundAdapter = new Tab1SoundAdapter(Tab1SoundListFragment.this);
@@ -161,7 +161,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     protected void initTitle() {
 
-        setTitleText(getString(R.string.remenzuopin));
+        setTitleText(getString(R.string.hotquestion));
 
     }
 
@@ -211,14 +211,14 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("作品列表");
+        MobclickAgent.onPageStart(getString(R.string.hotquestion));
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("作品列表");
+        MobclickAgent.onPageEnd(getString(R.string.hotquestion));
 
     }
 
@@ -231,7 +231,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
                 "getSoundList", Tab1SoundListFragment.this,false,true);
 
     }
@@ -247,7 +247,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getSoundList,
-                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
                         "getSoundList_more", Tab1SoundListFragment.this,false,true);
 
             }

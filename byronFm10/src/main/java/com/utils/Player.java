@@ -31,7 +31,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     private boolean USE_PROXY = true;
     private String oldUrl ;
     private onPlayCompletion onPlayCompletion;
-
+    private onPreparedCompletion mListener;
     public Player(Context context, SeekBar skbProgress, ImageView video_play,
                   TextView now_time, TextView all_time,onPlayCompletion onPlayCompletion) {
         this.skbProgress = skbProgress;
@@ -66,9 +66,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
                 return;
             if (skbProgress == null)
                 return;
-            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
-                handleProgress.sendEmptyMessage(0);
-            }
+//            if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
+//                handleProgress.sendEmptyMessage(0);
+//            }
         }
     };
 
@@ -118,7 +118,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     }
 
     public boolean isPlaying() {
-
+        if (mediaPlayer==null){
+            return false;
+        }
         return mediaPlayer.isPlaying();
     }
 
@@ -128,22 +130,24 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
     public void playUrl(String url) {
         if (oldUrl!=null && oldUrl.equals(url)) {
+
         } else {
             if (USE_PROXY) {
                 startProxy();
                 oldUrl = url;
                 url = proxy.getProxyURL(url);
+//                LogUtils.LOGE("mediaPlayer",url);
             }
             try {
-                if (mediaPlayer.isPlaying()){
-                    mediaPlayer.pause();
-                }
+//                if (mediaPlayer.isPlaying()){
+//                    mediaPlayer.pause();
+//                }
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
 //
-                mediaPlayer.prepare();
+                mediaPlayer.prepareAsync();
 //
-                mediaPlayer.start();
+                //mediaPlayer.start();
 //
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
@@ -175,6 +179,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     public void onPrepared(MediaPlayer arg0) {
         Log.e("mediaPlayer", "onPrepared");
         arg0.start();
+        if(mListener != null) mListener.onPreparedCompletion();
     }
 
     @Override
@@ -202,6 +207,13 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         public void completion();
     }
 
+
+    public void setOnPreparedCompletion(onPreparedCompletion l) {
+        mListener = l;
+    }
+    public interface onPreparedCompletion {
+        public void onPreparedCompletion();
+    }
 
     @Override
     public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {

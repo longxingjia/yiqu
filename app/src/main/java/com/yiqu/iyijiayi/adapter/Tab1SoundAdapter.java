@@ -139,7 +139,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
             h.listener.setText(String.valueOf(f.views));
             h.tectitle.setText(f.tectitle);
             h.like.setText(String.valueOf(f.like));
-            //      h.comment.setText(f.comment);
+            h.comment.setText(String.valueOf(f.comments));
 
             long time = System.currentTimeMillis() / 1000 - f.edited;
 

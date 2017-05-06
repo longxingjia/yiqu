@@ -64,6 +64,7 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,8 +102,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView soundtime;
     @BindView(R.id.tea_name)
     public TextView tea_name;
-    @BindView(R.id.stu_school)
-    public TextView stu_school;
+    @BindView(R.id.publish_time)
+    public TextView publish_time;
     @BindView(R.id.worth_name)
     public TextView worth_name;
     @BindView(R.id.stu_name)
@@ -111,8 +112,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView tectitle;
     @BindView(R.id.commenttime)
     public TextView commenttime;
-    @BindView(R.id.created)
-    public TextView created;
+    @BindView(R.id.comments)
+    public TextView comments;
     @BindView(R.id.views)
     public TextView views;
     @BindView(R.id.musictype)
@@ -281,7 +282,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private int position;
     //  private Player player;
     private Sound soundWorth;
-    private String2TimeUtils string2TimeUtils;
+    private String2TimeUtils string2TimeUtils  = new String2TimeUtils();;
 
     @Override
     protected int getContentView() {
@@ -294,7 +295,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
 
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-
+        seekbar.setMax(100);
         initListeners();
 
 
@@ -305,7 +306,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onPublish(final int progress) {
         super.onPublish(progress);
-        seekbar.setProgress(progress);
+     //   LogUtils.LOGE(tag,progress+"");
+
+        seekbar.setProgress(progress*100/mPlayService.getDuration());
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -360,9 +363,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
 
 
-//            this.pro = (int) (progress * mPlayService.getDuration()
-//                    / seekBar.getMax());
-            pro = progress;
+            pro = (progress * mPlayService.getDuration()
+                    / seekBar.getMax());
+//            pro = progress;
         }
 
         @Override
@@ -401,7 +404,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this);
+                        "getSoundDetail", ItemDetailFragment.this,true, true);
 
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addHistory, MyNetRequestConfig
@@ -458,18 +461,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             if (type == NetCallBack.TYPE_SUCCESS) {
                 LogUtils.LOGE(tag, netResponse.toString());
             }
-        } else if (id.equals("getSoundList")) {
+        } else if (id.equals("worthSoundList")) {
+
+            if (mPlayService!=null){
+                mPlayService.play(stuUrl, sound.sid);
+            }
 
             video_play.setImageResource(R.mipmap.video_pause);
-
-            mPlayService.play(stuUrl, sound.sid);
-            seekbar.setMax(mPlayService.getDuration());
-
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.views, MyNetRequestConfig
                             .getComments(getActivity(), sid),
                     "views", ItemDetailFragment.this, false, true);
-
 
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ArrayList<Sound> sounds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
@@ -482,16 +484,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                         worth_desc.setText(soundWorth.desc);
                     if (soundWorth.type == 1) {
                         worth_type.setImageResource(R.mipmap.shengyue);
-
                     } else {
                         worth_type.setImageResource(R.mipmap.boyin);
                     }
                     PictureUtils.showPicture(getActivity(), soundWorth.tecimage, worth_header, 40);
                     worth_teacher_name.setText(soundWorth.tecname);
                     worth_teacher_desc.setText(sound.tectitle);
-
-                    // worth_comment.setText(sound.);
                     worth_like.setText(String.valueOf(soundWorth.like));
+                    worth_comment.setText(String.valueOf(soundWorth.comments));
                     worth_listener.setText(String.valueOf(soundWorth.views));
 
                 }
@@ -513,14 +513,19 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         desc.setText(sound.desc);
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
-        stu_school.setText("学生");
+        try {
+            publish_time.setText(String2TimeUtils.longToString(sound.created*1000,"yyyy/MM/dd HH:mm"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         musicname.setText(sound.musicname);
         tectitle.setText(sound.tectitle);
         commenttime.setText(sound.commenttime + "\"");
-        string2TimeUtils = new String2TimeUtils();
+
         soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
         views.setText(sound.views + "");
         like.setText(sound.like + "");
+        comments.setText(String.valueOf(sound.comments));
         if (sound.type == 1) {
             musictype.setImageResource(R.mipmap.shengyue);
             String text = "";
@@ -536,13 +541,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             musictype.setImageResource(R.mipmap.boyin);
         }
 
-//        if (sound.isfollow.equals("0")){  //没有关注
-//            h.follow.setBackgroundResource(R.mipmap.follow);
-//
-//
-//        }else {
-//            h.follow.setBackgroundResource(R.mipmap.followed);
-//        }
 
         if (sound.touid == 0) {
             teacher_info.setVisibility(View.GONE);
@@ -567,17 +565,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         listview.setAdapter(tab1CommentsAdapter);
         listview.setOnItemClickListener(tab1CommentsAdapter);
 
-
         PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
-        long currentTimeMillis = System.currentTimeMillis() / 1000;
-
-        long time = currentTimeMillis - sound.edited;
-        created.setText(string2TimeUtils.long2Time(time));
-
         stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
-
         stufileName = stuUrl.substring(
                 stuUrl.lastIndexOf("/") + 1,
                 stuUrl.length());
@@ -595,6 +586,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             initDianZan();
         }
 
+
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
@@ -609,10 +601,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 getActivity(),
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "edited", "desc", "0"),
-                "getSoundList", ItemDetailFragment.this, false, true);
+                "worthSoundList", ItemDetailFragment.this, true, true);
 
-//        video_play.setImageResource(R.mipmap.video_pause);
-//        player.playUrl(stuUrl);
     }
 
     @Override
@@ -632,7 +622,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this);
+                        "getSoundDetail", ItemDetailFragment.this,true,false);
 
             }
         } else {
@@ -655,6 +645,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     bundle.putSerializable("Sound", soundWorth);
                     i.putExtras(bundle);
                     getActivity().startActivity(i);
+                    getActivity().finish();
 
                 }
                 break;

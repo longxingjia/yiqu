@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.model.Model;
+import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.DianZanUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
@@ -35,7 +44,7 @@ import java.util.ArrayList;
 public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickListener {
 
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Discovery> datas = new ArrayList<Discovery>();
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
 
     private String tag = "Tab1SoundAdapter";
@@ -47,12 +56,12 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
     }
 
 
-    public void setData(ArrayList<Discovery> list) {
+    public void setData(ArrayList<Sound> list) {
         datas = list;
         notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<Discovery> allDatas) {
+    public void addData(ArrayList<Sound> allDatas) {
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
@@ -63,7 +72,7 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
     }
 
     @Override
-    public Discovery getItem(int position) {
+    public Sound getItem(int position) {
         return datas.get(position);
     }
 
@@ -82,7 +91,9 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
         ImageView musictype;
         TextView views;
         TextView pl;
-        TextView time;
+        TextView comment;
+        TextView like;
+//        TextView time;
 
     }
 
@@ -99,35 +110,38 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
                 h.pl = (TextView) v.findViewById(R.id.pl);
                 h.name = (TextView) v.findViewById(R.id.name);
                 h.title = (TextView) v.findViewById(R.id.title);
-                h.time = (TextView) v.findViewById(R.id.time);
+                //    h.time = (TextView) v.findViewById(R.id.time);
                 h.header = (ImageView) v.findViewById(R.id.header);
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
-                h.views = (TextView) v.findViewById(R.id.views);
+                h.views = (TextView) v.findViewById(R.id.listener);
+                h.like = (TextView) v.findViewById(R.id.like);
+                h.comment = (TextView) v.findViewById(R.id.comment);
                 v.setTag(h);
             }
 
             h = (HoldChild) v.getTag();
-            Discovery f = getItem(position);
+            final Sound f = getItem(position);
 
             h.musicname.setText(f.musicname);
             h.desc.setText(f.desc);
+            h.comment.setText(String.valueOf(f.comments));
 
             if (f.type == 1) {
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
             } else {
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
-
+            h.like.setText(String.valueOf(f.like));
 
             if (f.stype == 1) {   //
                 h.name.setText(f.tecname);
                 h.title.setText(f.tecschool);
-                PictureUtils.showPicture(mContext, f.tecimage, h.header,40);
+                PictureUtils.showPicture(mContext, f.tecimage, h.header, 40);
 
                 h.pl.setText("点评了");
             } else {
                 h.title.setText(f.stuschool);
-                PictureUtils.showPicture(mContext, f.stuimage, h.header,40);
+                PictureUtils.showPicture(mContext, f.stuimage, h.header, 40);
                 h.name.setText(f.stuname);
                 h.pl.setText("录制了");
             }
@@ -135,11 +149,56 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
 
             h.views.setText(f.views + "");
 
-            String2TimeUtils string2TimeUtils = new String2TimeUtils();
-            long currentTimeMillis = System.currentTimeMillis() / 1000;
+            if (f.islike == 0) {
+                DianZanUtils.initDianZan(mContext, h.like, false);
 
-            long time = currentTimeMillis - f.edited;
-            h.time.setText(string2TimeUtils.long2Time(time));
+            } else {
+                DianZanUtils.initDianZan(mContext, h.like, true);
+            }
+
+            h.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (AppShare.getIsLogin(mContext)) {
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.like,
+                                MyNetRequestConfig.like(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                                "getSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                        //  LogUtils.LOGE(tag,netResponse.toString());
+                                        if (type == TYPE_SUCCESS) {
+
+                                            if (f.islike == 0) {
+                                                f.like++;
+                                                f.islike = 1;
+                                                notifyDataSetChanged();
+                                            } else {
+
+                                            }
+                                        }
+
+                                    }
+                                });
+                    } else {
+                        Model.startNextAct(mContext,
+                                SelectLoginFragment.class.getName());
+                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                    }
+
+                }
+            });
 
 
         } catch (Exception e) {
@@ -152,7 +211,10 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-        Discovery f = getItem(arg2 - 1);
+        if (arg2 < 1) {
+            return;
+        }
+        Sound f = getItem(arg2 - 1);
 
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
@@ -161,32 +223,40 @@ public class Tab4DiscoveryAdapter extends BaseAdapter implements OnItemClickList
         }
 
 
+        if (AppShare.getIsLogin(mContext)) {
 
-        if (AppShare.getIsLogin(mContext)){
-
-            if (f.stype == 1) {   //
-                Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", ItemDetailFragment.class.getName());
-                i.putExtra("data",f.sid+"");
-
-                mContext.startActivity(i);
-
-//            h.pl.setText("评论了");
-            } else {
-                Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", ItemDetailFragment.class.getName());
-                i.putExtra("data",f.sid+"");
-                mContext.startActivity(i);
-
-//                Bundle b = new Bundle();
-//                b.putSerializable("data",f);
-//                i.putExtras(b);
-
+//            if (f.stype == 1) {   //
+//                Intent i = new Intent(mContext, StubActivity.class);
+//                i.putExtra("fragment", ItemDetailFragment.class.getName());
+//                i.putExtra("data",f.sid+"");
+//
 //                mContext.startActivity(i);
-//            h.pl.setText("录制了");
-            }
+//
+////            h.pl.setText("评论了");
+//            } else {
+//                Intent i = new Intent(mContext, StubActivity.class);
+//                i.putExtra("fragment", ItemDetailFragment.class.getName());
+//                i.putExtra("data",f.sid+"");
+//                mContext.startActivity(i);
+//
+////                Bundle b = new Bundle();
+////                b.putSerializable("data",f);
+////                i.putExtras(b);
+//
+////                mContext.startActivity(i);
+////            h.pl.setText("录制了");
+//            }
 
-        }else {
+
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
+            Bundle b = new Bundle();
+            b.putSerializable("Sound", f);
+            i.putExtras(b);
+            mContext.startActivity(i);
+
+//
+        } else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());
             ToastManager.getInstance(mContext).showText("请登录后再试");

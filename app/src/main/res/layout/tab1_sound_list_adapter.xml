@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:minHeight="210dp"
-    android:orientation="vertical">
-
+              android:layout_width="match_parent"
+              android:layout_height="210dp"
+              android:minHeight="210dp"
+              android:orientation="vertical">
 
 
     <LinearLayout
-        android:layout_marginTop="27dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="27dp"
 
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text=""
-            android:textSize="17sp" />
-
-        <RelativeLayout
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="17sp"/>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="28dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp">
 
             <LinearLayout
@@ -48,18 +47,18 @@
                     android:id="@+id/musicname"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginLeft="8dp"
+                    android:gravity="center"
+                    android:singleLine="true"
                     android:text=""
                     android:textColor="@color/dd_gray"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
 
             </LinearLayout>
 
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="70dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
@@ -69,16 +68,17 @@
                 android:gravity="center"
                 android:text="查看详情"
                 android:textColor="@color/dd_gray"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/soundtime"
@@ -90,7 +90,7 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/stu_voice"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
             <RelativeLayout
                 android:layout_width="172dp"
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/stu_voice"
-                    android:progressDrawable="@drawable/progressbar_stu" />
+                    android:progressDrawable="@drawable/progressbar_stu"/>
 
                 <TextView
                     android:id="@+id/stu_listen"
@@ -116,7 +116,7 @@
 
                     android:text="我也要听"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
                 <ImageView
                     android:layout_width="30dp"
@@ -124,7 +124,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/bofang_left" />
+                    android:src="@mipmap/bofang_left"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -137,14 +137,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@drawable/head_bg" />
+                    android:background="@drawable/head_bg"/>
 
                 <com.ui.views.CircleImageView
                     android:id="@+id/stu_header"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/menu_head" />
+                    android:src="@mipmap/menu_head"/>
 
             </RelativeLayout>
 
@@ -152,12 +152,11 @@
         </LinearLayout>
 
 
-
         <LinearLayout
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -173,7 +172,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="@drawable/head_bg"
-                    android:padding="24dp" />
+                    android:padding="24dp"/>
 
                 <com.ui.views.CircleImageView
                     android:id="@+id/tea_header"
@@ -181,7 +180,7 @@
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:padding="24dp"
-                    android:src="@mipmap/menu_head" />
+                    android:src="@mipmap/menu_head"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -194,8 +193,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:background="@drawable/red_circle"/>
+                    android:background="@drawable/red_circle"
+                    android:scaleType="centerInside"/>
 
                 <TextView
                     android:id="@+id/tea_listen"
@@ -205,45 +204,44 @@
                     android:gravity="center"
                     android:text=""
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"/>
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/bofang_right" />
+                    android:src="@mipmap/bofang_right"/>
 
 
             </RelativeLayout>
-
 
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
                 android:background="@color/transparent"
                 android:gravity="center"
                 android:text="228"
-                android:layout_marginLeft="30dp"
                 android:textColor="@color/redMain"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="28dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-           >
+            >
 
             <TextView
                 android:id="@+id/tea_name"
@@ -251,7 +249,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tectitle"
@@ -265,31 +263,53 @@
                 android:maxLines="1"
                 android:text=""
                 android:textColor="@color/dd_gray"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
 
         </RelativeLayout>
 
         <View
-            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="12dp"
             android:background="@color/tab_bg_color"/>
+
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="28dp">
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/listener"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:drawableLeft="@mipmap/listened"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/dd_gray"
+                android:textSize="14sp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/comment"
-                android:drawableLeft="@mipmap/comment_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:drawableLeft="@mipmap/comment_normal"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:drawablePadding="5dp"
+                android:textColor="@color/dd_gray"
+                android:textSize="14sp"/>
 
             <View
                 android:layout_width="0dp"
@@ -299,37 +319,16 @@
             <TextView
                 android:id="@+id/like"
                 android:layout_width="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:layout_height="20dp"
                 android:drawableLeft="@mipmap/dianzan__new"
                 android:drawablePadding="5dp"
-
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
+                android:paddingLeft="10dp"
                 android:text=""
                 android:textColor="@color/dd_gray"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"/>
-
-
-            <TextView
-                android:id="@+id/listener"
-                android:drawablePadding="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:gravity="center"
-                android:text=""
-                android:drawableLeft="@mipmap/listened"
-                android:textColor="@color/dd_gray"
-                android:textSize="14sp"
-
-                />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
@@ -338,6 +337,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/tab_bg_color" />
+        android:background="@color/tab_bg_color"/>
 
 </LinearLayout>

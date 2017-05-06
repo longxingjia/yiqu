@@ -118,47 +118,63 @@
         android:textColor="@color/dd_gray"
         android:textSize="12sp" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="13dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="28dp"
+        android:orientation="horizontal">
+
 
         <TextView
-            android:id="@+id/time"
+            android:id="@+id/listener"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="20dp"
+            android:drawableLeft="@mipmap/listened"
+            android:drawablePadding="5dp"
+            android:gravity="center"
             android:text=""
             android:textColor="@color/dd_gray"
-            android:textSize="11sp" />
+            android:textSize="14sp"
+            />
 
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <TextView
+            android:id="@+id/comment"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-
-            android:layout_toLeftOf="@+id/views"
-            android:gravity="center"
-            android:text="听过"
+            android:drawableLeft="@mipmap/comment_normal"
+            android:gravity="center_vertical"
             android:textColor="@color/dd_gray"
-            android:textSize="11sp" />
+            android:drawablePadding="5dp"
+            android:textSize="14sp" />
 
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/views"
+            android:id="@+id/like"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
+            android:layout_height="20dp"
+            android:drawableLeft="@mipmap/dianzan__new"
+            android:drawablePadding="5dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
             android:text=""
-            android:textColor="@color/redMain"
-            android:textSize="11sp" />
+            android:textColor="@color/dd_gray"
+            android:textSize="14sp" />
 
-    </RelativeLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

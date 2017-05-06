@@ -56,13 +56,14 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     //刷新
     private RefreshList listView;
-  //  private Tab4HotAdapter tab4HotAdapter;
+    //  private Tab4HotAdapter tab4HotAdapter;
     private Tab4NewAdapter tab4NewAdapter;
     private String uid;
     private Events events;
     private String arr;
     private ArrayList<Sound> sounds;
     private Player player;
+    private Tab4HotAdapter tab4HotAdapter;
 
     @Override
     protected int getTitleView() {
@@ -105,7 +106,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             }
         });
 
-        tab4NewAdapter = new Tab4NewAdapter(getActivity(), player);
+        tab4NewAdapter = new Tab4NewAdapter(getActivity());
         listView.setAdapter(tab4NewAdapter);
         listView.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         listView.setOnItemClickListener(tab4NewAdapter);
@@ -115,11 +116,33 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
-        //  listView.addHeaderView(headerView);
+        listView.addHeaderView(headerView);
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
+
+        tab4NewAdapter.setOnPlayClickListener(new Tab4NewAdapter.OnPlayClickListener() {
+            int sid = 0;
+
+            @Override
+            public void onPlayClick(Sound sound) {
+                String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
+
+                if (sid == sound.sid) {
+                    mPlayService.resume();
+                } else {
+                    mPlayService.play(url, sound.sid);
+                }
+
+                sid = sound.sid;
+            }
+
+            @Override
+            public void onPauseClick(Sound sound) {
+                mPlayService.pause();
+            }
+        });
 
     }
 
@@ -129,8 +152,8 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             case R.id.join_in:
 
                 Intent intent = new Intent(getActivity(), RecordAllActivity.class);
-                intent.putExtra("eid",String.valueOf(events.id));
-                intent.putExtra("title",String.valueOf(events.title));
+                intent.putExtra("eid", String.valueOf(events.id));
+                intent.putExtra("title", String.valueOf(events.title));
                 getActivity().startActivity(intent);
 
 
@@ -140,9 +163,9 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
 
     private void initHeadView(View v) {
-//        tab4HotAdapter = new Tab4HotAdapter(getActivity());
-//        ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
-//        head_listview.setAdapter(tab4HotAdapter);
+        tab4HotAdapter = new Tab4HotAdapter(getActivity());
+        ListView head_listview = (ListView) v.findViewById(R.id.head_listview);
+        head_listview.setAdapter(tab4HotAdapter);
 
     }
 
@@ -264,6 +287,13 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
+        }else if (id.equals("views")){
+            if (type == TYPE_SUCCESS) {
+                LogUtils.LOGE(tag,netResponse.toString());
+                ArrayList<Sound>   s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
+                }.getType());
+                tab4HotAdapter.setData(s);
+            }
         }
         super.onNetEnd(id, type, netResponse);
     }
@@ -298,6 +328,12 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 MyNetApiConfig.getSoundList,
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "desc"),
                 "getSoundList", EventFragment.this);
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getSoundList,
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 3, "views", "desc"),
+                "views", EventFragment.this);
 
 
     }
