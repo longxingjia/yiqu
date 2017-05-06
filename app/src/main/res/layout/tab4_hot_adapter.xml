@@ -65,7 +65,7 @@
                 android:drawableLeft="@mipmap/comment_normal"
                 android:drawablePadding="3dp"
                 android:gravity="center"
-                android:text="228"
+                android:text=""
                 android:textColor="@color/dd_gray"
                 android:textSize="12sp"/>
 
