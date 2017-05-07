@@ -3,6 +3,7 @@ package com.yiqu.Tool.Player;
 import android.media.MediaPlayer;
 import android.os.Handler;
 
+import com.utils.LogUtils;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
@@ -242,11 +243,12 @@ public class VoicePlayerEngine {
 //            }
             //   playingUrl = null;
             voicePlayer.start();
-            //  LogUtils.LOGE("vp","fsfs");
             musicPlayerState = MusicData.MusicPlayerState.playing;
             int pos = voicePlayer.getCurrentPosition();
+            updateMicStatus();
             if (voicePlayerInterface != null) {
-                voicePlayerInterface.playVoiceStateChanged(pos);
+//                LogUtils.LOGE("tag",pos+"");
+//                voicePlayerInterface.playVoiceStateChanged(pos);
             }
             return pos;
         } else if (musicPlayerState == MusicData.MusicPlayerState.preparing) {

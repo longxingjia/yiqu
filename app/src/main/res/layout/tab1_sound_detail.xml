@@ -29,27 +29,27 @@
                 android:background="@mipmap/voice_bg"
                 android:orientation="vertical">
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="0dp">
 
                     <TextView
                         android:id="@+id/article_content"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:scrollbars = "vertical"
+                        android:maxLines="15"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="50dp"
                         android:gravity="center"
+                        android:text="
+从今年7月起，故宫将全部门票放在网络上销售，，不再要求提前一天预约，当天也可预约当天门票。7月至10月是故宫全网售票政策的试运行阶段，这一阶段，实体传统门票还会销售，但工作人员将在端门广场设置咨询台，帮助不熟悉网络购票的观众现场完成“网购”。10月下旬起，故宫将择机正式实施全网售票，力争在明年“五一”实现观众分时段、错峰参观。"
                         android:maxHeight="180dp"
                         
                         android:textColor="@color/white"
                         android:textSize="17sp"/>
 
 
-                </ScrollView>
+
 
                 <View
                     android:layout_width="1dp"

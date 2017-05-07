@@ -2,6 +2,7 @@ package com.ui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
@@ -9,7 +10,7 @@ import android.widget.ScrollView;
  */
 
 public class ObservableScrollView extends ScrollView {
-
+    boolean isScrollable = true;
     public interface ScrollViewListener {
 
         void onScrollChanged(ObservableScrollView scrollView, int x, int y,
@@ -44,4 +45,17 @@ public class ObservableScrollView extends ScrollView {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (isScrollable) {
+            return super.onTouchEvent(ev);
+        } else {
+
+            return false;
+        }
+    }
+
+    public void setScrollable(boolean scrollable) {
+        isScrollable = scrollable;
+    }
 }
