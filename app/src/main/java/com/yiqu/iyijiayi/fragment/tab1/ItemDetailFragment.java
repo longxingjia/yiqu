@@ -517,6 +517,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         article_content.setText(sound.article_content);
         article_content.setMovementMethod(new ScrollingMovementMethod());
 
+        
         article_content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
