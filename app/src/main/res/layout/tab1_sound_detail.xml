@@ -44,6 +44,7 @@
                         android:layout_marginTop="50dp"
                         android:gravity="center"
                         android:maxHeight="180dp"
+                        
                         android:textColor="@color/white"
                         android:textSize="17sp"/>
 
