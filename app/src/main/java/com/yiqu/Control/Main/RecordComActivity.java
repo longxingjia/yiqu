@@ -537,7 +537,6 @@ public class RecordComActivity extends Activity
     public void composeSuccess() {
         recordVoiceButton.setEnabled(true);
         composeProgressBar.setVisibility(View.GONE);
-
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = music.mid;
@@ -591,10 +590,8 @@ public class RecordComActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-
                 case REQUESTUPLOAD:
                     finish();
-
                     break;
             }
         }
@@ -637,7 +634,6 @@ public class RecordComActivity extends Activity
                 if (recordComFinish) {
                     upload();
                 } else if (recordVoiceBegin) {
-
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("完成录制");
                     builder.setMessage("确定要完成录制吗？");
@@ -660,7 +656,6 @@ public class RecordComActivity extends Activity
                 }
                 break;
             case R.id.reset:
-
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("重新录制");
                 builder.setMessage("确定删除已录制作品，重新录制？");
@@ -668,7 +663,6 @@ public class RecordComActivity extends Activity
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         icon_finish.setImageResource(R.mipmap.finish);
                         icon_record.setImageResource(R.mipmap.icon_record);
                         pb_record.setProgress(0);
@@ -682,14 +676,10 @@ public class RecordComActivity extends Activity
                 });
                 builder.show();
 
-
                 break;
             case R.id.title_back:
-
                 exit();
-
                 break;
-
 
         }
 

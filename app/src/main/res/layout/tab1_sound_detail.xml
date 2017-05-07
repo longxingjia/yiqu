@@ -29,26 +29,35 @@
                 android:background="@mipmap/voice_bg"
                 android:orientation="vertical">
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="0dp">
 
                     <TextView
                         android:id="@+id/article_content"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:scrollbars = "vertical"
+                        android:maxLines="15"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="50dp"
                         android:gravity="center"
+                        android:text="央广网北京5月7日消息 据中国之声《新闻和报纸摘要》报道，新闻动车组今日关注：北京养老机构“虐老欺老”将被纳入黑名单；四川广元西湾水厂水源地污染物铊元素浓度下降，达到供水条件；故宫将实行全网售票、分时段参观。
+　　北京养老机构“虐老欺老”将被纳入黑名单
+民政部、公安部、国家卫生计生委等6部门今年3月发布通知，在全国开展养老院服务质量建设专项行动。北京市近日明确，全市534家养老机构将启动自查整改，并探索建立养老机构黑名单制度，把虐老欺老行为、家属反映投诉、安全责任事故等情况录入诚信档案及黑名单范围。同时，建立养老机构退出机制，发现严重违法违规行为且不整改以及因违法违规行为导致事故的养老机构，向社会公告并通报相关部门。
+中国老龄科学研究中心副主任党俊武表示：我觉得退出机制对目前养老院的管理是非常大的完善，它的意义可能比黑名单制度还要重要。但是，进入和退出的两个机制要同时进行。
+　　央广记者刘会民北京报道
+四川广元西湾水厂水源地污染物铊元素浓度下降 达到供水条件
+5日，四川省广元市嘉陵江入川断面水质出现异常，西湾水厂水源地水质铊元素超标4.6倍。水污染发生后，当地迅速启动应急供水，同时加强水质监测，进行开闸放水、加大泄洪量等应急措施，加快污染水体流动和稀释。经相关专家及部门综合研判，初步判定污染源为川陕界上游输入型、一次性污染团。截止昨日（6日）晚上9时许，西湾水厂水源地水质铊元素浓度已稳定到标，上游无新增污染物，嘉陵江流域水质趋于稳定，符合供水条件。
+广元市环保局总工程师乔良：目前，污染物铊浓度已经稳定达标，有关部门正抓紧做好恢复西湾水厂供水各项准备工作，下一步我们也将持续做好水质监测和污染源排查工作，消除隐患，确保饮水安全。
+　　央广记者韩民权广元报道
+　　故宫将实行全网售票、分时段参观
+从今年7月起，故宫将全部门票放在网络上销售，同时改变目前故宫网络门票预约的时间限制，不再要求提前一天预约，当天也可预约当天门票。7月至10月是故宫全网售票政策的试运行阶段，这一阶段，实体传统门票还会销售，但工作人员将在端门广场设置咨询台，帮助不熟悉网络购票的观众现场完成“网购”。10月下旬起，故宫将择机正式实施全网售票，力争在明年“五一”实现观众分时段、错峰参观。"
                         android:maxHeight="180dp"
                         android:textColor="@color/white"
                         android:textSize="17sp"/>
 
 
-                </ScrollView>
+
 
                 <View
                     android:layout_width="1dp"

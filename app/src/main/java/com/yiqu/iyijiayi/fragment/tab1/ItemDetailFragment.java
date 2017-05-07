@@ -15,7 +15,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -512,7 +514,25 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         desc.setText(sound.desc);
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
-        article_content.setText(sound.article_content);
+      //  article_content.setText(sound.article_content);
+        article_content.setMovementMethod(new ScrollingMovementMethod());
+        article_content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if(motionEvent.getAction()==MotionEvent.ACTION_MOVE){
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if(motionEvent.getAction()==MotionEvent.ACTION_UP){
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        });
         try {
             publish_time.setText(String2TimeUtils.longToString(sound.created * 1000, "yyyy/MM/dd HH:mm"));
         } catch (ParseException e) {
@@ -521,7 +541,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         musicname.setText(sound.musicname);
         tectitle.setText(sound.tectitle);
         commenttime.setText(sound.commenttime + "\"");
-
         soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
         views.setText(sound.views + "");
         like.setText(sound.like + "");

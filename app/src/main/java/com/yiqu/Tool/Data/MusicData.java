@@ -9,5 +9,6 @@ public class MusicData {
         public final static int preparing = 1;
         public final static int playing = 2;
         public final static int pausing = 3;
+        public final static int stop = 4;
     }
 }
