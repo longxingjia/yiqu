@@ -19,57 +19,30 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
-import com.ui.views.RoundProgressBar;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
-import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
 
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.utils.LogUtils;
-import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;
-import com.yiqu.iyijiayi.model.Sound;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.DianZanUtils;
-import com.yiqu.iyijiayi.utils.PictureUtils;
-import com.yiqu.iyijiayi.utils.String2TimeUtils;
-
-import java.math.MathContext;
-import java.util.ArrayList;
 
 public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
     private String tag = "Tab4NewAdapter";
@@ -100,6 +73,10 @@ public class Tab4HotAdapter extends BaseAdapter implements OnItemClickListener {
     public void setCurrent(int current) {
         mCurrent = current;
         notifyDataSetChanged();
+    }
+
+    public int getCurrent() {
+        return mCurrent;
     }
 
     public void setData(ArrayList<Sound> list) {

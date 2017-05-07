@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadXizuoFragment extends AbsAllFragment {
 
-
     private TextView musicName;
     private Button submit;
     private String tag = "DownloadXizuoFragment";
@@ -63,7 +62,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 case Constant.QUERY:
 
                     Cursor cursor = downloadManager.query(query);
-
                     if (cursor != null && cursor.moveToFirst()) {
                         //此处直接查询文件大小
                         int bytesDLIdx =

@@ -1,12 +1,10 @@
 package com.yiqu.iyijiayi.model;
 
-import java.security.PublicKey;
-
 /**
  * Created by Administrator on 2017/2/16.
  */
 
-public class NSDictionary {
+public class EventNSDictionary {
     public String isopen;
     public String ispay;
     public String isreply;
@@ -14,6 +12,6 @@ public class NSDictionary {
     public String stype;
     public String touid;
     public String fromuid;
-//    public int eid;
+    public int eid;
 
 }

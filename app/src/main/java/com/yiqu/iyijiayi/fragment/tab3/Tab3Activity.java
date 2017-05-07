@@ -1,24 +1,15 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragmentAct;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.NoScollViewPager;
 
 import java.util.ArrayList;
@@ -48,11 +39,11 @@ public class Tab3Activity extends AbsFragmentAct implements View.OnClickListener
         sounds.setOnClickListener(this);
         record.setOnClickListener(this);
 
-        Intent intent = new Intent();
-        intent.putExtra("choice", "stop");
-        // top_play.setVisibility(View.GONE);
-        intent.setClass(this, MusicService.class);
-     startService(intent);
+//        Intent intent = new Intent();
+//        intent.putExtra("choice", "stop");
+//        // top_play.setVisibility(View.GONE);
+//        intent.setClass(this, MusicService.class);
+    // startService(intent);
 
     }
 

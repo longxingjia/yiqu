@@ -153,7 +153,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
-            mediaPlayer = null;
+           // mediaPlayer = null;
         }
     }
 

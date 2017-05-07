@@ -139,6 +139,7 @@ dependencies {
     // 此处以JPush 3.0.3 版本为例。
     compile 'cn.jiguang.sdk:jcore:1.1.1'
     // 此处以JCore 1.1.1 版本为例。
+    compile 'cn.jiguang.sdk:janalytics:1.1.1' // 此处以JAnalytics 1.1.1 版本为例。
     compile project(':LyricView')
     compile project(':base_library_pullToRefresh_chenyoca')
     compile files('libs/MobCommons-2017.0412.1554.jar')

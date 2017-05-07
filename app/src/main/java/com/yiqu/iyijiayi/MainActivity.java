@@ -189,7 +189,7 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
                                     dialog.dismiss();
-                                    ServiceUtils.stopService(MainActivity.this);
+
                                     finish();
                                 }
                             }).setPositiveButton("取消", null)

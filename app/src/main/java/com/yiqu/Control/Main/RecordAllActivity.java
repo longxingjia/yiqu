@@ -119,6 +119,7 @@ public class RecordAllActivity extends Activity
     private static RecordAllActivity instance;
     private final static int REQUESTMUSIC = 0x2001;
     private final static int REQUESTARTICLE = 0x2002;
+    private final static int REQUESTUPLOAD = 0x2003;
 
     private ImageView title_back;
     private ImageView image_anim;
@@ -177,6 +178,7 @@ public class RecordAllActivity extends Activity
     private SelectArticle selectArticle;
     private String event_title;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,9 +205,7 @@ public class RecordAllActivity extends Activity
         if (TextUtils.isEmpty(eid)) {
             eid = "0";
         }
-//        if (!TextUtils.isEmpty(eventName)) {
-//            musicName.setText(eventName);
-//        }
+
         if (!TextUtils.isEmpty(musicdesc)) {
             content.setText(musicdesc);
             et_content.setVisibility(View.GONE);
@@ -218,7 +218,7 @@ public class RecordAllActivity extends Activity
                 if (hasFocus) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                 } else {
-//  activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
                 }
 
             }
@@ -360,9 +360,7 @@ public class RecordAllActivity extends Activity
         author.setText(selectArticle.author);
         content.setText(selectArticle.content);
         image_anim.setVisibility(View.GONE);
-//        if (TextUtils.isEmpty(eventName)) {
-//            musicName.setText(selectArticle.title);
-//        }
+        musicName.setText(selectArticle.title);
         add_article.setBackgroundResource(R.mipmap.cancle_music);
         et_content.setVisibility(View.GONE);
     }
@@ -616,7 +614,7 @@ public class RecordAllActivity extends Activity
         composeVoice.musictype = "";
         composeVoice.chapter = "";
         if (!TextUtils.isEmpty(content.getText().toString())) {
-            composeVoice.desc = content.getText().toString();
+            composeVoice.article_content = content.getText().toString();
         }
         composeVoice.voicename = VoiceFunctionF2.getRecorderPath();
         composeVoice.accompaniment = "";
@@ -647,6 +645,9 @@ public class RecordAllActivity extends Activity
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = mid;
+        if (!TextUtils.isEmpty(content.getText().toString())) {
+            composeVoice.article_content = content.getText().toString();
+        }
         composeVoice.musicname = music.musicname;
         composeVoice.musictype = music.musictype;
         composeVoice.chapter = music.chapter;
@@ -733,6 +734,10 @@ public class RecordAllActivity extends Activity
                         content.setText(et_content.getText().toString());
                         et_content.setVisibility(View.GONE);
                     }
+                    if (selectArticle!=null && !TextUtils.isEmpty(selectArticle.content)) {
+                        content.setText(selectArticle.content);
+                    }
+
                     if (!is2mp3) {
                         VoiceFunctionF2.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
 
@@ -746,6 +751,7 @@ public class RecordAllActivity extends Activity
                     add_article.setVisibility(View.INVISIBLE);
                     add_music.setVisibility(View.INVISIBLE);
                     select_article.setEnabled(false);
+                    et_content.setVisibility(View.INVISIBLE);
                     if (select_article.getText().equals("请选择范文")) {
                         select_article.setText("无范文");
                     }
@@ -853,6 +859,7 @@ public class RecordAllActivity extends Activity
                         add_music.setEnabled(true);
                         add_article.setVisibility(View.VISIBLE);
                         add_music.setVisibility(View.VISIBLE);
+                        et_content.setVisibility(View.VISIBLE);
                     }
                 });
                 builder.show();
@@ -897,6 +904,8 @@ public class RecordAllActivity extends Activity
         bundle.putSerializable("composeVoice", composeVoice);
         String title = "提示";
         String[] items = new String[]{"免费上传作品"};
+        VoiceFunctionF2.pauseVoice();
+        icon_record.setImageResource(R.mipmap.icon_play);
         if (TextUtils.isEmpty(eid) || eid.equals("0")) {
             title = "找个导师点评一下吗？";
             items = new String[]{"免费上传作品", "找导师请教"};
@@ -911,16 +920,15 @@ public class RecordAllActivity extends Activity
                         Intent intent = new Intent(instance, StubActivity.class);
                         intent.putExtra("fragment", AddQuestionFragment.class.getName());
                         intent.putExtras(bundle);
-                        instance.startActivity(intent);
+                        instance.startActivityForResult(intent,REQUESTUPLOAD);
 
                         break;
                     case 0:
-
                         Intent i = new Intent(instance, StubActivity.class);
                         i.putExtra("fragment", UploadXizuoFragment.class.getName());
                         i.putExtras(bundle);
                         i.putExtra("eid", eid);
-                        instance.startActivity(i);
+                        instance.startActivityForResult(i,REQUESTUPLOAD);
 
                         break;
                 }
@@ -949,6 +957,10 @@ public class RecordAllActivity extends Activity
                     selectArticle = (SelectArticle) bundle.getSerializable("data");
                     initArticleData(selectArticle);
                     break;
+                case REQUESTUPLOAD:
+                    finish();
+
+                    break;
             }
         }
     }
@@ -970,7 +982,7 @@ public class RecordAllActivity extends Activity
                 @Override
                 public void onStart(int downloadId, long fileSize) {
                     if (dialogHelper == null) {
-                        dialogHelper = new DialogHelper(instance, (int) fileSize);
+                        dialogHelper = new DialogHelper(instance, (int) fileSize,"下载中...");
                         dialogHelper.showProgressDialog();
                     }
                 }
@@ -1020,7 +1032,6 @@ public class RecordAllActivity extends Activity
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
             mDownloadService = ((DownloadService.DownloadBinder) service).getService();
             mDownloadService.setOnDownloadEventListener(downloadListener);
         }
@@ -1036,9 +1047,7 @@ public class RecordAllActivity extends Activity
                         case 0:
                             actualRecordTime = 0;
                             recordVoiceBegin = false;
-
                             VoiceFunctionF2.StopRecordVoice(is2mp3);
-
 
                             break;
                         case 1:

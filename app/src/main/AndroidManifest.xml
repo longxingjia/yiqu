@@ -144,12 +144,6 @@
         </activity>
 
 
-
-        <service
-            android:name=".service.MusicService"
-            android:enabled="true"
-            android:exported="false">
-        </service>
         <service
             android:name="com.service.DownloadService"
             android:enabled="true"

@@ -179,7 +179,6 @@ public class VoicePlayerEngine {
         }
 
         //   playingUrl = null;
-
         voicePlayer.pause();
         musicPlayerState = MusicData.MusicPlayerState.pausing;
 

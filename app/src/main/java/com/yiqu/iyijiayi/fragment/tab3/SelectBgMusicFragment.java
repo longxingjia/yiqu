@@ -2,12 +2,14 @@ package com.yiqu.iyijiayi.fragment.tab3;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +18,7 @@ import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.adapter.Tab3MusicAdapter;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.model.Music;
@@ -116,14 +119,15 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
 
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
-
-
-
     }
 
     @Override
     public void onDestroy() {
-        player.stop();
+
+        if (mPlayService!=null){
+            mPlayService.stop();
+        }
+
         super.onDestroy();
     }
 
@@ -236,7 +240,7 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        LogUtils.LOGE("tag",netResponse.toString());
+
         if (id.equals("getBackgroundMusicList")) {
             if (type == TYPE_SUCCESS) {
                 backgroudMusics = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Music>>() {
@@ -245,6 +249,11 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
                 if (backgroudMusics.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
                 }
+                tab3MusicAdapter.setCurrent(-1);
+                if (mPlayService!=null){
+                    mPlayService.pause();
+                }
+
                 count += rows;
                 resfreshOk();
             } else {
@@ -268,6 +277,31 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
                 mLoadMoreView.end();
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        allowBindService(getActivity());
+        tab3MusicAdapter.setOnMoreClickListener(new Tab3MusicAdapter.OnMoreClickListener() {
+            @Override
+            public void onMoreClick(Music music) {
+                String url = MyNetApiConfig.ImageServerAddr + music.musicpath;
+                mPlayService.play(url, music.mid);
+
+            }
+
+        });
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("fragment", "onDestroyView");
+        allowUnbindService(getActivity());
     }
 
     private void selectedTab(int i) {
@@ -327,7 +361,7 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
 
     @Override
     protected void initTitle() {
-        setTitleText("配乐");
+        setTitleText("选择配乐");
 
     }
 

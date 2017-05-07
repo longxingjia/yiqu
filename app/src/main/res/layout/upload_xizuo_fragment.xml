@@ -7,6 +7,21 @@
     tools:context=".MainActivity"
     android:gravity="center_horizontal">
 
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/white_box"
+        android:gravity="top"
+        android:hint="描述一下自己的佳作吸引别人聆听"
+        android:paddingLeft="5dp"
+        android:text="我录制了一个作品，大家快来围观点评一下吧。"
+        android:textSize="16dp"
+        />
+
     <TextView
         android:id="@+id/musicname"
         android:layout_width="match_parent"
@@ -20,22 +35,6 @@
         android:paddingLeft="5dp"
         android:background="@drawable/white_box"
         />
-
-    <EditText
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
-        android:textSize="16dp"
-        android:hint="描述一下自己的佳作吸引别人聆听"
-        android:text="【我录制了一个作品，大家快来围观点评一下吧。】"
-        android:gravity="top"
-        android:paddingLeft="5dp"
-        android:background="@drawable/white_box"
-        />
-
 
 
     <Button

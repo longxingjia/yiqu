@@ -126,6 +126,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             h.time.setText(f.commenttime + "\"");
             h.tea_name.setText(f.tecname);
             h.listener.setText(String.valueOf(f.views));
+            h.comment.setText(String.valueOf(f.comments));
             h.tectitle.setText(f.tectitle);
             h.like.setText(String.valueOf(f.like));
             //  LogUtils.LOGE(tag,f.soundpath);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,6 +24,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
@@ -37,9 +39,9 @@ import java.util.ArrayList;
 public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
-    private Tab1XizuoAdapter tab1XizuoAdapter;
+    private Tab1XizuoAdapterTest tab1XizuoAdapter;
     private String tag = "Tab2ListFragment";
-    private ArrayList<Sound> datas;
+    private ArrayList<Sound> sounds;
     private Context mContext;
 
     //分页
@@ -105,13 +107,13 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
                 MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "views", "desc"),
                 "getSoundList", Tab1XizuoListFragment.this);
 
-        tab1XizuoAdapter = new Tab1XizuoAdapter(getActivity(),getClass().getSimpleName(),top_play,play,musicplaying,authorName);
+        tab1XizuoAdapter = new Tab1XizuoAdapterTest(getActivity(),getClass().getSimpleName());
         listView.setAdapter(tab1XizuoAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Sound f = datas.get(position - 1);
+                Sound f = sounds.get(position - 1);
                 if (AppShare.getIsLogin(mContext)) {
                     Intent i = new Intent(mContext, StubActivity.class);
                     i.putExtra("fragment", ItemDetailFragment.class.getName());
@@ -131,6 +133,34 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
         listView.setRefreshListListener(this);
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        allowBindService(getActivity());
+        tab1XizuoAdapter.setOnMoreClickListener(new Tab1XizuoAdapterTest.OnMoreClickListener() {
+            @Override
+            public void onMoreClick(int position) {
+
+                String url = MyNetApiConfig.ImageServerAddr + sounds.get(position).soundpath;
+                mPlayService.play(url, sounds.get(position).sid);
+
+               // initTopPlayUI(sounds.get(position));
+            }
+
+        });
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("fragment", "onDestroyView");
+        allowUnbindService(getActivity());
+    }
+
 
     @Override
     public void onDestroy() {
@@ -172,9 +202,9 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
 
                 try {
 
-                    datas = JsonUtils.parseXizuoList(netResponse.data);
-                    tab1XizuoAdapter.setData(datas);
-                    if (datas.size() == rows) {
+                    sounds = JsonUtils.parseXizuoList(netResponse.data);
+                    tab1XizuoAdapter.setData(sounds);
+                    if (sounds.size() == rows) {
                         mLoadMoreView.setMoreAble(true);
                     }
                     count += rows;
@@ -189,8 +219,8 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
             if (TYPE_SUCCESS == type) {
 
                 try {
-                    datas.addAll(JsonUtils.parseXizuoList(netResponse.data));
-                    if (datas.size() < rows) {
+                    sounds.addAll(JsonUtils.parseXizuoList(netResponse.data));
+                    if (sounds.size() < rows) {
                         mLoadMoreView.setMoreAble(false);
                     }
                     count += rows;

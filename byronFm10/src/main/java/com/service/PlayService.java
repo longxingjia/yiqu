@@ -114,12 +114,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         if (!TextUtils.isEmpty(path)) {
 
             if (mPlayer.isPlaying()) {
-                if (!mPlayer.getUrl().equals(path)) {
-                    mPlayer.pause();
-                    mPlayer.playUrl(path);
-                }
+//                if (!mPlayer.getUrl().equals(path)) {
+//
+//                }
+                mPlayer.pause();
+                mPlayer.playUrl(path);
             } else {
-
                 mPlayer.playUrl(path);
             }
         }
@@ -151,7 +151,16 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
         return sid;
     }
-
+    /**
+     * 暂停播放
+     *
+     * @return 当前播放的位置
+     */
+    public int stop() {
+        if (!isPlaying()) return -1;
+        mPlayer.stop();
+        return sid;
+    }
 
     /**
      * 是否正在播放

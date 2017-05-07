@@ -29,7 +29,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     MediaPlayerProxy proxy;
     Context context;
     private boolean USE_PROXY = true;
-    private String oldUrl ;
+   // private String oldUrl ;
     private onPlayCompletion onPlayCompletion;
     private onPreparedCompletion mListener;
     public Player(Context context, SeekBar skbProgress, ImageView video_play,
@@ -124,17 +124,17 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         return mediaPlayer.isPlaying();
     }
 
-    public String getUrl() {
-        return oldUrl;
-    }
+//    public String getUrl() {
+//        return oldUrl;
+//    }
 
     public void playUrl(String url) {
-        if (oldUrl!=null && oldUrl.equals(url)) {
-
-        } else {
+//        if (oldUrl!=null && oldUrl.equals(url)) {
+//
+//        } else {
             if (USE_PROXY) {
                 startProxy();
-                oldUrl = url;
+             //   oldUrl = url;
                 url = proxy.getProxyURL(url);
 //                LogUtils.LOGE("mediaPlayer",url);
             }
@@ -144,9 +144,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 //                }
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url);
-//
                 mediaPlayer.prepareAsync();
-//
                 //mediaPlayer.start();
 //
             } catch (IllegalArgumentException e) {
@@ -157,7 +155,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
                 e.printStackTrace();
             }
         }
-    }
+//    }
 
 
     public void pause() {
@@ -168,7 +166,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
-            mediaPlayer = null;
+       //     mediaPlayer = null;
         }
     }
 

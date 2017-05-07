@@ -29,6 +29,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -198,7 +200,9 @@ public class UploadXizuoFragment extends AbsAllFragment {
         super.onNetEnd(id, type, netResponse);
         if (type == NetCallBack.TYPE_SUCCESS) {
             ToastManager.getInstance(getActivity()).showText("上传成功");
-            getActivity().finish();
+            Intent intent = new Intent();
+            getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+            getActivity().finish();//此处一定要调用finish()方法
         } else {
             ToastManager.getInstance(getActivity()).showText(netResponse.result);
         }

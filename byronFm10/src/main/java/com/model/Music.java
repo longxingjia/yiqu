@@ -19,6 +19,7 @@ public class Music implements Serializable {
     public int time;
     public String size;
     public String isformulation;
+    public String lrcpath;
     public int isdecode;
     public long decodetime;
     public long created;

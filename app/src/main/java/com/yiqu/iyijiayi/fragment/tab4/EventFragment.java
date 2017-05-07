@@ -28,6 +28,7 @@ import com.yiqu.iyijiayi.adapter.Tab4NewAdapter;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.model.Discovery;
+import com.yiqu.iyijiayi.model.EventNSDictionary;
 import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
@@ -129,11 +130,23 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             public void onPlayClick(Sound sound) {
                 String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
 
-                if (sid == sound.sid) {
-                    mPlayService.resume();
-                } else {
+//                if (sid == sound.sid) {
+//                    mPlayService.resume();
+//                } else {
+//                    mPlayService.play(url, sound.sid);
+//                }
+                if (tab4NewAdapter.getCurrent()==-1){
+                    mPlayService.pause();
                     mPlayService.play(url, sound.sid);
+                }else {
+                    if (sid == sound.sid) {
+                        mPlayService.resume();
+                    } else {
+                        mPlayService.play(url, sound.sid);
+                    }
                 }
+
+                //   mPlayService.play(url, sound.sid);
                 tab4HotAdapter.setCurrent(-1);
                 sid = sound.sid;
             }
@@ -175,12 +188,20 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             public void onPlayClick(Sound sound) {
                 String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
 
-                if (sid == sound.sid) {
-                    mPlayService.resume();
-                } else {
+                if (tab4HotAdapter.getCurrent()==-1){
+                    mPlayService.pause();
                     mPlayService.play(url, sound.sid);
+                }else {
+                    if (sid == sound.sid) {
+                        mPlayService.resume();
+                    } else {
+                        mPlayService.play(url, sound.sid);
+                    }
                 }
 
+
+
+//                mPlayService.play(url, sound.sid);
                 tab4NewAdapter.setCurrent(-1);
                 sid = sound.sid;
             }
@@ -201,7 +222,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        NSDictionary nsDictionary = new NSDictionary();
+        EventNSDictionary nsDictionary = new EventNSDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
@@ -242,6 +263,9 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     public void onDestroy() {
         super.onDestroy();
         player.pause();
+        if (mPlayService!=null){
+            mPlayService.stop();
+        }
     }
 
     @Override

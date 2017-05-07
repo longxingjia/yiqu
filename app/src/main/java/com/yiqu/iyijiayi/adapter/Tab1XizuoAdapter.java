@@ -1,7 +1,6 @@
 
 package com.yiqu.iyijiayi.adapter;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,19 +19,15 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
-import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
-import com.yiqu.iyijiayi.fragment.Tab1Fragment;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
@@ -218,11 +213,11 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 mMusicname.setText(f.musicname);
                 mAuthor.setText(f.stuname);
                 String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
-                intent.setClass(mContext, MusicService.class);
-                //      mContext.stopService(intent);
-                intent.putExtra("choice", "play");
-                intent.putExtra("url", url);
-                mContext.startService(intent);
+//                intent.setClass(mContext, MusicService.class);
+//                //      mContext.stopService(intent);
+//                intent.putExtra("choice", "play");
+//                intent.putExtra("url", url);
+//                mContext.startService(intent);
 
             } else {
                 //   h.play_status.setImageResource(R.mipmap.xizuo_play);

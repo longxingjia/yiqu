@@ -28,6 +28,7 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
 
@@ -39,16 +40,21 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
     private ArrayList<Music> datas = new ArrayList<Music>();
     private Activity mContext;
     private String tag = "Tab3MusicAdapter";
-    private Player player;
     private int mCurrent = -1;
-    //  private ArrayList<Like> likes;
+    private OnMoreClickListener mListener;
+    private String2TimeUtils string2TimeUtils = new String2TimeUtils();
 
     public Tab3MusicAdapter(Activity context, Player player) {
         mContext = context;
-        this.player = player;
         mLayoutInflater = LayoutInflater.from(mContext);
 
 
+    }
+
+    public void setCurrent(int current) {
+
+        mCurrent = current;
+        notifyDataSetChanged();
     }
 
     public void setData(ArrayList<Music> list) {
@@ -61,6 +67,8 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
         datas.addAll(allDatas);
         notifyDataSetChanged();
     }
+
+
 
     @Override
     public int getCount() {
@@ -81,6 +89,8 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
 
         TextView musicname;
         TextView chapter;
+        TextView accompaniment;
+        TextView time;
         ImageView music_play;
         RoundProgressBar round_pb;
 
@@ -97,6 +107,8 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
                 v = mLayoutInflater.inflate(R.layout.tab3_music_adapter, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.chapter = (TextView) v.findViewById(R.id.chapter);
+                h.accompaniment = (TextView) v.findViewById(R.id.accompaniment);
+                h.time = (TextView) v.findViewById(R.id.time);
                 h.music_play = (ImageView) v.findViewById(R.id.music_play);
                 h.round_pb = (RoundProgressBar) v.findViewById(R.id.round_pb);
 
@@ -106,29 +118,42 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
             h = (HoldChild) v.getTag();
             final Music f = getItem(position);
             h.musicname.setText(f.musicname);
-            h.chapter.setText(f.chapter);
+            h.chapter.setText(f.chapter.trim());
+            h.accompaniment.setText("("+f.accompaniment+")");
+            h.time.setText(string2TimeUtils.stringForTimeS(f.time));
             if (mCurrent == position) {
-                // h.play_status.setImageResource(R.mipmap.xizuo_pause);
                 h.music_play.setImageResource(R.mipmap.music_pause);
 
             } else {
-                //   h.play_status.setImageResource(R.mipmap.xizuo_play);
                 h.music_play.setImageResource(R.mipmap.music_play);
             }
+
+            final int pos = position;
 
             h.music_play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    player.playUrl(MyNetApiConfig.ImageServerAddr + f.musicpath);
-                    mCurrent = position;
+                    //    h.play_status =
+                    mCurrent = pos;
                     notifyDataSetChanged();
+                    if(mListener != null) mListener.onMoreClick(f);
+
                 }
             });
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return v;
+    }
+
+    public void setOnMoreClickListener(OnMoreClickListener l) {
+        mListener = l;
+    }
+    public interface OnMoreClickListener {
+        public void onMoreClick(Music music);
     }
 
 

@@ -1,24 +1,17 @@
 package com.yiqu.iyijiayi.fragment;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -26,7 +19,6 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ui.views.AutoScrollViewPager;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
@@ -34,16 +26,13 @@ import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
-import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
-import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1SoundListFragment;
 import com.yiqu.iyijiayi.fragment.tab1.Tab1XizuoListFragment;
 import com.yiqu.iyijiayi.fragment.tab4.EventFragment;
 import com.yiqu.iyijiayi.model.Banner;
 import com.yiqu.iyijiayi.model.Events;
-import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
@@ -51,17 +40,12 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.yiqu.iyijiayi.service.MusicService;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.view.AutoPlayViewPager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
-import static com.ui.views.AutoScrollViewPager.SLIDE_BORDER_MODE_CYCLE;
 
 public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener, OnClickListener, RefreshList.IRefreshListViewListener {
 
@@ -228,10 +212,10 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             if (mPlayService!=null){
                 if (mPlayService.isPlaying()){
                     mPlayService.pause();
-                    top_play.setBackgroundResource(R.mipmap.play_banner);
+                    play.setBackgroundResource(R.mipmap.play_banner);
                 }else {
                     mPlayService.resume();
-                    top_play.setBackgroundResource(R.mipmap.pause_banner);
+                    play.setBackgroundResource(R.mipmap.pause_banner);
                 }
             }
 
@@ -315,8 +299,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
-        nsDictionary.ispay = "1";
-        nsDictionary.isreply = "1";
+//        nsDictionary.ispay = "1";
+//        nsDictionary.isreply = "1";
         nsDictionary.status = "1";
         nsDictionary.stype = "2";
         Gson gson = new Gson();
@@ -329,13 +313,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         }
 
        // LogUtils.LOGE(tag,uid+"");
-
-        count = 0;
-        RestNetCallHelper.callNet(
-                getActivity(),
-                MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc",uid),
-                "getSoundList", Tab1Fragment.this);
+        onRefresh();
 
         RestNetCallHelper.callNet(
                 getActivity(),
@@ -442,6 +420,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
+      //  LogUtils.LOGE(tag,netResponse.toString());
 
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
@@ -500,10 +479,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             //    LogUtils.LOGE("tab1", netResponse.toString());
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-
                 Gson gson = new Gson();
                 Sound sound = gson.fromJson(netResponse.data, Sound.class);
-
                 initTopPlayUI(sound);
 
             }
@@ -521,7 +498,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "asc",uid),
                 "getSoundList", Tab1Fragment.this);
 
     }
@@ -537,7 +514,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getSoundList,
-                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "edited", "desc"),
+                        MyNetRequestConfig.getSoundList(getActivity(), arr, count, rows, "created", "asc",uid),
                         "getSoundList_more", Tab1Fragment.this, false, true);
 
             }
