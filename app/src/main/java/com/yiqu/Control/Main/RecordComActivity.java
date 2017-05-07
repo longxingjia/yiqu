@@ -77,6 +77,7 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -91,6 +92,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -257,7 +259,6 @@ public class RecordComActivity extends Activity
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 
-
             fileNameCom = music.musicname + t + "cv.mp3";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
@@ -292,7 +293,6 @@ public class RecordComActivity extends Activity
 //    }
 
     private Handler handler = new Handler();
-
 
 
     private void initBackground(File file) {
@@ -395,7 +395,6 @@ public class RecordComActivity extends Activity
             recordTime = (int) (recordDuration / RecordConstant.OneSecond);
             int leftTime = totalTime - recordTime;
             musictime.setText(string2TimeUtils.stringForTimeS(recordTime));
-
             pb_record.setProgress(recordTime);
 
             if (leftTime <= 0) {
@@ -425,7 +424,7 @@ public class RecordComActivity extends Activity
     public void recordVoiceFail() {
         if (recordVoiceBegin) {
             if (actualRecordTime != 0) {
-               // goRecordSuccessState();
+                // goRecordSuccessState();
                 recordVoiceBegin = false;
                 musictime.setText(string2TimeUtils.stringForTimeS(actualRecordTime));
                 pb_record.setProgress(actualRecordTime);
@@ -437,7 +436,7 @@ public class RecordComActivity extends Activity
 
     @Override
     public void recordVoiceFinish() {
-        if (recordVoiceBegin&&recordComFinish==false) {
+        if (recordVoiceBegin && recordComFinish == false) {
             actualRecordTime = recordTime;
             goRecordSuccessState();
         }
@@ -456,7 +455,16 @@ public class RecordComActivity extends Activity
 
     @Override
     public void playVoiceStateChanged(long currentDuration) {
-
+     //   LogUtils.LOGE(tag,currentDuration+"");
+        if (recordComFinish) {
+            pb_record.setMax(recordTime);
+            totaltime.setText(string2TimeUtils.stringForTimeS(recordTime));
+            if (currentDuration > 0) {
+                int playtime = (int) (currentDuration / RecordConstant.OneSecond);
+                musictime.setText(string2TimeUtils.stringForTimeS(playtime));
+                pb_record.setProgress(playtime);
+            }
+        }
     }
 
     @Override
@@ -466,7 +474,10 @@ public class RecordComActivity extends Activity
 
     @Override
     public void playVoiceFinish() {
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
+        if (recordComFinish) {
+            icon_record.setImageResource(R.mipmap.icon_play);
+            upload();
+        }
     }
 
     @Override
@@ -474,6 +485,7 @@ public class RecordComActivity extends Activity
 //        composeProgressBar.setProgress(
 //                decodeProgress * RecordConstant.MaxDecodeProgress / RecordConstant.NormalMaxProgress);
     }
+
     private DialogHelper dialogHelper;
 
     private void compose() {
@@ -526,7 +538,6 @@ public class RecordComActivity extends Activity
         recordVoiceButton.setEnabled(true);
         composeProgressBar.setVisibility(View.GONE);
 
-
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = music.mid;
@@ -551,8 +562,8 @@ public class RecordComActivity extends Activity
         composeVoice.createtime = System.currentTimeMillis();
 
         if (AppInfo.isForeground(instance, "RecordComActivity")) {
-
             icon_record.setImageResource(R.mipmap.icon_pause);
+            VoiceFunctionF2.PlayToggleVoice(composeVoiceUrl, instance);
             CommonFunction.showToast("合成成功", className);
         }
 
@@ -564,6 +575,8 @@ public class RecordComActivity extends Activity
             dialogHelper.dismissProgressDialog();
             dialogHelper = null;
         }
+
+
     }
 
     @Override
@@ -604,58 +617,25 @@ public class RecordComActivity extends Activity
                         }
                     }
                 } else if (recordVoiceBegin) {
-
                     if (VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
                         VoiceFunctionF2.restartRecording(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_pause);
                         VoiceFunctionF2.startPlayVoice();
-
                     } else {
                         VoiceFunctionF2.pauseRecordVoice(is2mp3);
                         icon_record.setImageResource(R.mipmap.icon_record);
                         VoiceFunctionF2.pauseVoice();
-
                     }
-
                 } else {
-                 //   LogUtils.LOGE(tag,"fs");
                     VoiceFunctionF2.PlayToggleVoice(musicFileUrl, this);
-                    VoiceFunctionF2.StartRecordVoice(is2mp3,instance);
+                    VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
                     tempVoicePcmUrl = VoiceFunctionF2.getRecorderPath();
+                    icon_record.setImageResource(R.mipmap.icon_pause);
                 }
                 break;
             case R.id.finish:
                 if (recordComFinish) {
-
-                    final Bundle bundle = new Bundle();
-                    bundle.putSerializable("composeVoice", composeVoice);
-                    String title = "找个导师点评一下吗？";
-                    String[] items = new String[]{"免费上传作品", "找导师请教"};
-                    MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
-                        @Override
-                        public void onTea(int tea) {
-                            switch (tea) {
-                                case 1:
-                                    Intent intent = new Intent(instance, StubActivity.class);
-                                    intent.putExtra("fragment", AddQuestionFragment.class.getName());
-                                    intent.putExtras(bundle);
-                                    instance.startActivityForResult(intent,REQUESTUPLOAD);
-
-                                    break;
-                                case 0:
-
-                                    Intent i = new Intent(instance, StubActivity.class);
-                                    i.putExtra("fragment", UploadXizuoFragment.class.getName());
-                                    i.putExtras(bundle);
-                                    instance.startActivityForResult(i,REQUESTUPLOAD);
-                                    //  mediaPlayer.stop();
-                                    //   playUtils.stop();
-                                    break;
-                            }
-
-                        }
-                    });
-                    menuDialogSelectTeaHelper.show(recordVoiceButton);
+                    upload();
                 } else if (recordVoiceBegin) {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -715,6 +695,37 @@ public class RecordComActivity extends Activity
 
     }
 
+    private void upload() {
+        final Bundle bundle = new Bundle();
+        bundle.putSerializable("composeVoice", composeVoice);
+        String title = "找个导师点评一下吗？";
+        String[] items = new String[]{"免费上传作品", "找导师请教"};
+        MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
+            @Override
+            public void onTea(int tea) {
+                switch (tea) {
+                    case 1:
+                        Intent intent = new Intent(instance, StubActivity.class);
+                        intent.putExtra("fragment", AddQuestionFragment.class.getName());
+                        intent.putExtras(bundle);
+                        instance.startActivityForResult(intent, REQUESTUPLOAD);
+
+                        break;
+                    case 0:
+
+                        Intent i = new Intent(instance, StubActivity.class);
+                        i.putExtra("fragment", UploadXizuoFragment.class.getName());
+                        i.putExtras(bundle);
+                        instance.startActivityForResult(i, REQUESTUPLOAD);
+                        //  mediaPlayer.stop();
+                        //   playUtils.stop();
+                        break;
+                }
+
+            }
+        });
+        menuDialogSelectTeaHelper.show(recordVoiceButton);
+    }
 
 
     @Override
@@ -752,8 +763,6 @@ public class RecordComActivity extends Activity
     }
 
 
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { //监控/拦截/屏蔽返回键
@@ -763,7 +772,6 @@ public class RecordComActivity extends Activity
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
 
     @PermissionSuccess(requestCode = 100)

@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <!-- android:roundIcon="@mipmap/ic_launcher_round" -->
+
     <application
         android:name="com.yiqu.Tool.Common.CommonApplication"
         android:allowBackup="true"

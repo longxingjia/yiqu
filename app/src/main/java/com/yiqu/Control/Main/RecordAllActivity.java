@@ -531,6 +531,7 @@ public class RecordAllActivity extends Activity
             int playtime = (int) (currentDuration / RecordConstant.OneSecond);
             musictime.setText(string2TimeUtils.stringForTimeS(playtime));
             pb_record.setProgress(playtime);
+
         }
         //   LogUtils.LOGE(tag, currentDuration + "");
     }
@@ -543,15 +544,14 @@ public class RecordAllActivity extends Activity
     @Override
     public void playVoiceFinish() {
         if (recordComFinish) {
+            icon_record.setImageResource(R.mipmap.icon_play);
             upload();
         }
-//        playVoiceButton.setImageResource(R.drawable.selector_record_voice_play);
     }
 
     @Override
     public void updateDecodeProgress(int decodeProgress) {
-//        composeProgressBar.setProgress(
-//                decodeProgress * RecordConstant.MaxDecodeProgress / RecordConstant.NormalMaxProgress);
+
     }
 
     private DialogHelper dialogHelper;
@@ -570,7 +570,6 @@ public class RecordAllActivity extends Activity
                     RecordConstant.VoiceWeight, RecordConstant.VoiceBackgroundWeight,
                     0, this);
         }
-
         if (dialogHelper == null) {
             dialogHelper = new DialogHelper(instance, 100);
             dialogHelper.showProgressDialog();
@@ -579,11 +578,9 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void decodeSuccess() {
-
         DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(this);
         downloadMusicInfoDBHelper.updateDecode(mid, 1, System.currentTimeMillis());
         downloadMusicInfoDBHelper.close();
-
     }
 
     @Override
@@ -669,12 +666,10 @@ public class RecordAllActivity extends Activity
         composeVoice.createtime = System.currentTimeMillis();
 
         if (AppInfo.isForeground(instance, getClass().getSimpleName())) {
-//          mediaPlayer
             VoiceFunctionF2.PlayToggleVoice(composeVoiceUrl, this);
             icon_record.setImageResource(R.mipmap.icon_pause);
             CommonFunction.showToast("合成成功", className);
         }
-
 
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
         composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.COMPOSE);
