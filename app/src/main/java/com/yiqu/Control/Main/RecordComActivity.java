@@ -3,9 +3,11 @@ package com.yiqu.Control.Main;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +39,8 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.service.Download;
+import com.service.DownloadService;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.AudioFunction;
@@ -75,16 +80,20 @@ import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+import com.yiqu.iyijiayi.view.LrcView;
 import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -135,11 +144,14 @@ public class RecordComActivity extends Activity
     private int totalTime;
     private AudioManager audoManager;
 
-
     @BindView(R.id.background)
     public ImageView background;
     @BindView(R.id.lyricview)
     public LyricView lyricView;
+    @BindView(R.id.tv_lyric)
+    public TextView tv_lyric;
+    @BindView(R.id.play_first_lrc)
+    public LrcView mLrcViewOnFirstPage;
 
     @BindView(R.id.icon_record)
     public ImageView icon_record;
@@ -156,10 +168,14 @@ public class RecordComActivity extends Activity
     private String fileName;
     private TextView totaltime;
     private ProgressBar pb_record;
+    protected DownloadService mDownloadService;
+    private String lyricUrl;
+    private String lyricname;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bindService(new Intent(this, DownloadService.class), mDownloadServiceConnection,Context.BIND_AUTO_CREATE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         instance = this;
         init(R.layout.record_and_com_fragment);
@@ -182,7 +198,6 @@ public class RecordComActivity extends Activity
         musictime = (TextView) findViewById(R.id.musictime);
         totaltime = (TextView) findViewById(R.id.totaltime);
         tv_record = (TextView) findViewById(R.id.tv_record);
-        // recordVoiceButton = (TextView) findViewById(R.id.recordVoiceButton);
         title_back = (ImageView) findViewById(R.id.title_back);
         image_anim = (ImageView) findViewById(R.id.image_anim);
         composeProgressBar = (ProgressBar) findViewById(R.id.composeProgressBar);
@@ -210,12 +225,9 @@ public class RecordComActivity extends Activity
         Intent intent = getIntent();
         music = (Music) intent.getSerializableExtra("music");
         string2TimeUtils = new String2TimeUtils();
-        //  musictime.setText(string2TimeUtils.stringForTimeS(music.time));
-        //    LogUtils.LOGE(tag,music.time+"");
         musicName.setText(music.musicname);
         totalTime = music.time;
         pb_record.setMax(music.time);
-
 
         Random random = new Random();
         int i = random.nextInt(4);
@@ -224,25 +236,8 @@ public class RecordComActivity extends Activity
         reset.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
-//        image_anim.setImageResource();
-        UserInfo userInfo = AppShare.getUserInfo(this);
-        String url = userInfo.userimage;
-        if (url != null) {
-            if (!url.contains("http://wx.qlogo.cn")) {
-                url = MyNetApiConfig.ImageServerAddr + url;
-            }
-            String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-            File file = new File(Variable.StorageImagePath, fileName);
-            //   background.setBackgroundResource(R.color.wechat_green);
-            if (file.exists()) {
-                initBackground(file);
-            } else {
-                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
-                downLoaderTask.execute();
-            }
-        } else {
-            //  Picasso.with(context).load(R.mipmap.home_bg).into(icon);
-        }
+
+
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         URI uri = URI.create(Url);
@@ -250,7 +245,6 @@ public class RecordComActivity extends Activity
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
 
         if (mFile.exists())
-
         {
             musicFileUrl = mFile.getAbsolutePath();
             getDuration(musicFileUrl);//设置音乐总时间
@@ -281,25 +275,11 @@ public class RecordComActivity extends Activity
 
     }
 
-//    private void initMediaPlayer() {
-//
-//        try {
-//            mediaPlayer.reset();
-//            mediaPlayer.setDataSource(musicFileUrl);
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private Handler handler = new Handler();
-
 
     private void initBackground(File file) {
         PictureUtils.showPictureFile(instance, file, image_anim, 270);
         Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
 
-        //  background.setImageBitmap(bt);
         Bitmap b = BitmapUtil.blur(bt, 25f, this);
         Bitmap bb = BitmapUtil.blur(b, 25f, this);
         background.setImageBitmap(bb);
@@ -399,7 +379,7 @@ public class RecordComActivity extends Activity
 
             if (leftTime <= 0) {
                 VoiceFunctionF2.StopRecordVoice(is2mp3);
-                compose();
+             //   compose();
             }
 
         }
@@ -456,15 +436,19 @@ public class RecordComActivity extends Activity
     @Override
     public void playVoiceStateChanged(long currentDuration) {
      //   LogUtils.LOGE(tag,currentDuration+"");
+        int playtime = (int) (currentDuration / RecordConstant.OneSecond);
         if (recordComFinish) {
             pb_record.setMax(recordTime);
             totaltime.setText(string2TimeUtils.stringForTimeS(recordTime));
             if (currentDuration > 0) {
-                int playtime = (int) (currentDuration / RecordConstant.OneSecond);
+
                 musictime.setText(string2TimeUtils.stringForTimeS(playtime));
                 pb_record.setProgress(playtime);
+
             }
         }
+     //   LogUtils.LOGE(tag,currentDuration+"");
+        //if(mLrcViewOnFirstPage.hasLrc()) mLrcViewOnFirstPage.changeCurrent(currentDuration);
     }
 
     @Override
@@ -688,6 +672,8 @@ public class RecordComActivity extends Activity
     private void upload() {
         final Bundle bundle = new Bundle();
         bundle.putSerializable("composeVoice", composeVoice);
+        VoiceFunctionF2.pauseVoice();
+        icon_record.setImageResource(R.mipmap.icon_play);
         String title = "找个导师点评一下吗？";
         String[] items = new String[]{"免费上传作品", "找导师请教"};
         MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
@@ -722,8 +708,108 @@ public class RecordComActivity extends Activity
     protected void onDestroy() {
         VoiceFunctionF2.StopRecordVoice(is2mp3);
         VoiceFunctionF2.StopVoice();
+        unbindService(mDownloadServiceConnection);
         super.onDestroy();
     }
+
+    private Download.OnDownloadListener downloadListener =
+            new Download.OnDownloadListener() {
+              //  private DialogHelper dialogHelper;
+
+                @Override
+                public void onStart(int downloadId, long fileSize) {
+//                 tv_lyric.setText("歌词下载中");
+                }
+
+                @Override
+                public void onPublish(int downloadId, long size) {
+
+                }
+
+                @Override
+                public void onSuccess(int downloadId) {
+                    File f1 = new File(Variable.StorageLyricCachPath,lyricname);
+                    mLrcViewOnFirstPage.setLrcPath(f1.getAbsolutePath());
+                    String str = null;
+                    try {
+                        InputStream is = new FileInputStream(f1);
+                        InputStreamReader input = new InputStreamReader(is, "UTF-8");
+                        BufferedReader reader = new BufferedReader(input);
+                        while ((str = reader.readLine()) != null) {
+//                            tv_lyric.append(str);
+//                            tv_lyric.append("\n");
+
+                        }
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                @Override
+                public void onPause(int downloadId) {
+                    LogUtils.LOGE(tag, "onPause");
+                }
+
+                @Override
+                public void onError(int downloadId) {
+                    LogUtils.LOGE(tag, "onError");
+                }
+
+                @Override
+                public void onCancel(int downloadId) {
+                    LogUtils.LOGE(tag, "onCancel");
+                }
+
+                @Override
+                public void onGoon(int downloadId, long localSize) {
+                    LogUtils.LOGE(tag, "onGoon");
+                }
+            };
+
+    private ServiceConnection mDownloadServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mDownloadService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+         //   Log.e("mDownloadService","onServiceConnected");
+            mDownloadService = ((DownloadService.DownloadBinder) service).getService();
+            mDownloadService.setOnDownloadEventListener(downloadListener);
+
+            UserInfo userInfo = AppShare.getUserInfo(RecordComActivity.this);
+            if (TextUtils.isEmpty(music.lrcpath)){
+                String url = userInfo.userimage;
+                if (url != null) {
+                    if (!url.contains("http://wx.qlogo.cn")) {
+                        url = MyNetApiConfig.ImageServerAddr + url;
+                    }
+                    String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
+                    File file = new File(Variable.StorageImagePath, fileName);
+                    if (file.exists()) {
+                        initBackground(file);
+                    } else {
+                        DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                        downLoaderTask.execute();
+                    }
+                }
+            }else {
+                lyricUrl = MyNetApiConfig.ImageServerAddr + music.lrcpath;
+                lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")-1, lyricUrl.length());
+                tv_lyric.setText("歌词下载中。。。");
+                if (mDownloadService != null) {
+                    mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath,
+                            lyricname);
+                }
+            }
+        }
+    };
 
 
     private void exit() {

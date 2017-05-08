@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 
 import com.base.utils.ToastManager;
 import com.byron.framework.R;
+import com.service.DownloadService;
 import com.service.PlayService;
 import com.utils.LogUtils;
 
@@ -25,6 +26,7 @@ public abstract class AbsFragment extends Fragment {
 
 	private static String tag = "AbsFragment";
 	protected PlayService mPlayService;
+	protected DownloadService mDownloadService;
 	public View menuOrBack;
 
 	protected String getLogTag() {
@@ -56,17 +58,21 @@ public abstract class AbsFragment extends Fragment {
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			mPlayService = null;
-			LogUtils.LOGE("abs","onServiceDisconnected");
+		//	LogUtils.LOGE("abs","onServiceDisconnected");
 		}
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			mPlayService = ((PlayService.PlayBinder) service).getService();
 			mPlayService.setOnMusicEventListener(mMusicEventListener);
-			LogUtils.LOGE("abs","onServiceConnected");
+			//LogUtils.LOGE("abs","onServiceConnected");
 			onChange(mPlayService.getPlayingPosition());
 		}
 	};
+
+	public DownloadService getDownloadService() {
+		return mDownloadService;
+	}
 
 	/**
 	 * 音乐播放服务回调接口的实现类
@@ -112,6 +118,36 @@ public abstract class AbsFragment extends Fragment {
 	public  void onChange(int position){
 
 	};
+
+
+	private ServiceConnection mDownloadServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			mDownloadService = null;
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			Log.e("","ssss");
+			mDownloadService = ((DownloadService.DownloadBinder) service).getService();
+		}
+	};
+
+	/**
+	 * Fragment的view加载完成后回调
+	 */
+	public void allowBindDownloadService(Context context) {
+		context.bindService(new Intent(context, DownloadService.class), mDownloadServiceConnection,
+				Context.BIND_AUTO_CREATE);
+	}
+
+	/**
+	 * fragment的view消失后回调
+	 */
+	public void allowUnbindDownloadService(Context context) {
+		context.unbindService(mDownloadServiceConnection);
+	}
+
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

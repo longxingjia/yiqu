@@ -12,28 +12,40 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import java.io.IOException;
+import java.util.IllegalFormatCodePointException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Player implements OnBufferingUpdateListener, OnCompletionListener, MediaPlayer.OnPreparedListener {
     public MediaPlayer mediaPlayer;
+
+    public class MusicPlayerState {
+        public final static int reset = 0;
+        public final static int preparing = 1;
+        public final static int playing = 2;
+        public final static int pausing = 3;
+        public final static int stop = 4;
+    }
+
     private SeekBar skbProgress;
     private TextView now_time;
     private TextView all_time;
     private ImageView video_play;
     private boolean isfirst = true;
-
+    private int musicPlayerState;
     private Timer mTimer = new Timer();
     private int duration;
     MediaPlayerProxy proxy;
     Context context;
     private boolean USE_PROXY = true;
-   // private String oldUrl ;
+    // private String oldUrl ;
     private onPlayCompletion onPlayCompletion;
     private onPreparedCompletion mListener;
+
     public Player(Context context, SeekBar skbProgress, ImageView video_play,
-                  TextView now_time, TextView all_time,onPlayCompletion onPlayCompletion) {
+                  TextView now_time, TextView all_time, onPlayCompletion onPlayCompletion) {
         this.skbProgress = skbProgress;
         this.now_time = now_time;
         this.all_time = all_time;
@@ -101,72 +113,79 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         ;
     };
 
-    public int getCurrentPosition(){
-        int position = mediaPlayer.getCurrentPosition();
-        return position;
+    public int getCurrentPosition() {
+        if (musicPlayerState == MusicPlayerState.playing) {
+            return mediaPlayer.getCurrentPosition();
+        }
+        return 0;
     }
-    public int getDuration(){
-        int position = mediaPlayer.getDuration();
-        return position;
+
+    public int getDuration() {
+        if (musicPlayerState == MusicPlayerState.playing) {
+            return mediaPlayer.getDuration();
+        }
+        return 0;
     }
 
     public void rePlay() {
-        mediaPlayer.start();
+        if (musicPlayerState == MusicPlayerState.pausing) {
+            mediaPlayer.start();
+            musicPlayerState = MusicPlayerState.playing;
+        }
     }
+
     public void seekTo(int msec) {
-        mediaPlayer.seekTo(msec);
+        if (musicPlayerState == MusicPlayerState.playing) {
+            mediaPlayer.seekTo(msec);
+        }
+
     }
 
     public boolean isPlaying() {
-        if (mediaPlayer==null){
+        if (musicPlayerState == MusicPlayerState.playing) {
+            return true;
+        } else {
             return false;
         }
-        return mediaPlayer.isPlaying();
     }
 
-//    public String getUrl() {
-//        return oldUrl;
-//    }
-
     public void playUrl(String url) {
-//        if (oldUrl!=null && oldUrl.equals(url)) {
-//
-//        } else {
-            if (USE_PROXY) {
-                startProxy();
-             //   oldUrl = url;
-                url = proxy.getProxyURL(url);
-//                LogUtils.LOGE("mediaPlayer",url);
-            }
-            try {
-//                if (mediaPlayer.isPlaying()){
-//                    mediaPlayer.pause();
-//                }
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(url);
-                mediaPlayer.prepareAsync();
-                //mediaPlayer.start();
-//
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//        if (mediaPlayer == null) {
+//            mediaPlayer = new MediaPlayer();
+//        }
+        if (USE_PROXY) {
+            startProxy();
+            url = proxy.getProxyURL(url);
         }
-//    }
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepareAsync();
+            musicPlayerState = MusicPlayerState.preparing;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void pause() {
-        mediaPlayer.pause();
+        if (musicPlayerState == MusicPlayerState.playing) {
+            mediaPlayer.pause();
+            musicPlayerState = MusicPlayerState.pausing;
+        }
     }
 
     public void stop() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-       //     mediaPlayer = null;
+        if (musicPlayerState == MusicPlayerState.playing || musicPlayerState == MusicPlayerState.pausing) {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+//                mediaPlayer.release();
+            }
+            musicPlayerState = MusicPlayerState.stop;
         }
     }
 
@@ -175,9 +194,10 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
      * 通过onPrepared播放
      */
     public void onPrepared(MediaPlayer arg0) {
-        Log.e("mediaPlayer", "onPrepared");
+
         arg0.start();
-        if(mListener != null) mListener.onPreparedCompletion();
+        musicPlayerState = MusicPlayerState.playing;
+        if (mListener != null) mListener.onPreparedCompletion();
     }
 
     @Override
@@ -195,12 +215,14 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         isfirst = true;
 
         if (video_play != null) {
-           // video_play.setImageResource(R.mipmap.video_play);
+            // video_play.setImageResource(R.mipmap.video_play);
         }
         onPlayCompletion.completion();
+        musicPlayerState = MusicPlayerState.stop;
 
 
     }
+
     public interface onPlayCompletion {
         public void completion();
     }
@@ -209,6 +231,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     public void setOnPreparedCompletion(onPreparedCompletion l) {
         mListener = l;
     }
+
     public interface onPreparedCompletion {
         public void onPreparedCompletion();
     }

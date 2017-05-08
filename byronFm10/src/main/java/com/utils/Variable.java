@@ -8,5 +8,6 @@ public class Variable {
     public static String StorageMusicPath;
     public static String StorageQandAPath;
     public static String StorageMusicCachPath;
+    public static String StorageLyricCachPath;
     public static String StorageImagePath;
 }

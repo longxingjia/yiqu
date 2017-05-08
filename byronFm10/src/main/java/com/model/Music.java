@@ -38,6 +38,7 @@ public class Music implements Serializable {
                 ", musicpath='" + musicpath + '\'' +
                 ", musictype='" + musictype + '\'' +
                 ", chapter='" + chapter + '\'' +
+                ", lrcpath='" + lrcpath + '\'' +
                 ", accompaniment='" + accompaniment + '\'' +
                 ", time='" + time + '\'' +
                 ", size='" + size + '\'' +

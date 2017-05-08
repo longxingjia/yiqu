@@ -169,7 +169,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private String stuUrl;
     private String teaUrl;
     private File stuFile;
-    private File teaFile;
+    //    private File teaFile;
     private Timer mTimer;
     private TimerTask mTimerTask;
 
@@ -190,17 +190,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             switch (msg.what) {
                 case 0:
                     //更新进度
-                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {
-                        soundtime.setText(--stutotalTime + "\"");
-                        if (stutotalTime == 0) {
-                            stutotalTime = 1;
-                        }
-                    } else if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {
-                        commenttime.setText(--teatotalTime + "\"");
-                        if (teatotalTime == 0) {
-                            teatotalTime = 1;
-                        }
-                    }
+//                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {
+//                        soundtime.setText(--stutotalTime + "\"");
+//                        if (stutotalTime == 0) {
+//                            stutotalTime = 1;
+//                        }
+//                    } else if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {
+//                        commenttime.setText(--teatotalTime + "\"");
+//                        if (teatotalTime == 0) {
+//                            teatotalTime = 1;
+//                        }
+//                    }
                     break;
                 case Constant.QUERY_STUDENT:
                     DownloadManager.Query query = new DownloadManager.Query();
@@ -294,7 +294,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     protected void initView(View v) {
         ButterKnife.bind(this, v);
 
-
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
         seekbar.setMax(100);
         initListeners();
@@ -307,17 +306,15 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onPublish(final int progress) {
         super.onPublish(progress);
-        //   LogUtils.LOGE(tag,progress+"");
-
-        seekbar.setProgress(progress * 100 / mPlayService.getDuration());
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
-            }
-        });
-
-
+        if (mPlayService.getPlayingPosition() > 0) {
+            seekbar.setProgress(progress * 100 / mPlayService.getDuration());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
+                }
+            });
+        }
     }
 
     private void initListeners() {
@@ -362,11 +359,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
             // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-
-
-            pro = (progress * mPlayService.getDuration()
-                    / seekBar.getMax());
-//            pro = progress;
+            if (mPlayService != null) {
+                pro = (progress * mPlayService.getDuration()
+                        / seekBar.getMax());
+            }
         }
 
         @Override
@@ -517,19 +513,19 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         article_content.setText(sound.article_content);
         article_content.setMovementMethod(new ScrollingMovementMethod());
 
-        
+
         article_content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     //通知父控件不要干扰
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                if(motionEvent.getAction()==MotionEvent.ACTION_MOVE){
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                     //通知父控件不要干扰
                     view.getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                if(motionEvent.getAction()==MotionEvent.ACTION_UP){
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     view.getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 return false;
@@ -601,7 +597,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 teaUrl.lastIndexOf("/") + 1,
                 teaUrl.length());
         teafileName = sound.musicname + "_" + teafileName;
-        teaFile = new File(Variable.StorageMusicCachPath, teafileName);
+        //   teaFile = new File(Variable.StorageMusicCachPath, teafileName);
 
         if (sound.islike != 0) {
             initDianZan();
@@ -628,8 +624,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     protected void init(Bundle savedInstanceState) {
-
-        //   tea_listen.setOnClickListener(this);
 
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
         position = getActivity().getIntent().getIntExtra("position", -1);
@@ -678,13 +672,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 getActivity().finish();
                 break;
             case R.id.video_play:
-                if (mPlayService.isPlaying()) {
-                    video_play.setImageResource(R.mipmap.video_play);
-                    mPlayService.pause();
+                if (mPlayService.getPlayingPosition() > 0) {
+                    if (mPlayService.isPlaying()) {
+                        video_play.setImageResource(R.mipmap.video_play);
+                        mPlayService.pause();
+                    } else {
+                        video_play.setImageResource(R.mipmap.video_pause);
+                        mPlayService.resume();
+                    }
                 } else {
+                    mPlayService.play(stuUrl, sound.sid);
                     video_play.setImageResource(R.mipmap.video_pause);
-                    mPlayService.resume();
-
                 }
 
                 break;
@@ -704,20 +702,32 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
 
                 if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
-                    if (teaFile.exists()) {
-                        palyTeacherVoice();
-
+//                    if (teaFile.exists()) {
+//                        palyTeacherVoice();
+//
+//                    } else {
+//                        downloadTeaId = dowoload(teaUrl, teafileName, 1);
+//                    }
+                    video_play.setImageResource(R.mipmap.video_play);
+                    if (mPlayService.getPlayingPosition() == 0) {
+                        if (mPlayService.isPlaying()) {
+                            mPlayService.pause();
+                        } else {
+                            mPlayService.resume();
+                        }
                     } else {
-                        downloadTeaId = dowoload(teaUrl, teafileName, 1);
+                        palyTeacherVoice();
                     }
+
                 } else {
                     if (sound.listen == 1) {
-                        if (teaFile.exists()) {
-                            palyTeacherVoice();
-
-                        } else {
-                            downloadTeaId = dowoload(teaUrl, teafileName, 1);
-                        }
+//                        if (teaFile.exists()) {
+//                            palyTeacherVoice();
+//
+//                        } else {
+//                            downloadTeaId = dowoload(teaUrl, teafileName, 1);
+//                        }
+                        palyTeacherVoice();
                     } else {
                         String desc = "";
                         if (userInfo.coin_apple > 0) {
@@ -952,7 +962,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private void palyStudentVoice() {
 
         teacurrentTime = 0;
-
         stutotalTime = sound.soundtime;
         teatotalTime = sound.commenttime;
         commenttime.setText(teatotalTime + "\"");
@@ -998,49 +1007,49 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     }
 
     private void palyTeacherVoice() {
-        stucurrentTime = 0;
-        teatotalTime = sound.commenttime;
-        stutotalTime = sound.soundtime;
-        soundtime.setText(stutotalTime + "\"");
-
-
-        if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {  //正在播放，点击暂停
-            teacurrentTime = VoiceFunction.pauseVoice(teaFile.getAbsolutePath());
-            if (mTimer != null) {
-                mTimer.cancel();
-                mTimer = null;
-            }
-            if (mTimerTask != null) {
-                mTimerTask.cancel();
-                mTimerTask = null;
-            }
-
-        } else {     //暂停，点击播放
-
-
-            if (mTimer == null) {
-                mTimer = new Timer();
-            }
-            if (mTimerTask == null) {
-                mTimerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        mHandler.sendEmptyMessage(0);
-
-                    }
-                };
-                mTimer.schedule(mTimerTask, 1000, 1000);
-
-            }
-            if (teacurrentTime > 0) {
-                teatotalTime = MathUtils.sub(sound.commenttime, teacurrentTime);
-                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, teacurrentTime);
-            } else {
-                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, 0);
-            }
+//        stucurrentTime = 0;
+//        teatotalTime = sound.commenttime;
+//        stutotalTime = sound.soundtime;
+//
+//        if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {  //正在播放，点击暂停
+//            teacurrentTime = VoiceFunction.pauseVoice(teaFile.getAbsolutePath());
+//            if (mTimer != null) {
+//                mTimer.cancel();
+//                mTimer = null;
+//            }
+//            if (mTimerTask != null) {
+//                mTimerTask.cancel();
+//                mTimerTask = null;
+//            }
+//
+//        } else {     //暂停，点击播放
+//
+//
+//            if (mTimer == null) {
+//                mTimer = new Timer();
+//            }
+//            if (mTimerTask == null) {
+//                mTimerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        mHandler.sendEmptyMessage(0);
+//
+//                    }
+//                };
+//                mTimer.schedule(mTimerTask, 1000, 1000);
+//
+//            }
+//            if (teacurrentTime > 0) {
+//                teatotalTime = MathUtils.sub(sound.commenttime, teacurrentTime);
+//                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, teacurrentTime);
+//            } else {
+//                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, 0);
+//            }
+//        }
+        if (mPlayService != null) {
+            mPlayService.play(teaUrl, 0);
         }
     }
-
 
     @Override
     public void playVoiceBegin(long duration) {
@@ -1083,9 +1092,15 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     public void onDestroy() {
+        if (mPlayService != null) {
+            if (mPlayService.isPlaying()) {
+                if (mPlayService.getPlayingPosition() <= 0) {
+                    mPlayService.pause();
+                }
+            }
+        }
 
-        VoiceFunction.StopVoice();
-        //player.stop();
+
         stucurrentTime = 0;
         teacurrentTime = 0;
 

@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 
+import com.service.DownloadService;
+import com.service.PlayService;
 import com.ui.abs.AbsFragment;
 import com.ui.abs.AbsFragmentAct;
 import com.ui.abs.OnFragmentListener;
@@ -147,6 +150,18 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        allowBindService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        allowUnbindService();
+    }
+
     private void changeTabFragment(String className) {
         hideMainTab(mCurrentTabFragmentTag);
         AbsFragment f = (AbsFragment) getSupportFragmentManager()
@@ -189,6 +204,8 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
                                     dialog.dismiss();
+                                    stopService(new Intent(MainActivity.this, PlayService.class));
+                                    stopService(new Intent(MainActivity.this, DownloadService.class));
 
                                     finish();
                                 }

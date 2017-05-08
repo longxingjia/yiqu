@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.utils.LogUtils;
 import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Function.FileFunction;
 import com.utils.Variable;
@@ -148,43 +149,25 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         submit.setEnabled(false);
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
-   //     LogUtils.LOGE(tag, music.toString());
         musicName.setText(music.musicname + "");
 
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
-//        String fileName = Url.substring(
-//                Url.lastIndexOf("/") + 1,
-//                Url.length());
+
         URI uri = URI.create(Url);
-
-
         fileName = FileFunction.getValidFileName(uri);
-     //   LogUtils.LOGE(tag,fileName);
-//        AppShare
-
         File mFile = new File(Variable.StorageMusicCachPath, fileName);
-        // LogUtils.LOGE(tag,Variable.StorageMusicCachPath);
-
         if (mFile.exists()) {
-            //   Log.d(tag, "file " + mFile.getName() + " already exits!!");
             nextPage();
         } else {
             if (Tools.isNetworkAvailable(getActivity())) {
                 dowoload(Url, fileName);
-//                StubActivity mActivity = (StubActivity) getActivity();
-////                LogUtils.LOGE(tag,"t1");
-////                LogUtils.LOGE(music.mid+"_"+Url,Variable.StorageMusicCachPath);
-//                DownloadService downloadService =   mActivity.getDownloadService();
-//                if (downloadService!=null){
-//                    LogUtils.LOGE(tag,downloadService.toString());
-//                }
-//                downloadService.download(music.mid, Url,Variable.StorageMusicCachPath,
-//                        "ssssssssssss"+".mp3");
             }
         }
 
-        super.init(savedInstanceState);
 
+
+
+        super.init(savedInstanceState);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,7 +248,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-
             if (completeDownloadId == downloadId) {
 
                 if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
@@ -283,12 +265,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
                 downloadMusicInfoDBHelper.insert(music);
                 downloadMusicInfoDBHelper.close();
-
-//                File mFile = new File(Variable.StorageMusicCachPath, fileName);
-//            String    decodeFileUrl = Variable.StorageMusicPath + music.musicname + "_" + music.mid + "_decodeTem.pcm";
-//                AudioFunction.DecodeMusicFile(mFile.getAbsolutePath(), decodeFileUrl, 0,
-//                        music.time, getActivity());
-
             }
         }
     };
@@ -297,8 +273,19 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         /** 注册下载完成接收广播 **/
-
         MobclickAgent.onPageStart("下载作品");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        allowBindDownloadService(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        allowUnbindDownloadService(getActivity());
     }
 
     @Override
@@ -310,7 +297,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
     private void nextPage() {
         Intent i = new Intent(getActivity(), RecordComActivity.class);
-//        i.putExtra("fragment", RecordXizuoFragment.class.getName());
         Bundle bundle = new Bundle();
         bundle.putSerializable("music", music);
         i.putExtras(bundle);

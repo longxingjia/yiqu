@@ -50,6 +50,7 @@ public class FileFunction {
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
+        Variable.StorageLyricCachPath = Variable.StorageDirectoryPath + "/lyric/";
         Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
 
@@ -58,6 +59,7 @@ public class FileFunction {
         CreateDirectory(Variable.StorageImagePath);
         CreateDirectory(Variable.StorageMusicCachPath);
         CreateDirectory(Variable.StorageQandAPath);
+        CreateDirectory(Variable.StorageLyricCachPath);
 
     }
 

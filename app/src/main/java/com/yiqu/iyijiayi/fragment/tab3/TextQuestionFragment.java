@@ -188,9 +188,7 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
                     e.printStackTrace();
                 }
             }
-        } else if (id.equals("orderQuery"))
-
-        {
+        } else if (id.equals("orderQuery")){
 
             if (type == NetCallBack.TYPE_SUCCESS) {
                 ToastManager.getInstance(getActivity()).showText("提问成功,请等待老师回答");

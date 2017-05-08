@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.service.DownloadService;
 import com.service.PlayService;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Common.CommonThreadPool;
@@ -84,6 +85,7 @@ public class WelcomePageActivity extends Activity {
         init(R.layout.activity_welcome_page);
         Intent it = new Intent(this, PlayService.class);
         startService(it);
+        startService(new Intent(this, DownloadService.class));
 
     }
 

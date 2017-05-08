@@ -3,6 +3,10 @@ package com.yiqu.Tool.Recorder;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.AutomaticGainControl;
+import android.media.audiofx.NoiseSuppressor;
+import android.os.Build;
 import android.util.Log;
 
 import com.yiqu.Tool.Function.CommonFunction;
@@ -206,6 +210,21 @@ public class PCMRecorder {
                     audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                             RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
                             pcmFormat.getAudioFormat(), audioRecordBufferSize);
+
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        if (NoiseSuppressor.isAvailable()) {
+                            NoiseSuppressor.create(audioRecord.getAudioSessionId());
+                            //    Log.e("he",":he");
+                        }
+                        if (AcousticEchoCanceler.isAvailable()) {
+                            AcousticEchoCanceler.create(audioRecord.getAudioSessionId());
+
+                        }
+                        if (AutomaticGainControl.isAvailable()) {
+                            AutomaticGainControl.create(audioRecord.getAudioSessionId());
+                        }
+                    }
+
 
                     try {
                         audioRecord.startRecording();

@@ -3,6 +3,10 @@ package com.czt.mp3recorder;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.AutomaticGainControl;
+import android.media.audiofx.NoiseSuppressor;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -213,6 +217,21 @@ public class MP3Recorder extends BaseRecorder {
         mAudioRecord = new AudioRecord(DEFAULT_AUDIO_SOURCE,
                 DEFAULT_SAMPLING_RATE, DEFAULT_CHANNEL_CONFIG, DEFAULT_AUDIO_FORMAT.getAudioFormat(),
                 mBufferSize);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (NoiseSuppressor.isAvailable()) {
+                NoiseSuppressor.create(mAudioRecord.getAudioSessionId());
+                //    Log.e("he",":he");
+            }
+            if (AcousticEchoCanceler.isAvailable()) {
+                AcousticEchoCanceler.create(mAudioRecord.getAudioSessionId());
+
+            }
+            if (AutomaticGainControl.isAvailable()) {
+                AutomaticGainControl.create(mAudioRecord.getAudioSessionId());
+            }
+        }
+
 
         mPCMBuffer = new short[mBufferSize];
         /*

@@ -63,24 +63,30 @@ public class ProxyFileUtils {
 	 * @return
 	 */
 	private boolean isSdAvaliable() {
-		// 判断外部存储器是否可用
-		File dir = new File(Constants.DOWNLOAD_PATH);
-		if (!dir.exists()) {
-			dir.mkdirs();
-			if(!dir.exists()){
+
+		try {
+			// 判断外部存储器是否可用
+			File dir = new File(Constants.DOWNLOAD_PATH);
+			if (!dir.exists()) {
+				dir.mkdirs();
+				if(!dir.exists()){
+					return false;
+				}
+			}
+			// 删除部分缓存文件
+			ProxyUtils.asynRemoveBufferFile(Constants.CACHE_FILE_NUMBER);
+			// 可用空间大小是否大于SD卡预留最小值
+			long freeSize = ProxyUtils.getAvailaleSize(Constants.DOWNLOAD_PATH);
+			if (freeSize > Constants.SD_REMAIN_SIZE) {
+				return true;
+			} else {
+
 				return false;
 			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
-		// 删除部分缓存文件
-		ProxyUtils.asynRemoveBufferFile(Constants.CACHE_FILE_NUMBER);
-		// 可用空间大小是否大于SD卡预留最小值
-		long freeSize = ProxyUtils.getAvailaleSize(Constants.DOWNLOAD_PATH);
-		if (freeSize > Constants.SD_REMAIN_SIZE) {
-			return true;
-		} else {
-
-			return false;
-		}
+		return false;
 	}
 
 	private ProxyFileUtils(String name) {

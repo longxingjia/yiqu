@@ -205,17 +205,15 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         @Override
         public void onClick(View v) {
-//            intent.putExtra("choice", "pause");
-//            //  play.setImageResource(R.mipmap.play_icon);
-//            intent.setClass(getActivity(), MusicService.class);
-//            getActivity().startService(intent);
+
             if (mPlayService!=null){
                 if (mPlayService.isPlaying()){
                     mPlayService.pause();
-                    play.setBackgroundResource(R.mipmap.play_banner);
+                    play.setImageResource(R.mipmap.pause_banner);
                 }else {
                     mPlayService.resume();
-                    play.setBackgroundResource(R.mipmap.pause_banner);
+//                    play.setImageResource(R.mipmap.pause_banner);
+                    play.setImageResource(R.mipmap.play_banner);
                 }
             }
 
@@ -227,11 +225,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         @Override
         public void onClick(View v) {
-//            intent.putExtra("choice", "stop");
-            top_play.setVisibility(View.GONE);
 
-//            intent.setClass(getActivity(), MusicService.class);
-//            getActivity().startService(intent);
+            top_play.setVisibility(View.GONE);
             if (mPlayService!=null){
                 mPlayService.pause();
             }

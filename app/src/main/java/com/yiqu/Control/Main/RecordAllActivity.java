@@ -33,6 +33,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.service.Download;
 import com.service.DownloadService;
+import com.service.PlayService;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.AudioFunction;
@@ -128,7 +129,8 @@ public class RecordAllActivity extends Activity
     private ComposeVoice composeVoice;
     private String2TimeUtils string2TimeUtils;
 
-    private static int TOTALTIME = 600;  //默认录音600s
+    private static int TOTALTIME = 11;  //默认录音600s
+    //    private static int TOTALTIME = 600;  //默认录音600s
     private int totalTime = TOTALTIME;  //默认录音600s
     private Music music;
     private AudioManager audoManager;
@@ -177,7 +179,8 @@ public class RecordAllActivity extends Activity
     private String musicdesc;
     private SelectArticle selectArticle;
     private String event_title;
-
+    protected PlayService mPlayService;
+    private AlertDialog.Builder alertBuilder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -251,7 +254,8 @@ public class RecordAllActivity extends Activity
         reset.setImageBitmap(bitmap);
         recordVoiceButton.setImageBitmap(bitmap);
         finish.setImageBitmap(bitmap);
-//        image_anim.setImageResource();
+
+
         UserInfo userInfo = AppShare.getUserInfo(this);
         String url = userInfo.userimage;
         if (url != null) {
@@ -356,7 +360,6 @@ public class RecordAllActivity extends Activity
     private void initArticleData(SelectArticle selectArticle) {
         select_article.setText(selectArticle.title);
         title.setText(selectArticle.title);
-
         author.setText(selectArticle.author);
         content.setText(selectArticle.content);
         image_anim.setVisibility(View.GONE);
@@ -374,6 +377,7 @@ public class RecordAllActivity extends Activity
         musicName.setText("录制");
         et_content.setVisibility(View.VISIBLE);
         add_article.setBackgroundResource(R.mipmap.add_music);
+        selectArticle = null;
     }
 
 
@@ -411,6 +415,18 @@ public class RecordAllActivity extends Activity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        allowBindService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        allowUnbindService();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("录制声乐页面");
@@ -423,6 +439,12 @@ public class RecordAllActivity extends Activity
         musictime.setText(string2TimeUtils.stringForTimeS(actualRecordTime));
         pb_record.setProgress(actualRecordTime);
         recordComFinish = true;
+
+        if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
+            compose();
+        } else {
+            stopRecording();
+        }
     }
 
     private void goRecordFailState() {
@@ -453,9 +475,7 @@ public class RecordAllActivity extends Activity
             pb_record.setProgress(recordTime);
             if (leftTime <= 0) {
                 VoiceFunctionF2.StopRecordVoice(is2mp3);
-                if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                    compose();
-                }
+
             }
         }
     }
@@ -490,7 +510,43 @@ public class RecordAllActivity extends Activity
     public void recordVoiceFinish() {
         if (recordVoiceBegin) {
             actualRecordTime = recordTime;
-            goRecordSuccessState();
+            if (actualRecordTime == TOTALTIME) {
+                if (selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
+                    final EditText inputServer = new EditText(RecordAllActivity.this);
+                    inputServer.setBackgroundResource(R.drawable.edit_bg);
+                    inputServer.setFocusable(true);
+                    inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                    AlertDialog.Builder b = new AlertDialog.Builder(RecordAllActivity.this);
+                    b.setTitle(getString(R.string.record_save_dialog_title));
+                    b.setView(inputServer);
+                    b.setNegativeButton("取消", null);
+                    b.setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String inputName = inputServer.getText().toString();
+                                    if (TextUtils.isEmpty(inputName)) {
+                                        ToastManager.getInstance(instance).showText("请输入名字");
+                                        return;
+                                    }
+                                    musicName.setText(inputName + "");
+                                    goRecordSuccessState();
+                                    icon_finish.setImageResource(R.mipmap.upload);
+
+                                }
+                            });
+                    b.show();
+                    icon_record.setImageResource(R.mipmap.icon_record);
+                } else {
+                    icon_finish.setImageResource(R.mipmap.upload);
+                    goRecordSuccessState();
+                }
+
+
+            } else {
+                goRecordSuccessState();
+            }
+
         }
     }
 
@@ -533,7 +589,6 @@ public class RecordAllActivity extends Activity
             pb_record.setProgress(playtime);
 
         }
-        //   LogUtils.LOGE(tag, currentDuration + "");
     }
 
     @Override
@@ -645,7 +700,7 @@ public class RecordAllActivity extends Activity
         if (!TextUtils.isEmpty(content.getText().toString())) {
             composeVoice.article_content = content.getText().toString();
         }
-        composeVoice.musicname = music.musicname;
+        composeVoice.musicname = musicName.getText().toString();
         composeVoice.musictype = music.musictype;
         composeVoice.chapter = music.chapter;
         composeVoice.accompaniment = music.accompaniment;
@@ -729,7 +784,7 @@ public class RecordAllActivity extends Activity
                         content.setText(et_content.getText().toString());
                         et_content.setVisibility(View.GONE);
                     }
-                    if (selectArticle!=null && !TextUtils.isEmpty(selectArticle.content)) {
+                    if (selectArticle != null && !TextUtils.isEmpty(selectArticle.content)) {
                         content.setText(selectArticle.content);
                     }
 
@@ -757,77 +812,78 @@ public class RecordAllActivity extends Activity
                     upload();
                 } else if (recordVoiceBegin) {
 
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("完成录制");
-                    builder.setMessage("确定要完成录制吗？");
-                    builder.setNegativeButton("取消", null);
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (recordTime > 9) {
-                                if (selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
+                    if (recordTime > 9 && recordTime < TOTALTIME) {
+                        if (selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
 
-                                    final EditText inputServer = new EditText(RecordAllActivity.this);
-                                    inputServer.setBackgroundResource(R.drawable.edit_bg);
-                                    inputServer.setFocusable(true);
-                                    inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                            AlertDialog.Builder b = new AlertDialog.Builder(RecordAllActivity.this);
+                            final EditText inputServer = new EditText(RecordAllActivity.this);
+                            inputServer.setBackgroundResource(R.drawable.edit_bg);
+                            inputServer.setFocusable(true);
+                            inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                            b.setTitle(getString(R.string.record_save_dialog_title));
+                            b.setView(inputServer);
+                            b.setNegativeButton("取消", null);
+                            b.setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
 
-                                    AlertDialog.Builder b = new AlertDialog.Builder(RecordAllActivity.this);
-                                    b.setTitle(getString(R.string.record_save_dialog_title));
-                                    b.setView(inputServer);
-                                    b.setNegativeButton("取消", null);
-                                    b.setPositiveButton("确定",
-                                            new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String inputName = inputServer.getText().toString();
+                                            if (TextUtils.isEmpty(inputName)) {
+                                                ToastManager.getInstance(instance).showText("请输入名字");
+                                                return;
+                                            }
+                                            musicName.setText(inputName + "");
+                                            VoiceFunctionF2.StopRecordVoice(is2mp3);
+                                            VoiceFunctionF2.StopVoice();
+                                            icon_finish.setImageResource(R.mipmap.upload);
 
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    String inputName = inputServer.getText().toString();
-                                                    musicName.setText(inputName + "");
-                                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                                    VoiceFunctionF2.StopVoice();
-
-
-                                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                                                        compose();
-                                                    } else {
-                                                        stopRecording();
-                                                    }
-                                                    icon_finish.setImageResource(R.mipmap.upload);
-
-                                                }
-                                            });
-                                    b.show();
-                                    VoiceFunctionF2.pauseRecordVoice(is2mp3);
-                                    if (!is2mp3) {
-                                        VoiceFunctionF2.pauseVoice();
-                                    }
-                                    icon_record.setImageResource(R.mipmap.icon_record);
-
-                                } else {
-
-                                    VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                    VoiceFunctionF2.StopVoice();
-//                                    select_music.setEnabled(true);
-//                                    select_article.setEnabled(true);
-//                                    add_article.setEnabled(true);
-//                                    add_music.setEnabled(true);
-
-                                    if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
-                                        compose();
-                                    } else {
-                                        stopRecording();
-                                    }
-                                    icon_finish.setImageResource(R.mipmap.upload);
-
-
-                                }
-
-                            } else {
-                                ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
+                                        }
+                                    });
+                            b.show();
+                            VoiceFunctionF2.pauseRecordVoice(is2mp3);
+                            if (!is2mp3) {
+                                VoiceFunctionF2.pauseVoice();
                             }
-                            dialog.dismiss();
+                            icon_record.setImageResource(R.mipmap.icon_record);
+
+                        } else {
+                            VoiceFunctionF2.StopRecordVoice(is2mp3);
+                            VoiceFunctionF2.StopVoice();
+                            icon_finish.setImageResource(R.mipmap.upload);
+
                         }
-                    });
-                    builder.show();
+
+                    } else if (recordTime <= 9) {
+                        ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
+                    } else {
+
+                        if (alertBuilder == null) {
+                            alertBuilder = new AlertDialog.Builder(RecordAllActivity.this);
+                            alertBuilder.setTitle(getString(R.string.record_save_dialog_title));
+                            //  alertBuilder.setView(inputServer);
+                            final EditText inputServer = new EditText(RecordAllActivity.this);
+                            inputServer.setBackgroundResource(R.drawable.edit_bg);
+                            inputServer.setFocusable(true);
+                            inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                            alertBuilder.setNegativeButton("取消", null);
+                            alertBuilder.setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String inputName = inputServer.getText().toString();
+                                            if (TextUtils.isEmpty(inputName)) {
+                                                ToastManager.getInstance(instance).showText("请输入名字");
+                                                return;
+                                            }
+                                            musicName.setText(inputName + "");
+                                            goRecordSuccessState();
+                                        }
+                                    });
+                        }
+                        alertBuilder.show();
+
+                    }
+
                 }
                 break;
             case R.id.reset:
@@ -848,6 +904,9 @@ public class RecordAllActivity extends Activity
                         icon_record.setImageResource(R.mipmap.icon_record);
                         pb_record.setProgress(0);
                         musictime.setText("00:00");
+
+                        //     if ()
+
                         select_music.setEnabled(true);
                         select_article.setEnabled(true);
                         add_article.setEnabled(true);
@@ -905,29 +964,24 @@ public class RecordAllActivity extends Activity
             title = "找个导师点评一下吗？";
             items = new String[]{"免费上传作品", "找导师请教"};
         }
-
         MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(instance, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
             @Override
             public void onTea(int tea) {
                 switch (tea) {
-
                     case 1:
                         Intent intent = new Intent(instance, StubActivity.class);
                         intent.putExtra("fragment", AddQuestionFragment.class.getName());
                         intent.putExtras(bundle);
-                        instance.startActivityForResult(intent,REQUESTUPLOAD);
-
+                        instance.startActivityForResult(intent, REQUESTUPLOAD);
                         break;
                     case 0:
                         Intent i = new Intent(instance, StubActivity.class);
                         i.putExtra("fragment", UploadXizuoFragment.class.getName());
                         i.putExtras(bundle);
                         i.putExtra("eid", eid);
-                        instance.startActivityForResult(i,REQUESTUPLOAD);
-
+                        instance.startActivityForResult(i, REQUESTUPLOAD);
                         break;
                 }
-
             }
         });
         menuDialogSelectTeaHelper.show(recordVoiceButton);
@@ -960,6 +1014,38 @@ public class RecordAllActivity extends Activity
         }
     }
 
+    private ServiceConnection mPlayServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mPlayService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mPlayService = ((PlayService.PlayBinder) service).getService();
+            //  mPlayService.setOnMusicEventListener(mMusicEventListener);
+            //  onChange(mPlayService.getPlayingPosition());
+            if (mPlayService != null) {
+                mPlayService.pause();
+            }
+
+        }
+    };
+
+    /**
+     * Fragment的view加载完成后回调
+     */
+    public void allowBindService() {
+        bindService(new Intent(this, PlayService.class), mPlayServiceConnection,
+                Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * fragment的view消失后回调
+     */
+    public void allowUnbindService() {
+        unbindService(mPlayServiceConnection);
+    }
 
     @Override
     protected void onDestroy() {
@@ -977,7 +1063,7 @@ public class RecordAllActivity extends Activity
                 @Override
                 public void onStart(int downloadId, long fileSize) {
                     if (dialogHelper == null) {
-                        dialogHelper = new DialogHelper(instance, (int) fileSize,"下载中...");
+                        dialogHelper = new DialogHelper(instance, (int) fileSize, "配乐下载中...");
                         dialogHelper.showProgressDialog();
                     }
                 }
@@ -1029,6 +1115,7 @@ public class RecordAllActivity extends Activity
         public void onServiceConnected(ComponentName name, IBinder service) {
             mDownloadService = ((DownloadService.DownloadBinder) service).getService();
             mDownloadService.setOnDownloadEventListener(downloadListener);
+
         }
     };
 
@@ -1114,146 +1201,7 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-//        if (id.equals("getlyric")) {
-//            if (!TextUtils.isEmpty(netResponse.result)) {
-//                ArrayList<LyricDownInfo> lyricDownInfos = new Gson().fromJson(netResponse.result, new TypeToken<ArrayList<LyricDownInfo>>() {
-//                }.getType());
-//                String url = lyricDownInfos.get(0).lrc;
-//                LogUtils.LOGE(tag, url);
-//                if (!TextUtils.isEmpty(url)) {
-//                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordAllActivity.this, url, Variable.StorageMusicCachPath + "/" + fileName + ".lrc");
-//                    downLoaderlrcTask.execute();
-//                }
-//
-//            }
-//
-//
-//        }
 
-    }
-
-    public class DownLoaderlrcTask extends AsyncTask<Void, Integer, Long> {
-        private URL mUrl;
-        private File mFile;
-        private final String TAG = "DownLoaderTask";
-        private ProgressReportingOutputStream mOutputStream;
-        private int mProgress = 0;
-        private Context mContext;
-        private DialogHelper dialogHelper;
-
-        public DownLoaderlrcTask(Context context, String downloadPath, String fileName) {
-            try {
-                mUrl = new URL(downloadPath);
-                mFile = new File(fileName);
-                mContext = context;
-            } catch (MalformedURLException e) {
-
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (dialogHelper == null) {
-                dialogHelper = new DialogHelper(mContext, this);
-            }
-            dialogHelper.showProgressDialog();
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-
-            return download();
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            // TODO Auto-generated method stub
-            if (dialogHelper != null) {
-                dialogHelper.dismissProgressDialog();
-            }
-
-            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-
-            if (isCancelled())
-                return;
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length()*/) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output, 1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-                // TODO Auto-generated constructor stub
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                // TODO Auto-generated method stub
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
 
     }
 
@@ -1275,10 +1223,8 @@ public class RecordAllActivity extends Activity
 
             try {
                 mUrl = new URL(downloadPath);
-
                 mFile = new File(out, fileName);
             } catch (MalformedURLException e) {
-
                 e.printStackTrace();
             }
 

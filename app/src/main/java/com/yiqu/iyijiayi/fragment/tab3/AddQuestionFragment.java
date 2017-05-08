@@ -146,7 +146,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
             tea_name.setText(username);
             tea_price.setText(price);
         }
-        fileUrl = Variable.StorageMusicPath + composeVoice.voicename;
+        fileUrl =  composeVoice.voicename;
         musicName.setText(composeVoice.musicname);
 
 

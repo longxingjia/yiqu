@@ -70,9 +70,7 @@ public class Download implements Serializable {
 		if (!new File(localPath).getParentFile().exists()) {
 			new File(localPath).getParentFile().mkdirs();
 		}
-		
-		Log.e("下载地址", url);
-		
+	//	Log.e("下载地址", url);
 		mDownloadId = downloadId;
 		mUrl = url;
 		String[] tempArray = url.split("/");

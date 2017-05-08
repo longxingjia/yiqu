@@ -159,6 +159,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public int stop() {
         if (!isPlaying()) return -1;
         mPlayer.stop();
+        sid = 0;
         return sid;
     }
 

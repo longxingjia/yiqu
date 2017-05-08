@@ -84,9 +84,9 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                if (position < 2)
+                    return;
                 Intent intent = new Intent(getActivity(), PlayActivity.class);
-
                 intent.putExtra("data", (Serializable) voice);
                 intent.putExtra("position", position - 2);
                 startActivity(intent);
