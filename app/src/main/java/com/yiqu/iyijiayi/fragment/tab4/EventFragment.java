@@ -3,12 +3,10 @@ package com.yiqu.iyijiayi.fragment.tab4;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.base.utils.ToastManager;
@@ -21,16 +19,11 @@ import com.umeng.analytics.MobclickAgent;
 import com.utils.LogUtils;
 import com.yiqu.Control.Main.RecordAllActivity;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab4HotAdapter;
 import com.yiqu.iyijiayi.adapter.Tab4NewAdapter;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
-import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
-import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.EventNSDictionary;
 import com.yiqu.iyijiayi.model.Events;
-import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -63,7 +56,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private Events events;
     private String arr;
     private ArrayList<Sound> sounds;
-    private Player player;
+
     private Tab4HotAdapter tab4HotAdapter;
 
     @Override
@@ -100,12 +93,6 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         listView = (RefreshList) v.findViewById(R.id.lv_sound);
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.tab4_event_fragment_header, null);
         initHeadView(headerView);
-        player = new Player(getActivity(), null, null, null, null, new Player.onPlayCompletion() {
-            @Override
-            public void completion() {
-
-            }
-        });
 
         tab4NewAdapter = new Tab4NewAdapter(getActivity());
         listView.setAdapter(tab4NewAdapter);
@@ -130,11 +117,6 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
             public void onPlayClick(Sound sound) {
                 String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
 
-//                if (sid == sound.sid) {
-//                    mPlayService.resume();
-//                } else {
-//                    mPlayService.play(url, sound.sid);
-//                }
                 if (tab4NewAdapter.getCurrent()==-1){
                     mPlayService.pause();
                     mPlayService.play(url, sound.sid);
@@ -262,7 +244,7 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onDestroy() {
         super.onDestroy();
-        player.pause();
+
         if (mPlayService!=null){
             mPlayService.stop();
         }

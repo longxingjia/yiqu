@@ -98,7 +98,7 @@ public class LogFunction {
      */
     public static void error(String title, String content) {
         if (RecordConstant.Debug) {
-            Log.e(tag + " :" + title, getStackInformation(content));
+            Log.w(tag + " :" + title, getStackInformation(content));
         }
 
         try {

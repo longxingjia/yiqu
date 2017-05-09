@@ -9,23 +9,20 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Tool.Player.OnPlayMusicClickListener;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.adapter.Tab3MusicAdapter;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.model.Music;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
-import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PageCursorView;
 
 import java.util.ArrayList;
@@ -68,7 +65,6 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
 
     private Tab3MusicAdapter tab3MusicAdapter;
     private ArrayList<Music> backgroudMusics;
-    private Player player;
 
     //    @OnClick(R.id.submit)
     public void onClick(View v) {
@@ -98,13 +94,8 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
-        player = new Player(getActivity(), null, null, null, null, new Player.onPlayCompletion() {
-            @Override
-            public void completion() {
 
-            }
-        });
-        tab3MusicAdapter = new Tab3MusicAdapter(getActivity(),player);
+        tab3MusicAdapter = new Tab3MusicAdapter(getActivity());
         listView.setAdapter(tab3MusicAdapter);
         listView.setOnItemClickListener(tab3MusicAdapter);
         listView.setRefreshListListener(this);
@@ -116,7 +107,6 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
 
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
-
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
     }
@@ -283,15 +273,22 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
     public void onStart() {
         super.onStart();
         allowBindService(getActivity());
-        tab3MusicAdapter.setOnMoreClickListener(new Tab3MusicAdapter.OnMoreClickListener() {
+
+
+        tab3MusicAdapter.setOnPlayClickListener(new OnPlayMusicClickListener() {
             @Override
-            public void onMoreClick(Music music) {
+            public void onPlayClick(Music music) {
                 String url = MyNetApiConfig.ImageServerAddr + music.musicpath;
                 mPlayService.play(url, music.mid);
-
             }
 
+            @Override
+            public void onPauseClick(Music sound) {
+                    mPlayService.pause();
+            }
         });
+
+
     }
 
     /**

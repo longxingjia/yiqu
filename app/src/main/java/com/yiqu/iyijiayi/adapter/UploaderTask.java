@@ -133,7 +133,7 @@ public class UploaderTask extends AsyncTask<Void, Integer, String> {
                         sb2.append((char) ss);
                     }
                     result = sb2.toString();
-                    Log.e(TAG, "result : " + result);
+                    Log.d(TAG, "result : " + result);
                 } else {
                     Log.e(TAG, "request error");
                 }

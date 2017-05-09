@@ -1,26 +1,23 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.text.InputFilter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.utils.LogUtils;
-import com.yiqu.Control.Main.RecordAllActivity;
+import com.utils.Player;
 import com.utils.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
@@ -33,7 +30,6 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
 import com.yiqu.iyijiayi.adapter.UploaderTask;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -41,15 +37,12 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
-import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +64,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private TextView created;
     private TextView views;
     private ImageView stu_header;
-    private int totalTime = 10*60;
+    private int totalTime = 10 * 60;
 
     private String fileName;
     private String url;
@@ -107,7 +100,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     public TextView now_time;
     @BindView(R.id.soundtime)
     public TextView soundtime;
-    private Player player;
+//    private Player player;
 
     private boolean is2mp3 = true;
     private boolean recordComFinish = false;
@@ -232,14 +225,16 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     }
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
-        int progress;
+        int pro;
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
             // 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-            this.progress = (int) (progress * player.mediaPlayer.getDuration()
-                    / seekBar.getMax());
+            if (mPlayService != null) {
+                pro = (progress * mPlayService.getDuration()
+                        / seekBar.getMax());
+            }
         }
 
         @Override
@@ -250,7 +245,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             // seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
-            player.mediaPlayer.seekTo(progress);
+            mPlayService.seek(pro);
         }
     }
 
@@ -258,7 +253,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     protected void init(Bundle savedInstanceState) {
         desc.setText(sound.desc);
         musicname.setText(sound.musicname);
-
+        soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
 
         if (sound.type == 1) {
             musictype.setImageResource(R.mipmap.shengyue);
@@ -269,12 +264,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         }
 
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-        player = new Player(getActivity(), seekbar, video_play, now_time, soundtime, new Player.onPlayCompletion() {
-            @Override
-            public void completion() {
-
-            }
-        });
 
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
@@ -308,6 +297,24 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        allowBindService(getActivity());
+
+    }
+
+    /**
+     * stop时， 回调通知activity解除绑定服务
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("fragment", "onDestroyView");
+        allowUnbindService(getActivity());
+    }
+
     @OnClick({R.id.close_tips, R.id.video_play})
     public void onClick(View v) {
         switch (v.getId()) {
@@ -317,17 +324,20 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
                 break;
             case R.id.video_play:
-                if (player.isPlaying()) {
-                    video_play.setImageResource(R.mipmap.video_play);
-                    player.pause();
-                } else {
-                    video_play.setImageResource(R.mipmap.video_pause);
-                    if (url.equals(player.getUrl())) {
-                        player.rePlay();
+
+                if (mPlayService.getPlayingPosition() > 0) {
+                    if (mPlayService.isPlaying()) {
+                        video_play.setImageResource(R.mipmap.video_play);
+                        mPlayService.pause();
                     } else {
-                        player.playUrl(url);
+                        video_play.setImageResource(R.mipmap.video_pause);
+                        mPlayService.resume();
                     }
+                } else {
+                    mPlayService.play(url, sound.sid);
+                    video_play.setImageResource(R.mipmap.video_pause);
                 }
+
 
                 break;
             case R.id.send:
@@ -335,18 +345,23 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                     final Map<String, String> params = new HashMap<String, String>();
 
                     params.put("type", String.valueOf(1));
-                if (!TextUtils.isEmpty(recordPath)) {
-                    File file = new File(recordPath);
-                    if (file.exists()) {
-                        upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
-                        u.execute();
+                    if (!TextUtils.isEmpty(recordPath)) {
+                        File file = new File(recordPath);
+                        if (file.exists()) {
+                            upLoaderTask u = new upLoaderTask(getActivity(), MyNetApiConfig.uploadSounds.getPath(), params, file);
+                            u.execute();
+                        }
                     }
-                }
                 }
 
                 break;
             case R.id.record:
-
+                if (mPlayService != null) {
+                    if (mPlayService.isPlaying()) {
+                        video_play.setImageResource(R.mipmap.video_play);
+                        mPlayService.pause();
+                    }
+                }
                 VoiceFunctionF2.StartRecordVoice(is2mp3, this);
                 startAnimation();
                 recordPath = VoiceFunctionF2.getRecorderPath();
@@ -385,8 +400,8 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 break;
             case R.id.play:
 
-                if (recordComFinish&&!TextUtils.isEmpty(recordPath)){
-                 //   LogUtils.LOGE(tag,recordPath);
+                if (recordComFinish && !TextUtils.isEmpty(recordPath)) {
+
                     VoiceFunctionF2.StopVoice();
                     VoiceFunctionF2.PlayToggleVoice(recordPath, this);
                 }
@@ -446,14 +461,38 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         return b1.subtract(b2).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
+    Handler mHandler = new Handler();
+    String2TimeUtils string2TimeUtils = new String2TimeUtils();
+
+    @Override
+    public void onPublish(final int progress) {
+        super.onPublish(progress);
+
+        if (mPlayService.getPlayingPosition() > 0) {
+            seekbar.setProgress(progress * 100 / mPlayService.getDuration());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
+                }
+            });
+        }
+    }
 
     @Override
     public void onDestroy() {
-        player.stop();
+
         VoiceFunctionF2.StopVoice();
+        if (mPlayService != null) {
+            if (mPlayService.isPlaying()) {
+
+                mPlayService.pause();
+
+            }
+        }
 
         if (mIsRecording) {
-         VoiceFunctionF2.StopRecordVoice(is2mp3);
+            VoiceFunctionF2.StopRecordVoice(is2mp3);
         }
 
         super.onDestroy();
@@ -529,6 +568,8 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
         @Override
         protected void onProgressUpdate(Integer... values) {
+
+
             dialogHelper.setProgress(values[0]);
             super.onProgressUpdate(values);
         }
@@ -539,11 +580,14 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 dialogHelper.dismissProgressDialog();
 
             }
+
             if (!TextUtils.isEmpty(s)) {
+
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.soundReply,
-                        MyNetRequestConfig.soundReply(getActivity(), sound.sid + "", AppShare.getUserInfo(getActivity()).uid, s, recordTime + "", "1"),
+                        MyNetRequestConfig.soundReply(getActivity(), String.valueOf(sound.sid ), AppShare.getUserInfo(getActivity()).uid,
+                                s,String.valueOf(recordTime ) , "1"),
                         "soundReply", Tab5WopingDetailFragment.this);
 
             } else {

@@ -129,7 +129,7 @@ public class RecordAllActivity extends Activity
     private ComposeVoice composeVoice;
     private String2TimeUtils string2TimeUtils;
 
-    private static int TOTALTIME = 11;  //默认录音600s
+    private static int TOTALTIME = 600;  //默认录音600s
     //    private static int TOTALTIME = 600;  //默认录音600s
     private int totalTime = TOTALTIME;  //默认录音600s
     private Music music;
@@ -439,7 +439,7 @@ public class RecordAllActivity extends Activity
         musictime.setText(string2TimeUtils.stringForTimeS(actualRecordTime));
         pb_record.setProgress(actualRecordTime);
         recordComFinish = true;
-
+        icon_finish.setImageResource(R.mipmap.upload);
         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
             compose();
         } else {
@@ -510,7 +510,7 @@ public class RecordAllActivity extends Activity
     public void recordVoiceFinish() {
         if (recordVoiceBegin) {
             actualRecordTime = recordTime;
-            if (actualRecordTime == TOTALTIME) {
+            if (actualRecordTime == totalTime) {
                 if (selectArticle == null || TextUtils.isEmpty(selectArticle.title)) {
                     final EditText inputServer = new EditText(RecordAllActivity.this);
                     inputServer.setBackgroundResource(R.drawable.edit_bg);
@@ -583,12 +583,15 @@ public class RecordAllActivity extends Activity
     @Override
     public void playVoiceStateChanged(long currentDuration) {
 
-        if (currentDuration > 0) {
-            int playtime = (int) (currentDuration / RecordConstant.OneSecond);
-            musictime.setText(string2TimeUtils.stringForTimeS(playtime));
-            pb_record.setProgress(playtime);
+        if (recordComFinish){
+            if (currentDuration > 0) {
+                int playtime = (int) (currentDuration / RecordConstant.OneSecond);
+                musictime.setText(string2TimeUtils.stringForTimeS(playtime));
+                pb_record.setProgress(playtime);
 
+            }
         }
+
     }
 
     @Override
@@ -727,7 +730,7 @@ public class RecordAllActivity extends Activity
         }
 
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
-        composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.COMPOSE);
+        composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.UNCOMPOSE);
         composeVoiceInfoDBHelper.close();
 
         if (dialogHelper != null) {
@@ -857,14 +860,15 @@ public class RecordAllActivity extends Activity
                         ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
                     } else {
 
-                        if (alertBuilder == null) {
-                            alertBuilder = new AlertDialog.Builder(RecordAllActivity.this);
-                            alertBuilder.setTitle(getString(R.string.record_save_dialog_title));
-                            //  alertBuilder.setView(inputServer);
+
                             final EditText inputServer = new EditText(RecordAllActivity.this);
                             inputServer.setBackgroundResource(R.drawable.edit_bg);
                             inputServer.setFocusable(true);
                             inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                        AlertDialog.Builder    alertBuilder = new AlertDialog.Builder(RecordAllActivity.this);
+                            alertBuilder.setTitle(getString(R.string.record_save_dialog_title));
+
+                            alertBuilder.setView(inputServer);
                             alertBuilder.setNegativeButton("取消", null);
                             alertBuilder.setPositiveButton("确定",
                                     new DialogInterface.OnClickListener() {
@@ -879,7 +883,6 @@ public class RecordAllActivity extends Activity
                                             goRecordSuccessState();
                                         }
                                     });
-                        }
                         alertBuilder.show();
 
                     }
@@ -895,25 +898,7 @@ public class RecordAllActivity extends Activity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-                        actualRecordTime = 0;
-                        recordVoiceBegin = false;
-                        recordComFinish = false;
-                        VoiceFunctionF2.StopRecordVoice(is2mp3);
-                        VoiceFunctionF2.StopVoice();
-                        icon_finish.setImageResource(R.mipmap.finish);
-                        icon_record.setImageResource(R.mipmap.icon_record);
-                        pb_record.setProgress(0);
-                        musictime.setText("00:00");
-
-                        //     if ()
-
-                        select_music.setEnabled(true);
-                        select_article.setEnabled(true);
-                        add_article.setEnabled(true);
-                        add_music.setEnabled(true);
-                        add_article.setVisibility(View.VISIBLE);
-                        add_music.setVisibility(View.VISIBLE);
-                        et_content.setVisibility(View.VISIBLE);
+                        reset();
                     }
                 });
                 builder.show();
@@ -951,6 +936,25 @@ public class RecordAllActivity extends Activity
 
                 break;
         }
+    }
+
+    private void reset() {
+        actualRecordTime = 0;
+        recordVoiceBegin = false;
+        recordComFinish = false;
+        VoiceFunctionF2.StopRecordVoice(is2mp3);
+        VoiceFunctionF2.StopVoice();
+        icon_finish.setImageResource(R.mipmap.finish);
+        icon_record.setImageResource(R.mipmap.icon_record);
+        pb_record.setProgress(0);
+        musictime.setText("00:00");
+        select_music.setEnabled(true);
+        select_article.setEnabled(true);
+        add_article.setEnabled(true);
+        add_music.setEnabled(true);
+        add_article.setVisibility(View.VISIBLE);
+        add_music.setVisibility(View.VISIBLE);
+        et_content.setVisibility(View.VISIBLE);
     }
 
     private void upload() {
@@ -1127,9 +1131,7 @@ public class RecordAllActivity extends Activity
                 public void onSelected(int selected) {
                     switch (selected) {
                         case 0:
-                            actualRecordTime = 0;
-                            recordVoiceBegin = false;
-                            VoiceFunctionF2.StopRecordVoice(is2mp3);
+                            reset();
 
                             break;
                         case 1:

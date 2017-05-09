@@ -702,12 +702,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
 
                 if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
-//                    if (teaFile.exists()) {
-//                        palyTeacherVoice();
-//
-//                    } else {
-//                        downloadTeaId = dowoload(teaUrl, teafileName, 1);
-//                    }
+
                     video_play.setImageResource(R.mipmap.video_play);
                     if (mPlayService.getPlayingPosition() == 0) {
                         if (mPlayService.isPlaying()) {

@@ -325,8 +325,8 @@ public class DecodeEngine {
 
 
     private static void Resample(int sampleRate, String decodeFileUrl) {
-        String newDecodeFileUrl =decodeFileUrl + "new";
-
+        String newDecodeFileUrl ="new"+decodeFileUrl;
+        LogFunction.error("开始转采样率", "");
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(new File(decodeFileUrl));
@@ -340,7 +340,7 @@ public class DecodeEngine {
 
             fileInputStream.close();
             fileOutputStream.close();
-
+            LogFunction.error("停止转采样率", "");
             FileFunction.RenameFile(newDecodeFileUrl, decodeFileUrl);
         } catch (IOException e) {
             LogFunction.error("关闭bufferedOutputStream异常", e);

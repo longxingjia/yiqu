@@ -63,8 +63,6 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
     public Tab4NewAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-
-
     }
 
     public int getCurrent() {

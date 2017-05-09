@@ -114,9 +114,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         if (!TextUtils.isEmpty(path)) {
 
             if (mPlayer.isPlaying()) {
-//                if (!mPlayer.getUrl().equals(path)) {
-//
-//                }
                 mPlayer.pause();
                 mPlayer.playUrl(path);
             } else {

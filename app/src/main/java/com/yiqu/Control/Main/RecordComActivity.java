@@ -259,18 +259,7 @@ public class RecordComActivity extends Activity
 
         }
 
-//        lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
-//        if (!lrc.exists()) {
-//
-//            MyNetApiConfig myNetApiConfig = new MyNetApiConfig(music.musicname);
-//
-//            RestNetCallHelper.callNet(this,
-//                    myNetApiConfig.getlyric, MyNetRequestConfig
-//                            .getlyric(this),
-//                    "getlyric", this);
-//        } else {
-//            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-//        }
+
 
 
     }
@@ -279,7 +268,6 @@ public class RecordComActivity extends Activity
     private void initBackground(File file) {
         PictureUtils.showPictureFile(instance, file, image_anim, 270);
         Bitmap bt = BitmapFactory.decodeFile(file.getAbsolutePath());
-
         Bitmap b = BitmapUtil.blur(bt, 25f, this);
         Bitmap bb = BitmapUtil.blur(b, 25f, this);
         background.setImageBitmap(bb);
@@ -307,6 +295,8 @@ public class RecordComActivity extends Activity
         musictime.setText(string2TimeUtils.stringForTimeS(actualRecordTime));
         pb_record.setProgress(actualRecordTime);
 
+        icon_finish.setImageResource(R.mipmap.upload);
+        recordComFinish = true;
         compose();
 
     }
@@ -441,10 +431,8 @@ public class RecordComActivity extends Activity
             pb_record.setMax(recordTime);
             totaltime.setText(string2TimeUtils.stringForTimeS(recordTime));
             if (currentDuration > 0) {
-
                 musictime.setText(string2TimeUtils.stringForTimeS(playtime));
                 pb_record.setProgress(playtime);
-
             }
         }
      //   LogUtils.LOGE(tag,currentDuration+"");
@@ -628,8 +616,7 @@ public class RecordComActivity extends Activity
                             if (recordTime > 9) {
                                 VoiceFunctionF2.StopRecordVoice(is2mp3);
                                 VoiceFunctionF2.StopVoice();
-                                icon_finish.setImageResource(R.mipmap.upload);
-                                recordComFinish = true;
+
                             } else {
                                 ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
                             }
@@ -647,15 +634,7 @@ public class RecordComActivity extends Activity
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        icon_finish.setImageResource(R.mipmap.finish);
-                        icon_record.setImageResource(R.mipmap.icon_record);
-                        pb_record.setProgress(0);
-                        musictime.setText("00:00");
-                        actualRecordTime = 0;
-                        recordVoiceBegin = false;
-                        recordComFinish = false;
-                        VoiceFunctionF2.StopRecordVoice(is2mp3);
-                        VoiceFunctionF2.StopVoice();
+                        reset();
                     }
                 });
                 builder.show();
@@ -667,6 +646,23 @@ public class RecordComActivity extends Activity
 
         }
 
+    }
+
+    private void reset() {
+        icon_finish.setImageResource(R.mipmap.finish);
+        icon_record.setImageResource(R.mipmap.icon_record);
+        pb_record.setProgress(0);
+        musictime.setText("00:00");
+        actualRecordTime = 0;
+        recordVoiceBegin = false;
+        recordComFinish = false;
+        totalTime = music.time;
+        pb_record.setMax(music.time);
+        totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
+        pb_record.setMax(totalTime);
+
+        VoiceFunctionF2.StopRecordVoice(is2mp3);
+        VoiceFunctionF2.StopVoice();
     }
 
     private void upload() {
@@ -819,9 +815,7 @@ public class RecordComActivity extends Activity
                 public void onSelected(int selected) {
                     switch (selected) {
                         case 0:
-                            actualRecordTime = 0;
-                            recordVoiceBegin = false;
-                            VoiceFunctionF2.StopRecordVoice(is2mp3);
+                            reset();
 
                             break;
                         case 1:
@@ -842,7 +836,6 @@ public class RecordComActivity extends Activity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { //监控/拦截/屏蔽返回键
-//            dialog();
             exit();
             return false;
         }

@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.ui.views.RoundProgressBar;
+import com.utils.Player;
+import com.yiqu.Tool.Player.OnPlayMusicClickListener;
 import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.fileutils.utils.Player;
 import com.model.Music;
-import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 
 import java.util.ArrayList;
@@ -41,10 +41,15 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
     private Activity mContext;
     private String tag = "Tab3MusicAdapter";
     private int mCurrent = -1;
-    private OnMoreClickListener mListener;
+    private OnPlayMusicClickListener mListener;
+
+    public void setOnPlayClickListener(OnPlayMusicClickListener l) {
+        mListener = l;
+    }
+
     private String2TimeUtils string2TimeUtils = new String2TimeUtils();
 
-    public Tab3MusicAdapter(Activity context, Player player) {
+    public Tab3MusicAdapter(Activity context) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
 
@@ -86,15 +91,12 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
     }
 
     private class HoldChild {
-
         TextView musicname;
         TextView chapter;
         TextView accompaniment;
         TextView time;
         ImageView music_play;
         RoundProgressBar round_pb;
-
-
     }
 
     @Override
@@ -133,29 +135,21 @@ public class Tab3MusicAdapter extends BaseAdapter implements OnItemClickListener
             h.music_play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //    h.play_status =
-                    mCurrent = pos;
+                    if (mCurrent==pos){
+                        mCurrent=-1;
+                        if(mListener != null) mListener.onPauseClick(f);
+                    }else {
+                        if(mListener != null) mListener.onPlayClick(f);
+                        mCurrent = pos;
+                    }
                     notifyDataSetChanged();
-                    if(mListener != null) mListener.onMoreClick(f);
-
                 }
             });
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return v;
     }
-
-    public void setOnMoreClickListener(OnMoreClickListener l) {
-        mListener = l;
-    }
-    public interface OnMoreClickListener {
-        public void onMoreClick(Music music);
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {

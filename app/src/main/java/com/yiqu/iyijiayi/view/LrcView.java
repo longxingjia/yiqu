@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 
 import java.io.BufferedReader;
@@ -228,6 +229,8 @@ public class LrcView extends View {
 	public synchronized void changeCurrent(long time) {
 		// 如果当前时间小于下一句开始的时间
 		// 直接return
+		LogUtils.LOGE("lrcView",time+"");
+
 		if (mNextTime > time) {
 			return;
 		}
