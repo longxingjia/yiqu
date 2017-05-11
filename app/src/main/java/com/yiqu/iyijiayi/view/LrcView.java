@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 public class LrcView extends View {
 	private static final int SCROLL_TIME = 500;
 	private static final String DEFAULT_TEXT = "暂无歌词";
+	private static final String tag = LrcView.class.getSimpleName();
 	
 	private List<String> mLrcs = new ArrayList<String>(); // 存放歌词
 	private List<Long> mTimes = new ArrayList<Long>(); // 存放时间
@@ -234,10 +235,11 @@ public class LrcView extends View {
 		if (mNextTime > time) {
 			return;
 		}
-		
+		LogUtils.LOGE("mNextTime",mNextTime+"");
 		// 每次进来都遍历存放的时间
 		int timeSize = mTimes.size();
 		for (int i = 0; i < timeSize; i++) {
+			LogUtils.LOGE(tag,mTimes.get(i)  +"");
 			
 			// 解决最后一行歌词不能高亮的问题
 			if(mNextTime == mTimes.get(timeSize - 1)) {
@@ -255,6 +257,7 @@ public class LrcView extends View {
 			// 每次都重新显示，是不是要判断：现在正在显示就不刷新了
 			if (mTimes.get(i) > time) {
 				mNextTime = mTimes.get(i);
+				LogUtils.LOGE("mTimes",mTimes.get(i)+"");
 				mScroller.abortAnimation();
 				mScroller.startScroll(i, 0, 0, mMaxScroll, SCROLL_TIME);
 //				mNextTime = mTimes.get(i);

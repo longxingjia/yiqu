@@ -436,7 +436,7 @@ public class RecordComActivity extends Activity
             }
         }
      //   LogUtils.LOGE(tag,currentDuration+"");
-        //if(mLrcViewOnFirstPage.hasLrc()) mLrcViewOnFirstPage.changeCurrent(currentDuration);
+        if(mLrcViewOnFirstPage.hasLrc()) mLrcViewOnFirstPage.changeCurrent(currentDuration);
     }
 
     @Override

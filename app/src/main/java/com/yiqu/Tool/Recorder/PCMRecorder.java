@@ -86,8 +86,6 @@ public class PCMRecorder {
         }
 
 
-
-
         audioRecordBuffer = new short[audioRecordBufferSize];
 
         double sampleNumberInOneMicrosecond = (double) RecordConstant.RecordSampleRate / 1000;
@@ -98,7 +96,7 @@ public class PCMRecorder {
         realSampleNumberInOneDuration = (int) (sampleNumberInOneMicrosecond * realSampleDuration);
 
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordConstant.RecordSampleRate,
-                AudioFormat.CHANNEL_IN_MONO, pcmFormat.getAudioFormat(), audioRecordBufferSize);
+                AudioFormat.CHANNEL_IN_STEREO, pcmFormat.getAudioFormat(), audioRecordBufferSize);
     }
 
     public void release() {
@@ -210,6 +208,9 @@ public class PCMRecorder {
                     audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                             RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
                             pcmFormat.getAudioFormat(), audioRecordBufferSize);
+//                    audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+//                            RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_STEREO,
+//                            pcmFormat.getAudioFormat(), audioRecordBufferSize);
 
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         if (NoiseSuppressor.isAvailable()) {

@@ -378,6 +378,7 @@ public class RecordAllActivity extends Activity
         et_content.setVisibility(View.VISIBLE);
         add_article.setBackgroundResource(R.mipmap.add_music);
         selectArticle = null;
+       // et_content.setVisibility(View.VISIBLE);
     }
 
 
@@ -954,7 +955,7 @@ public class RecordAllActivity extends Activity
         add_music.setEnabled(true);
         add_article.setVisibility(View.VISIBLE);
         add_music.setVisibility(View.VISIBLE);
-        et_content.setVisibility(View.VISIBLE);
+//        et_content.setVisibility(View.VISIBLE);
     }
 
     private void upload() {

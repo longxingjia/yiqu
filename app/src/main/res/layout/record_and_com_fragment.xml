@@ -121,6 +121,11 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/normal_text_size"
                 android:visibility="gone"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                >
 
             <com.yiqu.iyijiayi.view.LrcView
                 xmlns:lrc="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
@@ -128,13 +133,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 lrc:currentTextColor="@android:color/white"
-                lrc:dividerHeight="5dp"
+                lrc:dividerHeight="10dp"
                 lrc:normalTextColor="@android:color/white"
                 lrc:rows="20"
-                lrc:textSize="15sp"/>
-
+                lrc:textSize="16sp"/>
+            </ScrollView>
 
             <RelativeLayout
                 android:id="@+id/hint"

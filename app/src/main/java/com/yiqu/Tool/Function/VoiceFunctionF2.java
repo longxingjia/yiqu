@@ -27,12 +27,12 @@ public class VoiceFunctionF2 {
             filePath =  Variable.StorageMusicPath +tmpName + ".mp3";
             Mp3RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
-            LogUtils.LOGE("path",filePath);
+        //    LogUtils.LOGE("path",filePath);
         } else {
             filePath = Variable.StorageMusicPath + tmpName + ".pcm";
             RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
-            LogUtils.LOGE("path",filePath);
+         //   LogUtils.LOGE("path",filePath);
         }
         return tmpName;
 
