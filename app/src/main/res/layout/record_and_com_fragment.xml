@@ -137,7 +137,7 @@
                 lrc:currentTextColor="@android:color/white"
                 lrc:dividerHeight="10dp"
                 lrc:normalTextColor="@android:color/white"
-                lrc:rows="20"
+                lrc:rows="30"
                 lrc:textSize="16sp"/>
             </ScrollView>
 

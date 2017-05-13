@@ -38,6 +38,7 @@ public class Sound implements Serializable {
     public String chapter;
     public int soundtime;
     public String soundpath;
+    public String lrc_url;
     public String stuschool;
     public String tecschool;
     public String commentpath;
@@ -64,6 +65,7 @@ public class Sound implements Serializable {
                 ", isformulation=" + isformulation +
                 ", fromuid=" + fromuid +
                 ", touid=" + touid +
+                ", lrc_url=" + lrc_url +
                 ", commenttime=" + commenttime +
                 ", questionprice=" + questionprice +
                 ", views=" + views +

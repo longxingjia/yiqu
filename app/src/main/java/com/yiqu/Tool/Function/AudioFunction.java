@@ -3,9 +3,12 @@ package com.yiqu.Tool.Function;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.yiqu.Tool.Global.RecordConstant;
-import com.utils.Variable;
+import com.czt.mp3recorder.RecordConstant;
 import com.czt.mp3recorder.util.LameUtil;
+import com.utils.Variable;
+import com.yiqu.Tool.Decode.DecodeEngine;
+import com.yiqu.Tool.Interface.ComposeAudioInterface;
+import com.yiqu.Tool.Interface.DecodeOperateInterface;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,10 +19,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import com.yiqu.Tool.Decode.DecodeEngine;
-import com.yiqu.Tool.Interface.ComposeAudioInterface;
-import com.yiqu.Tool.Interface.DecodeOperateInterface;
 
 /**
  * Created by zhengtongyu on 16/5/29.
@@ -123,8 +122,8 @@ public class AudioFunction {
             e.printStackTrace();
         }
 
-        LameUtil.init(RecordConstant.RecordSampleRate, RecordConstant.LameBehaviorChannelNumber,
-                RecordConstant.BehaviorSampleRate, RecordConstant.LameBehaviorBitRate, RecordConstant.LameMp3Quality);
+        LameUtil.init(RecordConstant.DEFAULT_SAMPLING_RATE, RecordConstant.DEFAULT_LAME_IN_CHANNEL,
+                RecordConstant.DEFAULT_SAMPLING_RATE, RecordConstant.DEFAULT_LAME_MP3_BIT_RATE, RecordConstant.DEFAULT_LAME_MP3_QUALITY);
 
         try {
             while (!firstAudioFinish) {

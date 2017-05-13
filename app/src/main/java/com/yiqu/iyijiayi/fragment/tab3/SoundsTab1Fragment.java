@@ -80,7 +80,6 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
                 intent.putExtra("fragment", SearchFragment.class.getName());
                 intent.putExtra("data","search_music");
                 getActivity().startActivity(intent);
-                getActivity().finish();
             }
         });
 

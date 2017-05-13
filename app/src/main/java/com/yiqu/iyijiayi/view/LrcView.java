@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
+import android.widget.TextView;
 
 import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
@@ -230,7 +231,10 @@ public class LrcView extends View {
 	public synchronized void changeCurrent(long time) {
 		// 如果当前时间小于下一句开始的时间
 		// 直接return
-		LogUtils.LOGE("lrcView",time+"");
+//		LogUtils.LOGE("lrcView",time+"");
+		if (time<1000){
+			return;
+		}
 
 		if (mNextTime > time) {
 			return;
@@ -239,7 +243,7 @@ public class LrcView extends View {
 		// 每次进来都遍历存放的时间
 		int timeSize = mTimes.size();
 		for (int i = 0; i < timeSize; i++) {
-			LogUtils.LOGE(tag,mTimes.get(i)  +"");
+//			LogUtils.LOGE(tag,mTimes.get(i)  +"");
 			
 			// 解决最后一行歌词不能高亮的问题
 			if(mNextTime == mTimes.get(timeSize - 1)) {
@@ -257,7 +261,7 @@ public class LrcView extends View {
 			// 每次都重新显示，是不是要判断：现在正在显示就不刷新了
 			if (mTimes.get(i) > time) {
 				mNextTime = mTimes.get(i);
-				LogUtils.LOGE("mTimes",mTimes.get(i)+"");
+//				LogUtils.LOGE("mTimes",mTimes.get(i)+"");
 				mScroller.abortAnimation();
 				mScroller.startScroll(i, 0, 0, mMaxScroll, SCROLL_TIME);
 //				mNextTime = mTimes.get(i);
@@ -278,6 +282,8 @@ public class LrcView extends View {
 			}
 		}
 	}
+
+
 
 	// 外部提供方法
 	// 设置lrc的路径

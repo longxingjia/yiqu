@@ -13,7 +13,7 @@ import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.PermissionFunction;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.utils.Variable;
 import com.yiqu.Tool.Common.CommonThreadPool;
 import com.czt.mp3recorder.PCMFormat;
@@ -60,11 +60,11 @@ public class PCMRecorder {
 
     private void initAudioRecord() {
         int audioRecordMinBufferSize = AudioRecord
-                .getMinBufferSize(RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
+                .getMinBufferSize(RecordConstant.DEFAULT_SAMPLING_RATE, RecordConstant.DEFAULT_CHANNEL_CONFIG,
                         pcmFormat.getAudioFormat());
 
         audioRecordBufferSize =
-                RecordConstant.RecordSampleRate * pcmFormat.getBytesPerFrame() / (1000 / sampleDuration);
+                RecordConstant.DEFAULT_SAMPLING_RATE * pcmFormat.getBytesPerFrame() / (1000 / sampleDuration);
 
         if (audioRecordMinBufferSize > audioRecordBufferSize) {
             audioRecordBufferSize = audioRecordMinBufferSize;
@@ -88,15 +88,15 @@ public class PCMRecorder {
 
         audioRecordBuffer = new short[audioRecordBufferSize];
 
-        double sampleNumberInOneMicrosecond = (double) RecordConstant.RecordSampleRate / 1000;
+        double sampleNumberInOneMicrosecond = (double) RecordConstant.DEFAULT_SAMPLING_RATE / 1000;
 
         realSampleDuration = audioRecordBufferSize * 1000 /
-                (RecordConstant.RecordSampleRate * pcmFormat.getBytesPerFrame());
+                (RecordConstant.DEFAULT_SAMPLING_RATE * pcmFormat.getBytesPerFrame());
 
         realSampleNumberInOneDuration = (int) (sampleNumberInOneMicrosecond * realSampleDuration);
 
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordConstant.RecordSampleRate,
-                AudioFormat.CHANNEL_IN_STEREO, pcmFormat.getAudioFormat(), audioRecordBufferSize);
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordConstant.DEFAULT_SAMPLING_RATE,
+                RecordConstant.DEFAULT_CHANNEL_CONFIG, pcmFormat.getAudioFormat(), audioRecordBufferSize);
     }
 
     public void release() {
@@ -205,12 +205,14 @@ public class PCMRecorder {
         public void run() {
             while (running) {
                 if (recordVoice) {
-                    audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                            RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
-                            pcmFormat.getAudioFormat(), audioRecordBufferSize);
+//                    audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+//                            RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_MONO,
+//                            pcmFormat.getAudioFormat(), audioRecordBufferSize);
 //                    audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
 //                            RecordConstant.RecordSampleRate, AudioFormat.CHANNEL_IN_STEREO,
 //                            pcmFormat.getAudioFormat(), audioRecordBufferSize);
+                    audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, RecordConstant.DEFAULT_SAMPLING_RATE,
+                            RecordConstant.DEFAULT_CHANNEL_CONFIG, pcmFormat.getAudioFormat(), audioRecordBufferSize);
 
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         if (NoiseSuppressor.isAvailable()) {

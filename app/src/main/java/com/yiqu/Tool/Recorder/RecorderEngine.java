@@ -12,7 +12,7 @@ import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 
 import com.yiqu.Tool.Common.CommonApplication;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 

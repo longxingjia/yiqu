@@ -29,23 +29,54 @@
                 android:background="@mipmap/voice_bg"
                 android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    >
+
 
                     <TextView
                         android:id="@+id/article_content"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:scrollbars = "vertical"
-                        android:maxLines="15"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="50dp"
                         android:gravity="center"
                         android:maxHeight="180dp"
-                        
+                        android:maxLines="15"
+                        android:scrollbars="vertical"
                         android:textColor="@color/white"
                         android:textSize="17sp"/>
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fillViewport="true"
+                        >
+
+                        <com.yiqu.iyijiayi.view.LrcView
+                            xmlns:lrc="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
+                            android:id="@+id/play_first_lrc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="50dp"
+                            android:scrollbars="vertical"
+                            lrc:currentTextColor="@android:color/white"
+                            lrc:dividerHeight="8dp"
+                            lrc:normalTextColor="@android:color/white"
+                            lrc:rows="30"
+                            lrc:textSize="14sp"/>
+                        <!--<cn.zhaiyifan.lyric.widget.LyricView-->
+                            <!--android:id="@+id/lyricView"-->
+                            <!--android:scrollbars="vertical"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"/>-->
+
+
+                    </ScrollView>
+                </RelativeLayout>
 
                 <include
                     layout="@layout/video_play_control"
@@ -135,10 +166,10 @@
                     <TextView
                         android:id="@+id/stu_name"
                         android:layout_width="match_parent"
-                        android:singleLine="true"
-                        android:layout_marginRight="10dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:singleLine="true"
                         android:textSize="16sp"/>
 
                     <TextView
@@ -552,10 +583,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:visibility="invisible"
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="90dp"
-                        android:background="@mipmap/already_dianp"/>
+                        android:background="@mipmap/already_dianp"
+                        android:visibility="invisible"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -700,8 +731,8 @@
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
+        android:background="@color/detail_banner_bg"
         android:gravity="center"
-
         android:orientation="horizontal">
 
         <ImageView

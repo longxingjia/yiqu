@@ -21,6 +21,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
 
     public static final String TYPE = "type";
     public static final String MID = "mid";
+    public static final String LRCPATH = "lrcpath";
     public static final String TYPENAME = "typename";
     public static final String IMAGE = "image";
     public static final String MUSICNAME = "musicname";
@@ -65,6 +66,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
                 music.musicpath = c.getString(c.getColumnIndex(MUSICPATH));
                 music.musictype = c.getString(c.getColumnIndex(MUSICTYPE));
                 music.chapter = c.getString(c.getColumnIndex(CHAPTER));
+                music.lrcpath = c.getString(c.getColumnIndex(LRCPATH));
                 music.accompaniment = c.getString(c.getColumnIndex(ACCOMPANIMENT));
                 music.time = c.getInt(c.getColumnIndex(TIME));
                 music.size = c.getString(c.getColumnIndex(SIZE));
@@ -195,6 +197,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(MID, cc.mid);
             c.put(TYPE, cc.type);
             c.put(TYPENAME, cc.typename);
+            c.put(LRCPATH, cc.lrcpath);
             c.put(IMAGE, cc.image);
             c.put(MUSICNAME, cc.musicname);
             c.put(MUSICPATH, cc.musicpath);

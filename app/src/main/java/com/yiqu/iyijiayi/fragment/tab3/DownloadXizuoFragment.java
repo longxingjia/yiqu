@@ -75,9 +75,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
 
                         cursor.close();
 
-//                        Log.w(tag, "downloaded size: " + bytesDL);
-//                        Log.w(tag, "total size: " + fileTotalSize);
-
                         if (fileTotalSize != 0) {
                             int percentage = (int) (bytesDL * 100 / fileTotalSize);
                             progressBar.setProgress(percentage);
@@ -163,9 +160,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 dowoload(Url, fileName);
             }
         }
-
-
-
 
         super.init(savedInstanceState);
         submit.setOnClickListener(new View.OnClickListener() {

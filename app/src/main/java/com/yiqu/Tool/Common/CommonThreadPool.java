@@ -1,6 +1,6 @@
 package com.yiqu.Tool.Common;
 
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

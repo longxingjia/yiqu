@@ -28,6 +28,7 @@
     <color name="normal_color">#ffffff</color>
     <color name="grey">#ff58616d</color>
     <color name="darkgray">#8b8b8b</color>
+    <color name="detail_banner_bg">#222222</color>
 
     <color name="apk_category_color">#a6a6a6</color>
     <color name="appinfo_down_item_gray">#ff999999</color>

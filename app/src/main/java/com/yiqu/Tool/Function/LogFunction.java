@@ -2,7 +2,7 @@ package com.yiqu.Tool.Function;
 
 import android.util.Log;
 
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.utils.Variable;
 
 import java.io.BufferedWriter;

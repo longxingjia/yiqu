@@ -10,8 +10,8 @@
 
 
     <RelativeLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="20dp">
 
         <com.ui.views.RoundProgressBar

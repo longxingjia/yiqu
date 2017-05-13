@@ -40,7 +40,7 @@ import com.yiqu.Tool.Function.AudioFunction;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.VoiceFunctionF2;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -73,7 +73,6 @@ import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.view.LyricLoader;
 import com.yiqu.iyijiayi.view.LyricView;
 
 import java.io.BufferedInputStream;

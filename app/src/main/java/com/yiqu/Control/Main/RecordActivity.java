@@ -27,7 +27,7 @@ import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
 import com.yiqu.Tool.Function.VoiceFunction;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.utils.Variable;
 
 import java.io.File;

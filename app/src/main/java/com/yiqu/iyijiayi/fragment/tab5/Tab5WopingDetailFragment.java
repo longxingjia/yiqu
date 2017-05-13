@@ -16,14 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.utils.LogUtils;
-import com.utils.Player;
 import com.utils.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Tool.Function.VoiceFunctionF2;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
@@ -100,6 +98,8 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     public TextView now_time;
     @BindView(R.id.soundtime)
     public TextView soundtime;
+    @BindView(R.id.username)
+    public TextView username;
 //    private Player player;
 
     private boolean is2mp3 = true;
@@ -254,7 +254,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         desc.setText(sound.desc);
         musicname.setText(sound.musicname);
         soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
-
+        username.setText(sound.stuname);
         if (sound.type == 1) {
             musictype.setImageResource(R.mipmap.shengyue);
         } else if ((sound.type == 2)) {

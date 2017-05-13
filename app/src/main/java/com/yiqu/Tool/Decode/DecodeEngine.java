@@ -6,7 +6,8 @@ import android.media.MediaFormat;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
+import com.utils.LogUtils;
 import com.utils.Variable;
 
 import java.io.BufferedOutputStream;
@@ -98,6 +99,8 @@ public class DecodeEngine {
         mime = mediaFormat.containsKey(MediaFormat.KEY_MIME) ? mediaFormat.getString(MediaFormat
                 .KEY_MIME) : "";
 
+        LogUtils.LOGE("channelCount",channelCount+"");
+
         LogFunction.log("歌曲信息",
                 "Track info: mime:" + mime + " 采样率sampleRate:" + sampleRate + " channels:" +
                         channelCount + " duration:" + duration);
@@ -166,7 +169,6 @@ public class DecodeEngine {
         outputBuffers = mediaCodec.getOutputBuffers();
 
         mediaExtractor.selectTrack(0);
-
         bufferInfo = new MediaCodec.BufferInfo();
       //  LogUtils.LOGE("buffers:" , inputBuffers.length+"");
         BufferedOutputStream bufferedOutputStream = FileFunction
@@ -281,7 +283,7 @@ public class DecodeEngine {
                             sourceByteArray);
 
                     byte[] resultByteArray =
-                            ConvertChannelNumber(channelCount, RecordConstant.RecordChannelNumber,
+                            ConvertChannelNumber(channelCount, RecordConstant.DEFAULT_LAME_IN_CHANNEL,
                                     RecordConstant.RecordByteNumber,
                                     convertByteNumberByteArray);
 
@@ -309,7 +311,7 @@ public class DecodeEngine {
         }
 
       //  LogUtils.LOGE("sampleRate",sampleRate+"");
-        if (sampleRate != RecordConstant.RecordSampleRate) {
+        if (sampleRate != RecordConstant.DEFAULT_SAMPLING_RATE) {
              Resample(sampleRate, decodeFileUrl);
         }
 
@@ -334,7 +336,7 @@ public class DecodeEngine {
                     new FileOutputStream(new File(newDecodeFileUrl));
 
 
-            new SSRC(fileInputStream, fileOutputStream, sampleRate, RecordConstant.RecordSampleRate,
+            new SSRC(fileInputStream, fileOutputStream, sampleRate, RecordConstant.DEFAULT_SAMPLING_RATE,
                     RecordConstant.RecordByteNumber, RecordConstant.RecordByteNumber, 1, Integer.MAX_VALUE,
                     0, 0, true);
 

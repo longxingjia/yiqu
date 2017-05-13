@@ -3,9 +3,11 @@ package com.yiqu.iyijiayi.fragment.tab1;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -31,10 +34,13 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.service.Download;
+import com.service.DownloadService;
 import com.ui.abs.AbsFragment;
 import com.ui.views.DialogUtil;
 import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
+import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -42,6 +48,7 @@ import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
+import com.yiqu.iyijiayi.fileutils.lyric.LyricProvider;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
@@ -60,6 +67,7 @@ import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+import com.yiqu.iyijiayi.view.LrcView;
 
 import java.io.File;
 import java.text.ParseException;
@@ -74,13 +82,15 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.zhaiyifan.lyric.widget.LyricView;
 
 
 /**
  * Created by Administrator on 2017/2/20.
  */
 
-public class ItemDetailFragment extends AbsFragment implements View.OnClickListener, VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener {
+public class ItemDetailFragment extends AbsFragment implements View.OnClickListener,
+        VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener, LyricView.OnLyricUpdateListener {
     String tag = "ItemDetailFragment";
     @BindView(R.id.back)
     public ImageView back;
@@ -142,8 +152,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public ImageView stu_header;
     @BindView(R.id.tea_header)
     public ImageView tea_header;
-    //    @BindView(R.id.ll_backgroud)
-//    public LinearLayout ll_backgroud;
+    @BindView(R.id.play_first_lrc)
+    public LrcView mLrcViewOnFirstPage;
+//    @BindView(R.id.lyricView)
+//    public LyricView mLyricView;
+
     @BindView(R.id.ll_title)
     public LinearLayout ll_title;
     @BindView(R.id.listview)
@@ -183,6 +196,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     Future<?> future;
     private long downloadTeaId = -1;
     private long downloadStuId = -1;
+    private LyricProvider mLyricProvider;
+
 
     Handler mHandler = new Handler() {
         @Override
@@ -252,19 +267,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
                         c.close();
 
-//                        Log.w(tag, "downloaded size: " + bytesDL);
-//                        Log.w(tag, "total size: " + fileTotalSize);
-
                         if (fileTotalSize != 0) {
                             int percentage = (int) (bytesDL * 100 / fileTotalSize);
                             tea_listen.setText(percentage + "%");
-//                            statusBar.setProgress(percentage);
-//                            statusText.setText(percentage + "%");
+
                         }
 
-                        //终止轮询task
-//                        if (fileTotalSize == bytesDL)
-//                            future.cancel(true);
                     }
                     break;
 
@@ -283,6 +291,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     //  private Player player;
     private Sound soundWorth;
     private String2TimeUtils string2TimeUtils = new String2TimeUtils();
+    private String lyricname;
     ;
 
     @Override
@@ -314,6 +323,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
                 }
             });
+            if (mLrcViewOnFirstPage.hasLrc()) {
+                mLrcViewOnFirstPage.changeCurrent(progress);
+//                LogUtils.LOGE(tag,progress+"");
+            }
+//            mLyricView. updateIndex(progress);
+
         }
     }
 
@@ -339,7 +354,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         if (y <= 0) {
             title.setTextColor(getResources().getColor(R.color.white));
             back.setImageResource(R.mipmap.back_write);
-            ll_title.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));//AGB由相关工具获得，或者美工提供
+            ll_title.setBackgroundColor(getResources().getColor(R.color.detail_banner_bg));//AGB由相关工具获得，或者美工提供
         } else if (y > 0 && y <= imageHeight) {
             float scale = (float) y / imageHeight;
             float alpha = (255 * scale);
@@ -350,6 +365,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             title.setTextColor(getResources().getColor(R.color.normal_text_color));
             back.setImageResource(R.mipmap.back);
         }
+    }
+
+    @Override
+    public void onLyricUpdate() {
+
     }
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
@@ -531,6 +551,24 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 return false;
             }
         });
+//        mLrcViewOnFirstPage.setMovementMethod(new ScrollingMovementMethod());
+        mLrcViewOnFirstPage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        });
         try {
             publish_time.setText(String2TimeUtils.longToString(sound.created * 1000, "yyyy/MM/dd HH:mm"));
         } catch (ParseException e) {
@@ -624,7 +662,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     protected void init(Bundle savedInstanceState) {
-
+        mLyricProvider = LyricProvider.getInstance(getActivity());
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
         position = getActivity().getIntent().getIntExtra("position", -1);
         userInfo = AppShare.getUserInfo(getActivity());
@@ -644,6 +682,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             sid = String.valueOf(sound.sid);
             initData();
         }
+
         super.init(savedInstanceState);
     }
 
@@ -875,6 +914,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().bindService(new Intent(getActivity(), DownloadService.class), mDownloadServiceConnection, Context.BIND_AUTO_CREATE);
 
         allowBindService(getActivity());
 
@@ -888,6 +928,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         super.onStop();
         Log.e("fragment", "onDestroyView");
         allowUnbindService(getActivity());
+        getActivity().unbindService(mDownloadServiceConnection);
     }
 
     private long dowoload(String downloadUrl, String fileName, final int tag) {
@@ -1002,49 +1043,91 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     }
 
     private void palyTeacherVoice() {
-//        stucurrentTime = 0;
-//        teatotalTime = sound.commenttime;
-//        stutotalTime = sound.soundtime;
-//
-//        if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {  //正在播放，点击暂停
-//            teacurrentTime = VoiceFunction.pauseVoice(teaFile.getAbsolutePath());
-//            if (mTimer != null) {
-//                mTimer.cancel();
-//                mTimer = null;
-//            }
-//            if (mTimerTask != null) {
-//                mTimerTask.cancel();
-//                mTimerTask = null;
-//            }
-//
-//        } else {     //暂停，点击播放
-//
-//
-//            if (mTimer == null) {
-//                mTimer = new Timer();
-//            }
-//            if (mTimerTask == null) {
-//                mTimerTask = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        mHandler.sendEmptyMessage(0);
-//
-//                    }
-//                };
-//                mTimer.schedule(mTimerTask, 1000, 1000);
-//
-//            }
-//            if (teacurrentTime > 0) {
-//                teatotalTime = MathUtils.sub(sound.commenttime, teacurrentTime);
-//                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, teacurrentTime);
-//            } else {
-//                VoiceFunction.PlayToggleVoice(teaFile.getAbsolutePath(), this, 0);
-//            }
-//        }
+
         if (mPlayService != null) {
             mPlayService.play(teaUrl, 0);
         }
     }
+
+    private ServiceConnection mDownloadServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mDownloadService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+//            Log.e("mDownloadService","onServiceConnected");
+
+            mDownloadService = ((DownloadService.DownloadBinder) service).getService();
+            mDownloadService.setOnDownloadEventListener(downloadListener);
+
+            UserInfo userInfo = AppShare.getUserInfo(getActivity());
+            if (TextUtils.isEmpty(sound.lrc_url)) {
+
+            } else {
+                String lyricUrl = MyNetApiConfig.ImageServerAddr + sound.lrc_url;
+                lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/") + 1, lyricUrl.length());
+                File file = new File( Variable.StorageLyricCachPath,lyricname);
+                if (file.exists()){
+                    mLrcViewOnFirstPage.setLrcPath(file.getAbsolutePath());
+                }else {
+                    if (mDownloadService != null) {
+                        mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
+                                lyricname);
+                    }
+                }
+
+
+            }
+        }
+    };
+
+    private Download.OnDownloadListener downloadListener =
+            new Download.OnDownloadListener() {
+                //  private DialogHelper dialogHelper;
+
+                @Override
+                public void onStart(int downloadId, long fileSize) {
+//                 tv_lyric.setText("歌词下载中");
+                }
+
+                @Override
+                public void onPublish(int downloadId, long size) {
+
+                }
+
+                @Override
+                public void onSuccess(int downloadId) {
+                    File f1 = new File(Variable.StorageLyricCachPath, lyricname);
+                    mLrcViewOnFirstPage.setLrcPath(f1.getAbsolutePath());
+//                    mLyricView.setOnLyricUpdateListener(ItemDetailFragment.this);
+//                    mLyricView.setLyric(mLyricProvider.get(f1.getAbsolutePath(), "utf-8"));
+//                    mLyricView.setLyricIndex(0);
+//                    mLyricView.play();
+
+                }
+
+                @Override
+                public void onPause(int downloadId) {
+                    LogUtils.LOGE(tag, "onPause");
+                }
+
+                @Override
+                public void onError(int downloadId) {
+                    LogUtils.LOGE(tag, "onError");
+                }
+
+                @Override
+                public void onCancel(int downloadId) {
+                    LogUtils.LOGE(tag, "onCancel");
+                }
+
+                @Override
+                public void onGoon(int downloadId, long localSize) {
+                    LogUtils.LOGE(tag, "onGoon");
+                }
+            };
 
     @Override
     public void playVoiceBegin(long duration) {

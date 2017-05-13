@@ -13,7 +13,7 @@ import android.util.Log;
 public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "yijiayi.db";
-    private static final int DB_VERSION = 14;
+    private static final int DB_VERSION = 16;
 
 
     public AbsDBHelper(Context context) {
@@ -85,8 +85,6 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
             String sql = "ALTER TABLE " + tableName + " RENAME TO " + tempTableName;
             executeBatch(sql, db);
 //            db.execSQL("");
-
-
             // 2, Create table.
             executeBatch(dbVersion, db);
 
@@ -118,6 +116,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.MUSICNAME + " text , "
                     + DownloadMusicInfoDBHelper.MUSICPATH + " text , "
                     + DownloadMusicInfoDBHelper.MUSICTYPE + " text , "
+                    + DownloadMusicInfoDBHelper.LRCPATH + " text , "
                     + DownloadMusicInfoDBHelper.CHAPTER + " text , "
                     + DownloadMusicInfoDBHelper.ACCOMPANIMENT + " text , "
                     + DownloadMusicInfoDBHelper.TIME + " text , "
@@ -213,6 +212,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.MUSICTYPE + " text , "
                     + DownloadMusicInfoDBHelper.CHAPTER + " text , "
                     + DownloadMusicInfoDBHelper.ACCOMPANIMENT + " text , "
+                    + DownloadMusicInfoDBHelper.LRCPATH + " text , "
                     + DownloadMusicInfoDBHelper.TIME + " text , "
                     + DownloadMusicInfoDBHelper.SIZE + " text , "
                     + DownloadMusicInfoDBHelper.ISFORMULATION + " text , "
@@ -242,6 +242,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + ComposeVoiceInfoDBHelper.ISPAY + " text , "
                     + ComposeVoiceInfoDBHelper.ISREPLY + " text , "
                     + ComposeVoiceInfoDBHelper.VOICENAME + " text , "
+                    + ComposeVoiceInfoDBHelper.LRCPATH + " text , "
                     + ComposeVoiceInfoDBHelper.CREATETIME + " text , "
                     + ComposeVoiceInfoDBHelper.ISCOMPOSE + " text , "
                     + ComposeVoiceInfoDBHelper.DESC + " text , "

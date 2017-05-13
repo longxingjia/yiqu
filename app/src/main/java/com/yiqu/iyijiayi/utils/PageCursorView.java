@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 
 
@@ -23,17 +24,16 @@ public class PageCursorView extends View {
 	
 	public PageCursorView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		paint = new Paint();
 		paint.setColor(color);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
 		float w = getWidth();
 		float h = getHeight();
 		preW = w / count;
+		LogUtils.LOGE("tag",preW+"");
 		if(r == null){
 			r = new RectF(0, 0, preW, h);
 		}

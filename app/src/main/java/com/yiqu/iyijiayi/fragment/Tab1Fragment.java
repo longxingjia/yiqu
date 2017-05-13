@@ -172,7 +172,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         super.onResume();
         MobclickAgent.onPageStart(getString(R.string.home_page)); //统计页面，"MainScreen"为页面名称，可自定义
 
-        if (mPlayService != null) {
+        if (mPlayService != null&&mPlayService.isPlaying()) {
+
             int sid = mPlayService.getPlayingPosition();
             if (sid > 0) {
                 RestNetCallHelper.callNet(getActivity(),
@@ -252,7 +253,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         });
 
-      //  mPlayService.onCompletion();
+
 
     }
 
@@ -415,7 +416,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-      //  LogUtils.LOGE(tag,netResponse.toString());
+//        LogUtils.LOGE(tag,netResponse.toString());
 
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {

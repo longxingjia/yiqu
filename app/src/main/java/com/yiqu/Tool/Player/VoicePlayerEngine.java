@@ -1,6 +1,7 @@
 package com.yiqu.Tool.Player;
 
 import android.media.MediaPlayer;
+import android.media.audiofx.PresetReverb;
 import android.os.Handler;
 
 import com.utils.LogUtils;
@@ -40,6 +41,13 @@ public class VoicePlayerEngine {
                 if (currentTime > 0) {
                     seekTo(currentTime);
                 }
+                PresetReverb mReverb = new PresetReverb(0, voicePlayer.getAudioSessionId());
+                PresetReverb.Settings settings = mReverb.getProperties();
+                String str = settings.toString();
+                settings = new PresetReverb.Settings(str);
+                short preset =  PresetReverb.PRESET_LARGEHALL;;
+                settings.preset = preset;
+                mReverb.setProperties(settings);
             }
         });
 
@@ -242,7 +250,13 @@ public class VoicePlayerEngine {
 //                return 0;
 //            }
             //   playingUrl = null;
+
+
+
+
             voicePlayer.start();
+//            mReverb
+//            voicePlayer.set
             musicPlayerState = MusicData.MusicPlayerState.playing;
             int pos = voicePlayer.getCurrentPosition();
             updateMicStatus();

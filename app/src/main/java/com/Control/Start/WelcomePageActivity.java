@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.kaolafm.record.AudioMixerNative;
+import com.m3b.rbaudiomixlibrary.AudioRecorderNative;
 import com.service.DownloadService;
 import com.service.PlayService;
 import com.yiqu.Tool.Common.CommonApplication;

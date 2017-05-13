@@ -5,12 +5,11 @@ import android.media.AudioManager;
 import android.os.Handler;
 
 import com.czt.mp3recorder.MP3Recorder;
-import com.utils.LogUtils;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 
 import java.io.File;

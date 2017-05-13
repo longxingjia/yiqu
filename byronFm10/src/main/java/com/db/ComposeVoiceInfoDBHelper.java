@@ -34,6 +34,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
     public static final String LISTENPRICE = "listenprice";
     public static final String ISOPEN = "isopen";
     public static final String STATUS = "status";
+    public static final String LRCPATH = "lrcpath";
     public static final String VOICENAME = "voicename";
     public static final String TYPE = "type";
     public static final String ISPAY = "ispay";
@@ -78,6 +79,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
                 music.questionprice = c.getString(c.getColumnIndex(QUESTIONPRICE));
                 music.listenprice = c.getString(c.getColumnIndex(LISTENPRICE));
                 music.status = c.getString(c.getColumnIndex(STATUS));
+                music.lrcpath = c.getString(c.getColumnIndex(LRCPATH));
                 music.isopen = c.getString(c.getColumnIndex(ISOPEN));
                 music.voicename = c.getString(c.getColumnIndex(VOICENAME));
                 music.type = c.getString(c.getColumnIndex(TYPE));
@@ -185,9 +187,11 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(ACCOMPANIMENT, cc.accompaniment);
             c.put(COMMENTPATH, cc.commentpath);
             c.put(COMMENTTIME, cc.commenttime);
+//            c.put(LRCPATH, cc.lrcpath);
             c.put(ISFORMULATION, cc.isformulation);
             c.put(QUESTIONPRICE, cc.questionprice);
             c.put(LISTENPRICE, cc.listenprice);
+            c.put(STATUS, cc.status);
             c.put(STATUS, cc.status);
             c.put(ISOPEN, cc.isopen);
             c.put(VOICENAME, cc.voicename);

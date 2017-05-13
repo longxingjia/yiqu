@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.audiofx.PresetReverb;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -58,6 +59,15 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
             mediaPlayer.setOnBufferingUpdateListener(this);
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setOnCompletionListener(this);
+
+
+            PresetReverb mReverb = new PresetReverb(0, mediaPlayer.getAudioSessionId());
+            PresetReverb.Settings settings = mReverb.getProperties();
+            String str = settings.toString();
+            settings = new PresetReverb.Settings(str);
+            short preset = PresetReverb.PRESET_LARGEHALL;
+            settings.preset = preset;
+            mReverb.setProperties(settings);
         } catch (Exception e) {
             Log.e("mediaPlayer", "error", e);
         }

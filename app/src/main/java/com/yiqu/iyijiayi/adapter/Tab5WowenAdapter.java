@@ -102,8 +102,12 @@ public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener
 
 
             if (f.type == 1) {
+                h.musictype.setVisibility(View.VISIBLE);
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            } else {
+            } else if (f.type==3){
+                h.musictype.setVisibility(View.GONE);
+            }else {
+                h.musictype.setVisibility(View.VISIBLE);
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 

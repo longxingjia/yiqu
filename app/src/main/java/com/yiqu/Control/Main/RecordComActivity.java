@@ -15,9 +15,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,7 +25,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -48,9 +45,8 @@ import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.LogFunction;
 import com.yiqu.Tool.Function.UpdateFunction;
-import com.yiqu.Tool.Function.VoiceFunction;
 import com.yiqu.Tool.Function.VoiceFunctionF2;
-import com.yiqu.Tool.Global.RecordConstant;
+import com.czt.mp3recorder.RecordConstant;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.ComposeAudioInterface;
 import com.yiqu.Tool.Interface.DecodeOperateInterface;
@@ -69,7 +65,6 @@ import com.yiqu.iyijiayi.fragment.tab3.UploadXizuoFragment;
 import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.LyricDownInfo;
 import com.model.Music;
-import com.yiqu.iyijiayi.model.SelectArticle;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppInfo;
@@ -175,13 +170,11 @@ public class RecordComActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindService(new Intent(this, DownloadService.class), mDownloadServiceConnection,Context.BIND_AUTO_CREATE);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         instance = this;
         init(R.layout.record_and_com_fragment);
-
     }
-
 
     private void init(int layoutId) {
         setContentView(layoutId);
@@ -253,14 +246,11 @@ public class RecordComActivity extends Activity
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 
-            fileNameCom = music.musicname + t + "cv.mp3";
+            fileNameCom = music.musicname + t + "cv.aac";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
 
         }
-
-
-
 
     }
 
@@ -435,8 +425,11 @@ public class RecordComActivity extends Activity
                 pb_record.setProgress(playtime);
             }
         }
-     //   LogUtils.LOGE(tag,currentDuration+"");
-        if(mLrcViewOnFirstPage.hasLrc()) mLrcViewOnFirstPage.changeCurrent(currentDuration);
+
+        if(mLrcViewOnFirstPage.hasLrc()){
+            mLrcViewOnFirstPage.changeCurrent(currentDuration);
+//            LogUtils.LOGE(tag,currentDuration+"");
+        }
     }
 
     @Override
@@ -699,12 +692,23 @@ public class RecordComActivity extends Activity
         menuDialogSelectTeaHelper.show(recordVoiceButton);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bindService(new Intent(this, DownloadService.class), mDownloadServiceConnection,Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(mDownloadServiceConnection);
+    }
 
     @Override
     protected void onDestroy() {
         VoiceFunctionF2.StopRecordVoice(is2mp3);
         VoiceFunctionF2.StopVoice();
-        unbindService(mDownloadServiceConnection);
+
         super.onDestroy();
     }
 
@@ -725,23 +729,24 @@ public class RecordComActivity extends Activity
                 @Override
                 public void onSuccess(int downloadId) {
                     File f1 = new File(Variable.StorageLyricCachPath,lyricname);
+                    LogUtils.LOGE(tag,f1.getAbsolutePath());
                     mLrcViewOnFirstPage.setLrcPath(f1.getAbsolutePath());
-                    String str = null;
-                    try {
-                        InputStream is = new FileInputStream(f1);
-                        InputStreamReader input = new InputStreamReader(is, "UTF-8");
-                        BufferedReader reader = new BufferedReader(input);
-                        while ((str = reader.readLine()) != null) {
-//                            tv_lyric.append(str);
-//                            tv_lyric.append("\n");
-
-                        }
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    String str = null;
+//                    try {
+//                        InputStream is = new FileInputStream(f1);
+//                        InputStreamReader input = new InputStreamReader(is, "UTF-8");
+//                        BufferedReader reader = new BufferedReader(input);
+//                        while ((str = reader.readLine()) != null) {
+////                            tv_lyric.append(str);
+////                            tv_lyric.append("\n");
+//
+//                        }
+//
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 
 
                 }
@@ -775,7 +780,8 @@ public class RecordComActivity extends Activity
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-         //   Log.e("mDownloadService","onServiceConnected");
+//            Log.e("mDownloadService","onServiceConnected");
+
             mDownloadService = ((DownloadService.DownloadBinder) service).getService();
             mDownloadService.setOnDownloadEventListener(downloadListener);
 
@@ -797,9 +803,11 @@ public class RecordComActivity extends Activity
                 }
             }else {
                 lyricUrl = MyNetApiConfig.ImageServerAddr + music.lrcpath;
-                lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")-1, lyricUrl.length());
+                lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")+1, lyricUrl.length());
                 tv_lyric.setText("歌词下载中。。。");
+//                Log.e("mDownloadService",lyricname);
                 if (mDownloadService != null) {
+//                    LogUtils.LOGE(tag,lyricname);
                     mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath,
                             lyricname);
                 }

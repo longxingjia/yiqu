@@ -7,6 +7,21 @@
     tools:context=".MainActivity"
     android:gravity="center_horizontal">
 
+    <TextView
+        android:id="@+id/musicname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:textSize="18dp"
+        android:hint="请输入名字"
+        android:paddingLeft="5dp"
+        android:background="@drawable/white_box"
+        />
+
+
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
@@ -22,19 +37,6 @@
         android:textSize="16dp"
         />
 
-    <TextView
-        android:id="@+id/musicname"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:gravity="center_vertical"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
-        android:textSize="18dp"
-        android:hint="请输入名字"
-        android:paddingLeft="5dp"
-        android:background="@drawable/white_box"
-        />
 
 
     <Button

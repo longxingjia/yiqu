@@ -112,7 +112,7 @@ public class TeacherListFragment extends AbsAllFragment  {
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_TXT;
+        return FLAG_TXT|FLAG_BACK;
     }
 
     @Override
@@ -133,7 +133,7 @@ public class TeacherListFragment extends AbsAllFragment  {
     @Override
     protected void initTitle() {
 
-            setTitleText("老师");
+            setTitleText("提问");
 
     }
 

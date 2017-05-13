@@ -163,13 +163,13 @@ public class LyricView extends TextView implements Runnable {
 
         if (mIsTouched > 0) {
             mPaint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText(String.format("%s - %s", lyric.artist, lyric.title), 10, 50, mPaint);
-            canvas.drawText("offset: " + lyric.offset, 10, 150, mPaint);
+//            canvas.drawText(String.format("%s - %s", lyric.artist, lyric.title), 10, 50, mPaint);
+//            canvas.drawText("offset: " + lyric.offset, 10, 150, mPaint);
             if (mLyricIndex >= 0) {
                 int seconds = (int) ((lyric.sentenceList.get(mLyricIndex).fromTime / 1000));
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
-                canvas.drawText(String.format("%02d:%02d", minutes, seconds), 10, 100, mPaint);
+//                canvas.drawText(String.format("%02d:%02d", minutes, seconds), 10, 100, mPaint);
             }
             --mIsTouched;
             mPaint.setTextAlign(Paint.Align.CENTER);
@@ -247,7 +247,6 @@ public class LyricView extends TextView implements Runnable {
             mLyricIndex = mLyricSentenceLength - 1;
             return -1;
         }
-
         // Get index of sentence whose timestamp is between its startTime and currentTime.
         mLyricIndex = LyricUtils.getSentenceIndex(lyric, time, mLyricIndex, lyric.offset);
 
@@ -256,7 +255,12 @@ public class LyricView extends TextView implements Runnable {
             mLyricIndex = mLyricSentenceLength - 1;
             return -1;
         }
-
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                invalidate();
+            }
+        });
         return lyric.sentenceList.get(mLyricIndex + 1).fromTime + lyric.offset;
     }
 
