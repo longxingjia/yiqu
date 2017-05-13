@@ -359,8 +359,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             imageViews[i] = imageView;
             // 默认选中的是第一张图片，此时第一个小圆点是选中状态，其他不是
             if (i == 0) {
-                imageViews[i].setBackgroundResource(R.mipmap.play_icon);
-//                imageViews[i].setBackgroundResource(R.drawable.oval_red_stroke);
+//                imageViews[i].setBackgroundResource(R.mipmap.play_icon);
+                imageViews[i].setBackgroundResource(R.drawable.oval_red_stroke);
             } else {
                 imageViews[i].setBackgroundResource(R.drawable.oval_gray_stroke);
 //                imageViews[i].setBackgroundResource(R.mipmap.play_icon);
