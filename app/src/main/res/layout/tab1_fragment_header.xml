@@ -9,14 +9,28 @@
         android:layout_height="1dp"
         android:background="@color/dark_gray" />
 
-
-
-    <com.yiqu.iyijiayi.view.AutoPlayViewPager
-        android:id="@+id/vp_spinner"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="144dp">
 
-    </com.yiqu.iyijiayi.view.AutoPlayViewPager>
+        <com.yiqu.iyijiayi.view.AutoPlayViewPager
+            android:id="@+id/vp_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="144dp">
+        </com.yiqu.iyijiayi.view.AutoPlayViewPager>
+
+        <LinearLayout
+            android:id="@+id/viewGroup"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="1dp"
+            android:layout_alignParentBottom="true">
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
 
@@ -25,48 +39,46 @@
         android:orientation="horizontal">
 
 
-
         <TextView
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
             android:id="@+id/raokouling"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="100dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:drawableTop="@mipmap/icon_rkl"
             android:gravity="center"
             android:text="挑战绕口令" />
 
         <View
-            android:background="@color/tab_bg_color"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-             />
+            android:background="@color/tab_bg_color" />
 
 
         <TextView
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
             android:id="@+id/reader"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="100dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:drawableTop="@mipmap/icon_read"
             android:gravity="center"
             android:text="为你朗诵" />
+
         <View
-            android:background="@color/tab_bg_color"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            />
+            android:background="@color/tab_bg_color" />
 
         <TextView
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="20dp"
             android:id="@+id/question"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="100dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
             android:drawableTop="@mipmap/icon_quetion"
             android:gravity="center"
             android:text="热门问答" />
@@ -76,17 +88,17 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/tab_bg_color"/>
+        android:background="@color/tab_bg_color" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        >
+        android:layout_marginLeft="10dp">
 
         <TextView
-            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
             android:gravity="center"
             android:text="最新作品"
             android:textSize="16sp" />
@@ -99,21 +111,20 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:padding="5dp"
-            android:drawableRight="@mipmap/top_arrow"
             android:drawablePadding="5dp"
+            android:drawableRight="@mipmap/top_arrow"
             android:gravity="center"
+            android:padding="5dp"
             android:text="HOT"
             android:textColor="@color/dd_gray"
             android:textSize="13sp" />
 
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/tab_bg_color" />
-
-
 
 
 </LinearLayout>

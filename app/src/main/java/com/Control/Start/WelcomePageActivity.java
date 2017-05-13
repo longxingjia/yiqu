@@ -143,7 +143,7 @@ public class WelcomePageActivity extends Activity {
     private void begin() {
 
         //      intent = new Intent(this, RecordAacActivity.class);//
-            intent = new Intent(this, MainActivity.class);//
+        intent = new Intent(this, MainActivity.class);//
         //  intent = new Intent(this, StubActivity.class);
         // intent.putExtra("fragment", SelectArticalFragment.class.getName());
         // startActivityForResult(i, REQUESTMUSIC);
@@ -203,28 +203,30 @@ public class WelcomePageActivity extends Activity {
 
                         @Override
                         public void onNetEnd(String id, int type, NetResponse netResponse) {
+                            if (type == TYPE_SUCCESS) {
 
-                            updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
-                            //  LogUtils.LOGE("1",updateInfo.toString());
+
+                                updateInfo = new Gson().fromJson(netResponse.data, UpdateInformation.class);
+                                //  LogUtils.LOGE("1",updateInfo.toString());
 //                        fileName = "艺加艺" + System.currentTimeMillis() + ".zip";
-                            fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
+                                fileName = "艺加艺" + System.currentTimeMillis() + ".apk";
 
-                            filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
+                                filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/";
 
-                            String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
-                            if (!updateInfo.version.equals(versionName)) {
+                                String versionName = getPackageInfo(WelcomePageActivity.this).versionName;
+                                if (!updateInfo.version.equals(versionName)) {
 //                            if (updateInfo.ismust.equals("1")) {
 //                                forceUpdate(WelcomePageActivity.this);
 //                            } else {
 //                                normalUpdate(WelcomePageActivity.this);
 //                            }
 
-                                forceUpdate(WelcomePageActivity.this);
+                                    forceUpdate(WelcomePageActivity.this);
 
-                            } else {
-                                begin();
+                                } else {
+                                    begin();
+                                }
                             }
-
                         }
                     }, false, true);
 

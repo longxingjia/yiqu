@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -202,7 +203,9 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
                 }
 
             }else {
+//                LogUtils.LOGE(tag,"fs");
                 mLoadMoreView.end();
+//                mLoadMoreView.setEndLoading();
                 mLoadMoreView.setMoreAble(false);
             }
         }

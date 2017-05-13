@@ -65,14 +65,13 @@ public class BannerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = new ImageView(mContext);
-        // 如果是http://www.xx.com/xx.png这种连接，这里可以用ImageLoader之类的框架加载
 //        imageView.setImageResource(banners.get());
         final Banner banner  =  banners.get(position % banners.size());
         PictureUtils.showBannersPicture(mContext,banner.image, imageView);
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtils.LOGE("tag",banner.toString());
                 if (!TextUtils.isEmpty(banner.url)){
                     Intent in = new Intent(mContext, StubActivity.class);
                     in.putExtra("fragment", WebVFragment.class.getName());

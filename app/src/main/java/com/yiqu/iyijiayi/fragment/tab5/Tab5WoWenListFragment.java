@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -53,7 +54,7 @@ public class Tab5WoWenListFragment extends AbsAllFragment implements LoadMoreVie
 
     @Override
     protected int getBodyView() {
-        return R.layout.tab1_fragment;
+        return R.layout.tab5_listview;
     }
 
     @Override
@@ -148,7 +149,6 @@ public class Tab5WoWenListFragment extends AbsAllFragment implements LoadMoreVie
 
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-                LogUtils.LOGE(tag,netResponse.toString());
 
                 try {
                     datas=JsonUtils.parseSoundList(netResponse.data);
@@ -163,6 +163,7 @@ public class Tab5WoWenListFragment extends AbsAllFragment implements LoadMoreVie
                 }
             } else {
                 resfreshFail();
+                ToastManager.getInstance(getActivity()).showText(getString(R.string.no_history));
             }
         } else if ("getSoundList_more".equals(id)) {
             if (TYPE_SUCCESS == type) {

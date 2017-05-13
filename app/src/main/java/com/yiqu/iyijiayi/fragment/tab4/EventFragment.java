@@ -52,12 +52,13 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private RefreshList listView;
     //  private Tab4HotAdapter tab4HotAdapter;
     private Tab4NewAdapter tab4NewAdapter;
+    private Tab4HotAdapter tab4HotAdapter;
     private String uid;
     private Events events;
     private String arr;
     private ArrayList<Sound> sounds;
 
-    private Tab4HotAdapter tab4HotAdapter;
+
 
     @Override
     protected int getTitleView() {

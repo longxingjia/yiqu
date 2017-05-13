@@ -88,7 +88,7 @@ public class ApplyTeacherFragment extends AbsAllFragment {
     protected void init(Bundle savedInstanceState) {
         tips.setText(Html.fromHtml("当您提交了以上真实信息后，" +
                 "我们工作人员会第一时间联系您，还请耐心等候！一般处理周期为" +
-               "<font color=\'#ff0000\'>5个工作日</font>" +"左右"));
+               "<font color=\'#ff0000\'>3个工作日</font>" +"左右"));
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
         } else {

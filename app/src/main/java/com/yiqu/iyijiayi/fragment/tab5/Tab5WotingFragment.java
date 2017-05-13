@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -48,7 +49,7 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
 
     @Override
     protected int getBodyView() {
-        return R.layout.tab1_fragment;
+        return R.layout.tab5_listview;
     }
 
     @Override
@@ -155,6 +156,7 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
                 resfreshOk();
 
             } else {
+                ToastManager.getInstance(getActivity()).showText(getString(R.string.no_history));
 
                 resfreshFail();
 

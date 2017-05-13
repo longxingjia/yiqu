@@ -203,20 +203,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0:
-                    //更新进度
-//                    if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {
-//                        soundtime.setText(--stutotalTime + "\"");
-//                        if (stutotalTime == 0) {
-//                            stutotalTime = 1;
-//                        }
-//                    } else if (VoiceFunction.IsPlayingVoice(teaFile.getAbsolutePath())) {
-//                        commenttime.setText(--teatotalTime + "\"");
-//                        if (teatotalTime == 0) {
-//                            teatotalTime = 1;
-//                        }
-//                    }
-                    break;
+
                 case Constant.QUERY_STUDENT:
                     DownloadManager.Query query = new DownloadManager.Query();
                     query.setFilterById(downloadStuId);//筛选下载任务，传入任务ID，可变参数
@@ -234,19 +221,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
                         cursor.close();
 
-//                        Log.w(tag, "downloaded size: " + bytesDL);
-//                        Log.w(tag, "total size: " + fileTotalSize);
-
-                        if (fileTotalSize != 0) {
-                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
-
-//                            statusBar.setProgress(percentage);
-//                            statusText.setText(percentage + "%");
-                        }
-
-                        //终止轮询task
-//                        if (fileTotalSize == bytesDL)
-//                            future.cancel(true);
                     }
                     break;
                 case Constant.QUERY_TEACHER:
@@ -306,7 +280,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
         seekbar.setMax(100);
         initListeners();
-
 
     }
 
@@ -530,7 +503,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         desc.setText(sound.desc);
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
-        article_content.setText(sound.article_content);
+        if (!TextUtils.isEmpty(sound.article_content)){
+            article_content.setText(sound.article_content);
+            mLrcViewOnFirstPage.setVisibility(View.GONE);
+        }
+
         article_content.setMovementMethod(new ScrollingMovementMethod());
 
 
@@ -819,10 +796,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
             case R.id.comment:
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
-                intent.putExtra("sid", sid + "");
-                intent.putExtra("fromuid", AppShare.getUserInfo(getActivity()).uid + "");
-                LogUtils.LOGE(tag, sound.toString());
-                intent.putExtra("touid", sound.fromuid + "");
+                intent.putExtra("sid", String.valueOf(sid));
+                intent.putExtra("fromuid",String.valueOf( AppShare.getUserInfo(getActivity()).uid));
+                intent.putExtra("touid", String.valueOf(sound.fromuid ));
                 getActivity().startActivity(intent);
 
                 break;

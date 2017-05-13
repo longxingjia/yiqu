@@ -3,6 +3,7 @@ package com.yiqu.iyijiayi.fragment.tab5;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -124,26 +125,40 @@ public class EditInfoFragment extends AbsAllFragment {
         sumbit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contentStr = content.getText().toString().trim();
-                if (contentStr.length() == 0) {
-                    ToastManager.getInstance(getActivity()).showText(
-                            "请输入您要修改的内容!");
-                    return;
-                }
-                if (data.equals("advices")) {
-                    RestNetCallHelper.callNet(getActivity(),
-                            MyNetApiConfig.addFeedback, MyNetRequestConfig
-                                    .addFeedback(getActivity(), uid, contentStr),
-                            "addFeedback", EditInfoFragment.this);
-                } else {
-                    RestNetCallHelper.callNet(getActivity(),
-                            MyNetApiConfig.editUser, MyNetRequestConfig
-                                    .editUser(getActivity(), uid, data, contentStr),
-                            "editUser", EditInfoFragment.this);
-                }
+                next();
 
             }
         });
+
+        content.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    next();
+                }
+                return false;
+            }
+        });
+    }
+
+    private void next() {
+        contentStr = content.getText().toString().trim();
+        if (contentStr.length() == 0) {
+            ToastManager.getInstance(getActivity()).showText(
+                    "请输入您要修改的内容!");
+            return;
+        }
+        if (data.equals("advices")) {
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.addFeedback, MyNetRequestConfig
+                            .addFeedback(getActivity(), uid, contentStr),
+                    "addFeedback", EditInfoFragment.this);
+        } else {
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.editUser, MyNetRequestConfig
+                            .editUser(getActivity(), uid, data, contentStr),
+                    "editUser", EditInfoFragment.this);
+        }
     }
 
     @Override

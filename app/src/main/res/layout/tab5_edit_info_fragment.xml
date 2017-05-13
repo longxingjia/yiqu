@@ -12,6 +12,7 @@
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:layout_marginRight="10dp"
+        android:singleLine="true"
         android:layout_marginLeft="10dp"
         android:background="@drawable/edit_bg"
         android:maxLength="15"

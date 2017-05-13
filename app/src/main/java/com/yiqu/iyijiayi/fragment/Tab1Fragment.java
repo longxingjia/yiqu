@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private TextView question;
     private TextView raokouling;
     private TextView reader;
+    private ImageView[] imageViews;
+    private LinearLayout mViewPoints;
 
 
     @Override
@@ -194,12 +197,17 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         question = (TextView) v.findViewById(R.id.question);
         raokouling = (TextView) v.findViewById(R.id.raokouling);
         reader = (TextView) v.findViewById(R.id.reader);
-
+        mViewPoints = (LinearLayout)v.findViewById(R.id.viewGroup);
         question.setOnClickListener(this);
         raokouling.setOnClickListener(this);
         reader.setOnClickListener(this);
 
         more_xizuo.setOnClickListener(this);
+
+//        ImageView imageView = new ImageView(getActivity());
+//        imageView.setBackgroundResource(R.mipmap.play_icon);
+//        mViewPoints.addView(imageView);
+
     }
 
     private OnClickListener playListener = new OnClickListener() {
@@ -317,6 +325,52 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 MyNetRequestConfig.getBannerList(getActivity()),
                 "getBannerList", Tab1Fragment.this, false, true);
 
+
+
+    }
+
+    //设置导航点的状态
+    private void setPointStatus(int position) {
+        position=position%banners.size();
+        for (int i = 0; i < imageViews.length; i++) {
+//            imageViews[position] .setBackgroundResource(R.mipmap.play_icon);
+            imageViews[position] .setBackgroundResource(R.drawable.oval_red_stroke);
+            // 不是当前选中的page，其小圆点设置为未选中的状态
+            if (position != i) {
+//                imageViews[i] .setBackgroundResource(R.mipmap.play_icon);
+                imageViews[i] .setBackgroundResource(R.drawable.oval_gray_stroke);
+            }
+        }
+    }
+
+    //创建viewpager的那几个滑动的点
+    private void initPoint() {
+        // 创建imageviews数组，大小是要显示的图片的数量
+        imageViews = new ImageView[banners.size()];
+        // 添加小圆点的图片
+        for (int i = 0; i < banners.size(); i++) {
+            ImageView  imageView = new ImageView(getActivity());
+            // 设置小圆点imageview的参数
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    20, 20);
+            layoutParams.setMargins(10, 0, 10, 0);
+            imageView.setLayoutParams(layoutParams);// 创建一个宽高均为20 的布局
+            // 将小圆点layout添加到数组中
+            imageViews[i] = imageView;
+            // 默认选中的是第一张图片，此时第一个小圆点是选中状态，其他不是
+            if (i == 0) {
+                imageViews[i].setBackgroundResource(R.mipmap.play_icon);
+//                imageViews[i].setBackgroundResource(R.drawable.oval_red_stroke);
+            } else {
+                imageViews[i].setBackgroundResource(R.drawable.oval_gray_stroke);
+//                imageViews[i].setBackgroundResource(R.mipmap.play_icon);
+            }
+
+            // 将imageviews添加到小圆点视图组
+            mViewPoints.addView(imageViews[i]);
+        }
+        // 设置viewpager的适配器和监听事件
+
     }
 
     @Override
@@ -339,8 +393,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
-        setTitleBtnImg(R.mipmap.edit_tab);
-        // pageNextComplete();
+//        setTitleBtnImg(R.mipmap.edit_tab);
 
         return true;
     }
@@ -416,14 +469,11 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-//        LogUtils.LOGE(tag,netResponse.toString());
-
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
 
                 ArrayList<Sound> s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
-                //tab1XizuoAdapter.setData(xizuo);
                 sounds = s;
                 tab1XizuoAdapter.setData(s);
 
@@ -463,14 +513,29 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 AppShare.setBannerList(getActivity(), banners);
 
                 bannerAdapter.update(banners);
-                //    LogUtils.LOGE("tag",banners.toString());
                 vp_spinner.setAdapter(bannerAdapter);
 
                 vp_spinner.setDirection(AutoPlayViewPager.Direction.LEFT);// 设置播放方向
                 vp_spinner.setCurrentItem(200); // 设置每个Item展示的时间
                 vp_spinner.start(); // 开始轮播
                 vp_spinner.setAdapter(bannerAdapter);
+                initPoint();
+                vp_spinner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        setPointStatus(position);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
             }
             //    LogUtils.LOGE("tab1", netResponse.toString());
         } else if (id.equals("getSoundDetail")) {

@@ -34,14 +34,14 @@ import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import java.util.ArrayList;
 
 public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag ="Tab1CommentsAdapter";
+    private String tag = "Tab1CommentsAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<CommentsInfo> datas = new ArrayList<CommentsInfo>();
     private Context mContext;
     private String sid;
     private String uid;
 
-    public Tab1CommentsAdapter(Context context,String sid,String uid) {
+    public Tab1CommentsAdapter(Context context, String sid,String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         this.sid = sid;
@@ -110,24 +110,22 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
 //            }
 
 
-
             CommentsInfo f = getItem(position);
 
             h.username.setText(f.fromusername);
 
-            if (!uid.equals(f.touid)){
+            if (!uid.equals(f.touid)) {
 
-                h.comment.setText("回复 "+ f.tousername+" : "+EmojiCharacterUtil.decode(f.comment));
-            }else {
+                h.comment.setText("回复 " + f.tousername + " : " + EmojiCharacterUtil.decode(f.comment));
+            } else {
                 String s = EmojiCharacterUtil.decode(f.comment);
                 h.comment.setText(s);
             }
 
 
+            h.time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy-MM-dd HH:mm:ss"));
 
-            h.time.setText(String2TimeUtils.longToString(f.created*1000,"yyyy-MM-dd HH:mm:ss"));
-
-            PictureUtils.showPicture(mContext,f.fromuserimage,h.header,47);
+            PictureUtils.showPicture(mContext, f.fromuserimage, h.header, 47);
 
 
         } catch (Exception e) {
@@ -148,15 +146,20 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
         if (AppShare.getIsLogin(mContext)) {
             String fromuid = AppShare.getUserInfo(mContext).uid;
             if (fromuid.equals(f.fromuid)) {
-                ToastManager.getInstance(mContext).showText("不能对自己评论");
-                return;
+//                ToastManager.getInstance(mContext).showText("不能对自己评论");
+                Intent intent = new Intent(mContext, CommentActivity.class);
+                intent.putExtra("sid", sid + "");
+                intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid + "");
+                intent.putExtra("touid",String.valueOf(uid));
+                mContext.startActivity(intent);
+            } else {
+                Intent intent = new Intent(mContext, CommentActivity.class);
+                intent.putExtra("sid", sid);
+                intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid);
+                intent.putExtra("touid", f.fromuid + "");
+                intent.putExtra("toname", f.fromusername + "");
+                mContext.startActivity(intent);
             }
-            Intent intent = new Intent(mContext, CommentActivity.class);
-            intent.putExtra("sid", sid);
-            intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid);
-            intent.putExtra("touid", f.fromuid + "");
-            intent.putExtra("toname", f.fromusername + "");
-            mContext.startActivity(intent);
         } else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());

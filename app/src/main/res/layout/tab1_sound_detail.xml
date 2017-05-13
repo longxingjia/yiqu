@@ -689,6 +689,7 @@
                         android:layout_centerVertical="true"
                         android:drawableLeft="@mipmap/comment_normal"
                         android:drawablePadding="5dp"
+                        android:textColor="@color/dd_gray"
                         android:gravity="center"
                         android:textSize="14sp"/>
 

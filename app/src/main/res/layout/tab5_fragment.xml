@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tab_line_color">
 
+    <com.ui.views.ObservableScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <LinearLayout
         android:gravity="center"
@@ -35,7 +40,7 @@
         <!--</RelativeLayout>-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="200dp"
             >
             <!--android:scaleType="centerCrop"-->
             <ImageView
@@ -52,7 +57,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="50dp"
                 android:background="@mipmap/menu_head" />
 
 
@@ -72,7 +77,7 @@
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp" />
@@ -81,7 +86,7 @@
                     android:id="@+id/sex"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/name"
                     android:background="@mipmap/sex_female" />
 
@@ -531,8 +536,10 @@
 
             <Button
                 android:id="@+id/logout"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/logout_selector"
                 android:gravity="center_vertical" />
@@ -541,7 +548,36 @@
         </RelativeLayout>
     </LinearLayout>
 
+    </com.ui.views.ObservableScrollView>
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-</ScrollView>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/title_height"
+            android:gravity="center"
+            android:text="我"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+</RelativeLayout>
 
 

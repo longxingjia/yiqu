@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tab_bg_color"
+    >
+
+
+    <com.ui.views.RefreshList
+        android:id="@+id/lv_sound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/tab_bg_color"
+
+        android:minHeight="250dp"
+        android:listSelector="#00000000"
+        android:scrollbars="none"></com.ui.views.RefreshList>
+
+
+</LinearLayout>

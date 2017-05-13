@@ -53,5 +53,6 @@
     <string name="notification_expand_summary">已拉伸</string>
     <string name="home_page">首页</string>
     <string name="record_save_dialog_title">给你的作品取个名吧</string>
+    <string name="no_history">没有历史记录</string>
 
 </resources>

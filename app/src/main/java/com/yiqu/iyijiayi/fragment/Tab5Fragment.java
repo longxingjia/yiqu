@@ -1,10 +1,12 @@
 package com.yiqu.iyijiayi.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,12 +16,15 @@ import android.widget.TextView;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.ui.abs.AbsFragment;
 import com.ui.views.CircleImageView;
+import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
 import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.MenuDialogPicHelper;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.ApplyTeacherFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.InfoFragment;
@@ -39,7 +44,10 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
-public class Tab5Fragment extends TabContentFragment implements View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class Tab5Fragment extends TabContentFragment implements View.OnClickListener,NetCallBack ,ObservableScrollView.ScrollViewListener{
 
 
     private Button Btlogin;
@@ -67,22 +75,18 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     private ImageView sex;
     private TextView content;
     private ImageView background;
+    @BindView(R.id.scrollView)
+    public ObservableScrollView scrollView;
+    @BindView(R.id.ll_title)
+    public LinearLayout ll_title;
+    @BindView(R.id.title)
+    public TextView title;
 
-    @Override
-    protected int getTitleView() {
 
-        return R.layout.titlebar_tab5;
-    }
-
-    @Override
-    protected int getBodyView() {
-
-        return R.layout.tab5_fragment;
-    }
 
     @Override
     protected void initView(View v) {
-
+        ButterKnife.bind(this, v);
 
         Btlogin = (Button) v.findViewById(R.id.tab5_login);
         logOutBt = (Button) v.findViewById(R.id.logout);
@@ -90,7 +94,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         llUserInfo = (RelativeLayout) v.findViewById(R.id.userinfo);
         background = (ImageView) v.findViewById(R.id.background);
         ll_tabs = (LinearLayout) v.findViewById(R.id.ll_tabs);
-
+        initListeners();
         InitHeadView(v);
 
         menu_item_wodeyijiayizhuye = (TextView) v.findViewById(R.id.menu_item_wodeyijiayizhuye);
@@ -98,13 +102,10 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         teacherOnly = (LinearLayout) v.findViewById(R.id.mine_teacher);
         menu_item_woping = (TextView) v.findViewById(R.id.menu_item_woping);
         menu_item_wodexizuo = (TextView) v.findViewById(R.id.menu_item_wodexizuo);
-
         menu_item_woting = (TextView) v.findViewById(R.id.menu_item_woting);
-
         menu_item_wodeyibi = (TextView) v.findViewById(R.id.menu_item_wodeyibi);
         menu_item_shezhi = (TextView) v.findViewById(R.id.menu_item_shezhi);
         menu_item_jiesuanshuoming = (TextView) v.findViewById(R.id.menu_item_jiesuanshuoming);
-//        menu_item_bangzhu = (TextView) v.findViewById(R.id.menu_item_bangzhu);
         menu_item_guanyu = (TextView) v.findViewById(R.id.menu_item_guanyu);
 
         v.findViewById(R.id.menu_item_guanzhu).setOnClickListener(this);
@@ -134,11 +135,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
     }
 
-    @Override
-    protected boolean isTouchMaskForNetting() {
-
-        return false;
-    }
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -192,34 +188,20 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         super.onDestroy();
     }
 
-    @Override
-    protected int getTitleBarType() {
 
-        return FLAG_TXT;
+
+    @Override
+    public void onNetNoStart(String id) {
+
     }
 
     @Override
-    protected boolean onPageBack() {
+    public void onNetStart(String id) {
 
-        if (mOnFragmentListener != null) {
-            mOnFragmentListener.onFragmentBack(this);
-        }
-        return true;
-    }
-
-    @Override
-    protected boolean onPageNext() {
-        return false;
-    }
-
-    @Override
-    protected void initTitle() {
-        setTitleText(getString(R.string.label_tab5));
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        super.onNetEnd(id, type, netResponse);
 
         if (type == NetCallBack.TYPE_SUCCESS) {
             Gson gson = new Gson();
@@ -282,6 +264,8 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         allowBindService(getActivity());
 
     }
+
+
 
     /**
      * stop时， 回调通知activity解除绑定服务
@@ -370,6 +354,77 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         super.onPause();
         MobclickAgent.onPageEnd("我");
     }
+    private int imageHeight;
+    private void initListeners() {
+        // 获取顶部图片高度后，设置滚动监听
+        ViewTreeObserver vto = ll_title.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
 
+            @Override
+            public void onGlobalLayout() {
+                ll_title.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                imageHeight = ll_title.getHeight();
+
+                scrollView.setScrollViewListener(Tab5Fragment.this);
+            }
+        });
+    }
+
+    @Override
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+        if (y <= 0) {
+            title.setTextColor(getResources().getColor(R.color.white));
+            ll_title.setBackgroundColor(getResources().getColor(R.color.transparent));//AGB由相关工具获得，或者美工提供
+        } else if (y > 0 && y <= imageHeight) {
+            float scale = (float) y / imageHeight;
+            float alpha = (255 * scale);
+            // 只是layout背景透明(仿知乎滑动效果)
+            ll_title.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+        } else {
+            ll_title.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+            title.setTextColor(getResources().getColor(R.color.normal_text_color));
+        }
+    }
+
+//    @Override
+//    protected int getContentView() {
+//        return R.layout.tab5_fragment;
+//    }
+
+    //    @Override
+    protected int getTitleView() {
+
+        return R.layout.titlebar_tab5;
+    }
+//
+    @Override
+    protected int getBodyView() {
+
+        return R.layout.tab5_fragment;
+    }
+
+
+
+
+    @Override
+    protected int getTitleBarType() {
+        return FLAG_NONE;
+    }
+
+    @Override
+    protected boolean onPageBack() {
+        return false;
+    }
+
+    @Override
+    protected boolean onPageNext() {
+        return false;
+    }
+
+    @Override
+    protected void initTitle() {
+
+    }
 }
