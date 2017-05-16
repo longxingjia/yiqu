@@ -139,7 +139,7 @@ public class RecordActivity extends Activity
         totalTime = music.time;
 
         String fileName = music.musicname + "_" + music.mid;
-        File mFile = new File(Variable.StorageMusicCachPath, fileName + ".mp3");
+        File mFile = new File(Variable.StorageMusicCachPath(this), fileName + ".mp3");
 
         if (mFile.exists()) {
             musicFileUrl = mFile.getAbsolutePath();

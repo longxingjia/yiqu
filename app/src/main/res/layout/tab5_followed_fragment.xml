@@ -2,114 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRe"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="40dp"
+        android:background="@color/tab_bg_color"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/loadmore_teacher"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="关注的导师 "
+            android:textColor="@color/redMain"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/teacher_size"
+            android:layout_width="1dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/redMain"/>
 
-                />
+        <TextView
+            android:id="@+id/loadmore_student"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="13dp"
+            android:text="关注的学生 "
+            android:textColor="@color/dd_gray"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@color/tab_bg_color"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/loadmore_teacher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="13dp"
-                        android:text="关注的导师 "
-                        android:textColor="@color/dd_gray" />
-                    <TextView
-                        android:id="@+id/teacher_size"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/redMain" />
+    </LinearLayout>
 
-                </LinearLayout>
-
-
-
-                <com.yiqu.iyijiayi.view.ScrollViewWithListView
-                    android:id="@+id/lv_teacher"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@color/background_color_rating_grey"
-                    android:dividerHeight="1dp"
-                    android:minHeight="255dp"
-                    android:listSelector="#00000000"
-                    android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
-
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@color/tab_bg_color"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="13dp"
-                        android:text="关注的学生 "
-                        android:textColor="@color/dd_gray" />
-                    <TextView
-                        android:id="@+id/student_size"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/redMain" />
-
-                </LinearLayout>
-
-                <com.yiqu.iyijiayi.view.ScrollViewWithListView
-                    android:id="@+id/lv_student"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:listSelector="#00000000"
-                    android:divider="@color/background_color_rating_grey"
-                    android:dividerHeight="1dp"
-                    android:minHeight="255dp"
-                    android:scrollbars="none"></com.yiqu.iyijiayi.view.ScrollViewWithListView>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_color_rating_grey"
-                    />
-
-            </LinearLayout>
-        </ScrollView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <com.ui.views.RefreshList
+        android:id="@+id/lv_student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="#00000000"
+        android:divider="@color/background_color_rating_grey"
+        android:dividerHeight="1dp"
+        android:minHeight="255dp"
+        android:scrollbars="none">
+    </com.ui.views.RefreshList>
 
 
     <!--<com.yiqu.iyijiayi.view.ReScrollViewWithListView-->

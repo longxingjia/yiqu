@@ -27,6 +27,8 @@ import com.yiqu.iyijiayi.utils.AppShare;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener, IRefreshListViewListener {
 
     //分页
@@ -91,7 +93,7 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("我听"); //统计页面，"MainScreen"为页面名称，可自定义
-
+        JAnalyticsInterface.onPageStart(getActivity(),"我听");
 
         uid = AppShare.getUserInfo(getActivity()).uid;
         count = 0;
@@ -107,6 +109,7 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("我听");
+        JAnalyticsInterface.onPageEnd(getActivity(),"我听");
     }
 
     @Override

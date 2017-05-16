@@ -13,7 +13,7 @@ import android.util.Log;
 public abstract class AbsDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "yijiayi.db";
-    private static final int DB_VERSION = 16;
+    private static final int DB_VERSION = 17;
 
 
     public AbsDBHelper(Context context) {
@@ -37,6 +37,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
             executeBatch(new String[]{"DROP TABLE if exists "
                     + DownloadMusicInfoDBHelper.TABLE_NAME, "DROP TABLE if exists "
                     + ComposeVoiceInfoDBHelper.TABLE_NAME}, db);
+
             db.execSQL("create table " + CachFileDBHelper.TABLE_NAME + "(FileName STRING PRIMARY KEY,FileSize INTEGER)");
             executeBatch(version_1, db);
         } else {
@@ -57,6 +58,34 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     DownloadMusicInfoDBHelper.ISDECODE + "," +
                     DownloadMusicInfoDBHelper.EDITED;
             upgradeTables(db, DownloadMusicInfoDBHelper.TABLE_NAME, version_14, columns);
+
+            String columns_com = ComposeVoiceInfoDBHelper.TYPE + "," +
+                    ComposeVoiceInfoDBHelper.MID + "," +
+                    ComposeVoiceInfoDBHelper.TYPE + "," +
+                    ComposeVoiceInfoDBHelper.TOUID  + "," +
+                    ComposeVoiceInfoDBHelper.MUSICNAME + "," +
+                    ComposeVoiceInfoDBHelper.SOUNDTIME + "," +
+                    ComposeVoiceInfoDBHelper.SOUNDPATH  + "," +
+                    ComposeVoiceInfoDBHelper.MUSICTYPE + "," +
+                    ComposeVoiceInfoDBHelper.CHAPTER + "," +
+                    ComposeVoiceInfoDBHelper.ACCOMPANIMENT  + "," +
+                    ComposeVoiceInfoDBHelper.COMMENTPATH + "," +
+                    ComposeVoiceInfoDBHelper.COMMENTTIME  + "," +
+                    ComposeVoiceInfoDBHelper.ISFORMULATION  + "," +
+                    ComposeVoiceInfoDBHelper.QUESTIONPRICE + "," +
+                    ComposeVoiceInfoDBHelper.LISTENPRICE+ "," +
+                    ComposeVoiceInfoDBHelper.STATUS + "," +
+                    ComposeVoiceInfoDBHelper.ISPAY + "," +
+                    ComposeVoiceInfoDBHelper.VOICENAME + "," +
+                    ComposeVoiceInfoDBHelper.CREATETIME  + "," +
+                    ComposeVoiceInfoDBHelper.ISCOMPOSE  + "," +
+                    ComposeVoiceInfoDBHelper.ARTICLE_CONTENT  + "," +
+                    ComposeVoiceInfoDBHelper.LRCPATH  + "," +
+                    ComposeVoiceInfoDBHelper.DESC  + "," +
+                    ComposeVoiceInfoDBHelper.ISOPEN;
+
+            upgradeTables(db, ComposeVoiceInfoDBHelper.TABLE_NAME, version_14_com, columns_com);
+
 
         }
         Log.w("onUpgrade", "oldVersion:" + oldVersion + ",newVersion:"
@@ -84,7 +113,6 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
             String tempTableName = tableName + "_temp";
             String sql = "ALTER TABLE " + tableName + " RENAME TO " + tempTableName;
             executeBatch(sql, db);
-//            db.execSQL("");
             // 2, Create table.
             executeBatch(dbVersion, db);
 
@@ -118,6 +146,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.MUSICTYPE + " text , "
                     + DownloadMusicInfoDBHelper.LRCPATH + " text , "
                     + DownloadMusicInfoDBHelper.CHAPTER + " text , "
+                    + DownloadMusicInfoDBHelper.FILENAME + " text , "
                     + DownloadMusicInfoDBHelper.ACCOMPANIMENT + " text , "
                     + DownloadMusicInfoDBHelper.TIME + " text , "
                     + DownloadMusicInfoDBHelper.SIZE + " text , "
@@ -127,6 +156,35 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.DOWNLOADTIME + " text , "
                     + DownloadMusicInfoDBHelper.CREATED + " text , "
                     + DownloadMusicInfoDBHelper.EDITED + " text "
+                    + ");";
+
+    private static final String version_14_com =
+            "Create table " + ComposeVoiceInfoDBHelper.TABLE_NAME + "("
+                    + ComposeVoiceInfoDBHelper.FROMUID + " text , "
+                    + ComposeVoiceInfoDBHelper.MID + " text , "
+                    + ComposeVoiceInfoDBHelper.TYPE + " text , "
+                    + ComposeVoiceInfoDBHelper.TOUID + " text , "
+                    + ComposeVoiceInfoDBHelper.SOUNDTIME + " text , "
+                    + ComposeVoiceInfoDBHelper.MUSICNAME + " text , "
+                    + ComposeVoiceInfoDBHelper.SOUNDPATH + " text , "
+                    + ComposeVoiceInfoDBHelper.MUSICTYPE + " text , "
+                    + ComposeVoiceInfoDBHelper.CHAPTER + " text , "
+                    + ComposeVoiceInfoDBHelper.ACCOMPANIMENT + " text , "
+                    + ComposeVoiceInfoDBHelper.COMMENTPATH + " text , "
+                    + ComposeVoiceInfoDBHelper.COMMENTTIME + " text , "
+                    + ComposeVoiceInfoDBHelper.ISFORMULATION + " text , "
+                    + ComposeVoiceInfoDBHelper.QUESTIONPRICE + " text , "
+                    + ComposeVoiceInfoDBHelper.LISTENPRICE + " text , "
+                    + ComposeVoiceInfoDBHelper.STATUS + " text , "
+                    + ComposeVoiceInfoDBHelper.ISPAY + " text , "
+                    + ComposeVoiceInfoDBHelper.ISREPLY + " text , "
+                    + ComposeVoiceInfoDBHelper.VOICENAME + " text , "
+                    + ComposeVoiceInfoDBHelper.CREATETIME + " text , "
+                    + ComposeVoiceInfoDBHelper.ISCOMPOSE + " text , "
+                    + ComposeVoiceInfoDBHelper.ARTICLE_CONTENT + " text , "
+                    + ComposeVoiceInfoDBHelper.DESC + " text , "
+                    + ComposeVoiceInfoDBHelper.LRCPATH + " text , "
+                    + ComposeVoiceInfoDBHelper.ISOPEN + " text "
                     + ");";
 
 
@@ -215,6 +273,7 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + DownloadMusicInfoDBHelper.LRCPATH + " text , "
                     + DownloadMusicInfoDBHelper.TIME + " text , "
                     + DownloadMusicInfoDBHelper.SIZE + " text , "
+                    + DownloadMusicInfoDBHelper.FILENAME + " text , "
                     + DownloadMusicInfoDBHelper.ISFORMULATION + " text , "
                     + DownloadMusicInfoDBHelper.ISDECODE + " text , "
                     + DownloadMusicInfoDBHelper.DECODETIME + " text , "
@@ -242,10 +301,11 @@ public abstract class AbsDBHelper extends SQLiteOpenHelper {
                     + ComposeVoiceInfoDBHelper.ISPAY + " text , "
                     + ComposeVoiceInfoDBHelper.ISREPLY + " text , "
                     + ComposeVoiceInfoDBHelper.VOICENAME + " text , "
-                    + ComposeVoiceInfoDBHelper.LRCPATH + " text , "
                     + ComposeVoiceInfoDBHelper.CREATETIME + " text , "
                     + ComposeVoiceInfoDBHelper.ISCOMPOSE + " text , "
+                    + ComposeVoiceInfoDBHelper.ARTICLE_CONTENT + " text , "
                     + ComposeVoiceInfoDBHelper.DESC + " text , "
+                    + ComposeVoiceInfoDBHelper.LRCPATH + " text , "
                     + ComposeVoiceInfoDBHelper.ISOPEN + " text "
                     + ");"
 

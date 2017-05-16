@@ -45,6 +45,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -101,7 +102,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     @BindView(R.id.username)
     public TextView username;
 //    private Player player;
-
     private boolean is2mp3 = true;
     private boolean recordComFinish = false;
 
@@ -130,12 +130,14 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     @Override
     public void onResume() {
         super.onResume();
+        JAnalyticsInterface.onPageStart(getActivity(),"待评详情");
         MobclickAgent.onPageStart("待评详情"); //统计页面，"MainScreen"为页面名称，可自定义
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        JAnalyticsInterface.onPageEnd(getActivity(),"待评详情");
         MobclickAgent.onPageEnd("待评详情");
     }
 
@@ -264,21 +266,18 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         }
 
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
         String2TimeUtils string2TimeUtils = new String2TimeUtils();
         long currentTimeMillis = System.currentTimeMillis() / 1000;
-
         long time = currentTimeMillis - sound.edited;
         created.setText(string2TimeUtils.long2Time(time));
-
         url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
         fileName = url.substring(
                 url.lastIndexOf("/") + 1,
                 url.length());
         fileName = sound.musicname + "_" + fileName;
-        mFile = new File(Variable.StorageMusicCachPath, fileName);
+        mFile = new File(Variable.StorageMusicCachPath(getActivity()), fileName);
         rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
@@ -319,12 +318,9 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.close_tips:
-
                 tips.setVisibility(View.GONE);
-
                 break;
             case R.id.video_play:
-
                 if (mPlayService.getPlayingPosition() > 0) {
                     if (mPlayService.isPlaying()) {
                         video_play.setImageResource(R.mipmap.video_play);
@@ -485,8 +481,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         VoiceFunctionF2.StopVoice();
         if (mPlayService != null) {
             if (mPlayService.isPlaying()) {
-
-                mPlayService.pause();
+                mPlayService.stop();
 
             }
         }

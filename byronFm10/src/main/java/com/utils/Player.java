@@ -60,7 +60,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setOnCompletionListener(this);
 
-
             PresetReverb mReverb = new PresetReverb(0, mediaPlayer.getAudioSessionId());
             PresetReverb.Settings settings = mReverb.getProperties();
             String str = settings.toString();
@@ -160,9 +159,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     }
 
     public void playUrl(String url) {
-//        if (mediaPlayer == null) {
-//            mediaPlayer = new MediaPlayer();
-//        }
+
         if (USE_PROXY) {
             startProxy();
             url = proxy.getProxyURL(url);
@@ -171,6 +168,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
             mediaPlayer.reset();
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
+            mediaPlayer.setOnCompletionListener(this);
             musicPlayerState = MusicPlayerState.preparing;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -212,25 +210,21 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 
     @Override
     public void onCompletion(MediaPlayer arg0) {
-        Log.e("mediaPlayer", "onCompletion");
-        //now_time.setText(""+changeNum(position/(60*1000))+":"+changeNum(position%(60*1000)/1000));
         if (now_time != null) {
-
             now_time.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
         }
         if (skbProgress != null) {
-
             skbProgress.setProgress(100);
         }
         isfirst = true;
-
         if (video_play != null) {
-            // video_play.setImageResource(R.mipmap.video_play);
         }
         onPlayCompletion.completion();
         musicPlayerState = MusicPlayerState.stop;
+    }
 
-
+    public int getMusicPlayerState(){
+        return musicPlayerState;
     }
 
     public interface onPlayCompletion {

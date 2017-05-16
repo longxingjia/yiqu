@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -72,8 +73,6 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
         switch (v.getId()) {
 
             case R.id.submit:
-
-
                 break;
             default:
                 break;
@@ -328,7 +327,7 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
         super.onResume();
 
         MobclickAgent.onPageStart("配乐");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"配乐");
     }
 
 
@@ -337,7 +336,7 @@ public class SelectBgMusicFragment extends AbsAllFragment implements LoadMoreVie
         super.onPause();
 
         MobclickAgent.onPageEnd("配乐");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"配乐");
 
     }
 

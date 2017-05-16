@@ -22,6 +22,8 @@ import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.wxapi.WXPayEntryActivity;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -66,12 +68,14 @@ public class PayforYBFragment extends AbsAllFragment implements View.OnClickList
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("艺币充值"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"艺币充值");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("艺币充值");
+        JAnalyticsInterface.onPageEnd(getActivity(),"艺币充值");
     }
 
     @Override

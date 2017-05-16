@@ -23,6 +23,8 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.DensityUtil;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -56,12 +58,14 @@ public class EditInfoFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("修改个人信息"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"修改个人信息");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("修改个人信息");
+        JAnalyticsInterface.onPageEnd(getActivity(),"修改个人信息");
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.base.utils.ToastManager;
 import com.ui.abs.AbsFragment;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.db.ComposeVoiceInfoDBHelper;
@@ -17,6 +18,8 @@ import com.model.ComposeVoice;
 import com.yiqu.iyijiayi.model.UserInfo;
 
 import java.util.ArrayList;
+
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -69,7 +72,6 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
             soundsTab3Adapter.setData(composeVoices);
         }
 
-//        LogUtils.LOGE(tag, composeVoices.toString());
     }
 
     @Override
@@ -88,14 +90,16 @@ public class SoundsTab3fragment extends AbsFragment implements  View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("本地");
+        MobclickAgent.onPageStart("声乐本地");
+        JAnalyticsInterface.onPageStart(getActivity(),"声乐本地");
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("本地");
+        MobclickAgent.onPageEnd("声乐本地");
+        JAnalyticsInterface.onPageEnd(getActivity(),"声乐本地");
 
     }
 

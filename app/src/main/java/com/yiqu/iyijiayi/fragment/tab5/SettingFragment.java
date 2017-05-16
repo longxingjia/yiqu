@@ -9,6 +9,8 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Model;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/9.
  */
@@ -52,11 +54,13 @@ public class SettingFragment extends AbsAllFragment implements View.OnClickListe
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("设置"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"设置");
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        JAnalyticsInterface.onPageEnd(getActivity(),"设置");
         MobclickAgent.onPageEnd("设置");
     }
 

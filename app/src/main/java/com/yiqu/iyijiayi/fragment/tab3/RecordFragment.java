@@ -23,6 +23,8 @@ import com.yiqu.iyijiayi.model.UserInfo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -119,19 +121,13 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         }
 
         MobclickAgent.onPageStart("录音列表");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"录音列表");
     }
 
     private void record() {
 
-//        Model.startNextAct(getActivity(),
-//                RecordInfoFragment.class.getName());
-
         Intent intent = new Intent(getActivity(), RecordAllActivity.class);
         getActivity().startActivity(intent);
-//        Intent intent = new Intent(getActivity(), RecordOnlyActivity.class);
-//        getActivity().startActivity(intent);
-
 
     }
 
@@ -140,7 +136,7 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("录音列表");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"录音列表");
     }
 
     @Override

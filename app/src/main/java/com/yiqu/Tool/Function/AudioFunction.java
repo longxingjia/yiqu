@@ -126,62 +126,59 @@ public class AudioFunction {
                 RecordConstant.DEFAULT_SAMPLING_RATE, RecordConstant.DEFAULT_LAME_MP3_BIT_RATE, RecordConstant.DEFAULT_LAME_MP3_QUALITY);
 
         try {
-            while (!firstAudioFinish) {
-//            while (!firstAudioFinish && !secondAudioFinish) {
-                index = 0;
-
-                if (audioOffset < 0) {
-                    secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
-
-                    outputShortArrayLength = secondAudioReadNumber / 2;
-
-                    for (; index < outputShortArrayLength; index++) {
-                        resultShort = CommonFunction.GetShort(secondAudioByteBuffer[index * 2],
-                                secondAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
-
-                        outputShortArray[index] = (short) (resultShort * secondAudioWeight);
-                    }
-
-                    audioOffset += secondAudioReadNumber;
-
-                    if (secondAudioReadNumber < 0) {
-                        secondAudioFinish = true;
-                        break;
-                    }
-
-                    if (audioOffset >= 0) {
-                        break;
-                    }
-                } else {
-
-
-                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
-                    outputShortArrayLength = firstAudioReadNumber / 2;
-
-                    for (; index < outputShortArrayLength; index++) {
-                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
-                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
-
-                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
-                    }
-                    audioOffset -= firstAudioReadNumber;
-                    if (firstAudioReadNumber < 0) {
-                        firstAudioFinish = true;
-                        break;
-                    }
-                    if (audioOffset <= 0) {
-                        break;
-                    }
-                }
-                if (outputShortArrayLength > 0) {
-                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
-                            outputShortArrayLength, mp3Buffer);
-                    if (encodedSize > 0) {
-                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
-
-                    }
-                }
-            }
+//            while (!firstAudioFinish) {
+//                index = 0;
+//                if (audioOffset < 0) {
+//                    secondAudioReadNumber = secondAudioInputStream.read(secondAudioByteBuffer);
+//                    outputShortArrayLength = secondAudioReadNumber / 2;
+//
+//                    for (; index < outputShortArrayLength; index++) {
+//                        resultShort = CommonFunction.GetShort(secondAudioByteBuffer[index * 2],
+//                                secondAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
+//
+//                        outputShortArray[index] = (short) (resultShort * secondAudioWeight);
+//                    }
+//
+//                    audioOffset += secondAudioReadNumber;
+//
+//                    if (secondAudioReadNumber < 0) {
+//                        secondAudioFinish = true;
+//                        break;
+//                    }
+//
+//                    if (audioOffset >= 0) {
+//                        break;
+//                    }
+//                } else {
+//
+//
+//                    firstAudioReadNumber = firstAudioInputStream.read(firstAudioByteBuffer);
+//                    outputShortArrayLength = firstAudioReadNumber / 2;
+//
+//                    for (; index < outputShortArrayLength; index++) {
+//                        resultShort = CommonFunction.GetShort(firstAudioByteBuffer[index * 2],
+//                                firstAudioByteBuffer[index * 2 + 1], Variable.isBigEnding);
+//
+//                        outputShortArray[index] = (short) (resultShort * firstAudioWeight);
+//                    }
+//                    audioOffset -= firstAudioReadNumber;
+//                    if (firstAudioReadNumber < 0) {
+//                        firstAudioFinish = true;
+//                        break;
+//                    }
+//                    if (audioOffset <= 0) {
+//                        break;
+//                    }
+//                }
+//                if (outputShortArrayLength > 0) {
+//                    int encodedSize = LameUtil.encode(outputShortArray, outputShortArray,
+//                            outputShortArrayLength, mp3Buffer);
+//                    if (encodedSize > 0) {
+//                        composeAudioOutputStream.write(mp3Buffer, 0, encodedSize);
+//
+//                    }
+//                }
+//            }
 
             while (!firstAudioFinish) {
 //            while (!firstAudioFinish || !secondAudioFinish) {

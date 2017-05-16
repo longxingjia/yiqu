@@ -334,6 +334,7 @@ public class MyNetRequestConfig {
         r.addHttpParam("desc", composeVoice.desc);
         r.addHttpParam("soundpath", composeVoice.soundpath);
         r.addHttpParam("article_content", composeVoice.article_content);
+        r.addHttpParam("lrc_url", composeVoice.lrcpath);
         r.addHttpParam("isfree", isfree);
         return r;
     }

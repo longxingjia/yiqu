@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/9.
  */
@@ -64,12 +66,14 @@ public class ShowSettingFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(title); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),title);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(title);
+        JAnalyticsInterface.onPageEnd(getActivity(),title);
     }
 
 

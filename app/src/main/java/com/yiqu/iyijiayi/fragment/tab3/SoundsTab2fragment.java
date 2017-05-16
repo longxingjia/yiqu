@@ -15,6 +15,8 @@ import com.model.Music;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -61,6 +63,7 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
             soundsTab1Adapter.setData(musics);
         }
         MobclickAgent.onPageStart("声乐已下载");
+        JAnalyticsInterface.onPageStart(getActivity(),"声乐已下载");
     }
 
 
@@ -68,6 +71,7 @@ public class SoundsTab2fragment extends AbsFragment implements View.OnClickListe
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("声乐已下载");
+        JAnalyticsInterface.onPageEnd(getActivity(),"声乐已下载");
 
     }
 

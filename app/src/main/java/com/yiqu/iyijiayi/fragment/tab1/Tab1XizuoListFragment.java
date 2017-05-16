@@ -36,6 +36,8 @@ import com.yiqu.iyijiayi.utils.JsonUtils;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
@@ -241,14 +243,14 @@ public class Tab1XizuoListFragment extends AbsAllFragment implements LoadMoreVie
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("作品列表");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"作品列表");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("作品列表");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"作品列表");
     }
 
     @Override

@@ -24,6 +24,8 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/3/17.
  */
@@ -180,14 +182,14 @@ public class SearchAllFragment extends AbsFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("查找所有");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"查找所有");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("查找所有");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"查找所有");
     }
 
     @Override

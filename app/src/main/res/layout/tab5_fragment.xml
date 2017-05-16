@@ -358,12 +358,11 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:background="@color/normal_color"
+            android:background="@color/tab_bg_color"
             android:orientation="vertical">
 
             <LinearLayout
@@ -494,6 +493,12 @@
                 android:layout_marginRight="5dp"
                 android:background="@color/tab_line_color" />
 
+            <LinearLayout
+                android:id="@+id/ll_t"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/menu_item_jiesuanshuoming"
@@ -522,7 +527,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/tab_line_color" />
-
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -532,17 +537,19 @@
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dp">
+            >
 
             <Button
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
+                android:text="退出登录"
+                android:textSize="18sp"
                 android:layout_marginRight="15dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/logout_selector"
-                android:gravity="center_vertical" />
+                android:background="@color/white"
+                android:gravity="center" />
 
 
         </RelativeLayout>
@@ -557,7 +564,9 @@
         android:orientation="horizontal">
 
 
+
         <View
+
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"/>
@@ -568,7 +577,7 @@
             android:layout_height="@dimen/title_height"
             android:gravity="center"
             android:text="我"
-            android:textColor="@color/white"
+            android:textColor="@color/transparent"
             android:textSize="18sp"/>
 
         <View

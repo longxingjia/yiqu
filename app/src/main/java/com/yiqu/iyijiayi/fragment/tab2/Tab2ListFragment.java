@@ -30,6 +30,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
@@ -78,14 +80,14 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("老师学生列表");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"老师学生列表");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("老师学生列表");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"老师学生列表");
     }
 
     @Override

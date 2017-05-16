@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:paddingTop="10dp">
 
     <LinearLayout
+        android:id="@+id/text_q"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
         android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:maxWidth="220dp"
-            android:singleLine="true"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:maxWidth="220dp"
+            android:singleLine="true"
             android:text=""
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
 
         <ImageView
@@ -30,14 +31,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@mipmap/shengyue"
-            android:gravity="center" />
+            android:gravity="center"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-
+            android:layout_weight="1"/>
 
 
     </LinearLayout>
@@ -56,24 +55,24 @@
             android:gravity="center"
             android:text="问题描述："
             android:textColor="@color/dd_gray"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="25dp"
+            android:layout_marginRight="10dp"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text=""
-            android:layout_marginRight="10dp"
             android:textColor="@color/dd_gray"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -84,7 +83,7 @@
             android:gravity="center"
             android:text="提问时间："
             android:textColor="@color/dark_gray"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/created"
@@ -95,21 +94,21 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/dark_gray"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已点评"
             android:layout_marginRight="10dp"
+            android:text="已点评"
             android:textColor="@color/dd_gray"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
 
         <!--<View-->
@@ -122,6 +121,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/tab_bg_color" />
+        android:background="@color/tab_bg_color"/>
 
 </LinearLayout>

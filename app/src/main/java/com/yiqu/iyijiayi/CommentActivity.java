@@ -23,6 +23,8 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class CommentActivity extends Activity implements NetCallBack {
 
 
@@ -88,12 +90,14 @@ public class CommentActivity extends Activity implements NetCallBack {
 
     public void onResume() {
         super.onResume();
+        JAnalyticsInterface.onPageStart(this,"评论");
         MobclickAgent.onPageStart("评论"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);          //统计时长
     }
 
     public void onPause() {
         super.onPause();
+        JAnalyticsInterface.onPageEnd(this,"评论");
         MobclickAgent.onPageEnd("评论"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
         MobclickAgent.onPause(this);
         AppShare.setLastComment(this,edit.getText().toString());
@@ -121,7 +125,6 @@ public class CommentActivity extends Activity implements NetCallBack {
             }
         };
     }
-
 
     @Override
     public void onNetNoStart(String id) {

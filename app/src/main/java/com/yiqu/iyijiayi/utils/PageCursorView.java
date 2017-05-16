@@ -21,7 +21,9 @@ public class PageCursorView extends View {
 	private RectF r;
 	private int currIndex;
 	private float preW;
-	
+	private float w;
+	private int offset = 60;
+
 	public PageCursorView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		paint = new Paint();
@@ -30,24 +32,30 @@ public class PageCursorView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		float w = getWidth();
+		w = getWidth();
 		float h = getHeight();
 		preW = w / count;
-		LogUtils.LOGE("tag",preW+"");
+
 		if(r == null){
-			r = new RectF(0, 0, preW, h);
+			r = new RectF(offset, 0, preW- offset, h);
 		}
 		canvas.drawRect(r, paint);
 		super.onDraw(canvas);
 	}
+
 
 	public void setCount(int c){
 		r = null;
 		count = c;
 	}
 
+	public void setOffset(int offset){
+		r = null;
+		this.offset = offset;
+	}
+
 	public void setPosition(int p){
-		 Animation animation = new TranslateAnimation(currIndex*preW, p*preW,0,0);//平移动画  
+		 Animation animation = new TranslateAnimation(currIndex* w / count, p* w / count,0,0);//平移动画
          currIndex = p;  
          animation.setFillAfter(true);//动画终止时停留在最后一帧，不然会回到没有执行前的状态  
          animation.setDuration(200);//动画持续时间0.2秒  

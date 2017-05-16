@@ -28,6 +28,8 @@ import com.yiqu.iyijiayi.utils.JsonUtils;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab5WopingListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
@@ -82,12 +84,13 @@ public class Tab5WopingListFragment extends AbsAllFragment implements LoadMoreVi
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("我评列表");
+        JAnalyticsInterface.onPageEnd(getActivity(),"我评列表");
     }
 
     @Override
     public void onResume() {
         MobclickAgent.onPageStart("我评列表"); //统计页面，"MainScreen"为页面名称，可自定义
-
+        JAnalyticsInterface.onPageStart(getActivity(),"我评列表");
         super.onResume();
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";

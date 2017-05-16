@@ -31,6 +31,7 @@ import com.utils.LogUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 public class Tab2Fragment extends TabContentFragment {
 
@@ -132,6 +133,7 @@ public class Tab2Fragment extends TabContentFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("找人"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"找人");
         initData();
     }
 
@@ -140,6 +142,7 @@ public class Tab2Fragment extends TabContentFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("找人");
+        JAnalyticsInterface.onPageEnd(getActivity(),"找人");
     }
 
     @Override

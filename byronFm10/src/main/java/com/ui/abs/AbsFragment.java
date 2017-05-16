@@ -88,6 +88,11 @@ public abstract class AbsFragment extends Fragment {
 				public void onChange(int position) {
 					AbsFragment.this.onChange(position);
 				}
+
+				@Override
+				public void OnCompletion() {
+					AbsFragment.this.OnCompletion();
+				}
 			};
 	/**
 	 * Fragment的view加载完成后回调
@@ -111,6 +116,14 @@ public abstract class AbsFragment extends Fragment {
 	public  void onPublish(int progress){
 
 	};
+
+
+	/**
+	 */
+	public  void OnCompletion(){
+
+	};
+
 	/**
 	 * 切换歌曲
 	 * @param position 歌曲在list中的位置
@@ -118,6 +131,7 @@ public abstract class AbsFragment extends Fragment {
 	public  void onChange(int position){
 
 	};
+
 
 
 	private ServiceConnection mDownloadServiceConnection = new ServiceConnection() {

@@ -101,32 +101,19 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-//            try{
-//                Typeface typefaceDroidSansFallback= Typeface.createFromAsset(mContext.getResources().getAssets(), "fonts/NotoColorEmoji.ttf");
-//                h.comment.setTypeface(typefaceDroidSansFallback);
-////                mContentTextView.setTypeface(typefaceDroidSansFallback);
-//            }catch(Exception ex){
-//                Log.i("EmojiTest", "Catch Exception!");
-//            }
-
 
             CommentsInfo f = getItem(position);
-
             h.username.setText(f.fromusername);
 
             if (!uid.equals(f.touid)) {
-
                 h.comment.setText("回复 " + f.tousername + " : " + EmojiCharacterUtil.decode(f.comment));
             } else {
                 String s = EmojiCharacterUtil.decode(f.comment);
                 h.comment.setText(s);
             }
 
-
             h.time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy-MM-dd HH:mm:ss"));
-
             PictureUtils.showPicture(mContext, f.fromuserimage, h.header, 47);
-
 
         } catch (Exception e) {
             e.printStackTrace();

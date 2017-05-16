@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.czt.mp3recorder.RecordConstant;
+import com.utils.L;
 import com.utils.LogUtils;
 import com.utils.Variable;
 
@@ -99,9 +100,8 @@ public class DecodeEngine {
         mime = mediaFormat.containsKey(MediaFormat.KEY_MIME) ? mediaFormat.getString(MediaFormat
                 .KEY_MIME) : "";
 
-        LogUtils.LOGE("channelCount",channelCount+"");
 
-        LogFunction.log("歌曲信息",
+        L.e("歌曲信息",
                 "Track info: mime:" + mime + " 采样率sampleRate:" + sampleRate + " channels:" +
                         channelCount + " duration:" + duration);
 
@@ -310,7 +310,6 @@ public class DecodeEngine {
             }
         }
 
-      //  LogUtils.LOGE("sampleRate",sampleRate+"");
         if (sampleRate != RecordConstant.DEFAULT_SAMPLING_RATE) {
              Resample(sampleRate, decodeFileUrl);
         }
@@ -327,25 +326,26 @@ public class DecodeEngine {
 
 
     private static void Resample(int sampleRate, String decodeFileUrl) {
-        String newDecodeFileUrl ="new"+decodeFileUrl;
-        LogFunction.error("开始转采样率", "");
+
+        String fileName = decodeFileUrl.substring(0, decodeFileUrl.lastIndexOf("/") + 1);
+        String newDecodeFileUrl =fileName +"new.pcm";
+//        L.e("开始转采样率",newDecodeFileUrl);
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(new File(decodeFileUrl));
             FileOutputStream fileOutputStream =
                     new FileOutputStream(new File(newDecodeFileUrl));
 
-
             new SSRC(fileInputStream, fileOutputStream, sampleRate, RecordConstant.DEFAULT_SAMPLING_RATE,
                     RecordConstant.RecordByteNumber, RecordConstant.RecordByteNumber, 1, Integer.MAX_VALUE,
                     0, 0, true);
-
             fileInputStream.close();
             fileOutputStream.close();
-            LogFunction.error("停止转采样率", "");
+      //      L.e("停止转采样率");
             FileFunction.RenameFile(newDecodeFileUrl, decodeFileUrl);
         } catch (IOException e) {
-            LogFunction.error("关闭bufferedOutputStream异常", e);
+//            LogFunction.error("关闭bufferedOutputStream异常", e);
+            e.printStackTrace();
         }
     }
 

@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.czt.mp3recorder.util.LameUtil;
+import com.utils.L;
 import com.utils.LogUtils;
 import com.yiqu.Control.Main.RecordComActivity;
 import com.yiqu.Tool.Function.FileFunction;
@@ -35,6 +38,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -147,12 +152,18 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         Intent intent = getActivity().getIntent();
         music = (Music) intent.getSerializableExtra("music");
         musicName.setText(music.musicname + "");
-
+//        DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
+//        String file = downloadMusicInfoDBHelper.getFilename(String.valueOf(music.mid));
+//        downloadMusicInfoDBHelper.close();
+////        if (TextUtils.isEmpty(file)) {
+////
+////        }
+//        L.e(file);
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
 
         URI uri = URI.create(Url);
         fileName = FileFunction.getValidFileName(uri);
-        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        File mFile = new File(Variable.StorageMusicCachPath(getActivity()), fileName);
         if (mFile.exists()) {
             nextPage();
         } else {
@@ -170,7 +181,6 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         });
 
     }
-
 
 
     private void dowoload(String downloadUrl, String fileName) {
@@ -256,8 +266,14 @@ public class DownloadXizuoFragment extends AbsAllFragment {
                 submit.setEnabled(true);
                 submit.setBackgroundResource(R.drawable.red_circle);
                 music.downloadtime = System.currentTimeMillis();
+                music.filename = fileName;
                 DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(getActivity());
-                downloadMusicInfoDBHelper.insert(music);
+                if (TextUtils.isEmpty(downloadMusicInfoDBHelper.getId(String.valueOf(music.mid)))){
+                    downloadMusicInfoDBHelper.insert(music);
+                }else {
+                    downloadMusicInfoDBHelper.update(music,String.valueOf(music.mid));
+                }
+
                 downloadMusicInfoDBHelper.close();
             }
         }
@@ -268,6 +284,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
         super.onResume();
         /** 注册下载完成接收广播 **/
         MobclickAgent.onPageStart("下载作品");
+        JAnalyticsInterface.onPageStart(getActivity(),"下载作品");
     }
 
     @Override
@@ -286,6 +303,7 @@ public class DownloadXizuoFragment extends AbsAllFragment {
     public void onPause() {
 
         MobclickAgent.onPageEnd("下载作品");
+        JAnalyticsInterface.onPageEnd(getActivity(),"下载作品");
         super.onPause();
     }
 

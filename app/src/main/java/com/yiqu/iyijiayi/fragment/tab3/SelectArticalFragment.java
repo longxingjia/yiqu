@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -254,8 +255,8 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     public void onResume() {
         super.onResume();
 
-        MobclickAgent.onPageStart("范文");
-
+        MobclickAgent.onPageStart("范文列表");
+        JAnalyticsInterface.onPageStart(getActivity(),"范文列表");
     }
 
 
@@ -263,8 +264,8 @@ public class SelectArticalFragment extends AbsAllFragment implements LoadMoreVie
     public void onPause() {
         super.onPause();
 
-        MobclickAgent.onPageEnd("范文");
-
+        MobclickAgent.onPageEnd("范文列表");
+        JAnalyticsInterface.onPageEnd(getActivity(),"范文列表");
 
     }
 

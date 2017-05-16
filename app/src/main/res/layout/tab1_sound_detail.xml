@@ -50,32 +50,14 @@
                         android:textColor="@color/white"
                         android:textSize="17sp"/>
 
-                    <ScrollView
+                    <com.yiqu.lyric.LrcView
+                        android:layout_marginTop="50dp"
+                        android:id="@+id/lrcView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fillViewport="true"
-                        >
 
-                        <com.yiqu.iyijiayi.view.LrcView
-                            xmlns:lrc="http://schemas.android.com/apk/res/com.yiqu.iyijiayi"
-                            android:id="@+id/play_first_lrc"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="50dp"
-                            android:scrollbars="vertical"
-                            lrc:currentTextColor="@android:color/white"
-                            lrc:dividerHeight="8dp"
-                            lrc:normalTextColor="@android:color/white"
-                            lrc:rows="30"
-                            lrc:textSize="14sp"/>
-                        <!--<cn.zhaiyifan.lyric.widget.LyricView-->
-                            <!--android:id="@+id/lyricView"-->
-                            <!--android:scrollbars="vertical"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="match_parent"/>-->
+                        />
 
-
-                    </ScrollView>
                 </RelativeLayout>
 
                 <include

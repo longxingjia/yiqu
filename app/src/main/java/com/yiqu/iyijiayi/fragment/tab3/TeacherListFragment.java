@@ -21,6 +21,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class TeacherListFragment extends AbsAllFragment  {
 
     private String tag = "TeacherListFragment";
@@ -95,11 +97,13 @@ public class TeacherListFragment extends AbsAllFragment  {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("选择老师列表"); //统计页面，"MainScreen"为页面名称，可自定义
+        MobclickAgent.onPageStart("声乐选择老师列表"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"声乐选择老师列表");
     }
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("选择老师列表");
+        MobclickAgent.onPageEnd("声乐选择老师列表");
+        JAnalyticsInterface.onPageEnd(getActivity(),"声乐选择老师列表");
     }
 
 

@@ -51,7 +51,6 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
         this.fragmentName = fragmentName;
         mLayoutInflater = LayoutInflater.from(mContext);
 
-//        fragment.getClass().getName()
 
     }
 
@@ -183,7 +182,7 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
                     }else {
                         Model.startNextAct(mContext,
                                 SelectLoginFragment.class.getName());
-                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                        ToastManager.getInstance(mContext).showText(mContext.getString(R.string.login_tips));
                     }
 
                 }
@@ -211,29 +210,18 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
 
             }
 
-            if (mCurrent == position) {
-                // h.play_status.setImageResource(R.mipmap.xizuo_pause);
+            if (mCurrent == f.sid) {
                 h.musicname.setTextColor(mContext.getResources().getColor(R.color.redMain));
 
-                String url = MyNetApiConfig.ImageServerAddr + f.soundpath;
-//                intent.setClass(mContext, MusicService.class);
-//                intent.putExtra("choice", "play");
-//                intent.putExtra("url", url);
-//                mContext.startService(intent);
-
-
             } else {
-                //   h.play_status.setImageResource(R.mipmap.xizuo_play);
                 h.musicname.setTextColor(mContext.getResources().getColor(R.color.normal_text_color));
-
             }
             final int pos = position;
-
             h.play_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //    h.play_status =
-                    mCurrent = pos;
+                    mCurrent = f.sid;
                     notifyDataSetChanged();
                     if(mListener != null) mListener.onMoreClick(pos);
 

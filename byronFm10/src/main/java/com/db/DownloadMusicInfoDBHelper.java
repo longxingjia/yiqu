@@ -37,6 +37,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     public static final String ISDECODE = "isdecode";
     public static final String DECODETIME = "decodetime";
     public static final String DOWNLOADTIME = "downloadtime";
+    public static final String FILENAME = "filename";
 
 
     public DownloadMusicInfoDBHelper(Context context) {
@@ -75,6 +76,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
                 music.edited = c.getLong(c.getColumnIndex(EDITED));
                 music.isdecode = c.getInt(c.getColumnIndex(ISDECODE));
                 music.downloadtime = c.getLong(c.getColumnIndex(DOWNLOADTIME));
+                music.filename = c.getString(c.getColumnIndex(FILENAME));
                 ds.add(music);
                 c.moveToNext();
             }
@@ -92,12 +94,40 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
     /**
      * @param id
      * @return
+     * @comments 获取某一个的文件名
+     * @version 1.0
+     */
+    public String getFilename(String id) {
+        Cursor c = null;
+        String a = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            c = db.query(TABLE_NAME, new String[]{FILENAME}, MID + " = " + id + " ", null, null, null, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                String filename = c.getString(c.getColumnIndex(FILENAME));
+                a = filename;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e.toString());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            this.close();
+        }
+        return a;
+    }
+
+    /**
+     * @param id
+     * @return
      * @comments 获取某一个的ID(其实是查找是否有这个id)
      * @version 1.0
      */
     public String getId(String id) {
         Cursor c = null;
-        String a = null;
+        String a = "";
         try {
             SQLiteDatabase db = getReadableDatabase();
             c = db.query(TABLE_NAME, null, MID + " = " + id + " ", null, null, null, null);
@@ -116,6 +146,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         }
         return a;
     }
+
 
 
     /**
@@ -211,6 +242,7 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(EDITED, cc.edited);
             c.put(DOWNLOADTIME, cc.downloadtime);
             c.put(ISDECODE, -1);
+            c.put(FILENAME, cc.filename);
 
             count = db.insert(TABLE_NAME, null, c);
             db.close();
@@ -271,8 +303,10 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues c = new ContentValues();
+            c.put(MID, cc.mid);
             c.put(TYPE, cc.type);
             c.put(TYPENAME, cc.typename);
+            c.put(LRCPATH, cc.lrcpath);
             c.put(IMAGE, cc.image);
             c.put(MUSICNAME, cc.musicname);
             c.put(MUSICPATH, cc.musicpath);
@@ -284,8 +318,10 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
             c.put(ISFORMULATION, cc.isformulation);
             c.put(CREATED, cc.created);
             c.put(EDITED, cc.edited);
+            c.put(DOWNLOADTIME, cc.downloadtime);
+            c.put(ISDECODE, -1);
+            c.put(FILENAME, cc.filename);
             int r = db.update(TABLE_NAME, c, MID + " = " + mid + " ", null);
-//            db.close();
             return r;
         } catch (Exception e) {
             Log.w(TAG, e.toString());

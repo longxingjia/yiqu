@@ -17,6 +17,7 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -105,7 +106,7 @@ public class ShowArticalFragment extends AbsAllFragment {
         super.onResume();
 
         MobclickAgent.onPageStart("范文");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"范文");
     }
 
 
@@ -114,7 +115,7 @@ public class ShowArticalFragment extends AbsAllFragment {
         super.onPause();
 
         MobclickAgent.onPageEnd("范文");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"范文");
 
     }
 

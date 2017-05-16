@@ -47,6 +47,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class HomePageFragment extends AbsAllFragment implements RefreshList.IRefreshListViewListener, LoadMoreView.OnMoreListener {
 
 
@@ -133,12 +135,17 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("个人主页"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"个人主页");
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("个人主页");
+        JAnalyticsInterface.onPageEnd(getActivity(),"个人主页");
+
     }
 
 
@@ -165,9 +172,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             myUid = AppShare.getUserInfo(mContext).uid;
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
         tab1SoundAdapter = new Tab1SoundAdapter(this);
-
         tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity());
-
 
         listView.setRefreshListListener(this);
         if (homePage == null) {
@@ -198,9 +203,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                 listView.setOnItemClickListener(tab5DianpingAdapter);
                 tab5DianpingAdapter.setData(sounds);
                 price1.setText(userInfo.price + "");
-                if (!userInfo.uid.equals(AppShare.getUserInfo(getActivity()).uid))
 
-                    ll_tw.setVisibility(View.VISIBLE);
             } else {
                 listView.setAdapter(tab1SoundAdapter);
                 tab1SoundAdapter.setData(sounds);
@@ -362,6 +365,11 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
      */
     private void InitCursor(int count) {
         cursor.setCount(count);
+        if (count ==2){
+            cursor.setOffset(120);
+        }else if (count==3){
+            cursor.setOffset(80);
+        }
     }
 
 

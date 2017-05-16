@@ -29,6 +29,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -70,10 +72,12 @@ public class UploadXizuoFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("上传作品"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"上传作品");
     }
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("上传作品");
+        JAnalyticsInterface.onPageEnd(getActivity(),"上传作品");
     }
 
     @Override

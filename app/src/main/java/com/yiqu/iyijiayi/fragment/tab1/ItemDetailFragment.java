@@ -19,13 +19,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -40,7 +40,7 @@ import com.ui.abs.AbsFragment;
 import com.ui.views.DialogUtil;
 import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
-import com.yiqu.Control.Main.RecordComActivity;
+import com.utils.Player;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -48,13 +48,13 @@ import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
-import com.yiqu.iyijiayi.fileutils.lyric.LyricProvider;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.PayforYBFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
 import com.yiqu.iyijiayi.model.Constant;
 import com.yiqu.iyijiayi.model.HomePage;
+import com.yiqu.iyijiayi.model.Lyrc;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
@@ -64,14 +64,25 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.utils.LogUtils;
+import com.utils.L;
+import com.yiqu.iyijiayi.utils.LyrcUtil;
 import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.view.LrcView;
+import com.yiqu.lyric.DefaultLrcBuilder;
+import com.yiqu.lyric.ILrcBuilder;
+import com.yiqu.lyric.LrcRow;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -82,15 +93,14 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.zhaiyifan.lyric.widget.LyricView;
-
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/2/20.
  */
 
 public class ItemDetailFragment extends AbsFragment implements View.OnClickListener,
-        VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener, LyricView.OnLyricUpdateListener {
+        VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener {
     String tag = "ItemDetailFragment";
     @BindView(R.id.back)
     public ImageView back;
@@ -152,10 +162,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public ImageView stu_header;
     @BindView(R.id.tea_header)
     public ImageView tea_header;
-    @BindView(R.id.play_first_lrc)
-    public LrcView mLrcViewOnFirstPage;
-//    @BindView(R.id.lyricView)
-//    public LyricView mLyricView;
+
+    @BindView(R.id.lrcView)
+    public com.yiqu.lyric.LrcView mLrcView;
 
     @BindView(R.id.ll_title)
     public LinearLayout ll_title;
@@ -165,6 +174,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public LinearLayout teacher_info;
     @BindView(R.id.scrollView)
     public ObservableScrollView scrollView;
+
 
     @BindView(R.id.no_comments)
     public TextView no_comments;
@@ -196,7 +206,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     Future<?> future;
     private long downloadTeaId = -1;
     private long downloadStuId = -1;
-    private LyricProvider mLyricProvider;
+
+    private boolean isBoundDownload;
 
 
     Handler mHandler = new Handler() {
@@ -293,16 +304,18 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    mLrcView.seekLrcToTime(progress);
                     now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
                 }
             });
-            if (mLrcViewOnFirstPage.hasLrc()) {
-                mLrcViewOnFirstPage.changeCurrent(progress);
-//                LogUtils.LOGE(tag,progress+"");
-            }
-//            mLyricView. updateIndex(progress);
 
         }
+    }
+
+    @Override
+    public void OnCompletion() {
+        super.OnCompletion();
+        video_play.setImageResource(R.mipmap.video_play);
     }
 
     private void initListeners() {
@@ -340,10 +353,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onLyricUpdate() {
-
-    }
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
         int pro;
@@ -500,16 +509,16 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     }
 
     private void initData() {
+        getActivity().bindService(new Intent(getActivity(), DownloadService.class), mDownloadServiceConnection, Context.BIND_AUTO_CREATE);
         desc.setText(sound.desc);
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
-        if (!TextUtils.isEmpty(sound.article_content)){
+        if (!TextUtils.isEmpty(sound.article_content)) {
             article_content.setText(sound.article_content);
-            mLrcViewOnFirstPage.setVisibility(View.GONE);
+            mLrcView.setVisibility(View.GONE);
         }
 
         article_content.setMovementMethod(new ScrollingMovementMethod());
-
 
         article_content.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -529,7 +538,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         });
 //        mLrcViewOnFirstPage.setMovementMethod(new ScrollingMovementMethod());
-        mLrcViewOnFirstPage.setOnTouchListener(new View.OnTouchListener() {
+        mLrcView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -605,19 +614,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 stuUrl.lastIndexOf("/") + 1,
                 stuUrl.length());
         stufileName = sound.musicname + "_" + stufileName;
-        stuFile = new File(Variable.StorageMusicCachPath, stufileName);
+        stuFile = new File(Variable.StorageMusicCachPath(getActivity()), stufileName);
 
         teaUrl = MyNetApiConfig.ImageServerAddr + sound.commentpath;
         teafileName = teaUrl.substring(
                 teaUrl.lastIndexOf("/") + 1,
                 teaUrl.length());
         teafileName = sound.musicname + "_" + teafileName;
-        //   teaFile = new File(Variable.StorageMusicCachPath, teafileName);
 
         if (sound.islike != 0) {
             initDianZan();
         }
-
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
@@ -639,7 +646,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        mLyricProvider = LyricProvider.getInstance(getActivity());
+
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
         position = getActivity().getIntent().getIntExtra("position", -1);
         userInfo = AppShare.getUserInfo(getActivity());
@@ -657,6 +664,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         } else {
             sid = String.valueOf(sound.sid);
+//            L.e(sound.toString());
             initData();
         }
 
@@ -689,36 +697,33 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
             case R.id.video_play:
                 if (mPlayService.getPlayingPosition() > 0) {
-                    if (mPlayService.isPlaying()) {
-                        video_play.setImageResource(R.mipmap.video_play);
-                        mPlayService.pause();
+                    if (mPlayService.getMusicPlayerState() != Player.MusicPlayerState.stop) {
+                        if (mPlayService.isPlaying()) {
+                            video_play.setImageResource(R.mipmap.video_play);
+                            mPlayService.pause();
+                        } else {
+                            video_play.setImageResource(R.mipmap.video_pause);
+                            mPlayService.resume();
+                        }
                     } else {
+                        mPlayService.play(stuUrl, sound.sid);
                         video_play.setImageResource(R.mipmap.video_pause);
-                        mPlayService.resume();
                     }
                 } else {
                     mPlayService.play(stuUrl, sound.sid);
                     video_play.setImageResource(R.mipmap.video_pause);
                 }
-
                 break;
             case R.id.stu_listen:
-
                 if (stuFile.exists()) {
                     palyStudentVoice();
-
                 } else {
-
                     downloadStuId = dowoload(stuUrl, stufileName, 0);
                 }
-
-
                 break;
             case R.id.tea_listen:
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
-
                 if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
-
                     video_play.setImageResource(R.mipmap.video_play);
                     if (mPlayService.getPlayingPosition() == 0) {
                         if (mPlayService.isPlaying()) {
@@ -732,12 +737,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
                 } else {
                     if (sound.listen == 1) {
-//                        if (teaFile.exists()) {
-//                            palyTeacherVoice();
-//
-//                        } else {
-//                            downloadTeaId = dowoload(teaUrl, teafileName, 1);
-//                        }
                         palyTeacherVoice();
                     } else {
                         String desc = "";
@@ -790,16 +789,29 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 } else {
                     Model.startNextAct(getActivity(),
                             SelectLoginFragment.class.getName());
-                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
                 }
 
                 break;
             case R.id.comment:
-                Intent intent = new Intent(getActivity(), CommentActivity.class);
-                intent.putExtra("sid", String.valueOf(sid));
-                intent.putExtra("fromuid",String.valueOf( AppShare.getUserInfo(getActivity()).uid));
-                intent.putExtra("touid", String.valueOf(sound.fromuid ));
-                getActivity().startActivity(intent);
+
+
+                if (AppShare.getIsLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), CommentActivity.class);
+                    intent.putExtra("sid", String.valueOf(sid));
+                    intent.putExtra("fromuid", String.valueOf(AppShare.getUserInfo(getActivity()).uid));
+                    intent.putExtra("touid", String.valueOf(sound.fromuid));
+                    getActivity().startActivity(intent);
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+//                Intent intent = new Intent(getActivity(), CommentActivity.class);
+//                    intent.putExtra("sid", String.valueOf(sid));
+//                    intent.putExtra("fromuid",String.valueOf(AppShare.getUserInfo(getActivity()).uid));
+//                    intent.putExtra("touid", String.valueOf(sound.fromuid ));
+//                    getActivity().startActivity(intent);
 
                 break;
 
@@ -820,8 +832,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         getActivity().registerReceiver(downloadCompleteReceiver,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         MobclickAgent.onPageStart("声乐详情");
-
-
+        JAnalyticsInterface.onPageStart(getActivity(),"声乐详情");
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getComments, MyNetRequestConfig
                         .getComments(getActivity(), sid),
@@ -829,7 +840,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
 
     }
-
 
     private void initHomepage(final Context mContext, String uid) {
         String mUid = "0";
@@ -881,17 +891,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
         MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
-
-        //player.pause();
-
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"声乐详情");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().bindService(new Intent(getActivity(), DownloadService.class), mDownloadServiceConnection, Context.BIND_AUTO_CREATE);
-
         allowBindService(getActivity());
 
     }
@@ -902,9 +907,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onStop() {
         super.onStop();
-        Log.e("fragment", "onDestroyView");
         allowUnbindService(getActivity());
-        getActivity().unbindService(mDownloadServiceConnection);
+//        L.e(String.valueOf(isBoundDownload));
+        if (isBoundDownload) {
+            getActivity().unbindService(mDownloadServiceConnection);
+            isBoundDownload = false;
+        }
+
+
     }
 
     private long dowoload(String downloadUrl, String fileName, final int tag) {
@@ -1033,28 +1043,34 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-//            Log.e("mDownloadService","onServiceConnected");
+            //   Log.e("mDownloadService","onServiceConnected");
 
             mDownloadService = ((DownloadService.DownloadBinder) service).getService();
             mDownloadService.setOnDownloadEventListener(downloadListener);
+            isBoundDownload = true;
 
-            UserInfo userInfo = AppShare.getUserInfo(getActivity());
             if (TextUtils.isEmpty(sound.lrc_url)) {
-
+                mLrcView.setVisibility(View.GONE);
             } else {
+                L.e(sound.lrc_url);
                 String lyricUrl = MyNetApiConfig.ImageServerAddr + sound.lrc_url;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/") + 1, lyricUrl.length());
-                File file = new File( Variable.StorageLyricCachPath,lyricname);
-                if (file.exists()){
-                    mLrcViewOnFirstPage.setLrcPath(file.getAbsolutePath());
-                }else {
+                File file = new File(Variable.StorageLyricCachPath, lyricname);
+                if (file.exists()) {
+                    String result = LyrcUtil.readLRCFile(file);
+                    //解析歌词构造器
+                    ILrcBuilder builder = new DefaultLrcBuilder();
+                    //解析歌词返回LrcRow集合
+                    List<LrcRow> rows = builder.getLrcRows(result);
+                    mLrcView.setLrc(rows);
+
+                } else {
+
                     if (mDownloadService != null) {
                         mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
                                 lyricname);
                     }
                 }
-
-
             }
         }
     };
@@ -1076,11 +1092,13 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 @Override
                 public void onSuccess(int downloadId) {
                     File f1 = new File(Variable.StorageLyricCachPath, lyricname);
-                    mLrcViewOnFirstPage.setLrcPath(f1.getAbsolutePath());
-//                    mLyricView.setOnLyricUpdateListener(ItemDetailFragment.this);
-//                    mLyricView.setLyric(mLyricProvider.get(f1.getAbsolutePath(), "utf-8"));
-//                    mLyricView.setLyricIndex(0);
-//                    mLyricView.play();
+                    String result = LyrcUtil.readLRCFile(f1);
+                    //解析歌词构造器
+                    ILrcBuilder builder = new DefaultLrcBuilder();
+                    //解析歌词返回LrcRow集合
+                    List<LrcRow> rows = builder.getLrcRows(result);
+                    mLrcView.setLrc(rows);
+
 
                 }
 

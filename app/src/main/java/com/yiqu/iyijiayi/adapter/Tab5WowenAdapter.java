@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -73,6 +74,7 @@ public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener
         ImageView musictype;
         TextView desc;
         TextView created;
+        LinearLayout text_q;
 
     }
 
@@ -89,6 +91,7 @@ public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener
                 h.musictype = (ImageView) v.findViewById(R.id.musictype);
                 h.desc = (TextView) v.findViewById(R.id.desc);
                 h.created = (TextView) v.findViewById(R.id.created);
+                h.text_q = (LinearLayout) v.findViewById(R.id.text_q);
 
                 v.setTag(h);
             }
@@ -102,12 +105,12 @@ public class Tab5WowenAdapter extends BaseAdapter implements OnItemClickListener
 
 
             if (f.type == 1) {
-                h.musictype.setVisibility(View.VISIBLE);
+                h.text_q.setVisibility(View.VISIBLE);
                 h.musictype.setBackgroundResource(R.mipmap.shengyue);
             } else if (f.type==3){
-                h.musictype.setVisibility(View.GONE);
+                h.text_q.setVisibility(View.GONE);
             }else {
-                h.musictype.setVisibility(View.VISIBLE);
+                h.text_q.setVisibility(View.VISIBLE);
                 h.musictype.setBackgroundResource(R.mipmap.boyin);
             }
 

@@ -34,6 +34,8 @@ import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class RegisterFragment extends AbsAllFragment {
 
     EditText txt01;
@@ -227,11 +229,13 @@ public class RegisterFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("注册"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"注册");
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        JAnalyticsInterface.onPageEnd(getActivity(),"注册");
         MobclickAgent.onPageEnd("注册");
     }
 

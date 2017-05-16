@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,19 +13,23 @@ import com.ui.views.LoadMoreView;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.Tab4Adapter;
+import com.yiqu.iyijiayi.fragment.tab3.TextQuestionFragment;
 import com.yiqu.iyijiayi.fragment.tab4.RenewFragment;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.Events;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.AppShare;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnMoreListener {
 
@@ -104,6 +109,7 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"发现");
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getEventList,
@@ -118,6 +124,7 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("发现");
+        JAnalyticsInterface.onPageEnd(getActivity(),"发现");
     }
 
     @Override
@@ -153,8 +160,15 @@ public class Tab4Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.item_renew:
-                Model.startNextAct(getActivity(),
-                        RenewFragment.class.getName());
+                if (AppShare.getIsLogin(getActivity())) {
+                    Model.startNextAct(getActivity(),
+                            RenewFragment.class.getName());
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+
                 break;
         }
     }

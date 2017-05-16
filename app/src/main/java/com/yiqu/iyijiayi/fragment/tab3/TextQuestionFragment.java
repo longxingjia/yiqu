@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -128,8 +129,8 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
     public void onResume() {
         super.onResume();
 
-        MobclickAgent.onPageStart("问题描述");
-
+        MobclickAgent.onPageStart("文字问题描述");
+        JAnalyticsInterface.onPageStart(getActivity(),"文字问题描述");
     }
 
     @Override
@@ -206,7 +207,8 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("问题描述");
+        MobclickAgent.onPageEnd("文字问题描述");
+        JAnalyticsInterface.onPageEnd(getActivity(),"文字问题描述");
 
     }
 

@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.ui.views.CircleImageView;
+import com.utils.L;
 import com.utils.Variable;
 import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
@@ -38,10 +40,11 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.LyrcUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
-
-import cn.zhaiyifan.lyric.LyricUtils;
-import cn.zhaiyifan.lyric.widget.LyricView ;
+import com.yiqu.lyric.DefaultLrcBuilder;
+import com.yiqu.lyric.ILrcBuilder;
+import com.yiqu.lyric.LrcRow;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -55,6 +58,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,6 +66,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 public class PlayActivity extends BaseActivity
         implements NetCallBack {
@@ -101,8 +106,6 @@ public class PlayActivity extends BaseActivity
     @BindView(R.id.upload)
     public ImageView upload;
 
-    @BindView(R.id.lyricview)
-    public LyricView lyricView;
     @BindView(R.id.background)
     public ImageView background;
     @BindView(R.id.pre_bg)
@@ -113,6 +116,8 @@ public class PlayActivity extends BaseActivity
     public CircleImageView next_bg;
     @BindView(R.id.seekbar)
     public SeekBar seekbar;
+    @BindView(R.id.lrcView)
+    public com.yiqu.lyric.LrcView mLrcView;
 
     private final static int Mode_LIST = 2000;
     private final static int Mode_ONE = 2001;
@@ -176,22 +181,9 @@ public class PlayActivity extends BaseActivity
 
         voicePlayer.setOnCompletionListener(onCompletion);
 
-        UserInfo userInfo = AppShare.getUserInfo(this);
-        String url = userInfo.userimage;
-        if (url != null) {
-            if (!url.contains("http://wx.qlogo.cn")) {
-                url = MyNetApiConfig.ImageServerAddr + url;
-            }
-            String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-            File file = new File(Variable.StorageImagePath, fileName);
-            //   background.setBackgroundResource(R.color.wechat_green);
-            if (file.exists()) {
-                initBackground(file);
-            } else {
-                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
-                downLoaderTask.execute();
-            }
-        }
+
+
+
 
         initData();
     }
@@ -241,28 +233,45 @@ public class PlayActivity extends BaseActivity
         play_bg.setImageBitmap(bitmap);
         next_bg.setImageBitmap(bitmap);
 
-        String fileName = voice.musicname + "_" + voice.mid;
+//        String fileName = voice.musicname + "_" + voice.mid;
         playUrl( voice.voicename);
         if (mPlayService!=null){
             mPlayService.pause();
         }
+        UserInfo userInfo = AppShare.getUserInfo(this);
+        L.e(voice.lrcpath);
+        if (TextUtils.isEmpty(voice.lrcpath)){
+            String url = userInfo.userimage;
+            if (url != null) {
+                if (!url.contains("http://wx.qlogo.cn")) {
+                    url = MyNetApiConfig.ImageServerAddr + url;
+                }
+                String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
+                File file = new File(Variable.StorageImagePath, fileName);
+                if (file.exists()) {
+                    initBackground(file);
+                } else {
+                    DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                    downLoaderTask.execute();
+                }
+            }
+            mLrcView.setVisibility(View.GONE);
+        }else {
+            L.e(voice.lrcpath);
 
-        File lrc = new File(Variable.StorageMusicCachPath, fileName + ".lrc");
-        if (!lrc.exists()) {
+            String  lyricUrl = MyNetApiConfig.ImageServerAddr + voice.lrcpath;
+            String   lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")+1, lyricUrl.length());
+            File file = new File(Variable.StorageLyricCachPath, lyricname);
+            if (file.exists()) {
+                String result = LyrcUtil.readLRCFile(file);
+                //解析歌词构造器
+                ILrcBuilder builder = new DefaultLrcBuilder();
+                //解析歌词返回LrcRow集合
+                List<LrcRow> rows = builder.getLrcRows(result);
+                mLrcView.setLrc(rows);
 
-            MyNetApiConfig myNetApiConfig = new MyNetApiConfig(voice.musicname);
-
-            RestNetCallHelper.callNet(this,
-                    myNetApiConfig.getlyric, MyNetRequestConfig
-                            .getlyric(this),
-                    "getlyric", instance);
-        } else {
-
-            lyricView.setLyric(  LyricUtils.parseLyric(lrc,"utf-8"));
-            lyricView.play();
+            }
         }
-
-
     }
 
     private Handler handler = new Handler();
@@ -330,6 +339,7 @@ public class PlayActivity extends BaseActivity
                 seekbar.setProgress((int) pos);
                 now_time.setText("" + changeNum(position / (60 * 1000)) + ":" + changeNum(position % (60 * 1000) / 1000));
                 totaltime.setText("" + changeNum(duration / (60 * 1000)) + ":" + changeNum(duration % (60 * 1000) / 1000));
+                mLrcView.seekLrcToTime(position);
             }
 
 
@@ -505,7 +515,7 @@ public class PlayActivity extends BaseActivity
                                 intent.putExtra("fragment", AddQuestionFragment.class.getName());
                                 intent.putExtras(bundle);
                                 instance.startActivity(intent);
-                                //   VoiceFunction.StopVoice();
+
 
                                 break;
                             case 0:
@@ -570,7 +580,7 @@ public class PlayActivity extends BaseActivity
         super.onResume();
         MobclickAgent.onPageStart("播放录音或者声乐页面");
         MobclickAgent.onResume(this);
-
+        JAnalyticsInterface.onPageStart(this,"播放录音或者声乐页面");
 
     }
 
@@ -579,6 +589,7 @@ public class PlayActivity extends BaseActivity
         super.onPause();
         MobclickAgent.onPageEnd("播放录音或者声乐页面");
         MobclickAgent.onPause(this);
+        JAnalyticsInterface.onPageEnd(this,"播放录音或者声乐页面");
     }
 
     public class DownLoaderTask extends AsyncTask<Void, Integer, Long> {

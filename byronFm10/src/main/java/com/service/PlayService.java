@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.utils.L;
 import com.utils.LogUtils;
 import com.utils.Player;
 
@@ -59,6 +60,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             @Override
             public void completion() {
 
+                mListener.OnCompletion();
             }
         });
 // 开始更新进度的线程
@@ -169,6 +171,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         return mPlayer != null && mPlayer.isPlaying();
     }
 
+
+    public int getMusicPlayerState(){
+        return mPlayer.getMusicPlayerState();
+    }
+
     /**
      * 获取正在播放的位置
      *
@@ -255,5 +262,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         public void onPublish(int percent);
 
         public void onChange(int position);
+        public void OnCompletion();
     }
 }

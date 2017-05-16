@@ -20,6 +20,7 @@ public class Music implements Serializable {
     public String size;
     public String isformulation;
     public String lrcpath;
+    public String filename;
     public int isdecode;
     public long decodetime;
     public long created;
@@ -37,6 +38,7 @@ public class Music implements Serializable {
                 ", musicname='" + musicname + '\'' +
                 ", musicpath='" + musicpath + '\'' +
                 ", musictype='" + musictype + '\'' +
+                ", filename='" + filename + '\'' +
                 ", chapter='" + chapter + '\'' +
                 ", lrcpath='" + lrcpath + '\'' +
                 ", accompaniment='" + accompaniment + '\'' +

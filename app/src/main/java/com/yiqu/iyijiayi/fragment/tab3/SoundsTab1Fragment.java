@@ -27,6 +27,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/15.
  */
@@ -89,7 +91,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("声乐伴奏页面");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"声乐伴奏页面");
 
     }
 
@@ -97,7 +99,7 @@ public class SoundsTab1Fragment extends AbsFragment implements LoadMoreView.OnMo
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("声乐伴奏页面");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"声乐伴奏页面");
     }
 
 

@@ -24,6 +24,7 @@ import com.kaolafm.record.AudioMixerNative;
 import com.m3b.rbaudiomixlibrary.AudioRecorderNative;
 import com.service.DownloadService;
 import com.service.PlayService;
+import com.utils.LogUtils;
 import com.yiqu.Tool.Common.CommonApplication;
 import com.yiqu.Tool.Common.CommonThreadPool;
 
@@ -41,6 +42,8 @@ import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.service.JpushReceiver;
+import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.NetWorkUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 
@@ -58,7 +61,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Set;
 
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -116,16 +122,44 @@ public class WelcomePageActivity extends Activity {
 
     @Override
     protected void onResume() {
-        // MobclickAgent.setDebugMode( true );
 
         PermissionGen.needPermission(this, 100, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE
         });
         MobclickAgent.onPageStart("启动页面"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);
+        if (AppShare.getIsLogin(this)){
+            LogUtils.LOGE("Alias",AppShare.getUserInfo(this).uid);
+            JPushInterface.setAliasAndTags(getApplicationContext(),
+                    AppShare.getUserInfo(this).uid,
+                    null,
+                    mAliasCallback);
+        }
 
         super.onResume();
     }
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+//            switch (code) {
+//                case 0:
+//                    logs = "Set tag and alias success";
+//                    Log.i(TAG, logs);
+//                    // 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
+//                    break;
+//                case 6002:
+//                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+//                    Log.i(TAG, logs);
+//                    // 延迟 60 秒来调用 Handler 设置别名
+//                    mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+//                    break;
+//                default:
+//                    logs = "Failed with errorCode = " + code;
+//            }
+        }
+    };
 
     @Override
     protected void onPause() {
@@ -144,9 +178,6 @@ public class WelcomePageActivity extends Activity {
 
         //      intent = new Intent(this, RecordAacActivity.class);//
         intent = new Intent(this, MainActivity.class);//
-        //  intent = new Intent(this, StubActivity.class);
-        // intent.putExtra("fragment", SelectArticalFragment.class.getName());
-        // startActivityForResult(i, REQUESTMUSIC);
 
         Message.obtain(handler).sendToTarget();
     }

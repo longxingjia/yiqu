@@ -15,6 +15,8 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/2/9.
  */
@@ -59,12 +61,14 @@ public class SelectLoginFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("选择登陆方式"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"选择登陆方式");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("选择登陆方式");
+        JAnalyticsInterface.onPageEnd(getActivity(),"选择登陆方式");
     }
 
 

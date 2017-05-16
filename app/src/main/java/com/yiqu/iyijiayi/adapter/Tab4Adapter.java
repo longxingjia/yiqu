@@ -119,23 +119,28 @@ public class Tab4Adapter extends BaseAdapter implements OnItemClickListener {
             return;
         }
 
+        Intent i = new Intent(mContext, StubActivity.class);
+        i.putExtra("fragment", EventFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data",f);
+        i.putExtras(bundle);
+        mContext.startActivity(i);
 
-
-        if (AppShare.getIsLogin(mContext)){
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", EventFragment.class.getName());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("data",f);
-            i.putExtras(bundle);
-            mContext.startActivity(i);
-
-        }else {
-            Intent i = new Intent(mContext, StubActivity.class);
-            i.putExtra("fragment", SelectLoginFragment.class.getName());
-            ToastManager.getInstance(mContext).showText("请登录后再试");
-            mContext.startActivity(i);
-
-        }
+//        if (AppShare.getIsLogin(mContext)){
+//            Intent i = new Intent(mContext, StubActivity.class);
+//            i.putExtra("fragment", EventFragment.class.getName());
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("data",f);
+//            i.putExtras(bundle);
+//            mContext.startActivity(i);
+//
+//        }else {
+//            Intent i = new Intent(mContext, StubActivity.class);
+//            i.putExtra("fragment", SelectLoginFragment.class.getName());
+//            ToastManager.getInstance(mContext).showText("请登录后再试");
+//            mContext.startActivity(i);
+//
+//        }
 
     }
 

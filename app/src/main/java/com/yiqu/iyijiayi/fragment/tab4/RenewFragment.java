@@ -31,6 +31,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/4/12.
  */
@@ -71,12 +73,10 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
         listView.setAdapter(tab4DiscoveryAdapter);
         listView.setOnItemClickListener(tab4DiscoveryAdapter);
         listView.setRefreshListListener(this);
-//
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
         listView.addFooterView(mLoadMoreView);
         listView.setOnScrollListener(mLoadMoreView);
-
         listView.setFooterDividersEnabled(false);
         listView.setHeaderDividersEnabled(false);
 
@@ -101,7 +101,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("动态"); //统计页面，"MainScreen"为页面名称，可自定义
-
+        JAnalyticsInterface.onPageStart(getActivity(),"动态");
         if (count > 0) {
             loadErr.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
@@ -142,6 +142,8 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("动态");
+        JAnalyticsInterface.onPageEnd(getActivity(),"动态");
+
     }
 
     @Override

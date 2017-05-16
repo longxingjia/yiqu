@@ -15,12 +15,15 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.base.utils.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Banner;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 
 /**
@@ -78,6 +81,23 @@ public class WebVFragment extends AbsAllFragment {
         webview.loadUrl(banner.url);
         super.init(savedInstanceState);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("浏览器");
+        JAnalyticsInterface.onPageStart(getActivity(),"浏览器");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("浏览器");
+        JAnalyticsInterface.onPageEnd(getActivity(),"浏览器");
+
+    }
+
 
 
     private void back(){

@@ -43,21 +43,18 @@ public class FileFunction {
 
         } else {
             Variable.StorageDirectoryPath = application.getExternalCacheDir().getAbsolutePath();
-
-//                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/ComposeAudio/";
         }
 
         Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
         Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
         Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
         Variable.StorageLyricCachPath = Variable.StorageDirectoryPath + "/lyric/";
+
         Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        Variable.StorageMusicCachPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(); //audio
 
         CreateDirectory(Variable.StorageDirectoryPath);
         CreateDirectory(Variable.StorageMusicPath);
         CreateDirectory(Variable.StorageImagePath);
-        CreateDirectory(Variable.StorageMusicCachPath);
         CreateDirectory(Variable.StorageQandAPath);
         CreateDirectory(Variable.StorageLyricCachPath);
 

@@ -52,6 +52,11 @@ public abstract class BaseActivity extends FragmentActivity {
 				public void onChange(int position) {
 					BaseActivity.this.onChange(position);
 				}
+
+				@Override
+				public void OnCompletion() {
+
+				}
 			};
 	
 	/**

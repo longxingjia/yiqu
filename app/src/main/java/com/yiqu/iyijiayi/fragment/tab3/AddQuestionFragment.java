@@ -42,6 +42,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -92,6 +94,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("提问");
+        JAnalyticsInterface.onPageStart(getActivity(),"提问");
 
     }
 
@@ -99,7 +102,7 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("提问");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"提问");
     }
 
 

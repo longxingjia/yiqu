@@ -21,6 +21,8 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab3Fragment extends TabContentFragment implements View.OnClickListener {
 
 
@@ -52,7 +54,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
                 } else {
                     Model.startNextAct(getActivity(),
                             SelectLoginFragment.class.getName());
-                    ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
                 }
             }
         });
@@ -91,6 +93,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("录制和提问"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"录制和提问");
     }
 
 
@@ -100,6 +103,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("录制和提问");
+        JAnalyticsInterface.onPageEnd(getActivity(),"录制和提问");
     }
 
 
@@ -152,7 +156,7 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
             Intent i = new Intent(getActivity(), StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());
             getActivity().startActivity(i);
-            ToastManager.getInstance(getActivity()).showText("请您登录后在操作");
+            ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
         }
 
     }

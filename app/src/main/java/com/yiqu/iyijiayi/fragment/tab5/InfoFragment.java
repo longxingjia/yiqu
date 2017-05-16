@@ -30,6 +30,7 @@ import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -99,6 +100,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("个人信息");
+        JAnalyticsInterface.onPageEnd(getActivity(),"个人信息");
     }
 
     @Override
@@ -139,6 +141,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("个人信息"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"个人信息");
 
         if (AppShare.getIsLogin(getActivity())) {
             userInfo = AppShare.getUserInfo(getActivity());

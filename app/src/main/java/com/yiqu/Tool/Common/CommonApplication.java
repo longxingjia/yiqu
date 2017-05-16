@@ -9,9 +9,11 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.yiqu.Tool.Function.CommonFunction;
+import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.InitFunction;
 import com.ui.App;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -35,6 +37,9 @@ public class CommonApplication extends Application {
     public void onCreate() {
         super.onCreate();
         JPushInterface.init(this);
+        JAnalyticsInterface.init(this);
+
+        JAnalyticsInterface.setDebugMode(true);  //参数为 true 表示打开调试模式，可看到 sdk 的日志。
         JPushInterface.setDebugMode(true);
         instance = this;
 
@@ -58,7 +63,7 @@ public class CommonApplication extends Application {
             initialised = true;
 
             InitFunction.Initialise(this);
-
+//            FileFunction.InitStorage(this);
 //            if (RecordConstant.Debug) {
 //                StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
 //                        new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog();

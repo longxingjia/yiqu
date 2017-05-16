@@ -186,7 +186,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                     }else {
                         Model.startNextAct(mContext,
                                 SelectLoginFragment.class.getName());
-                        ToastManager.getInstance(mContext).showText("请您登录后在操作");
+                        ToastManager.getInstance(mContext).showText(mContext.getString(R.string.login_tips));
                     }
 
                 }

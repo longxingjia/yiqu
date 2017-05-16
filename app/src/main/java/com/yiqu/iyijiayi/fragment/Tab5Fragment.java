@@ -46,6 +46,7 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 public class Tab5Fragment extends TabContentFragment implements View.OnClickListener,NetCallBack ,ObservableScrollView.ScrollViewListener{
 
@@ -81,7 +82,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     public LinearLayout ll_title;
     @BindView(R.id.title)
     public TextView title;
-
+    private LinearLayout ll_t;
 
 
     @Override
@@ -94,6 +95,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         llUserInfo = (RelativeLayout) v.findViewById(R.id.userinfo);
         background = (ImageView) v.findViewById(R.id.background);
         ll_tabs = (LinearLayout) v.findViewById(R.id.ll_tabs);
+        ll_t = (LinearLayout) v.findViewById(R.id.ll_t);
         initListeners();
         InitHeadView(v);
 
@@ -168,6 +170,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         } else {
             logOutBt.setVisibility(View.GONE);
             ll_tabs.setVisibility(View.GONE);
+            ll_t.setVisibility(View.GONE);
             llUserInfo.setVisibility(View.GONE);
             Btlogin.setVisibility(View.VISIBLE);
         }
@@ -176,7 +179,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     public void onResume() {
         MobclickAgent.onPageStart("我"); //统计页面，"MainScreen"为页面名称，可自定义
-
+        JAnalyticsInterface.onPageStart(getActivity(),"我");
         initUI();
         super.onResume();
     }
@@ -246,6 +249,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
 
         ll_tabs.setVisibility(View.VISIBLE);
+        ll_t.setVisibility(View.VISIBLE);
         if (userInfo.type.equals("1")) {  //1是学生
             menu_item_guanyu.setVisibility(View.VISIBLE);
             teacherOnly.setVisibility(View.GONE);
@@ -353,6 +357,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("我");
+        JAnalyticsInterface.onPageEnd(getActivity(),"我");
     }
     private int imageHeight;
     private void initListeners() {
@@ -375,7 +380,7 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
     @Override
     public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
         if (y <= 0) {
-            title.setTextColor(getResources().getColor(R.color.white));
+            title.setTextColor(getResources().getColor(R.color.transparent));
             ll_title.setBackgroundColor(getResources().getColor(R.color.transparent));//AGB由相关工具获得，或者美工提供
         } else if (y > 0 && y <= imageHeight) {
             float scale = (float) y / imageHeight;

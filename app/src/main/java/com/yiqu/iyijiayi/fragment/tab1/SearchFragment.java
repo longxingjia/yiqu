@@ -28,6 +28,8 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 /**
  * Created by Administrator on 2017/3/17.
  */
@@ -167,6 +169,7 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
         super.onResume();
         MobclickAgent.onPageStart("查找单个");
         MobclickAgent.onResume(getActivity());
+        JAnalyticsInterface.onPageStart(getActivity(),"查找单个");
     }
 
     @Override
@@ -174,6 +177,7 @@ public class SearchFragment extends AbsFragment implements View.OnClickListener,
         super.onPause();
         MobclickAgent.onPageEnd("查找单个");
         MobclickAgent.onPause(getActivity());
+        JAnalyticsInterface.onPageEnd(getActivity(),"查找单个");
     }
 
     @Override

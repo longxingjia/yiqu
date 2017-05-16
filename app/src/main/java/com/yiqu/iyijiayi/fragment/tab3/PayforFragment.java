@@ -16,6 +16,8 @@ import com.yiqu.iyijiayi.model.Wx_arr;
 import com.yiqu.iyijiayi.utils.AppAvilibleUtils;
 import com.yiqu.iyijiayi.wxapi.WXPayEntryActivity;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -87,14 +89,14 @@ public class PayforFragment extends AbsAllFragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("支付");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"支付");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("支付");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"支付");
     }
 
 

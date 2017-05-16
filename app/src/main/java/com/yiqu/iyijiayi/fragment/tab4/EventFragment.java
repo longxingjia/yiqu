@@ -22,18 +22,22 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab4HotAdapter;
 import com.yiqu.iyijiayi.adapter.Tab4NewAdapter;
+import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.EventNSDictionary;
 import com.yiqu.iyijiayi.model.Events;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Remen;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/4/12.
@@ -147,11 +151,17 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
         switch (v.getId()) {
             case R.id.join_in:
 
-                Intent intent = new Intent(getActivity(), RecordAllActivity.class);
-                intent.putExtra("eid", String.valueOf(events.id));
-                intent.putExtra("title", String.valueOf(events.title));
-                getActivity().startActivity(intent);
+                if (AppShare.getIsLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), RecordAllActivity.class);
+                    intent.putExtra("eid", String.valueOf(events.id));
+                    intent.putExtra("title", String.valueOf(events.title));
+                    getActivity().startActivity(intent);
 
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
 
                 break;
         }
@@ -226,8 +236,8 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("发现"); //统计页面，"MainScreen"为页面名称，可自定义
-
+        MobclickAgent.onPageStart("热门活动"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"热门活动");
         if (mPlayService != null) {
             if (mPlayService.isPlaying())
                 mPlayService.pause();
@@ -239,7 +249,8 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("发现");
+        MobclickAgent.onPageEnd("热门活动");
+        JAnalyticsInterface.onPageEnd(getActivity(),"热门活动");
     }
 
     @Override

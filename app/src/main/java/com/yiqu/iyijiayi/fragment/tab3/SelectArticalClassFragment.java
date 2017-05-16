@@ -36,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -246,7 +247,7 @@ public class SelectArticalClassFragment extends AbsAllFragment implements LoadMo
         super.onResume();
 
         MobclickAgent.onPageStart("范文分类");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"范文分类");
     }
 
 
@@ -255,7 +256,7 @@ public class SelectArticalClassFragment extends AbsAllFragment implements LoadMo
         super.onPause();
 
         MobclickAgent.onPageEnd("范文分类");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"范文分类");
 
     }
 

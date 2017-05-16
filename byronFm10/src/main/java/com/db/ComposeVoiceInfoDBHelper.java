@@ -44,6 +44,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
     public static final String COMPOSE = "1";
     public static final String UNCOMPOSE = "2";
     public static final String DESC = "desc";
+    public static final String ARTICLE_CONTENT = "article_content";
 
     public ComposeVoiceInfoDBHelper(Context context) {
         super(context);
@@ -187,7 +188,7 @@ public class ComposeVoiceInfoDBHelper extends AbsDBHelper {
             c.put(ACCOMPANIMENT, cc.accompaniment);
             c.put(COMMENTPATH, cc.commentpath);
             c.put(COMMENTTIME, cc.commenttime);
-//            c.put(LRCPATH, cc.lrcpath);
+            c.put(LRCPATH, cc.lrcpath);
             c.put(ISFORMULATION, cc.isformulation);
             c.put(QUESTIONPRICE, cc.questionprice);
             c.put(LISTENPRICE, cc.listenprice);

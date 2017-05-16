@@ -34,6 +34,8 @@ import com.yiqu.iyijiayi.wxapi.WXEntryActivity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class SetPhoneFragment extends AbsAllFragment {
 
     EditText txt01;
@@ -75,12 +77,14 @@ public class SetPhoneFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("绑定手机"); //统计页面，"MainScreen"为页面名称，可自定义
+        JAnalyticsInterface.onPageStart(getActivity(),"绑定手机");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("绑定手机");
+        JAnalyticsInterface.onPageEnd(getActivity(),"绑定手机");
     }
 
 

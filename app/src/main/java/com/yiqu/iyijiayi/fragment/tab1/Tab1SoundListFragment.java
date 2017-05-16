@@ -36,6 +36,8 @@ import com.yiqu.iyijiayi.utils.JsonUtils;
 
 import java.util.ArrayList;
 
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+
 public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreView.OnMoreListener, RefreshList.IRefreshListViewListener {
 
 
@@ -215,6 +217,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(getString(R.string.hotquestion));
+        JAnalyticsInterface.onPageStart(getActivity(),getString(R.string.hotquestion));
 
     }
 
@@ -222,6 +225,7 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(getString(R.string.hotquestion));
+        JAnalyticsInterface.onPageEnd(getActivity(),getString(R.string.hotquestion));
 
     }
 

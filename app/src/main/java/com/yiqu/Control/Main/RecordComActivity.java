@@ -72,12 +72,13 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.DensityUtil;
 import com.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.LyrcUtil;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.view.LrcView;
-import com.yiqu.iyijiayi.view.LyricLoader;
-import com.yiqu.iyijiayi.view.LyricView;
+import com.yiqu.lyric.DefaultLrcBuilder;
+import com.yiqu.lyric.ILrcBuilder;
+import com.yiqu.lyric.LrcRow;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -95,11 +96,13 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -141,12 +144,7 @@ public class RecordComActivity extends Activity
 
     @BindView(R.id.background)
     public ImageView background;
-    @BindView(R.id.lyricview)
-    public LyricView lyricView;
-    @BindView(R.id.tv_lyric)
-    public TextView tv_lyric;
-    @BindView(R.id.play_first_lrc)
-    public LrcView mLrcViewOnFirstPage;
+
 
     @BindView(R.id.icon_record)
     public ImageView icon_record;
@@ -158,6 +156,8 @@ public class RecordComActivity extends Activity
     public CircleImageView recordVoiceButton;
     @BindView(R.id.finish)
     public CircleImageView finish;
+    @BindView(R.id.lrcView)
+    public com.yiqu.lyric.LrcView mLrcView;
 
     private File lrc;
     private String fileName;
@@ -235,7 +235,7 @@ public class RecordComActivity extends Activity
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         URI uri = URI.create(Url);
         fileName = FileFunction.getValidFileName(uri);
-        File mFile = new File(Variable.StorageMusicCachPath, fileName);
+        File mFile = new File(Variable.StorageMusicCachPath(this), fileName);
 
         if (mFile.exists())
         {
@@ -246,7 +246,7 @@ public class RecordComActivity extends Activity
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 
-            fileNameCom = music.musicname + t + "cv.aac";
+            fileNameCom = music.musicname + t + "cv.mp3";
             composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
 
@@ -269,7 +269,7 @@ public class RecordComActivity extends Activity
         super.onResume();
         MobclickAgent.onPageStart("录制声乐页面");
         MobclickAgent.onResume(this);
-
+        JAnalyticsInterface.onPageStart(this, "录制声乐页面");
     }
 
     @Override
@@ -277,6 +277,7 @@ public class RecordComActivity extends Activity
         super.onPause();
         MobclickAgent.onPageEnd("录制声乐页面");
         MobclickAgent.onPause(this);
+        JAnalyticsInterface.onPageEnd(this, "录制声乐页面");
     }
 
 
@@ -426,10 +427,8 @@ public class RecordComActivity extends Activity
             }
         }
 
-        if(mLrcViewOnFirstPage.hasLrc()){
-            mLrcViewOnFirstPage.changeCurrent(currentDuration);
-//            LogUtils.LOGE(tag,currentDuration+"");
-        }
+        mLrcView.seekLrcToTime(currentDuration);
+
     }
 
     @Override
@@ -508,6 +507,7 @@ public class RecordComActivity extends Activity
         composeVoice.musicname = music.musicname;
         composeVoice.musictype = music.musictype;
         composeVoice.chapter = music.chapter;
+        composeVoice.lrcpath = music.lrcpath;
         composeVoice.accompaniment = music.accompaniment;
         composeVoice.soundtime = actualRecordTime;
         composeVoice.isformulation = music.isformulation;
@@ -714,11 +714,9 @@ public class RecordComActivity extends Activity
 
     private Download.OnDownloadListener downloadListener =
             new Download.OnDownloadListener() {
-              //  private DialogHelper dialogHelper;
 
                 @Override
                 public void onStart(int downloadId, long fileSize) {
-//                 tv_lyric.setText("歌词下载中");
                 }
 
                 @Override
@@ -728,26 +726,13 @@ public class RecordComActivity extends Activity
 
                 @Override
                 public void onSuccess(int downloadId) {
-                    File f1 = new File(Variable.StorageLyricCachPath,lyricname);
-                    LogUtils.LOGE(tag,f1.getAbsolutePath());
-                    mLrcViewOnFirstPage.setLrcPath(f1.getAbsolutePath());
-//                    String str = null;
-//                    try {
-//                        InputStream is = new FileInputStream(f1);
-//                        InputStreamReader input = new InputStreamReader(is, "UTF-8");
-//                        BufferedReader reader = new BufferedReader(input);
-//                        while ((str = reader.readLine()) != null) {
-////                            tv_lyric.append(str);
-////                            tv_lyric.append("\n");
-//
-//                        }
-//
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-
+                    File f1 = new File(Variable.StorageLyricCachPath, lyricname);
+                    String result = LyrcUtil.readLRCFile(f1);
+                    //解析歌词构造器
+                    ILrcBuilder builder = new DefaultLrcBuilder();
+                    //解析歌词返回LrcRow集合
+                    List<LrcRow> rows = builder.getLrcRows(result);
+                    mLrcView.setLrc(rows);
 
                 }
 
@@ -804,12 +789,21 @@ public class RecordComActivity extends Activity
             }else {
                 lyricUrl = MyNetApiConfig.ImageServerAddr + music.lrcpath;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")+1, lyricUrl.length());
-                tv_lyric.setText("歌词下载中。。。");
-//                Log.e("mDownloadService",lyricname);
-                if (mDownloadService != null) {
-//                    LogUtils.LOGE(tag,lyricname);
-                    mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath,
-                            lyricname);
+
+                File file = new File(Variable.StorageLyricCachPath, lyricname);
+                if (file.exists()) {
+                    String result = LyrcUtil.readLRCFile(file);
+                    //解析歌词构造器
+                    ILrcBuilder builder = new DefaultLrcBuilder();
+                    //解析歌词返回LrcRow集合
+                    List<LrcRow> rows = builder.getLrcRows(result);
+                    mLrcView.setLrc(rows);
+
+                } else {
+                    if (mDownloadService != null) {
+                        mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath,
+                                lyricname);
+                    }
                 }
             }
         }
@@ -885,146 +879,6 @@ public class RecordComActivity extends Activity
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        if (id.equals("getlyric")) {
-            if (!TextUtils.isEmpty(netResponse.result)) {
-                ArrayList<LyricDownInfo> lyricDownInfos = new Gson().fromJson(netResponse.result, new TypeToken<ArrayList<LyricDownInfo>>() {
-                }.getType());
-                String url = lyricDownInfos.get(0).lrc;
-                LogUtils.LOGE(tag, url);
-                if (!TextUtils.isEmpty(url)) {
-                    DownLoaderlrcTask downLoaderlrcTask = new DownLoaderlrcTask(RecordComActivity.this, url, Variable.StorageMusicCachPath + fileName + ".lrc");
-                    downLoaderlrcTask.execute();
-                }
-
-            }
-
-
-        }
-
-    }
-
-    public class DownLoaderlrcTask extends AsyncTask<Void, Integer, Long> {
-        private URL mUrl;
-        private File mFile;
-        private final String TAG = "DownLoaderTask";
-        private ProgressReportingOutputStream mOutputStream;
-        private int mProgress = 0;
-        private Context mContext;
-        private DialogHelper dialogHelper;
-
-        public DownLoaderlrcTask(Context context, String downloadPath, String fileName) {
-            try {
-                mUrl = new URL(downloadPath);
-                mFile = new File(fileName);
-                mContext = context;
-            } catch (MalformedURLException e) {
-
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (dialogHelper == null) {
-                dialogHelper = new DialogHelper(mContext, this);
-            }
-            dialogHelper.showProgressDialog();
-        }
-
-        @Override
-        protected Long doInBackground(Void... params) {
-
-            return download();
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            // TODO Auto-generated method stub
-            if (dialogHelper != null) {
-                dialogHelper.dismissProgressDialog();
-            }
-
-            lyricView.initLyricFile(LyricLoader.loadLyricFile(fileName));
-
-            if (isCancelled())
-                return;
-        }
-
-        private long download() {
-            URLConnection connection = null;
-            int bytesCopied = 0;
-            try {
-                connection = mUrl.openConnection();
-                int length = connection.getContentLength();
-                if (mFile.exists()/* && length == mFile.length()*/) {
-                    Log.d(TAG, "file " + mFile.getName() + " already exits!!");
-                    mFile.delete();
-                }
-
-                mOutputStream = new ProgressReportingOutputStream(mFile);
-                publishProgress(0, length);
-                bytesCopied = copy(connection.getInputStream(), mOutputStream);
-                if (bytesCopied != length && length != -1) {
-                    Log.e(TAG, "Download incomplete bytesCopied=" + bytesCopied
-                            + ", length" + length);
-                }
-                mOutputStream.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return bytesCopied;
-        }
-
-        private int copy(InputStream input, OutputStream output) {
-            byte[] buffer = new byte[1024 * 8];
-            BufferedInputStream in = new BufferedInputStream(input, 1024 * 8);
-            BufferedOutputStream out = new BufferedOutputStream(output, 1024 * 8);
-            int count = 0, n = 0;
-            try {
-                while ((n = in.read(buffer, 0, 1024 * 8)) != -1) {
-                    out.write(buffer, 0, n);
-                    count += n;
-                }
-                out.flush();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            return count;
-        }
-
-        private final class ProgressReportingOutputStream extends FileOutputStream {
-
-            public ProgressReportingOutputStream(File file)
-                    throws FileNotFoundException {
-                super(file);
-                // TODO Auto-generated constructor stub
-            }
-
-            @Override
-            public void write(byte[] buffer, int byteOffset, int byteCount)
-                    throws IOException {
-                // TODO Auto-generated method stub
-                super.write(buffer, byteOffset, byteCount);
-                mProgress += byteCount;
-                publishProgress(mProgress);
-            }
-
-        }
 
     }
 
@@ -1077,7 +931,6 @@ public class RecordComActivity extends Activity
         protected void onPostExecute(Long result) {
             // TODO Auto-generated method stub
             // super.onPostExecute(result);
-
             Log.e(TAG, "下载完");
             initBackground(mFile);
             if (isCancelled())

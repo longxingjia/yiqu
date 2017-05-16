@@ -71,6 +71,7 @@ public class DownloadService extends Service {
 					Toast.makeText(DownloadService.this,
 							mDownloads.get(downloadId).getLocalFileName() + "下载完成",
 							Toast.LENGTH_SHORT).show();
+
 					onDownloadComplete(downloadId);
 					//	scanSDCard();
 				}

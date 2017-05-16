@@ -28,6 +28,7 @@ public class ComposeVoice implements Serializable{
     public String questionprice;
     public String voicename;
     public String lrcpath;
+    public String lrc_url;
     public String soundpath;
     public String article_content;
     public String desc;

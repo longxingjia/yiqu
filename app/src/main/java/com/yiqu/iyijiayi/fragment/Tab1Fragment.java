@@ -23,7 +23,6 @@ import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
-import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
@@ -45,6 +44,8 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.view.AutoPlayViewPager;
 
 import java.util.ArrayList;
+
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -174,7 +175,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(getString(R.string.home_page)); //统计页面，"MainScreen"为页面名称，可自定义
-
+        JAnalyticsInterface.onPageStart(getActivity(),getString(R.string.home_page));
         if (mPlayService != null&&mPlayService.isPlaying()) {
 
             int sid = mPlayService.getPlayingPosition();
@@ -239,6 +240,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             if (mPlayService!=null){
                 mPlayService.pause();
             }
+            tab1XizuoAdapter.setCurrent(-1);
 
         }
     };
@@ -252,15 +254,12 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         tab1XizuoAdapter.setOnMoreClickListener(new Tab1XizuoAdapterTest.OnMoreClickListener() {
             @Override
             public void onMoreClick(int position) {
-
                 String url = MyNetApiConfig.ImageServerAddr + sounds.get(position).soundpath;
                 mPlayService.play(url, sounds.get(position).sid);
-
                 initTopPlayUI(sounds.get(position));
             }
 
         });
-
 
 
     }
@@ -352,7 +351,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             ImageView  imageView = new ImageView(getActivity());
             // 设置小圆点imageview的参数
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    20, 20);
+                   18, 18);
             layoutParams.setMargins(10, 0, 10, 0);
             imageView.setLayoutParams(layoutParams);// 创建一个宽高均为20 的布局
             // 将小圆点layout添加到数组中
@@ -452,6 +451,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(getString(R.string.home_page));
+        JAnalyticsInterface.onPageEnd(getActivity(),getString(R.string.home_page));
     }
 
     @Override
@@ -469,6 +469,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
+//        L.e(netResponse.toString());
         if (netResponse != null && "getSoundList".equals(id)) {
             if (netResponse.bool == 1) {
 

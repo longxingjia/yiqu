@@ -19,8 +19,10 @@ import java.util.Vector;
 
 public class LyrcUtil {
     private static List<Lyrc> lyrcList;
+
     /**
      * 读取歌词文件文件
+     *
      * @param f
      * @return
      */
@@ -54,6 +56,36 @@ public class LyrcUtil {
             e.printStackTrace();
         }
         return lyrcList;
+    }
+
+    public static String readLRCFile(File f) {
+        String result = "";
+        try {
+            if (f == null || !f.exists()) {
+                result = "";
+            } else {
+                String line = "";
+                try {
+                    InputStream is = new FileInputStream(f);
+                    InputStreamReader input = new InputStreamReader(is, "UTF-8");
+                    BufferedReader reader = new BufferedReader(input);
+                    while ((line = reader.readLine()) != null) {
+                        if (line.trim().equals(""))
+                            continue;
+                        result += line + "\r\n";
+
+                    }
+                    reader.close();
+                    is.close();
+                    // 对歌词进行排序
+                }catch (Exception e){
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**
@@ -197,6 +229,7 @@ public class LyrcUtil {
         }
         return charset;
     }
+
     //根据时间顺序进行排序
     private static class Sort implements Comparator<Lyrc> {
         public Sort() {

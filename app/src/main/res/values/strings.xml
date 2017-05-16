@@ -54,5 +54,6 @@
     <string name="home_page">首页</string>
     <string name="record_save_dialog_title">给你的作品取个名吧</string>
     <string name="no_history">没有历史记录</string>
+    <string name="login_tips">您还没有登录，点击登录</string>
 
 </resources>

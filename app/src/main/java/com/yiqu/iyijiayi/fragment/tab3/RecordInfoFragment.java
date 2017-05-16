@@ -19,6 +19,7 @@ import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 /**
  * Created by Administrator on 2017/2/15.
@@ -85,7 +86,7 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
         super.onResume();
 
         MobclickAgent.onPageStart("录制作品");
-
+        JAnalyticsInterface.onPageStart(getActivity(),"录制作品");
     }
 
 
@@ -96,7 +97,7 @@ public class RecordInfoFragment extends AbsAllFragment implements View.OnClickLi
         super.onPause();
 
         MobclickAgent.onPageEnd("录制作品");
-
+        JAnalyticsInterface.onPageEnd(getActivity(),"录制作品");
 
     }
 

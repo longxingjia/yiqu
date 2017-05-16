@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -73,7 +74,6 @@ import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.RecorderAndPlayUtil;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
-import com.yiqu.iyijiayi.view.LyricView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -92,6 +92,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -136,8 +137,7 @@ public class RecordAllActivity extends Activity
     private String eid;
     @BindView(R.id.background)
     public ImageView background;
-    @BindView(R.id.lyricview)
-    public LyricView lyricView;
+
 
     @BindView(R.id.icon_record)
     public ImageView icon_record;
@@ -222,7 +222,6 @@ public class RecordAllActivity extends Activity
                 } else {
 
                 }
-
             }
         });
 
@@ -296,13 +295,13 @@ public class RecordAllActivity extends Activity
         String Url = MyNetApiConfig.ImageServerAddr + music.musicpath;
         URI uri = URI.create(Url);
         fileName = FileFunction.getValidFileName(uri);
-        backgroudMusciFile = new File(Variable.StorageMusicCachPath, fileName);
+        backgroudMusciFile = new File(Variable.StorageMusicCachPath(this), fileName);
         if (backgroudMusciFile.exists()) {
             initMusicUI();
 
         } else {
             if (mDownloadService != null) {
-                mDownloadService.download(music.mid, Url, Variable.StorageMusicCachPath,
+                mDownloadService.download(music.mid, Url, Variable.StorageMusicCachPath(this),
                         fileName);
             }
         }
@@ -377,7 +376,7 @@ public class RecordAllActivity extends Activity
         et_content.setVisibility(View.VISIBLE);
         add_article.setBackgroundResource(R.mipmap.add_music);
         selectArticle = null;
-       // et_content.setVisibility(View.VISIBLE);
+        // et_content.setVisibility(View.VISIBLE);
     }
 
 
@@ -409,9 +408,9 @@ public class RecordAllActivity extends Activity
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("录制声乐页面");
+        MobclickAgent.onPageStart("录制播音页面");
         MobclickAgent.onResume(this);
-
+        JAnalyticsInterface.onPageStart(this, "录制播音页面");
     }
 
     @Override
@@ -429,8 +428,9 @@ public class RecordAllActivity extends Activity
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("录制声乐页面");
+        MobclickAgent.onPageEnd("录制播音页面");
         MobclickAgent.onPause(this);
+        JAnalyticsInterface.onPageEnd(this, "录制播音页面");
     }
 
 
@@ -532,6 +532,8 @@ public class RecordAllActivity extends Activity
                                     musicName.setText(inputName + "");
                                     goRecordSuccessState();
                                     icon_finish.setImageResource(R.mipmap.upload);
+                                    //          ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(RecordAllActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                                    hideSoftInput();
 
                                 }
                             });
@@ -583,7 +585,7 @@ public class RecordAllActivity extends Activity
     @Override
     public void playVoiceStateChanged(long currentDuration) {
 
-        if (recordComFinish){
+        if (recordComFinish) {
             if (currentDuration > 0) {
                 int playtime = (int) (currentDuration / RecordConstant.OneSecond);
                 musictime.setText(string2TimeUtils.stringForTimeS(playtime));
@@ -781,7 +783,7 @@ public class RecordAllActivity extends Activity
                         }
                     }
                 } else {
-
+                    content.setVisibility(View.VISIBLE);
                     icon_record.setImageResource(R.mipmap.icon_pause);
                     if (!TextUtils.isEmpty(et_content.getText().toString())) {
                         content.setText(et_content.getText().toString());
@@ -840,53 +842,51 @@ public class RecordAllActivity extends Activity
                                             VoiceFunctionF2.StopVoice();
                                             icon_finish.setImageResource(R.mipmap.upload);
 
+                                            hideSoftInput();
+
                                         }
                                     });
                             b.show();
+
                             VoiceFunctionF2.pauseRecordVoice(is2mp3);
                             if (!is2mp3) {
                                 VoiceFunctionF2.pauseVoice();
                             }
                             icon_record.setImageResource(R.mipmap.icon_record);
-
                         } else {
                             VoiceFunctionF2.StopRecordVoice(is2mp3);
                             VoiceFunctionF2.StopVoice();
                             icon_finish.setImageResource(R.mipmap.upload);
-
                         }
 
                     } else if (recordTime <= 9) {
                         ToastManager.getInstance(instance).showText("录音时间要大于10秒钟");
                     } else {
+                        final EditText inputServer = new EditText(RecordAllActivity.this);
+                        inputServer.setBackgroundResource(R.drawable.edit_bg);
+                        inputServer.setFocusable(true);
+                        inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecordAllActivity.this);
+                        alertBuilder.setTitle(getString(R.string.record_save_dialog_title));
 
+                        alertBuilder.setView(inputServer);
+                        alertBuilder.setNegativeButton("取消", null);
+                        alertBuilder.setPositiveButton("确定",
+                                new DialogInterface.OnClickListener() {
 
-                            final EditText inputServer = new EditText(RecordAllActivity.this);
-                            inputServer.setBackgroundResource(R.drawable.edit_bg);
-                            inputServer.setFocusable(true);
-                            inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
-                        AlertDialog.Builder    alertBuilder = new AlertDialog.Builder(RecordAllActivity.this);
-                            alertBuilder.setTitle(getString(R.string.record_save_dialog_title));
-
-                            alertBuilder.setView(inputServer);
-                            alertBuilder.setNegativeButton("取消", null);
-                            alertBuilder.setPositiveButton("确定",
-                                    new DialogInterface.OnClickListener() {
-
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String inputName = inputServer.getText().toString();
-                                            if (TextUtils.isEmpty(inputName)) {
-                                                ToastManager.getInstance(instance).showText("请输入名字");
-                                                return;
-                                            }
-                                            musicName.setText(inputName + "");
-                                            goRecordSuccessState();
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String inputName = inputServer.getText().toString();
+                                        if (TextUtils.isEmpty(inputName)) {
+                                            ToastManager.getInstance(instance).showText("请输入名字");
+                                            return;
                                         }
-                                    });
+                                        musicName.setText(inputName + "");
+                                        goRecordSuccessState();
+                                        hideSoftInput();
+                                    }
+                                });
                         alertBuilder.show();
-
                     }
-
                 }
                 break;
             case R.id.reset:
@@ -897,7 +897,6 @@ public class RecordAllActivity extends Activity
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
                         reset();
                     }
                 });
@@ -938,6 +937,25 @@ public class RecordAllActivity extends Activity
         }
     }
 
+    /**
+     * 多种隐藏软件盘方法的其中一种
+     *
+     * @param token
+     */
+    private void hideSoftInput(IBinder token) {
+        if (token != null) {
+            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            im.hideSoftInputFromWindow(token,
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    private void hideSoftInput() {
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
     private void reset() {
         actualRecordTime = 0;
         recordVoiceBegin = false;
@@ -954,7 +972,11 @@ public class RecordAllActivity extends Activity
         add_music.setEnabled(true);
         add_article.setVisibility(View.VISIBLE);
         add_music.setVisibility(View.VISIBLE);
-//        et_content.setVisibility(View.VISIBLE);
+        if (selectArticle == null || TextUtils.isEmpty(selectArticle.content)) {
+            et_content.setVisibility(View.VISIBLE);
+            content.setVisibility(View.GONE);
+            content.setText("");
+        }
     }
 
     private void upload() {

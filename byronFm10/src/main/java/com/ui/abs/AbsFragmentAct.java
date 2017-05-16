@@ -156,6 +156,11 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 				public void onChange(int position) {
 					AbsFragmentAct.this.onChange(position);
 				}
+
+				@Override
+				public void OnCompletion() {
+
+				}
 			};
 
 	/**
