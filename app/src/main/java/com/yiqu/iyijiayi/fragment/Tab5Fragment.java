@@ -247,7 +247,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
        // LogUtils.LOGE("t",userInfo.toString());
 
-
         ll_tabs.setVisibility(View.VISIBLE);
         ll_t.setVisibility(View.VISIBLE);
         if (userInfo.type.equals("1")) {  //1是学生

@@ -324,6 +324,27 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi addTextImage = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/add-text-image";
+        }
+
+    };
+    public static MyNetApi deleteSound = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/delete-sound";
+        }
+
+    };
+    public static MyNetApi deleteComment = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/comment/del-comment";
+        }
+
+    };
 
     /**
      * 67、获取推荐关注接口
@@ -414,6 +435,19 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/sound/get-sound-list";
+        }
+
+        @Override
+        public NetMethod getNetMethod() {
+            return NetMethod.GET;
+        }
+
+    };
+
+    public static MyNetApi getHomeData = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/get-home-data";
         }
 
         @Override

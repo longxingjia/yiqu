@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab2ListFragmetAdapter;
@@ -71,6 +72,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         mLoadMoreView.setOnMoreListener(this);
 //        listView.addFooterView(mLoadMoreView);
 //        listView.setOnScrollListener(mLoadMoreView);
+        listView.setRefreshListListener(this);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
     }
@@ -80,14 +82,14 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("老师学生列表");
-        JAnalyticsInterface.onPageStart(getActivity(),"老师学生列表");
+        JAnalyticsInterface.onPageStart(getActivity(), "老师学生列表");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("老师学生列表");
-        JAnalyticsInterface.onPageEnd(getActivity(),"老师学生列表");
+        JAnalyticsInterface.onPageEnd(getActivity(), "老师学生列表");
     }
 
     @Override
@@ -113,16 +115,7 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
         listView.setAdapter(tab2ListFragmetAdapter);
         listView.setOnItemClickListener(tab2ListFragmetAdapter);
         //  listView.setRefreshListListener(this);
-
-
-
-
-        RestNetCallHelper.callNet(
-                mContext,
-                MyNetApiConfig.getGroups,
-                MyNetRequestConfig.getGroups(mContext, tab2_groups.id + "", uid, 0, 10),
-                "getGroups", this, false, true);
-
+        onRefresh();
     }
 
     @Override
@@ -201,12 +194,20 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
                 mLoadMoreView.end();
             }
         } else if (id.equals("getGroups")) {
-            if (type == TYPE_SUCCESS) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
 
                 ArrayList<Teacher> userInfos = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {
                 }.getType());
-                LogUtils.LOGE(tag,userInfos.toString());
                 tab2ListFragmetAdapter.setData(userInfos);
+                if (userInfos.size() == rows) {
+                    mLoadMoreView.setMoreAble(true);
+                }
+                count += rows;
+                L.e("ff");
+                resfreshOk();
+
+            } else {
+                resfreshFail();
             }
 
         }
@@ -225,6 +226,11 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 //                        , uid, type, count, rows),
 //                "get_follow_recommend_list",
 //                this, false, true);
+        RestNetCallHelper.callNet(
+                mContext,
+                MyNetApiConfig.getGroups,
+                MyNetRequestConfig.getGroups(mContext, tab2_groups.id + "", uid, 0, 10),
+                "getGroups", this, false, true);
 
     }
 

@@ -16,7 +16,7 @@
 
     <color name="navpage">#FFE1E8EB</color>
     <color name="head_bg">#f5f5f5</color>
-
+    <color name="im_font_color_text_hint">#abb1b6</color>
 
     <color name="book_selection_bg_color">#9087cdfa</color>
 
@@ -34,9 +34,10 @@
     <color name="appinfo_down_item_gray">#ff999999</color>
     <color name="dialog_btn_pressed">#ffe0e0e0</color>
     <color name="dialog_btn_normal">#fff7f7f7</color>
-    <color name="line_top_title">#ffcccccc</color>
+    <color name="line_top_title">#f2f2f2</color>
     <color name="background_gray">#DCDCDC</color>
-
+    <color name="color_aeaeae">#aeaeae</color>
+    <color name="im_line_color">#dadada</color>
     <color name="top_bar_search_select_bg_color">#662d3037</color>
     <color name="black_overlay">#66000000</color>
     <color name="diver_color">#E0E0E0</color>
@@ -46,7 +47,8 @@
     <color name="search_navigation_txt">#ff1d1d1d</color>
     <color name="dark_slate_gray">#2F4F4F</color>
     <color name="record_bg">#7f6c31</color>
-
+    <color name="color_232323">#232323</color>
+    <color name="basic_color_primary">#373b3e</color>
     <color name="transparent">#00000000</color>
     <color name="blue">#ffccddff</color>
     <color name="lightransparent">#a0000000</color>
@@ -68,6 +70,7 @@
     <color name="footer_text_color">#ff7f7f7f</color>
     <color name="dialog_msg_color">#ff818282</color>
     <color name="link_color">#ff7a93af</color>
+    <color name="color_8290AF">#8290AF</color>
     <color name="link_color_pressed">#ff576b95</color>
     <color name="actionbar_devider_color">#ff212324</color>
     <color name="menu_devider_color">#ff282a2b</color>
@@ -123,7 +126,7 @@
     <color name="help_title">#172E59</color>
     <color name="unit_content">#142b54</color>
     <drawable name="translate">#00000000</drawable> <!-- 透明色 -->
-    <drawable name="pic_dea">#eeeeee</drawable>
+    <color name="pic_dea">#eeeeee</color>
 
 
 

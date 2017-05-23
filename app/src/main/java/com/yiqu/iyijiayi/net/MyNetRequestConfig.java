@@ -73,6 +73,7 @@ public class MyNetRequestConfig {
         r.addHttpParam("username", username);
         r.addHttpParam("userimage", userimage);
         r.addHttpParam("sex", sex);
+        r.addHttpParam("deviceToken", "");
 
         return r;
     }
@@ -262,11 +263,28 @@ public class MyNetRequestConfig {
                                           int count, int rows, String orderby, String sort, String uid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("arr", arr);
-        r.addHttpParam("count", count + "");
-        r.addHttpParam("rows", rows + "");
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
         r.addHttpParam("orderby", orderby);
         r.addHttpParam("sort", sort);
         r.addHttpParam("checkpay", uid);
+        return r;
+    }
+
+    public static NetRequest getHomeData(Context c, String myuid,
+                                          int count, int rows, String sort) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("myuid", myuid);
+        r.addHttpParam("count", String.valueOf(count));
+        r.addHttpParam("rows", String.valueOf(rows));
+        r.addHttpParam("sort", sort);
+        return r;
+    }
+    public static NetRequest deleteComment(Context c, String id,
+                                           String uid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("id", id);
+        r.addHttpParam("uid", String.valueOf(uid));
         return r;
     }
 
@@ -390,6 +408,15 @@ public class MyNetRequestConfig {
         r.addHttpParam("count", count);
         return r;
     }
+    public static NetRequest addTextImage(Context c, String desc, String fromuid,
+                                                    String images) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("stype", "3");
+        r.addHttpParam("desc", desc);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("images", images);
+        return r;
+    }
     public static NetRequest getSoundArticleList(Context c, String class_id, String event_id,
                                                  String rows,String count) {
         MyNetRequest r = new MyNetRequest(c);
@@ -466,6 +493,12 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
         r.addHttpParam("myuid", myuid);
+        return r;
+    }
+    public static NetRequest deleteSound(Context c, String uid, String sid) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("uid", uid);
+        r.addHttpParam("sid", sid);
         return r;
     }
 

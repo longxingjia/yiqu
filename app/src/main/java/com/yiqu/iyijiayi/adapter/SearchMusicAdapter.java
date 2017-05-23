@@ -87,7 +87,6 @@ public class SearchMusicAdapter extends BaseAdapter implements OnItemClickListen
                 h.name = (TextView) v.findViewById(R.id.musicname);
                 h.musictype = (TextView) v.findViewById(R.id.musictype);
                 h.accompaniment = (TextView) v.findViewById(R.id.accompaniment);
-
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();

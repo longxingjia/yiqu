@@ -23,29 +23,38 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+import com.yiqu.iyijiayi.view.MultiView.ExpandTextView;
 
 import java.util.ArrayList;
 
-public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag ="Tab1XizuoAdapter";
+public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener,
+        AdapterView.OnItemLongClickListener {
+    private String tag = "Tab1XizuoAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
-    private int mCurrent=-1;
+    private int mCurrent = -1;
+    private boolean flag = false;
 
-
-    public Tab5XizuoAdapter(Context context) {
+    public Tab5XizuoAdapter(Context context, boolean flag) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-
+        this.flag = flag;
     }
 
     public void setData(ArrayList<Sound> list) {
@@ -73,10 +82,15 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
         return position;
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
+    }
+
     private class HoldChild {
 
         TextView musicname;
-        TextView content;
+        ExpandTextView content;
         TextView author;
         TextView comment;
         TextView like;
@@ -99,7 +113,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h = new HoldChild();
                 v = mLayoutInflater.inflate(R.layout.tab1_zuoping_adapter, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
-                h.content = (TextView) v.findViewById(R.id.desc);
+                h.content = (ExpandTextView) v.findViewById(R.id.desc);
                 h.author = (TextView) v.findViewById(R.id.author);
                 h.publish_time = (TextView) v.findViewById(R.id.publish_time);
                 h.comment = (TextView) v.findViewById(R.id.comment);
@@ -113,14 +127,14 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
-            Sound f = getItem(position);
+            final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
             h.content.setText(f.desc);
             h.comment.setText(String.valueOf(f.comments));
             h.like.setText(String.valueOf(f.like));
             h.listener.setText(String.valueOf(f.views));
             h.author.setText(f.stuname);
-            h.publish_time.setText(String2TimeUtils.longToString(f.created*1000,"yyyy/MM/dd HH:mm"));
+            h.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
             if (f.type == 1) {
                 h.musictype.setImageResource(R.mipmap.shengyue);
             } else {
@@ -128,6 +142,69 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             }
             PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
             PictureUtils.showPicture(mContext, f.stuimage, h.album, 75);
+            if (flag) {
+                L.e(String.valueOf(flag));
+                final int pos = position;
+
+                h.iv_status.setVisibility(View.VISIBLE);
+                h.iv_status.setImageResource(R.mipmap.mine_arrow);
+                h.iv_status.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (AppShare.getIsLogin(mContext)) {
+                            String title = "提示";
+                            String[] items = new String[]{"删除"};
+
+                            MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(mContext, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
+                                @Override
+                                public void onTea(int tea) {
+                                    switch (tea) {
+
+                                        case 0:
+                                            RestNetCallHelper.callNet(
+                                                    mContext,
+                                                    MyNetApiConfig.deleteSound,
+                                                    MyNetRequestConfig.deleteSound(mContext, AppShare.getUserInfo(mContext).uid, String.valueOf(f.sid)),
+                                                    "getSoundList", new NetCallBack() {
+                                                        @Override
+                                                        public void onNetNoStart(String id) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onNetStart(String id) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                                            //  LogUtils.LOGE(tag,netResponse.toString());
+                                                            L.e(netResponse.toString());
+                                                            if (type == TYPE_SUCCESS) {
+                                                                ToastManager.getInstance(mContext).showText(netResponse.result);
+                                                                datas.remove(position);
+                                                                notifyDataSetChanged();
+
+
+                                                            }
+
+                                                        }
+                                                    });
+
+
+                                            break;
+                                    }
+                                }
+                            });
+                            menuDialogSelectTeaHelper.show(v);
+                        } else {
+                            Model.startNextAct(mContext,
+                                    SelectLoginFragment.class.getName());
+                            ToastManager.getInstance(mContext).showText(mContext.getString(R.string.login_tips));
+                        }
+                    }
+                });
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,14 +221,14 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
                     R.string.fm_net_call_no_network);
             return;
         }
-        if (AppShare.getIsLogin(mContext)){
+        if (AppShare.getIsLogin(mContext)) {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", ItemDetailFragment.class.getName());
             Bundle bundle = new Bundle();
-            bundle.putSerializable("Sound",f);
+            bundle.putSerializable("Sound", f);
             i.putExtras(bundle);
             mContext.startActivity(i);
-        }else {
+        } else {
             Intent i = new Intent(mContext, StubActivity.class);
             i.putExtra("fragment", SelectLoginFragment.class.getName());
             ToastManager.getInstance(mContext).showText("请登录后再试");

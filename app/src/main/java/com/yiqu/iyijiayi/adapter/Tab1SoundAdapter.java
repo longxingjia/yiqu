@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,9 +29,11 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailTextFragment;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.HomePage;
@@ -46,7 +49,8 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
-public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener ,
+        AdapterView.OnItemLongClickListener{
 
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
@@ -90,8 +94,12 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         return 0;
     }
 
-    private class HoldChild {
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
+    }
 
+    private class HoldChild {
         TextView musicname;
         TextView desc;
         TextView time;
@@ -104,7 +112,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
         TextView listener;
         TextView tea_listen;
         TextView like;
-
+        LinearLayout ll_question;
     }
 
     @Override
@@ -127,6 +135,7 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 h.like = (TextView) v.findViewById(R.id.like);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.comment = (TextView) v.findViewById(R.id.comment);
+                h.ll_question = (LinearLayout) v.findViewById(R.id.ll_question);
                 v.setTag(h);
             }
 
@@ -198,9 +207,13 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                 }
             });
             if (f.type == 1) {
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
-            } else {
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
+                h.ll_question.setVisibility(View.VISIBLE);
+                h.musictype.setImageResource(R.mipmap.shengyue);
+            } else if (f.type == 2){
+                h.ll_question.setVisibility(View.VISIBLE);
+                h.musictype.setImageResource(R.mipmap.boyin);
+            }else {
+                h.ll_question.setVisibility(View.GONE);
             }
 
             PictureUtils.showPicture(mContext, f.tecimage, h.tea_header);
@@ -290,9 +303,16 @@ public class Tab1SoundAdapter extends BaseAdapter implements OnItemClickListener
                     R.string.fm_net_call_no_network);
             return;
         }
+//        L.e(f.type+"");
 
         Intent i = new Intent(mContext, StubActivity.class);
-        i.putExtra("fragment", ItemDetailFragment.class.getName());
+        if (f.type == 1) {
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
+        } else if (f.type == 2){
+            i.putExtra("fragment", ItemDetailFragment.class.getName());
+        }else {
+            i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+        }
         Bundle bundle = new Bundle();
         bundle.putSerializable("Sound", f);
         i.putExtras(bundle);

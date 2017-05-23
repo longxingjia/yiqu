@@ -100,7 +100,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:gravity="center"
-            android:text="最新作品"
+            android:text="最新"
             android:textSize="16sp" />
 
         <TextView

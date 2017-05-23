@@ -20,15 +20,19 @@ import com.fwrestnet.NetResponse;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
+import com.yiqu.iyijiayi.ImagePagerActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
 
+import com.yiqu.iyijiayi.adapter.Tab5PicAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
 
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab3.RecordFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Model;
@@ -57,6 +61,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private String tag = "HomePageFragment";
     private LinearLayout dianping_tab;
     private LinearLayout tiwen_tab;
+    private LinearLayout pic_tab;
     private RelativeLayout xizuo_tab;
     private TextView name;
     private ImageView sex;
@@ -72,10 +77,10 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private Tab5DianpingAdapter tab5DianpingAdapter;
     private Tab5XizuoAdapter tab5XizuoAdapter;
     private Tab1SoundAdapter tab1SoundAdapter;
+    private Tab5PicAdapter tab5PicAdapter;
     private Context mContext;
     private TextView price;
-    private LinearLayout tea;
-    private LinearLayout stu;
+
     private TextView questioncount;
     private TextView totalincome;
     private TextView questionincome;
@@ -88,6 +93,10 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private LinearLayout ll_tw;
     private TextView price1;
     private TextView ok;
+    /**
+     * 是否是自己的个人主页，true 是
+     */
+    private boolean flag = false;
 
     @Override
     protected int getTitleView() {
@@ -101,7 +110,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected int getTitleBarType() {
-        if (homePage == null) {
+        if (flag) {
             return FLAG_ALL;
         } else {
             return FLAG_BACK | FLAG_TXT;
@@ -124,7 +133,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
     @Override
     protected void initTitle() {
-        if (homePage == null) {
+        if (flag) {
             setTitleText("我");
         } else {
             setTitleText(userInfo.username + "的主页");
@@ -135,7 +144,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("个人主页"); //统计页面，"MainScreen"为页面名称，可自定义
-        JAnalyticsInterface.onPageStart(getActivity(),"个人主页");
+        JAnalyticsInterface.onPageStart(getActivity(), "个人主页");
 
 
     }
@@ -144,7 +153,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("个人主页");
-        JAnalyticsInterface.onPageEnd(getActivity(),"个人主页");
+        JAnalyticsInterface.onPageEnd(getActivity(), "个人主页");
 
     }
 
@@ -170,47 +179,63 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         InitHeadView(headview);
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
-        tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
-        tab1SoundAdapter = new Tab1SoundAdapter(this);
-        tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity());
+
 
         listView.setRefreshListListener(this);
         if (homePage == null) {
             userInfo = AppShare.getUserInfo(mContext);
-            if (userInfo.type.equals("2")) {
-
-                listView.setAdapter(tab5DianpingAdapter);
-                listView.setOnItemClickListener(tab5DianpingAdapter);
-                TYPE = 2;
-
-            } else {
-                listView.setAdapter(tab1SoundAdapter);
-                listView.setOnItemClickListener(tab1SoundAdapter);
-                TYPE = 1;
-            }
-            RestNetCallHelper.callNet(getActivity(),
-                    MyNetApiConfig.getUserPageSoundList,
-                    MyNetRequestConfig.getUserPageSoundList(getActivity()
-                            , TYPE, userInfo.uid, count, rows, myUid),
-                    "getUserPageSoundList",
-                    HomePageFragment.this);
+            flag = true;
+//            if (userInfo.type.equals("2")) {
+//
+//                listView.setAdapter(tab5DianpingAdapter);
+//                listView.setOnItemClickListener(tab5DianpingAdapter);
+////                TYPE = 2;
+//
+//            } else {
+//                listView.setAdapter(tab1SoundAdapter);
+//                listView.setOnItemClickListener(tab1SoundAdapter);
+//
+//            }
+//            listView.setAdapter(tab5PicAdapter);
+//            listView.setOnItemClickListener(tab5PicAdapter);
+//            TYPE = 4;
+//            RestNetCallHelper.callNet(getActivity(),
+//                    MyNetApiConfig.getUserPageSoundList,
+//                    MyNetRequestConfig.getUserPageSoundList(getActivity()
+//                            , TYPE, userInfo.uid, count, rows, myUid),
+//                    "getUserPageSoundList",
+//                    HomePageFragment.this);
 
         } else {
+            flag = false;
             userInfo = homePage.user;
             sounds = homePage.sound;
-            if (userInfo.type.equals("2")) {
-                listView.setAdapter(tab5DianpingAdapter);
-                listView.setOnItemClickListener(tab5DianpingAdapter);
-                tab5DianpingAdapter.setData(sounds);
-                price1.setText(userInfo.price + "");
+//            if (userInfo.type.equals("2")) {
+//                listView.setAdapter(tab5DianpingAdapter);
+//                listView.setOnItemClickListener(tab5DianpingAdapter);
+//                tab5DianpingAdapter.setData(sounds);
+//                price1.setText(userInfo.price + "");
 
-            } else {
-                listView.setAdapter(tab1SoundAdapter);
-                tab1SoundAdapter.setData(sounds);
-                listView.setOnItemClickListener(tab1SoundAdapter);
-            }
+//            } else {
+              //  listView.setAdapter(tab1SoundAdapter);
+             //   tab1SoundAdapter.setData(sounds);
+             //   listView.setOnItemClickListener(tab1SoundAdapter);
+//            }
         }
+        tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
+        tab1SoundAdapter = new Tab1SoundAdapter(this);
+        tab5PicAdapter = new Tab5PicAdapter(getActivity(),flag);
+        tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity(),flag);
+        listView.setAdapter(tab5PicAdapter);
+        listView.setOnItemClickListener(tab5PicAdapter);
 
+        TYPE = 4;
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getUserPageSoundList,
+                MyNetRequestConfig.getUserPageSoundList(getActivity()
+                        , TYPE, userInfo.uid, count, rows, myUid),
+                "getUserPageSoundList",
+                HomePageFragment.this);
         initUI();
 
         ok.setOnClickListener(new View.OnClickListener() {
@@ -219,11 +244,15 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
 //                Model.startNextAct(getActivity(),
 //                        Tab3Activity.class.getName());
-                Intent intent = new Intent(getActivity(), Tab3Activity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data", userInfo);
-                intent.putExtras(bundle);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), Tab3Activity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("data", userInfo);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                i.putExtra("fragment", RecordFragment.class.getName());
+                getActivity().startActivity(i);
+
             }
         });
 
@@ -247,9 +276,20 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         background = (ImageView) v.findViewById(R.id.background);
         dianping_tab = (LinearLayout) v.findViewById(R.id.dianping_tab);
         tiwen_tab = (LinearLayout) v.findViewById(R.id.tiwen_tab);
-        tea = (LinearLayout) v.findViewById(R.id.tea);
-        stu = (LinearLayout) v.findViewById(R.id.stu);
+        pic_tab = (LinearLayout) v.findViewById(R.id.pic_tab);
+
         xizuo_tab = (RelativeLayout) v.findViewById(R.id.xizuo_tab);
+
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ArrayList<String> imagesList = new ArrayList<String>();
+                String url = userInfo.userimage;
+                imagesList.add(url);
+                ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(v.getMeasuredWidth(), v.getMeasuredHeight());
+                ImagePagerActivity.startImagePagerActivity((getActivity()), imagesList, 0, imageSize);
+            }
+        });
 
 
     }
@@ -264,33 +304,48 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
         @Override
         public void onClick(View v) {
-            TYPE = index;
+            // TYPE = index;
             int i = index;
-            switch (TYPE) {
-                case 1:
-                    if (userInfo.type.equals("2")) {
 
-                    } else {
-                        i = index - 1;
-                    }
-                    listView.setAdapter(tab1SoundAdapter);
+            switch (index) {
+                case 1://tiwen
+
+                    i = index - 1;
+                    TYPE = 4;
+                    listView.setAdapter(tab5PicAdapter);
+
 
                     break;
-                case 2:
+                case 2://dianping
+
+                    i = index - 1;
+                    //  listView.setAdapter(tab5DianpingAdapter);
+                    TYPE = 3;
+                    listView.setAdapter(tab5XizuoAdapter);
+
+                    break;
+
+                case 3://xizuo
                     if (userInfo.type.equals("2")) {
+                        i = index - 1;
+                    } else {
                         i = index - 2;
                     }
+                    //    listView.setAdapter(tab5XizuoAdapter);
+                    TYPE = 2;
                     listView.setAdapter(tab5DianpingAdapter);
 
                     break;
 
-                case 3:
+                case 4:
                     if (userInfo.type.equals("2")) {
                         i = index - 1;
                     } else {
                         i = index - 2;
                     }
-                    listView.setAdapter(tab5XizuoAdapter);
+                    //    listView.setAdapter(tab5XizuoAdapter);
+                    TYPE = 1;
+                    listView.setAdapter(tab1SoundAdapter);
 
                     break;
 
@@ -311,14 +366,14 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     private void initUI() {
         String descStr = "";
         if (userInfo.type.equals("2")) {
-            InitCursor(3);
+            InitCursor(4);
             dianping_tab.setVisibility(View.VISIBLE);
             if (TextUtils.isEmpty(userInfo.title)) {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
             } else {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
             }
-            TYPE = 2;
+            TYPE = 4;
 
 //            tea.setVisibility(View.VISIBLE);
 //            stu.setVisibility(View.GONE);
@@ -329,14 +384,14 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         } else {
 //            tea.setVisibility(View.GONE);
 //            stu.setVisibility(View.VISIBLE);
-            InitCursor(2);
+            InitCursor(3);
             dianping_tab.setVisibility(View.GONE);
             if (TextUtils.isEmpty(userInfo.school)) {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
             } else {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.school, userInfo.followcount, userInfo.myfollowcount);
             }
-            TYPE = 1;
+            TYPE = 4;
             tincome.setText(userInfo.totalincome);
         }
         uid = userInfo.uid;
@@ -351,9 +406,10 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         } else {
             sex.setBackgroundResource(R.mipmap.sex_male);
         }
-        dianping_tab.setOnClickListener(new txListener(2));
-        tiwen_tab.setOnClickListener(new txListener(1));
-        xizuo_tab.setOnClickListener(new txListener(3));
+        dianping_tab.setOnClickListener(new txListener(3));
+        tiwen_tab.setOnClickListener(new txListener(4));
+        xizuo_tab.setOnClickListener(new txListener(2));
+        pic_tab.setOnClickListener(new txListener(1));
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
         PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
@@ -365,10 +421,13 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
      */
     private void InitCursor(int count) {
         cursor.setCount(count);
-        if (count ==2){
+        cursor.setPosition(0);
+        if (count == 2) {
             cursor.setOffset(120);
-        }else if (count==3){
+        } else if (count == 3) {
             cursor.setOffset(80);
+        } else if (count == 4) {
+            cursor.setOffset(50);
         }
     }
 
@@ -376,17 +435,15 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-
         if (id.equals("getUserPageSoundList")) {
-
             if (type == NetCallBack.TYPE_SUCCESS) {
-
                 switch (TYPE) {
                     case 2:
                         try {
                             sounds = JsonUtils.parseSoundList(netResponse.data);
                             tab5DianpingAdapter.setData(sounds);
                             listView.setOnItemClickListener(tab5DianpingAdapter);
+
 
                             if (sounds.size() == rows) {
                                 mLoadMoreView.setMoreAble(true);
@@ -402,6 +459,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                             sounds = JsonUtils.parseSoundList(netResponse.data);
                             tab1SoundAdapter.setData(sounds);
                             listView.setOnItemClickListener(tab1SoundAdapter);
+
                             if (sounds.size() == rows) {
                                 mLoadMoreView.setMoreAble(true);
                             }
@@ -450,6 +508,21 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                                 }
                             }
                         });
+                        break;
+                    case 4:
+                        try {
+                            sounds = JsonUtils.parseSoundList(netResponse.data);
+                            tab5PicAdapter.setData(sounds);
+                            listView.setOnItemClickListener(tab5PicAdapter);
+
+                            if (sounds.size() == rows) {
+                                mLoadMoreView.setMoreAble(true);
+                            }
+                            count += rows;
+                            resfreshOk();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         break;
                 }
             } else {

@@ -328,7 +328,7 @@ public class DecodeEngine {
     private static void Resample(int sampleRate, String decodeFileUrl) {
 
         String fileName = decodeFileUrl.substring(0, decodeFileUrl.lastIndexOf("/") + 1);
-        String newDecodeFileUrl =fileName +"new.pcm";
+        String newDecodeFileUrl =fileName +"44new.pcm";
 //        L.e("开始转采样率",newDecodeFileUrl);
         try {
             FileInputStream fileInputStream =
@@ -342,7 +342,7 @@ public class DecodeEngine {
             fileInputStream.close();
             fileOutputStream.close();
       //      L.e("停止转采样率");
-            FileFunction.RenameFile(newDecodeFileUrl, decodeFileUrl);
+        //    FileFunction.RenameFile(newDecodeFileUrl, decodeFileUrl);
         } catch (IOException e) {
 //            LogFunction.error("关闭bufferedOutputStream异常", e);
             e.printStackTrace();

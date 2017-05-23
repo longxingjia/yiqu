@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="220dp"
-    android:minHeight="220dp"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="220dp"
+              android:descendantFocusability="blocksDescendants"
+              android:minHeight="220dp"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,12 +22,12 @@
             android:padding="24dp"
             android:src="@mipmap/menu_head"
             app:border_color="@color/circle_imageview_border"
-            app:border_width="3dp" />
+            app:border_width="3dp"/>
 
         <RelativeLayout
-            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:gravity="center_vertical">
 
             <TextView
@@ -36,15 +37,17 @@
                 android:maxWidth="220dp"
                 android:singleLine="true"
                 android:text=""
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/iv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:background="@mipmap/icon_new" />
+                android:src="@mipmap/icon_new"
+                android:paddingLeft="15dp"
+                android:paddingBottom="15dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/publish_time"
@@ -53,35 +56,32 @@
                 android:layout_below="@id/author"
                 android:maxWidth="220dp"
                 android:singleLine="true"
-                android:textColor="@color/dark_gray"
                 android:text=""
-                android:textSize="14sp" />
+                android:textColor="@color/dark_gray"
+                android:textSize="14sp"/>
 
         </RelativeLayout>
 
 
     </LinearLayout>
 
-    <TextView
+    <com.yiqu.iyijiayi.view.MultiView.ExpandTextView
         android:id="@+id/desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:maxLines="3"
-        android:text=""
-        android:textColor="@color/dd_gray"
-        android:textSize="17sp" />
+        app:showLines="4"/>
+
+    <!-- 不同的地方 -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="13dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -91,7 +91,7 @@
             <ImageView
                 android:id="@+id/album"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
             <ImageView
                 android:id="@+id/play_status"
@@ -102,19 +102,19 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:padding="1dp"
-                android:src="@mipmap/ic_play" />
+                android:src="@mipmap/ic_play"/>
 
 
         </RelativeLayout>
 
 
         <LinearLayout
-            android:background="@color/tab_bg_color"
             android:layout_width="match_parent"
             android:layout_height="75dp"
+            android:background="@color/tab_bg_color"
+            android:orientation="vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:orientation="vertical">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,25 +127,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text=""
-                    android:singleLine="true"
                     android:maxWidth="180dp"
+                    android:singleLine="true"
+                    android:text=""
                     android:textColor="@color/dd_gray"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <ImageView
                     android:id="@+id/musictype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:gravity="center" />
+                    android:gravity="center"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="28dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
 
@@ -162,11 +162,10 @@
                     />
 
 
-
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/comment"
@@ -174,16 +173,16 @@
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:drawableLeft="@mipmap/comment_normal"
+                    android:drawablePadding="5dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/dd_gray"
-                    android:drawablePadding="5dp"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/like"
@@ -196,7 +195,7 @@
                     android:maxLines="1"
                     android:text=""
                     android:textColor="@color/dd_gray"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
 
             </LinearLayout>
@@ -206,9 +205,9 @@
     </LinearLayout>
 
     <View
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/tab_bg_color" />
+        android:layout_marginTop="10dp"
+        android:background="@color/tab_bg_color"/>
 
 </LinearLayout>

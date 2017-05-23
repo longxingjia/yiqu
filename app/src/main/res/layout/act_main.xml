@@ -41,11 +41,12 @@
 
 
             <ImageView
+                android:id="@+id/m"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="2dp"
-                android:src="@mipmap/main_tab3_an"/>
+                android:src="@mipmap/main_tab3_an1"/>
 
             <ImageView
                 android:id="@+id/image_anim"

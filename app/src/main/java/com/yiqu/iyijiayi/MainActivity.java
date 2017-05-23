@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -27,6 +28,7 @@ import com.ui.abs.AbsFragmentAct;
 import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.utils.ServiceUtils;
@@ -66,6 +68,8 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
         image_anim.startAnimation(rotate);
+
+
 
     }
 

@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_color_rating_grey"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/white_box"
+        android:gravity="top"
+        android:hint="分享新鲜图文消息..."
+        android:padding="5dp"
+        android:textSize="16dp"
+        />
+
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="false"
+        android:horizontalSpacing="@dimen/mis_space_size"
+        android:numColumns="4"
+        android:paddingBottom="?android:attr/actionBarSize"
+        android:verticalSpacing="@dimen/mis_space_size"/>
+
+
+</LinearLayout>

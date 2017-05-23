@@ -54,7 +54,8 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  * Created by Administrator on 2017/2/20.
  */
 
-public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnClickListener, VoicePlayerInterface, VoiceRecorderOperateInterface {
+public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnClickListener,
+        VoicePlayerInterface, VoiceRecorderOperateInterface {
     String tag = "Tab5WopingDetailFragment";
     private TextView like;
     private TextView musicname;
@@ -533,6 +534,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         } else if (id.equals("soundReply")) {
             if (type == TYPE_SUCCESS) {
                 ToastManager.getInstance(getActivity()).showText("回复成功");
+                getActivity().finish();
             } else {
                 ToastManager.getInstance(getActivity()).showText("回复失败");
             }

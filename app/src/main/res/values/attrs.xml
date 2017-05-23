@@ -33,4 +33,14 @@
         <attr name="dividerHeight" format="dimension"/>
         <attr name="rows" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="PraiseListView">
+        <attr name="item_color" format="color"/>
+        <attr name="item_selector_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ExpandTextView">
+        <attr name="showLines" format="integer"/>
+    </declare-styleable>
+
 </resources>

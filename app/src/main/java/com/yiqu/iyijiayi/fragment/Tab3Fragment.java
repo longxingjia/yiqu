@@ -2,6 +2,7 @@ package com.yiqu.iyijiayi.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -10,7 +11,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
+import com.yiqu.iyijiayi.fragment.tab3.RecordFragment;
 import com.yiqu.iyijiayi.fragment.tab3.RecordInfoFragment;
+import com.yiqu.iyijiayi.fragment.tab3.SharePicFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
 
 import com.yiqu.iyijiayi.fragment.tab3.TextQuestionFragment;
@@ -21,11 +24,14 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.utils.AppShare;
 
+import java.util.ArrayList;
+
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import me.nereo.multi_image_selector.MultiImageSelector;
 
 public class Tab3Fragment extends TabContentFragment implements View.OnClickListener {
 
-
+    private ArrayList<String> mSelectPath;
     @Override
     protected int getTitleView() {
         return R.layout.titlebar_tab5;
@@ -56,6 +62,33 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
                             SelectLoginFragment.class.getName());
                     ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
                 }
+            }
+        });
+
+        v.findViewById(R.id.rl_add_pic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (AppShare.getIsLogin(getActivity())) {
+                    Model.startNextAct(getActivity(),
+                            SharePicFragment.class.getName());
+                    if (mPlayService != null) {
+                        if (mPlayService.isPlaying())
+                            mPlayService.pause();
+                    }
+
+
+
+
+
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+
+
             }
         });
 
@@ -141,16 +174,16 @@ public class Tab3Fragment extends TabContentFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (AppShare.getIsLogin(getActivity())) {
-            Intent intent = new Intent(getActivity(), Tab3Activity.class);
-            startActivity(intent);
-//			Intent in = new Intent(getActivity(), StubActivity.class);
-//			in.putExtra("fragment", RecordInfoFragment.class.getName());
-//			startActivity(in);
+//            Intent intent = new Intent(getActivity(), Tab3Activity.class);
+//            startActivity(intent);
+
             if (mPlayService != null) {
                 if (mPlayService.isPlaying())
                     mPlayService.pause();
             }
-
+            Intent i = new Intent(getActivity(), StubActivity.class);
+            i.putExtra("fragment", RecordFragment.class.getName());
+            getActivity().startActivity(i);
 
         } else {
             Intent i = new Intent(getActivity(), StubActivity.class);

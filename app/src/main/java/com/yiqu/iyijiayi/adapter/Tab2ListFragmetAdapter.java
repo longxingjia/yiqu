@@ -122,6 +122,14 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
                 @Override
                 public void onClick(View v) {
 
+                    if (uid.equals("0")){
+                        Intent i = new Intent(mContext, StubActivity.class);
+                        i.putExtra("fragment", SelectLoginFragment.class.getName());
+                        mContext.startActivity(i);
+                        ToastManager.getInstance(mContext).showText(mContext.getString(R.string.login_tips));
+                        return;
+                    }
+
                     if (f.isfollow.equals("0")){  //没有关注
                         RestNetCallHelper.callNet(
                                 mContext,

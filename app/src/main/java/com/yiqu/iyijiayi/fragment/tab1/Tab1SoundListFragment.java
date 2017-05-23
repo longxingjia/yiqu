@@ -24,7 +24,6 @@ import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
-import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
@@ -118,7 +117,13 @@ public class Tab1SoundListFragment extends AbsAllFragment implements LoadMoreVie
                 Sound f = datas.get(position - 1);
                 if (AppShare.getIsLogin(mContext)) {
                     Intent i = new Intent(mContext, StubActivity.class);
-                    i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    if (f.type == 1) {
+                        i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    } else if (f.type == 2){
+                        i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    }else {
+                        i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+                    }
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Sound",f);
                     i.putExtras(bundle);

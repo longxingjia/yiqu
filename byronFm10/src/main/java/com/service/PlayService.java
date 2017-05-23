@@ -56,11 +56,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 //		MusicUtils.initMusicList();
 //		mPlayingPosition = (Integer) SpUtils.get(this, Constants.PLAY_POS, 0);
 
+
         mPlayer = new Player(this, null, null, null, null, new Player.onPlayCompletion() {
             @Override
             public void completion() {
-
-                mListener.OnCompletion();
+                if (mListener != null)
+                    mListener.OnCompletion();
             }
         });
 // 开始更新进度的线程
@@ -150,6 +151,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
         return sid;
     }
+
     /**
      * 暂停播放
      *
@@ -172,7 +174,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
 
-    public int getMusicPlayerState(){
+    public int getMusicPlayerState() {
         return mPlayer.getMusicPlayerState();
     }
 
@@ -262,6 +264,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         public void onPublish(int percent);
 
         public void onChange(int position);
+
         public void OnCompletion();
     }
 }

@@ -124,7 +124,7 @@ public class WelcomePageActivity extends Activity {
     protected void onResume() {
 
         PermissionGen.needPermission(this, 100, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE
+                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CAMERA
         });
         MobclickAgent.onPageStart("启动页面"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);

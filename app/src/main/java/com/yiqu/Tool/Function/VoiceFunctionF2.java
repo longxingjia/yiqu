@@ -1,5 +1,6 @@
 package com.yiqu.Tool.Function;
 
+import com.utils.L;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
@@ -27,12 +28,12 @@ public class VoiceFunctionF2 {
             filePath =  Variable.StorageMusicPath +tmpName + ".mp3";
             Mp3RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
-        //    LogUtils.LOGE("path",filePath);
+            //    LogUtils.LOGE("path",filePath);
         } else {
             filePath = Variable.StorageMusicPath + tmpName + ".pcm";
             RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
-         //   LogUtils.LOGE("path",filePath);
+            //   LogUtils.LOGE("path",filePath);
         }
         return tmpName;
 
@@ -149,9 +150,9 @@ public class VoiceFunctionF2 {
     public synchronized static void PlayToggleVoice(String fileUrl,
                                                     VoicePlayerInterface voicePlayerInterface) {
         if (IsPlayVoice(fileUrl)) {
-           VoicePlayerEngine.getInstance().stopVoice();
+            VoicePlayerEngine.getInstance().stopVoice();
         } else {
-          //  VoicePlayerEngine.getInstance().stopVoice();
+            //  VoicePlayerEngine.getInstance().stopVoice();
 //            VoicePlayerEngine.getInstance()
 //                    .playVoice(fileUrl, voicePlayerInterface);
         }

@@ -15,6 +15,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.Control.Main.PlayActivity;
 import com.yiqu.Control.Main.RecordAllActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.SoundsTab3Adapter;
 import com.db.ComposeVoiceInfoDBHelper;
 import com.model.ComposeVoice;
@@ -29,7 +30,7 @@ import cn.jiguang.analytics.android.api.JAnalyticsInterface;
  * Created by Administrator on 2017/2/15.
  */
 
-public class RecordFragment extends AbsFragment implements View.OnClickListener, RefreshList.IRefreshListViewListener {
+public class RecordFragment extends AbsAllFragment implements View.OnClickListener, RefreshList.IRefreshListViewListener {
 
 
     private TextView buttonOne;
@@ -53,8 +54,18 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
         }
     }
 
+//    @Override
+//    protected int getContentView() {
+//        return R.layout.record_fragment;
+//    }
+
     @Override
-    protected int getContentView() {
+    protected int getTitleView() {
+        return R.layout.titlebar_tab5;
+    }
+
+    @Override
+    protected int getBodyView() {
         return R.layout.record_fragment;
     }
 
@@ -176,6 +187,27 @@ public class RecordFragment extends AbsFragment implements View.OnClickListener,
 
 
         }.execute();
+
+    }
+
+    @Override
+    protected int getTitleBarType() {
+        return FLAG_BACK|FLAG_TXT;
+    }
+
+    @Override
+    protected boolean onPageBack() {
+        return false;
+    }
+
+    @Override
+    protected boolean onPageNext() {
+        return false;
+    }
+
+    @Override
+    protected void initTitle() {
+        setTitleText("录音");
 
     }
 }

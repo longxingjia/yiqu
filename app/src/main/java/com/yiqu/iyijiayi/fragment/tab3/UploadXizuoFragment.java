@@ -177,6 +177,7 @@ public class UploadXizuoFragment extends AbsAllFragment {
                 dialogHelper.dismissProgressDialog();
             }
 
+
             if (isCancelled()) {
                 return;
             }

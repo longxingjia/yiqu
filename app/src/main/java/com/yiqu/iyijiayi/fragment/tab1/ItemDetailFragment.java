@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,16 +33,26 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetApi;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.service.Download;
 import com.service.DownloadService;
+import com.squareup.picasso.Picasso;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.ui.abs.AbsFragment;
 import com.ui.views.DialogUtil;
+import com.ui.views.MenuDialog;
+import com.ui.views.MenuDialogImage;
 import com.ui.views.ObservableScrollView;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.Constants;
 import com.utils.Player;
 import com.yiqu.Tool.Function.VoiceFunction;
 import com.utils.Variable;
@@ -61,14 +74,17 @@ import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.NetworkRestClient;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.utils.LogUtils;
 import com.utils.L;
+import com.yiqu.iyijiayi.utils.DensityUtil;
 import com.yiqu.iyijiayi.utils.LyrcUtil;
 import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+import com.yiqu.iyijiayi.utils.WxUtil;
 import com.yiqu.lyric.DefaultLrcBuilder;
 import com.yiqu.lyric.ILrcBuilder;
 import com.yiqu.lyric.LrcRow;
@@ -80,6 +96,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +111,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 /**
  * Created by Administrator on 2017/2/20.
@@ -136,6 +157,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView views;
     @BindView(R.id.musictype)
     public ImageView musictype;
+    @BindView(R.id.share)
+    public ImageView share;
     @BindView(R.id.worth_type)
     public ImageView worth_type;
     @BindView(R.id.add_follow)
@@ -168,6 +191,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @BindView(R.id.ll_title)
     public LinearLayout ll_title;
+    @BindView(R.id.ll_backgroud)
+    public LinearLayout ll_backgroud;
     @BindView(R.id.listview)
     public ListView listview;
     @BindView(R.id.teacher_info)
@@ -191,7 +216,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private String teafileName;
     private String stuUrl;
     private String teaUrl;
-    private File stuFile;
+    //    private File stuFile;
     //    private File teaFile;
     private Timer mTimer;
     private TimerTask mTimerTask;
@@ -206,65 +231,65 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     Future<?> future;
     private long downloadTeaId = -1;
     private long downloadStuId = -1;
-
+    private int mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
     private boolean isBoundDownload;
 
 
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-
-                case Constant.QUERY_STUDENT:
-                    DownloadManager.Query query = new DownloadManager.Query();
-                    query.setFilterById(downloadStuId);//筛选下载任务，传入任务ID，可变参数
-                    Cursor cursor = downloadManager.query(query);
-
-                    if (cursor != null && cursor.moveToFirst()) {
-                        //此处直接查询文件大小
-                        int bytesDLIdx =
-                                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
-                        int bytesDL = cursor.getInt(bytesDLIdx);
-
-                        //获取文件下载总大小
-                        long fileTotalSize = cursor.getLong(cursor.getColumnIndex(
-                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-
-                        cursor.close();
-
-                    }
-                    break;
-                case Constant.QUERY_TEACHER:
-
-                    DownloadManager.Query q = new DownloadManager.Query();
-                    q.setFilterById(downloadTeaId);//筛选下载任务，传入任务ID，可变参数
-                    Cursor c = downloadManager.query(q);
-
-                    if (c != null && c.moveToFirst()) {
-                        //此处直接查询文件大小
-                        int bytesDLIdx =
-                                c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
-                        int bytesDL = c.getInt(bytesDLIdx);
-
-                        //获取文件下载总大小
-                        long fileTotalSize = c.getLong(c.getColumnIndex(
-                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-
-                        c.close();
-
-                        if (fileTotalSize != 0) {
-                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
-                            tea_listen.setText(percentage + "%");
-
-                        }
-
-                    }
-                    break;
-
-                default:
-
-                    break;
-            }
+//            switch (msg.what) {
+//
+//                case Constant.QUERY_STUDENT:
+//                    DownloadManager.Query query = new DownloadManager.Query();
+//                    query.setFilterById(downloadStuId);//筛选下载任务，传入任务ID，可变参数
+//                    Cursor cursor = downloadManager.query(query);
+//
+//                    if (cursor != null && cursor.moveToFirst()) {
+//                        //此处直接查询文件大小
+//                        int bytesDLIdx =
+//                                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+//                        int bytesDL = cursor.getInt(bytesDLIdx);
+//
+//                        //获取文件下载总大小
+//                        long fileTotalSize = cursor.getLong(cursor.getColumnIndex(
+//                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+//
+//                        cursor.close();
+//
+//                    }
+//                    break;
+//                case Constant.QUERY_TEACHER:
+//
+//                    DownloadManager.Query q = new DownloadManager.Query();
+//                    q.setFilterById(downloadTeaId);//筛选下载任务，传入任务ID，可变参数
+//                    Cursor c = downloadManager.query(q);
+//
+//                    if (c != null && c.moveToFirst()) {
+//                        //此处直接查询文件大小
+//                        int bytesDLIdx =
+//                                c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+//                        int bytesDL = c.getInt(bytesDLIdx);
+//
+//                        //获取文件下载总大小
+//                        long fileTotalSize = c.getLong(c.getColumnIndex(
+//                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+//
+//                        c.close();
+//
+//                        if (fileTotalSize != 0) {
+//                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
+//                            tea_listen.setText(percentage + "%");
+//
+//                        }
+//
+//                    }
+//                    break;
+//
+//                default:
+//
+//                    break;
+//            }
 
         }
     };
@@ -277,7 +302,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private Sound soundWorth;
     private String2TimeUtils string2TimeUtils = new String2TimeUtils();
     private String lyricname;
-    ;
+    private IWXAPI api;
 
     @Override
     protected int getContentView() {
@@ -287,7 +312,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
-
+        api = WXAPIFactory.createWXAPI(getActivity(), Constant.APP_ID);
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
         seekbar.setMax(100);
         initListeners();
@@ -419,10 +444,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
+                L.e(netResponse.toString());
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
                 initData();
+
 
             } else {
                 getActivity().finish();
@@ -452,6 +479,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 } else {
                     tab1CommentsAdapter.setData(commentsInfos);
                     no_comments.setVisibility(View.GONE);
+                    comments.setText(String.valueOf(commentsInfos.size()));
                 }
 
             }
@@ -462,11 +490,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         } else if (id.equals("worthSoundList")) {
 
-            if (mPlayService != null) {
-                mPlayService.play(stuUrl, sound.sid);
-            }
 
-            video_play.setImageResource(R.mipmap.video_pause);
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.views, MyNetRequestConfig
                             .getComments(getActivity(), sid),
@@ -518,6 +542,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             mLrcView.setVisibility(View.GONE);
         }
 
+        video_play.setImageResource(R.mipmap.video_pause);
         article_content.setMovementMethod(new ScrollingMovementMethod());
 
         article_content.setOnTouchListener(new View.OnTouchListener() {
@@ -560,7 +585,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        musicname.setText(sound.musicname);
+        title.setText(sound.musicname);
         tectitle.setText(sound.tectitle);
         commenttime.setText(sound.commenttime + "\"");
         soundtime.setText(string2TimeUtils.stringForTimeS(sound.soundtime));
@@ -585,10 +610,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         if (sound.touid == 0) {
             teacher_info.setVisibility(View.GONE);
-            title.setText("作品详情");
+            // title.setText("作品详情");
         } else {
             teacher_info.setVisibility(View.VISIBLE);
-            title.setText("问题详情");
+            // title.setText("问题详情");
         }
 
         long t = System.currentTimeMillis() / 1000 - sound.edited;
@@ -605,16 +630,39 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         tab1CommentsAdapter = new Tab1CommentsAdapter(getActivity(), sid, sound.fromuid + "");
         listview.setAdapter(tab1CommentsAdapter);
         listview.setOnItemClickListener(tab1CommentsAdapter);
+        listview.setOnItemLongClickListener(tab1CommentsAdapter);
+
+        tab1CommentsAdapter.setOnMoreClickListener(new Tab1CommentsAdapter.setDeleteCom() {
+            @Override
+            public void onDeleteCom() {
+                //     L.e("f");
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.getComments, MyNetRequestConfig
+                                .getComments(getActivity(), sid),
+                        "getComments", ItemDetailFragment.this, false, true);
+
+            }
+        });
 
         PictureUtils.showPicture(getActivity(), sound.tecimage, tea_header);
         PictureUtils.showPicture(getActivity(), sound.stuimage, stu_header);
 
-        stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
-        stufileName = stuUrl.substring(
-                stuUrl.lastIndexOf("/") + 1,
-                stuUrl.length());
-        stufileName = sound.musicname + "_" + stufileName;
-        stuFile = new File(Variable.StorageMusicCachPath(getActivity()), stufileName);
+        if (TextUtils.isEmpty(sound.soundpath)) {
+            //      ll_backgroud.setVisibility(View.GONE);
+            //   musictype.setVisibility(View.GONE);
+//            stufileName = stuUrl.substring(
+//                    stuUrl.lastIndexOf("/") + 1,
+//                    stuUrl.length());
+//            stufileName = sound.musicname + "_" + stufileName;
+            //   stuFile = new File(Variable.StorageMusicCachPath(getActivity()), stufileName);
+        } else {
+            stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
+            if (mPlayService != null) {
+                mPlayService.play(stuUrl, sound.sid);
+                L.e(stuUrl);
+            }
+        }
+
 
         teaUrl = MyNetApiConfig.ImageServerAddr + sound.commentpath;
         teafileName = teaUrl.substring(
@@ -625,6 +673,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         if (sound.islike != 0) {
             initDianZan();
         }
+
 
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
@@ -639,7 +688,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "edited", "desc", "0"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "views", "desc", "0"),
                 "worthSoundList", ItemDetailFragment.this, true, true);
 
     }
@@ -653,33 +702,48 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         if (sound == null) {
             sid = getActivity().getIntent().getExtras().getString("data");
-
+            String uid = "0";
             if (AppShare.getIsLogin(getActivity())) {
-
-                RestNetCallHelper.callNet(getActivity(),
-                        MyNetApiConfig.getSoundDetail, MyNetRequestConfig
-                                .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this, true, false);
+                uid = userInfo.uid;
 
             }
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                            .getSoundDetail(getActivity(), sid, uid),
+                    "getSoundDetail", ItemDetailFragment.this, true, false);
+
         } else {
             sid = String.valueOf(sound.sid);
-//            L.e(sound.toString());
-            initData();
+            String uid = "0";
+            if (AppShare.getIsLogin(getActivity())) {
+                uid = userInfo.uid;
+            }
+            //     initData();
+            RestNetCallHelper.callNet(getActivity(),
+                    MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                            .getSoundDetail(getActivity(), sid, uid),
+                    "getSoundDetail", ItemDetailFragment.this, true, false);
+
         }
 
         super.init(savedInstanceState);
     }
 
-    @OnClick({R.id.tea_listen, R.id.like, R.id.comment, R.id.stu_header, R.id.tea_header,
-            R.id.video_play, R.id.back, R.id.add_follow, R.id.ll_worth})
+    @OnClick({R.id.tea_listen, R.id.like, R.id.comments, R.id.stu_header, R.id.tea_header,
+            R.id.video_play, R.id.back, R.id.add_follow, R.id.ll_worth, R.id.share})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_worth:
 
                 if (soundWorth != null) {
                     Intent i = new Intent(getActivity(), StubActivity.class);
-                    i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    if (soundWorth.type == 1) {
+                        i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    } else if (soundWorth.type == 2){
+                        i.putExtra("fragment", ItemDetailFragment.class.getName());
+                    }else {
+                        i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+                    }
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Sound", soundWorth);
                     i.putExtras(bundle);
@@ -714,13 +778,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     video_play.setImageResource(R.mipmap.video_pause);
                 }
                 break;
-            case R.id.stu_listen:
-                if (stuFile.exists()) {
-                    palyStudentVoice();
-                } else {
-                    downloadStuId = dowoload(stuUrl, stufileName, 0);
-                }
-                break;
+
             case R.id.tea_listen:
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
                 if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
@@ -793,7 +851,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 }
 
                 break;
-            case R.id.comment:
+            case R.id.comments:
 
 
                 if (AppShare.getIsLogin(getActivity())) {
@@ -821,18 +879,215 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             case R.id.tea_header:
                 initHomepage(getActivity(), String.valueOf(sound.touid));
                 break;
+            case R.id.share:
+                showShare();
+
+                //            showShareOri();
+                break;
 
         }
+    }
+
+    private void showShare() {
+        ShareSDK.initSDK(getActivity());
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        final String url = MyNetApiConfig.ServerAddr + "/site/share-page?sid=" + sid;
+        L.e(url);
+// 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+        oks.setTitle(sound.musicname);
+        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+//        oks.setTitleUrl("http://sharesdk.cn");
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText(sound.stuname);
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl(url);
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+        // oks.setComment("我是测试评论文本");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        //   oks.setSite(getString(R.string.app_name));
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl(url);
+        oks.setImageUrl(url);
+//        if (sound.stuimage != null) {
+//            if (sound.stuimage .contains("http://wx.qlogo.cn")) {
+//                oks.setImagePath(sound.stuimage );
+//                L.e(sound.stuimage );
+//            } else {
+//                //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+//                oks.setImageUrl(MyNetApiConfig.ImageServerAddr +sound.stuimage);
+//                L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage );
+//            }
+//        } else {
+//            Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//            oks.setImageData(imageData);
+//            oks.setim
+//        }
+        oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
+            @Override
+            public void onShare(Platform platform, cn.sharesdk.framework.Platform.ShareParams paramsToShare) {
+                if ("QZone".equals(platform.getName())) {
+                    paramsToShare.setTitle(null);
+                    paramsToShare.setTitleUrl(null);
+                }
+                if ("QQ".equals(platform.getName())) {
+                    Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                    paramsToShare.setImageData(imageData);
+                    paramsToShare.setContentType(Platform.SHARE_MUSIC);
+//                    if (sound.stuimage != null) {
+//                        if (sound.stuimage .contains("http://wx.qlogo.cn")) {
+//                            paramsToShare.setImagePath(sound.stuimage );
+//                            L.e(sound.stuimage );
+//                        } else {
+//                            //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+//                            paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr +sound.stuimage);
+//                            L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage );
+//                        }
+//                    } else {
+//                        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//                        paramsToShare.setImageData(image);
+//                    }
+                }
+
+                if ("SinaWeibo".equals(platform.getName())) {
+                    paramsToShare.setUrl(url);
+                    paramsToShare.setText("分享 " + url);
+                    paramsToShare.setContentType(Platform.SHARE_MUSIC);
+                    if (sound.stuimage != null) {
+                        if (sound.stuimage.contains("http://wx.qlogo.cn")) {
+                            paramsToShare.setImagePath(sound.stuimage);
+                            L.e(sound.stuimage);
+                        } else {
+                            //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+                            paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                            L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                        }
+                    } else {
+                        Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        paramsToShare.setImageData(imageData);
+                    }
+
+                }
+                if ("Wechat".equals(platform.getName())) {
+                    paramsToShare.setContentType(Platform.SHARE_MUSIC);
+                    if (sound.stuimage != null) {
+                        if (sound.stuimage.contains("http://wx.qlogo.cn")) {
+                            paramsToShare.setImagePath(sound.stuimage);
+                            L.e(sound.stuimage);
+                        } else {
+                            //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+                            paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                            L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                        }
+                    } else {
+                        Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        paramsToShare.setImageData(imageData);
+                    }
+
+                }
+                if ("WechatMoments".equals(platform.getName())) {
+                    paramsToShare.setContentType(Platform.SHARE_MUSIC);
+                    if (sound.stuimage != null) {
+                        if (sound.stuimage.contains("http://wx.qlogo.cn")) {
+                            paramsToShare.setImagePath(sound.stuimage);
+                            L.e(sound.stuimage);
+                        } else {
+                            //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+                            paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                            L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                        }
+                    } else {
+                        Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                        paramsToShare.setImageData(imageData);
+                    }
+                }
+
+            }
+        });
+
+// 启动分享GUI
+        oks.show(getActivity());
+    }
+
+    private void showShareOri() {
+
+        final MenuDialogImage menuDialogImage = new MenuDialogImage(getActivity(), new MenuDialogImage.OnMenuListener() {
+            @Override
+            public void onMenuClick(MenuDialogImage dialog, int which) {
+                switch (which) {
+                    case MenuDialogImage.WXCHAT:
+                        mTargetScene = SendMessageToWX.Req.WXSceneSession;
+                        break;
+                    case MenuDialogImage.WXCHATMOMENTS:
+                        mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
+                        break;
+                }
+
+                final String url = MyNetApiConfig.ServerAddr + "/site/share-page?sid=" + sid;
+
+                WXMusicObject musicObject = new WXMusicObject();
+                musicObject.musicUrl = url;
+
+                WXMediaMessage msg = new WXMediaMessage();
+                msg.mediaObject = musicObject;
+                msg.title = sound.musicname;
+                msg.description = sound.desc;
+
+//                if (sound.stuimage != null) {
+//                    if (sound.stuimage.contains("http://wx.qlogo.cn")) {
+//                        msg.setImagePath(sound.stuimage);
+//                        L.e(sound.stuimage);
+//                    } else {
+//                        //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
+//                        paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+//                        L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+//                    }
+//                } else {
+//                    Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//                    paramsToShare.setImageData(imageData);
+//                }
+
+
+                Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+                msg.thumbData = WxUtil.bmpToByteArray(thumb, true);
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("music");
+                req.message = msg;
+                req.scene = mTargetScene;
+                api.sendReq(req);
+
+            }
+
+            @Override
+            public void onMenuCanle(MenuDialogImage dialog) {
+
+            }
+        });
+        menuDialogImage.show(share);
+
+
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         /** 注册下载完成接收广播 **/
-        getActivity().registerReceiver(downloadCompleteReceiver,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+//        getActivity().registerReceiver(downloadCompleteReceiver,
+//                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         MobclickAgent.onPageStart("声乐详情");
-        JAnalyticsInterface.onPageStart(getActivity(),"声乐详情");
+        JAnalyticsInterface.onPageStart(getActivity(), "声乐详情");
         RestNetCallHelper.callNet(getActivity(),
                 MyNetApiConfig.getComments, MyNetRequestConfig
                         .getComments(getActivity(), sid),
@@ -882,7 +1137,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     public void onPause() {
-        getActivity().unregisterReceiver(downloadCompleteReceiver);
+//        getActivity().unregisterReceiver(downloadCompleteReceiver);
         if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
             future.cancel(true);
             scheduledExecutorService.shutdown();
@@ -891,7 +1146,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
         MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
-        JAnalyticsInterface.onPageEnd(getActivity(),"声乐详情");
+        JAnalyticsInterface.onPageEnd(getActivity(), "声乐详情");
     }
 
     @Override
@@ -955,78 +1210,78 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     }
 
-    BroadcastReceiver downloadCompleteReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+//    BroadcastReceiver downloadCompleteReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+//
+//            if (completeDownloadId == downloadTeaId) {
+//                tea_listen.setText("100%");
+//                downloadTeaId = -1;
+//                palyTeacherVoice();
+//            }
+//            if (completeDownloadId == downloadStuId) {
+//                downloadStuId = -1;
+//                palyStudentVoice();
+//
+//            }
+//            if (downloadTeaId == -1 && downloadTeaId == -1) {
+//                if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
+//                    future.cancel(true);
+//                    scheduledExecutorService.shutdown();
+//                    scheduledExecutorService = null;
+//                }
+//            }
+//        }
+//    };
 
-            if (completeDownloadId == downloadTeaId) {
-                tea_listen.setText("100%");
-                downloadTeaId = -1;
-                palyTeacherVoice();
-            }
-            if (completeDownloadId == downloadStuId) {
-                downloadStuId = -1;
-                palyStudentVoice();
 
-            }
-            if (downloadTeaId == -1 && downloadTeaId == -1) {
-                if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
-                    future.cancel(true);
-                    scheduledExecutorService.shutdown();
-                    scheduledExecutorService = null;
-                }
-            }
-        }
-    };
-
-
-    private void palyStudentVoice() {
-
-        teacurrentTime = 0;
-        stutotalTime = sound.soundtime;
-        teatotalTime = sound.commenttime;
-        commenttime.setText(teatotalTime + "\"");
-
-        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
-            stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
-            if (mTimer != null) {
-                mTimer.cancel();
-                mTimer = null;
-            }
-            if (mTimerTask != null) {
-                mTimerTask.cancel();
-                mTimerTask = null;
-            }
-
-        } else {     //暂停，点击播放
-
-            if (mTimer == null) {
-                mTimer = new Timer();
-            }
-            if (mTimerTask == null) {
-                mTimerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        mHandler.sendEmptyMessage(0);
-
-                    }
-                };
-                mTimer.schedule(mTimerTask, 1000, 1000);
-
-            }
-
-            if (stucurrentTime > 0) {
-
-                stutotalTime = MathUtils.sub(sound.soundtime, stucurrentTime);
-                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, stucurrentTime);
-            } else {
-                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, 0);
-            }
-
-        }
-    }
+//    private void palyStudentVoice() {
+//
+//        teacurrentTime = 0;
+//        stutotalTime = sound.soundtime;
+//        teatotalTime = sound.commenttime;
+//        commenttime.setText(teatotalTime + "\"");
+//
+//        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
+//            stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
+//            if (mTimer != null) {
+//                mTimer.cancel();
+//                mTimer = null;
+//            }
+//            if (mTimerTask != null) {
+//                mTimerTask.cancel();
+//                mTimerTask = null;
+//            }
+//
+//        } else {     //暂停，点击播放
+//
+//            if (mTimer == null) {
+//                mTimer = new Timer();
+//            }
+//            if (mTimerTask == null) {
+//                mTimerTask = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//
+//                        mHandler.sendEmptyMessage(0);
+//
+//                    }
+//                };
+//                mTimer.schedule(mTimerTask, 1000, 1000);
+//
+//            }
+//
+//            if (stucurrentTime > 0) {
+//
+//                stutotalTime = MathUtils.sub(sound.soundtime, stucurrentTime);
+//                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, stucurrentTime);
+//            } else {
+//                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, 0);
+//            }
+//
+//        }
+//    }
 
     private void palyTeacherVoice() {
 
@@ -1065,13 +1320,16 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     mLrcView.setLrc(rows);
 
                 } else {
-
+                    L.e("fd");
                     if (mDownloadService != null) {
+                        L.e("f");
                         mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
                                 lyricname);
                     }
                 }
             }
+
+
         }
     };
 

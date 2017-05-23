@@ -13,8 +13,11 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ui.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
+import com.yiqu.iyijiayi.ImagePagerActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
@@ -29,6 +32,8 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.utils.LogUtils;
 import com.yiqu.iyijiayi.utils.PermissionUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
+
+import java.util.ArrayList;
 
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import kr.co.namee.permissiongen.PermissionFail;
@@ -95,12 +100,11 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     }
 
 
-
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("个人信息");
-        JAnalyticsInterface.onPageEnd(getActivity(),"个人信息");
+        JAnalyticsInterface.onPageEnd(getActivity(), "个人信息");
     }
 
     @Override
@@ -141,7 +145,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("个人信息"); //统计页面，"MainScreen"为页面名称，可自定义
-        JAnalyticsInterface.onPageStart(getActivity(),"个人信息");
+        JAnalyticsInterface.onPageStart(getActivity(), "个人信息");
 
         if (AppShare.getIsLogin(getActivity())) {
             userInfo = AppShare.getUserInfo(getActivity());
@@ -166,7 +170,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
         if (userInfo.type.equals("2")) {
             edit_price.setText(userInfo.price);
             rl_edit_apply.setVisibility(View.GONE);
-        }else {
+        } else {
             rl_edit_price.setVisibility(View.GONE);
         }
 
@@ -230,6 +234,11 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 PermissionGen.needPermission(this, 200, Manifest.permission.CAMERA);
                 break;
             case R.id.rl_edit_photo:
+                final ArrayList<String> imagesList = new ArrayList<String>();
+                String url = userInfo.userimage;
+                imagesList.add(url);
+                ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(rl_edit_photo.getMeasuredWidth(), rl_edit_photo.getMeasuredHeight());
+                ImagePagerActivity.startImagePagerActivity((getActivity()), imagesList, 0, imageSize);
 
                 break;
             case R.id.rl_edit_price:
@@ -287,7 +296,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
             @Override
             public void onBitmapUrl(String url) {
 
-                LogUtils.LOGE(tag, url);
+
             }
         });
         menuDialogPicHelper.show(edit_head, edit_head);

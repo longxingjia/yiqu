@@ -10,6 +10,7 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.utils.L;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
@@ -33,8 +34,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import cn.sharesdk.wechat.utils.WechatHandlerActivity;
 
-public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
+
+public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEventHandler {
 
     private Context mContext;
     private String code;
@@ -88,7 +91,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 //即为所需的code
                 code = ((SendAuth.Resp) resp).code;
 
-
                 if (NetworkRestClient.isNetworkAvailable(mContext)) {
                     LoginTask loginTask = new LoginTask();
                     loginTask.execute();
@@ -101,7 +103,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 finish();
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
-                ToastManager.getInstance(this).showText("登录被取消");
+                ToastManager.getInstance(this).showText("操作被取消");
                 finish();
                 break;
         }
@@ -143,6 +145,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         Intent intent = new Intent();
                         intent.putExtra("openid",wechatAccessToken.openid);
                         setResult(RESULT_OK,intent);
+
                         finish();
                         return;
                     }
@@ -189,6 +192,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 WechatUserInfo vo = null;
 
                 if (result.length() > 0) {
+//                    L.e(result);
                     Gson gson = new Gson();
                     vo = gson.fromJson(result, WechatUserInfo.class);
                 }
@@ -205,11 +209,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             if (dialog != null) {
                 dialog.dismissProgressDialog();
             }
-
-
             if (vo != null) {
-                //   LogUtils.LOGE(vo.toString());
                 AppShare.setWechatUserInfo(mContext, vo);
+                L.e(vo.headimgurl);
+
                 RestNetCallHelper.callNet(mContext,
                         MyNetApiConfig.loginFromWechat, MyNetRequestConfig
                                 .loginFromWechat(mContext, vo.openid, vo.nickname, vo.headimgurl, vo.sex),
@@ -233,6 +236,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                 } else {
 
                                     Gson gson = new Gson();
+                                    L.e(netResponse.toString());
                                     UserInfo userInfo = gson.fromJson(netResponse.data.toString(), UserInfo.class);
                                     AppShare.setIsLogin(mContext, true);
                                     AppShare.setUserInfo(mContext, userInfo);

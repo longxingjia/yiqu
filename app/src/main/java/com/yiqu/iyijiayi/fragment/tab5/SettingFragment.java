@@ -81,9 +81,7 @@ public class SettingFragment extends AbsAllFragment implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), StubActivity.class);
         switch (v.getId()) {
-
             case R.id.agreement:
-
                 intent.putExtra("fragment", ShowSettingFragment.class.getName());
                 intent.putExtra("data", "agreement");
                 getActivity().startActivity(intent);

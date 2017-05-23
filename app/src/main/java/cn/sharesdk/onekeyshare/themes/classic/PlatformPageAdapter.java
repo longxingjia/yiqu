@@ -26,6 +26,7 @@ import cn.sharesdk.onekeyshare.CustomerLogo;
 
 import com.mob.tools.gui.ViewPagerAdapter;
 import com.mob.tools.utils.ResHelper;
+import com.utils.L;
 
 /** 九宫格的适配器抽象类 */
 public abstract class PlatformPageAdapter extends ViewPagerAdapter implements OnClickListener {
@@ -54,6 +55,9 @@ public abstract class PlatformPageAdapter extends ViewPagerAdapter implements On
 			calculateSize(page.getContext(), cells);
 			collectCells(cells);
 		}
+
+
+
 	}
 
 	/** 计算九宫格的格数，行数，格高，行高，图标大小 */
@@ -104,6 +108,7 @@ public abstract class PlatformPageAdapter extends ViewPagerAdapter implements On
 		int lineCount = panelHeight / cellHeight;
 		LinearLayout[] llCells = new LinearLayout[lineCount * lineSize];
 		llPanel.setTag(llCells);
+//		L.e(llCells.length+"");
 		int cellBack = ResHelper.getBitmapRes(context, "ssdk_oks_classic_platform_cell_back");
 		LinearLayout.LayoutParams lp;
 		for (int i = 0; i < lineCount; i++) {

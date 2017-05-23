@@ -29,6 +29,7 @@ import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
 
 import com.mob.tools.gui.MobViewPager;
 import com.mob.tools.utils.ResHelper;
+import com.utils.L;
 
 /** 九宫格的抽象类 */
 public abstract class PlatformPage extends OnekeySharePage {
@@ -105,11 +106,13 @@ public abstract class PlatformPage extends OnekeySharePage {
 		for (Platform p : platforms) {
 			if (!hides.containsKey(p.getName())) {
 				cells.add(p);
+
 			}
 		}
 
 		ArrayList<CustomerLogo> customers = getCustomerLogos();
 		if (customers != null && customers.size() > 0) {
+			L.e(customers.size()+"");
 			cells.addAll(customers);
 		}
 

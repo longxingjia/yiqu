@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
@@ -40,7 +41,7 @@ import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
 
-public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListener,AdapterView.OnItemLongClickListener {
 
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
@@ -79,6 +80,8 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
     public long getItemId(int position) {
         return 0;
     }
+
+
 
     private class HoldChild {
 
@@ -242,6 +245,37 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
         }
 
 
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position<2){
+          return  false;
+        }else {
+            Sound f = getItem(position-2);//加了头部
+            if (!isNetworkConnected(mContext)) {
+                ToastManager.getInstance(mContext).showText(
+                        R.string.fm_net_call_no_network);
+                return false;
+            }
+            if (AppShare.getIsLogin(mContext)){
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", ItemDetailFragment.class.getName());
+                i.putExtra("data",f.sid+"");
+
+                mContext.startActivity(i);
+            }else {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", SelectLoginFragment.class.getName());
+                ToastManager.getInstance(mContext).showText("请登录后再试");
+                mContext.startActivity(i);
+
+            }
+
+        }
+        L.e(position+"");
+
+        return true;
     }
 
     public boolean isNetworkConnected(Context context) {

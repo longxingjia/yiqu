@@ -87,7 +87,7 @@ public class UploadImage {
                 InputStream is = new FileInputStream(file);
                 byte[] bytes = new byte[1024];
                 int len = 0;
-                LogUtils.LOGE("total",file.length()+"");
+            //    LogUtils.LOGE("total",file.length()+"");
                 long progress = 0;
                 while ((len = is.read(bytes)) != -1) {
                     dos.write(bytes, 0, len);
@@ -97,7 +97,6 @@ public class UploadImage {
                     if (percent>100){
                         percent=100;
                     }
-                    LogUtils.LOGE("progress",percent+"");
 
                 }
                 is.close();

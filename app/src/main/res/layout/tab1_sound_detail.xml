@@ -40,10 +40,10 @@
                         android:id="@+id/article_content"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
                         android:layout_marginTop="50dp"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:maxHeight="180dp"
                         android:maxLines="15"
                         android:scrollbars="vertical"
@@ -72,35 +72,7 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="7dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
 
-                <ImageView
-                    android:id="@+id/musictype"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:src="@mipmap/shengyue"/>
-
-                <TextView
-                    android:id="@+id/musicname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="@color/dd_gray"
-                    android:textSize="16sp"/>
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -418,7 +390,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/tab_bg_color"
+                android:background="#f2f2f2"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -443,6 +415,7 @@
                     android:drawableLeft="@mipmap/comment"
                     android:paddingBottom="2dp"
                     android:paddingLeft="10dp"
+                    android:visibility="gone"
                     android:paddingTop="2dp"
                     android:textColor="@color/redMain"
                     android:textSize="16sp"/>
@@ -714,7 +687,7 @@
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
-        android:background="@color/detail_banner_bg"
+        android:background="@color/transparent"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -736,9 +709,19 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/title_height"
             android:gravity="center"
-            android:text="详情"
+            android:text=""
+            android:maxWidth="180dp"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/musictype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/shengyue"/>
+
 
         <View
             android:layout_width="0dp"
@@ -751,9 +734,34 @@
             android:layout_height="@dimen/title_height"
             android:focusable="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/back_write"
-            android:visibility="invisible"/>
+            android:src="@mipmap/share_icon"
+            />
 
 
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+
+            <TextView
+                android:id="@+id/musicname"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text=""
+                android:visibility="gone"
+                android:textColor="@color/dd_gray"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

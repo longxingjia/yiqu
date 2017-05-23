@@ -1,6 +1,7 @@
 package com.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -237,17 +238,23 @@ public class ProxyFileUtils {
 	 */
 	static public String getValidFileName(URI uri) {
 		String path = uri.getRawPath();
-		String name = path.substring(path.lastIndexOf("/"));
-		name = name.replace("\\", "");
-		name = name.replace("/", "");
-		name = name.replace(":", "");
-		name = name.replace("*", "");
-		name = name.replace("?", "");
-		name = name.replace("\"", "");
-		name = name.replace("<", "");
-		name = name.replace(">", "");
-		name = name.replace("|", "");
-		name = name.replace(" ", "_"); // 前面的替换会产生空格,最后将其一并替换掉
-		return name;
+		if (!TextUtils.isEmpty(path)){
+			String name = path.substring(path.lastIndexOf("/"));
+			name = name.replace("\\", "");
+			name = name.replace("/", "");
+			name = name.replace(":", "");
+			name = name.replace("*", "");
+			name = name.replace("?", "");
+			name = name.replace("\"", "");
+			name = name.replace("<", "");
+			name = name.replace(">", "");
+			name = name.replace("|", "");
+			name = name.replace(" ", "_"); // 前面的替换会产生空格,最后将其一并替换掉
+			return name;
+		}else {
+			return "";
+		}
+
+
 	}
 }

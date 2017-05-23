@@ -333,9 +333,9 @@ public class RecordAllActivity extends Activity
         fileNameCom = music.musicname + t + "cv.mp3";
         composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
         mid = music.mid;
-        totalTime = music.time;
+//        totalTime = music.time;
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
-        pb_record.setMax(music.time);
+        pb_record.setMax(totalTime);
         select_music.setText(music.musicname);
         add_music.setBackgroundResource(R.mipmap.cancle_music);
 //        VoiceFunctionF2.PlayToggleVoice(musicFileUrl, this);
@@ -554,9 +554,11 @@ public class RecordAllActivity extends Activity
 
     @Override
     public void playVoiceBegin(long duration) {
-        int pTotalTime = (int) duration / 1000;
-        tv_totaltime.setText(string2TimeUtils.stringForTimeS(pTotalTime));
-        pb_record.setMax(pTotalTime);
+        if (!recordVoiceBegin){
+            int pTotalTime = (int) duration / 1000;
+            tv_totaltime.setText(string2TimeUtils.stringForTimeS(pTotalTime));
+            pb_record.setMax(pTotalTime);
+        }
 
         if (backgroudMusciFile != null && backgroudMusciFile.exists()) {
             DownloadMusicInfoDBHelper downloadMusicInfoDBHelper = new DownloadMusicInfoDBHelper(instance);
@@ -606,6 +608,12 @@ public class RecordAllActivity extends Activity
         if (recordComFinish) {
             icon_record.setImageResource(R.mipmap.icon_play);
             upload();
+        }
+
+        if (recordVoiceBegin) {
+            if (!is2mp3) {
+                VoiceFunctionF2.PlayToggleVoice(backgroudMusciFile.getAbsolutePath(), this);
+            }
         }
     }
 
@@ -663,6 +671,9 @@ public class RecordAllActivity extends Activity
     }
 
     private void stopRecording() {
+        recordVoiceButton.setEnabled(true);
+        composeProgressBar.setVisibility(View.GONE);
+        recordComFinish = true;
         composeVoice = new ComposeVoice();
         composeVoice.fromuid = AppShare.getUserInfo(instance).uid;
         composeVoice.mid = 0;
@@ -691,7 +702,9 @@ public class RecordAllActivity extends Activity
         ComposeVoiceInfoDBHelper composeVoiceInfoDBHelper = new ComposeVoiceInfoDBHelper(instance);
         composeVoiceInfoDBHelper.insert(composeVoice, ComposeVoiceInfoDBHelper.UNCOMPOSE);
         composeVoiceInfoDBHelper.close();
+        VoiceFunctionF2.StopVoice();
         VoiceFunctionF2.PlayToggleVoice(VoiceFunctionF2.getRecorderPath(), instance);
+
     }
 
     @Override
@@ -838,10 +851,13 @@ public class RecordAllActivity extends Activity
                                                 return;
                                             }
                                             musicName.setText(inputName + "");
+                                            //
+                                            if (!is2mp3) {
+                                                VoiceFunctionF2.StopVoice();
+                                            }
                                             VoiceFunctionF2.StopRecordVoice(is2mp3);
-                                            VoiceFunctionF2.StopVoice();
-                                            icon_finish.setImageResource(R.mipmap.upload);
 
+                                            icon_finish.setImageResource(R.mipmap.upload);
                                             hideSoftInput();
 
                                         }

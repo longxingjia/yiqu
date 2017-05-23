@@ -20,6 +20,16 @@
         android:listSelector="#00000000"
         android:scrollbars="none"></com.ui.views.RefreshList>
 
+    <!--<com.malinskiy.superrecyclerview.SuperRecyclerView-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/recyclerView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"-->
+        <!--app:layout_moreProgress="@layout/view_more_progress"-->
+        <!--app:recyclerClipToPadding="true"-->
+        <!--app:scrollbarStyle="outsideOverlay" />-->
+
 
 
 </LinearLayout>

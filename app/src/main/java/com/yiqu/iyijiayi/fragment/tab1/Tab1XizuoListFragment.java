@@ -23,7 +23,6 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
-import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.NSDictionary;

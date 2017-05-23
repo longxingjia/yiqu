@@ -7,6 +7,7 @@
  */
 package com.yiqu.iyijiayi.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -21,27 +22,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
+import com.ui.views.DialogUtil;
+import com.utils.L;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
 import com.yiqu.iyijiayi.model.CommentsInfo;
+import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
+import com.yiqu.iyijiayi.view.CommentListView;
 
 import java.util.ArrayList;
 
-public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListener {
+public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListener, AdapterView.OnItemLongClickListener {
     private String tag = "Tab1CommentsAdapter";
     private LayoutInflater mLayoutInflater;
     private ArrayList<CommentsInfo> datas = new ArrayList<CommentsInfo>();
     private Context mContext;
     private String sid;
     private String uid;
+    private Dialog dialog;
 
-    public Tab1CommentsAdapter(Context context, String sid,String uid) {
+    public Tab1CommentsAdapter(Context context, String sid, String uid) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         this.sid = sid;
@@ -75,6 +86,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
         return position;
     }
 
+
     private class HoldChild {
 
         TextView username;
@@ -84,7 +96,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
 
 
     }
-
+    private setDeleteCom mListener;
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
@@ -122,6 +134,67 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
     }
 
     @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        final CommentsInfo f = getItem(position);
+        L.e(f.toString());
+        if (!isNetworkConnected(mContext)) {
+            ToastManager.getInstance(mContext).showText(
+                    R.string.fm_net_call_no_network);
+            return true;
+        }
+
+        if (AppShare.getIsLogin(mContext)) {
+            final String fromuid = AppShare.getUserInfo(mContext).uid;
+
+            if (fromuid.equals(f.fromuid)) {
+                dialog = DialogUtil.showMyDialog(mContext, "小消息", "确定删除吗？", "确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        L.e(f.toString());
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.deleteComment,
+                                MyNetRequestConfig.deleteComment(mContext, f.id, fromuid),
+                                "worthSoundList", new NetCallBack() {
+                                    @Override
+                                    public void onNetNoStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetStart(String id) {
+
+                                    }
+
+                                    @Override
+                                    public void onNetEnd(String id, int type, NetResponse netResponse) {
+                                        if (type==TYPE_SUCCESS){
+                                            if (mListener != null) mListener.onDeleteCom();
+                                        }
+
+                                    }
+                                }, true, true);
+                        dialog.dismiss();
+                    }
+                }, "取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+
+
+        } else {
+            Intent i = new Intent(mContext, StubActivity.class);
+            i.putExtra("fragment", SelectLoginFragment.class.getName());
+            ToastManager.getInstance(mContext).showText("请登录后再试");
+            mContext.startActivity(i);
+        }
+        return true;
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CommentsInfo f = getItem(position);
 //
@@ -137,7 +210,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
                 Intent intent = new Intent(mContext, CommentActivity.class);
                 intent.putExtra("sid", sid + "");
                 intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid + "");
-                intent.putExtra("touid",String.valueOf(uid));
+                intent.putExtra("touid", String.valueOf(uid));
                 mContext.startActivity(intent);
             } else {
                 Intent intent = new Intent(mContext, CommentActivity.class);
@@ -153,6 +226,14 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
             ToastManager.getInstance(mContext).showText("请登录后再试");
             mContext.startActivity(i);
         }
+    }
+
+    public interface setDeleteCom{
+        public void onDeleteCom();
+    }
+
+    public void setOnMoreClickListener(setDeleteCom l) {
+        mListener = l;
     }
 
     public boolean isNetworkConnected(Context context) {

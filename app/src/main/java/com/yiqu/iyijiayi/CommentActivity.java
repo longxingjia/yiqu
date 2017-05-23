@@ -82,7 +82,7 @@ public class CommentActivity extends Activity implements NetCallBack {
                 RestNetCallHelper.callNet(CommentActivity.this,
                         MyNetApiConfig.addComment, MyNetRequestConfig
                                 .addComment(CommentActivity.this, sid, fromuid, touid, s),
-                        "addComment", CommentActivity.this, false, true);
+                        "addComment", CommentActivity.this, true, true);
     }
 });
 
