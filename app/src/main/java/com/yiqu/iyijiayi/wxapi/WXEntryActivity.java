@@ -111,12 +111,12 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
 
     class LoginTask extends AsyncTask<String, Void, String> {
 
-        private DialogHelper dialogHelper;
+//        private DialogHelper dialogHelper;
 
         @Override
         protected void onPreExecute() {
-            dialogHelper = new DialogHelper(mContext, this);
-            dialogHelper.showProgressDialog();
+//            dialogHelper = new DialogHelper(mContext, this);
+//            dialogHelper.showProgressDialog();
         }
 
         @Override
@@ -131,10 +131,10 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
 
         @Override
         protected void onPostExecute(final String result) {
-
-            if (dialogHelper != null) {
-                dialogHelper.dismissProgressDialog();
-            }
+//
+//            if (dialogHelper != null) {
+//                dialogHelper.dismissProgressDialog();
+//            }
             try {
                 if (result.contains("errmsg")) {
                     ToastManager.getInstance(mContext).showText("登录失败");
