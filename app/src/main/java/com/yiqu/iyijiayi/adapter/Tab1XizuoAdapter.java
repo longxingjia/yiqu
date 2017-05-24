@@ -572,7 +572,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 //    h.play_status =
                 mCurrent = f.sid;
                 notifyDataSetChanged();
-                if (mListener != null) mListener.onMoreClick(pos);
+                if (mListener != null) mListener.onMoreClick(mCurrent);
             }
         });
 

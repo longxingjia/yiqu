@@ -123,9 +123,9 @@ public class Tab5WotingAdapter extends BaseAdapter implements OnItemClickListene
             h.like.setText(String.valueOf(f.like));
 
             if (f.type == 1) {
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+                h.musictype.setImageResource(R.mipmap.shengyue);
             } else {
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
+                h.musictype.setImageResource(R.mipmap.boyin);
             }
             PictureUtils.showPicture(mContext, f.userimage, h.header, 50);
 

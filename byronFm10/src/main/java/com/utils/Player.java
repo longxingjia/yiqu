@@ -44,6 +44,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     // private String oldUrl ;
     private onPlayCompletion onPlayCompletion;
     private onPreparedCompletion mListener;
+    private onPlayStatusChange onPlayStatusChange;
 
     public Player(Context context, SeekBar skbProgress, ImageView video_play,
                   TextView now_time, TextView all_time, onPlayCompletion onPlayCompletion) {
@@ -139,7 +140,9 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     public void rePlay() {
         if (musicPlayerState == MusicPlayerState.pausing) {
             mediaPlayer.start();
+
             musicPlayerState = MusicPlayerState.playing;
+            if (onPlayStatusChange != null) onPlayStatusChange.onPlayStatusChange(musicPlayerState);
         }
     }
 
@@ -170,6 +173,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnCompletionListener(this);
             musicPlayerState = MusicPlayerState.preparing;
+            if (onPlayStatusChange != null) onPlayStatusChange.onPlayStatusChange(musicPlayerState);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -194,6 +198,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
 //                mediaPlayer.release();
             }
             musicPlayerState = MusicPlayerState.stop;
+            if (onPlayStatusChange != null) onPlayStatusChange.onPlayStatusChange(musicPlayerState);
         }
     }
 
@@ -204,8 +209,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     public void onPrepared(MediaPlayer arg0) {
 
         arg0.start();
+//        L.e("playing");
         musicPlayerState = MusicPlayerState.playing;
+
         if (mListener != null) mListener.onPreparedCompletion();
+        if (onPlayStatusChange != null) onPlayStatusChange.onPlayStatusChange(musicPlayerState);
     }
 
     @Override
@@ -221,6 +229,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
         }
         onPlayCompletion.completion();
         musicPlayerState = MusicPlayerState.stop;
+        if (onPlayStatusChange != null) onPlayStatusChange.onPlayStatusChange(musicPlayerState);
     }
 
     public int getMusicPlayerState(){
@@ -232,12 +241,19 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener, 
     }
 
 
+
     public void setOnPreparedCompletion(onPreparedCompletion l) {
         mListener = l;
+    }
+    public void setOnPlayStatusChange(onPlayStatusChange l) {
+        onPlayStatusChange = l;
     }
 
     public interface onPreparedCompletion {
         public void onPreparedCompletion();
+    }
+    public interface onPlayStatusChange {
+        public void onPlayStatusChange(int status);
     }
 
     @Override

@@ -168,7 +168,7 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
         private String openid;
         private String access_token;
         private Context mContext;
-        private DialogHelper dialog;
+    //    private DialogHelper dialog;
 
         public GetWechatUserInfoTask(Context context, String access_token, String openid) {
             this.openid = openid;
@@ -178,8 +178,8 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
 
         @Override
         protected void onPreExecute() {
-            dialog = new DialogHelper(mContext, this);
-            dialog.showProgressDialog();
+//            dialog = new DialogHelper(mContext, this);
+//            dialog.showProgressDialog();
         }
 
         @Override
@@ -196,6 +196,7 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
                     Gson gson = new Gson();
                     vo = gson.fromJson(result, WechatUserInfo.class);
                 }
+                L.e(vo.toString());
                 return vo;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -206,9 +207,9 @@ public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEven
 
         @Override
         protected void onPostExecute(final WechatUserInfo vo) {
-            if (dialog != null) {
-                dialog.dismissProgressDialog();
-            }
+//            if (dialog != null) {
+//                dialog.dismissProgressDialog();
+//            }
             if (vo != null) {
                 AppShare.setWechatUserInfo(mContext, vo);
                 L.e(vo.headimgurl);

@@ -236,62 +236,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
 
     Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//
-//                case Constant.QUERY_STUDENT:
-//                    DownloadManager.Query query = new DownloadManager.Query();
-//                    query.setFilterById(downloadStuId);//筛选下载任务，传入任务ID，可变参数
-//                    Cursor cursor = downloadManager.query(query);
-//
-//                    if (cursor != null && cursor.moveToFirst()) {
-//                        //此处直接查询文件大小
-//                        int bytesDLIdx =
-//                                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
-//                        int bytesDL = cursor.getInt(bytesDLIdx);
-//
-//                        //获取文件下载总大小
-//                        long fileTotalSize = cursor.getLong(cursor.getColumnIndex(
-//                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-//
-//                        cursor.close();
-//
-//                    }
-//                    break;
-//                case Constant.QUERY_TEACHER:
-//
-//                    DownloadManager.Query q = new DownloadManager.Query();
-//                    q.setFilterById(downloadTeaId);//筛选下载任务，传入任务ID，可变参数
-//                    Cursor c = downloadManager.query(q);
-//
-//                    if (c != null && c.moveToFirst()) {
-//                        //此处直接查询文件大小
-//                        int bytesDLIdx =
-//                                c.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
-//                        int bytesDL = c.getInt(bytesDLIdx);
-//
-//                        //获取文件下载总大小
-//                        long fileTotalSize = c.getLong(c.getColumnIndex(
-//                                DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-//
-//                        c.close();
-//
-//                        if (fileTotalSize != 0) {
-//                            int percentage = (int) (bytesDL * 100 / fileTotalSize);
-//                            tea_listen.setText(percentage + "%");
-//
-//                        }
-//
-//                    }
-//                    break;
-//
-//                default:
-//
-//                    break;
-//            }
-
-        }
     };
 
     private Tab1CommentsAdapter tab1CommentsAdapter;
@@ -659,7 +603,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             stuUrl = MyNetApiConfig.ImageServerAddr + sound.soundpath;
             if (mPlayService != null) {
                 mPlayService.play(stuUrl, sound.sid);
-                L.e(stuUrl);
+//                L.e(stuUrl);
             }
         }
 
@@ -1172,116 +1116,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     }
 
-    private long dowoload(String downloadUrl, String fileName, final int tag) {
-        downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-        //downloadUrl为下载地址
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
-
-        //设置文件下载目录和文件名
-        //   request.setDestinationInExternalPublicDir("Android/data/com.yiqu.iyijiayi/cache/musiccach", fileName);
-        request.setDestinationInExternalFilesDir(getActivity(), Environment.DIRECTORY_DOWNLOADS, fileName);
-
-        //设置下载中通知栏提示的标题
-        request.setTitle(fileName);
-
-        //设置下载中通知栏提示的介绍
-        request.setDescription(fileName);
-        // 设置为可见和可管理
-        request.setVisibleInDownloadsUi(false);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
-
-        scheduledExecutorService = Executors.newScheduledThreadPool(1);
-
-        future = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                Message msg = mHandler.obtainMessage();
-                if (tag == 0) {
-                    msg.what = Constant.QUERY_STUDENT;
-                } else {
-                    msg.what = Constant.QUERY_TEACHER;
-                }
-
-                mHandler.sendMessage(msg);
-            }
-        }, 500, 300, TimeUnit.MILLISECONDS);
-
-        return downloadManager.enqueue(request);
-
-    }
-
-//    BroadcastReceiver downloadCompleteReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-//
-//            if (completeDownloadId == downloadTeaId) {
-//                tea_listen.setText("100%");
-//                downloadTeaId = -1;
-//                palyTeacherVoice();
-//            }
-//            if (completeDownloadId == downloadStuId) {
-//                downloadStuId = -1;
-//                palyStudentVoice();
-//
-//            }
-//            if (downloadTeaId == -1 && downloadTeaId == -1) {
-//                if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
-//                    future.cancel(true);
-//                    scheduledExecutorService.shutdown();
-//                    scheduledExecutorService = null;
-//                }
-//            }
-//        }
-//    };
-
-
-//    private void palyStudentVoice() {
-//
-//        teacurrentTime = 0;
-//        stutotalTime = sound.soundtime;
-//        teatotalTime = sound.commenttime;
-//        commenttime.setText(teatotalTime + "\"");
-//
-//        if (VoiceFunction.IsPlayingVoice(stuFile.getAbsolutePath())) {  //正在播放，点击暂停
-//            stucurrentTime = VoiceFunction.pauseVoice(stuFile.getAbsolutePath());
-//            if (mTimer != null) {
-//                mTimer.cancel();
-//                mTimer = null;
-//            }
-//            if (mTimerTask != null) {
-//                mTimerTask.cancel();
-//                mTimerTask = null;
-//            }
-//
-//        } else {     //暂停，点击播放
-//
-//            if (mTimer == null) {
-//                mTimer = new Timer();
-//            }
-//            if (mTimerTask == null) {
-//                mTimerTask = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//
-//                        mHandler.sendEmptyMessage(0);
-//
-//                    }
-//                };
-//                mTimer.schedule(mTimerTask, 1000, 1000);
-//
-//            }
-//
-//            if (stucurrentTime > 0) {
-//
-//                stutotalTime = MathUtils.sub(sound.soundtime, stucurrentTime);
-//                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, stucurrentTime);
-//            } else {
-//                VoiceFunction.PlayToggleVoice(stuFile.getAbsolutePath(), this, 0);
-//            }
-//
-//        }
-//    }
 
     private void palyTeacherVoice() {
 
@@ -1303,26 +1137,34 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             mDownloadService = ((DownloadService.DownloadBinder) service).getService();
             mDownloadService.setOnDownloadEventListener(downloadListener);
             isBoundDownload = true;
+            String lrcUrl = "";
+            if (!TextUtils.isEmpty(sound.lrcpath)){
+                lrcUrl = sound.lrcpath;
+            }else if (!TextUtils.isEmpty(sound.lrc_url)){
+                lrcUrl = sound.lrc_url;
+            }
 
-            if (TextUtils.isEmpty(sound.lrc_url)) {
+            if (TextUtils.isEmpty(lrcUrl)) {
                 mLrcView.setVisibility(View.GONE);
             } else {
-                L.e(sound.lrc_url);
-                String lyricUrl = MyNetApiConfig.ImageServerAddr + sound.lrc_url;
+//                L.e(lrcUrl);
+                String lyricUrl = MyNetApiConfig.ImageServerAddr + lrcUrl;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/") + 1, lyricUrl.length());
                 File file = new File(Variable.StorageLyricCachPath, lyricname);
+
                 if (file.exists()) {
                     String result = LyrcUtil.readLRCFile(file);
+//                    L.e(result.toString());
                     //解析歌词构造器
                     ILrcBuilder builder = new DefaultLrcBuilder();
                     //解析歌词返回LrcRow集合
                     List<LrcRow> rows = builder.getLrcRows(result);
+
+          //          L.e(rows.size()+"");
                     mLrcView.setLrc(rows);
 
                 } else {
-                    L.e("fd");
                     if (mDownloadService != null) {
-                        L.e("f");
                         mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
                                 lyricname);
                     }

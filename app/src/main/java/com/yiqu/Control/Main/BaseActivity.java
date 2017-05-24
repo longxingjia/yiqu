@@ -57,6 +57,7 @@ public abstract class BaseActivity extends FragmentActivity {
 				public void OnCompletion() {
 
 				}
+
 			};
 	
 	/**

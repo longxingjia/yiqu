@@ -16,6 +16,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 import com.utils.L;
+import com.utils.Variable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -90,17 +91,27 @@ public class BitmapUtil {
      * @param inputPath
      * @return
      */
-    public static boolean decodeUriAsBitmap(Context context, String inputPath, String outputPath) {
-        if (context == null || inputPath == null || outputPath == null) return false;
+    public static String decodeUriAsBitmap(Context context, String inputPath) {
+        String outPath = Variable.StorageImagePath + System.currentTimeMillis() + ".jpg";
+        String temPath = Variable.StorageImagePath +  "temPath.jpg";
+
+
+        if (context == null || inputPath == null )
+            return "" ;
 
         Bitmap bitmap;
         try {
             bitmap = getReviewImage(inputPath);
 
+            File file = new File(temPath);
+            if (file.exists()){
+                file.delete();
+            }
 //            Uri uri = Uri.fromFile(new File(inputPath));
 //            bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            FileOutputStream fOut = new FileOutputStream(outputPath);
+            FileOutputStream fOutTemPath = new FileOutputStream(temPath);
+            FileOutputStream fOut = new FileOutputStream(outPath);
 
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
             int options = 100;
@@ -110,16 +121,18 @@ public class BitmapUtil {
                 options -= 10;//每次都减少10
                 bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
             }
+            bitmap.compress(Bitmap.CompressFormat.JPEG, options, fOutTemPath);
 
 
-            int angel = readPictureDegree(inputPath);
+            int angel = readPictureDegree(temPath);
             Bitmap newBitmap = rotaingImageView(angel, bitmap);
             newBitmap.compress(Bitmap.CompressFormat.JPEG, options, fOut);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
+            return "";
         }
-        return true;
+        return outPath;
     }
 
     /**

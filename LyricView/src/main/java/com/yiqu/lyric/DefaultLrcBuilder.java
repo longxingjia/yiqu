@@ -16,7 +16,7 @@ public class DefaultLrcBuilder implements ILrcBuilder {
     static final String TAG = "DefaultLrcBuilder";
 
     public List<LrcRow> getLrcRows(String rawLrc) {
-        Log.d(TAG,"getLrcRows by rawString");
+     //   Log.e(TAG,"getLrcRows by rawString");
         if(rawLrc == null || rawLrc.length() == 0){
             Log.e(TAG,"getLrcRows rawLrc null or empty");
             return null;
@@ -37,10 +37,11 @@ public class DefaultLrcBuilder implements ILrcBuilder {
                  [02:34.14][01:07.00]当你我不小心又想起她
                  [02:45.69][02:42.20][02:37.69][01:10.60]就在记忆里画一个叉
                  **/
-                Log.d(TAG,"lrc raw line: " + line);
+             //   Log.e(TAG,"lrc raw line: " + line);
                 if(line != null && line.length() > 0){
                     //解析每一行歌词 得到每行歌词的集合，因为有些歌词重复有多个时间，就可以解析出多个歌词行来
                     List<LrcRow> lrcRows = LrcRow.createRows(line);
+//                    Log.e(TAG, lrcRows.size()+"");
                     if(lrcRows != null && lrcRows.size() > 0){
                         for(LrcRow row : lrcRows){
                             rows.add(row);

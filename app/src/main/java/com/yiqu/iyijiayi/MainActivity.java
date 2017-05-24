@@ -28,6 +28,7 @@ import com.ui.abs.AbsFragmentAct;
 import com.ui.abs.OnFragmentListener;
 import com.ui.views.TabHostView;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMShareAPI;
 import com.utils.L;
 import com.yiqu.iyijiayi.fragment.TabContentFragment;
 import com.yiqu.iyijiayi.model.Model;
@@ -70,6 +71,13 @@ public class MainActivity extends AbsFragmentAct implements Handler.Callback,
         image_anim.startAnimation(rotate);
 
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
 
     }
 

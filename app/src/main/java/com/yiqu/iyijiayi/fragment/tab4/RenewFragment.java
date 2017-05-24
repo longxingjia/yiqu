@@ -1,12 +1,15 @@
 package com.yiqu.iyijiayi.fragment.tab4;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
+import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
@@ -14,10 +17,16 @@ import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.utils.LogUtils;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab4DiscoveryAdapter;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailPicFragment;
+import com.yiqu.iyijiayi.fragment.tab1.ItemDetailTextFragment;
 import com.yiqu.iyijiayi.model.Discovery;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
@@ -48,11 +57,13 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
     //刷新
     private RefreshList listView;
-    private Tab4DiscoveryAdapter tab4DiscoveryAdapter;
+//    private Tab4DiscoveryAdapter tab4DiscoveryAdapter;
+    private Tab1XizuoAdapter adapter;
     private String uid;
     private RelativeLayout loadErr;
     private String arr;
     private ArrayList<Sound> discoveries;
+    private ArrayList<Sound> datas = new ArrayList<Sound>();
 
     @Override
     protected int getTitleView() {
@@ -69,9 +80,9 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
         listView = (RefreshList) v.findViewById(R.id.listView);
         loadErr = (RelativeLayout) v.findViewById(R.id.loading_error);
 
-        tab4DiscoveryAdapter = new Tab4DiscoveryAdapter(getActivity());
-        listView.setAdapter(tab4DiscoveryAdapter);
-        listView.setOnItemClickListener(tab4DiscoveryAdapter);
+        adapter = new Tab1XizuoAdapter(getActivity(),getClass().getSimpleName());
+        listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(adapter);
         listView.setRefreshListListener(this);
         mLoadMoreView = (LoadMoreView) LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
         mLoadMoreView.setOnMoreListener(this);
@@ -82,6 +93,48 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
 
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 1) {
+                    return;
+                }
+             //   L.e(datas.get(position-1).toString());
+                Sound sound = datas.get(position-1);
+//                int type = getItemViewType(position - 2);
+//                if (!isNetworkConnected(mContext)) {
+//                    ToastManager.getInstance(mContext).showText(
+//                            R.string.fm_net_call_no_network);
+//                    return;
+//                }
+                Intent i = new Intent(getActivity(), StubActivity.class);
+                switch (sound.stype) {
+                    case 1:
+                        //   holder1 = (ViewHolder1) convertView.getTag();
+                        if (sound.type == 1) {
+                            i.putExtra("fragment", ItemDetailFragment.class.getName());
+                        } else if (sound.type == 2){
+                            i.putExtra("fragment", ItemDetailFragment.class.getName());
+                        }else {
+                            i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+                        }
+
+                        break;
+                    case 2:
+                        i.putExtra("fragment", ItemDetailFragment.class.getName());
+
+                        break;
+                    case 3:
+                        i.putExtra("fragment", ItemDetailPicFragment.class.getName());
+                        break;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Sound", sound);
+                i.putExtras(bundle);
+                getActivity().startActivity(i);
+            }
+        });
 
 
     }
@@ -126,7 +179,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
             RestNetCallHelper.callNet(
                     getActivity(),
                     MyNetApiConfig.getFollowSoundList,
-                    MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
+                    MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "created", "desc"),
                     "getSoundList", RenewFragment.this, false, true);
         } else {
             loadErr.setVisibility(View.VISIBLE);
@@ -176,12 +229,14 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
+      //  L.e(netResponse.toString());
         if (id.equals("getSoundList")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
                 discoveries = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
-                tab4DiscoveryAdapter.setData(discoveries);
+                datas.addAll(discoveries);
+                adapter.setData(discoveries);
                 if (discoveries.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
                 }
@@ -198,8 +253,8 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
             if (TYPE_SUCCESS == type) {
                 discoveries = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
-
-                tab4DiscoveryAdapter.addData(discoveries);
+                datas.addAll(discoveries);
+                adapter.addData(discoveries);
                 if (discoveries.size() < rows) {
                     mLoadMoreView.setMoreAble(false);
                 }
@@ -226,7 +281,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
                 RestNetCallHelper.callNet(
                         getActivity(),
                         MyNetApiConfig.getFollowSoundList,
-                        MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
+                        MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "created", "desc"),
                         "getSoundList_more", RenewFragment.this, false, true);
 
             }
@@ -244,7 +299,7 @@ public class RenewFragment extends AbsAllFragment implements LoadMoreView.OnMore
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getFollowSoundList,
-                MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "edited", "desc"),
+                MyNetRequestConfig.getFollowSoundList(getActivity(), uid, arr, count, rows, "created", "desc"),
                 "getSoundList", RenewFragment.this, false, true);
 
 

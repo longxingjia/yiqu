@@ -51,7 +51,8 @@ public class LrcRow implements Comparable<LrcRow> {
             [02:45.69][02:42.20][02:37.69][01:10.60]就在记忆里画一个叉
          **/
         try{
-            if(standardLrcLine.indexOf("[") != 0 || standardLrcLine.indexOf("]") != 9 ){
+            if(standardLrcLine.indexOf("[") != 0  ){
+//            if(standardLrcLine.indexOf("[") != 0 || standardLrcLine.indexOf("]") != 9  ){
                 return null;
             }
             //[02:34.14][01:07.00]当你我不小心又想起她
@@ -98,10 +99,19 @@ public class LrcRow implements Comparable<LrcRow> {
         timeString = timeString.replace('.', ':');
         //将字符串 XX:XX:XX 拆分
         String[] times = timeString.split(":");
+
+    //    Log.e(TAG,times[2].length()+"");
+
+        String time_mm = times[2];
+        if (time_mm.length()>2){
+            time_mm = time_mm.substring(0,1);
+        }
+     //   Log.e(TAG,time_mm+"");
+
         // mm:ss:SS
         return Integer.valueOf(times[0]) * 60 * 1000 +//分
                 Integer.valueOf(times[1]) * 1000 +//秒
-                Integer.valueOf(times[2]) ;//毫秒
+                Integer.valueOf(time_mm) ;//毫秒
     }
 
     /**

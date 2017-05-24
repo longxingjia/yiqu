@@ -17,18 +17,23 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.utils.L;
 import com.yiqu.YWActivity;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by yiw on 2016/1/6.
@@ -88,6 +93,14 @@ public class ImagePagerActivity extends Activity {
 
         addGuideView(guideGroup, startPos, imgUrls);
 
+//        viewPager.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                L.e("ff");
+//                finish();
+//            }
+//        });
+
     }
 
     private void getIntentData() {
@@ -104,9 +117,11 @@ public class ImagePagerActivity extends Activity {
                 View view = new View(this);
                 view.setBackgroundResource(R.drawable.selector_guide_bg);
                 view.setSelected(i == startPos ? true : false);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.gudieview_width),
+                final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.gudieview_width),
                         getResources().getDimensionPixelSize(R.dimen.gudieview_heigh));
                 layoutParams.setMargins(10, 0, 0, 0);
+//                L.e("ff");
+
                 guideGroup.addView(view, layoutParams);
                 guideViewList.add(view);
             }
@@ -127,7 +142,7 @@ public class ImagePagerActivity extends Activity {
 
         private List<String> datas = new ArrayList<String>();
         private LayoutInflater inflater;
-        private Context context;
+        private Activity context;
         private ImageSize imageSize;
         private ImageView smallImageView = null;
 
@@ -140,7 +155,7 @@ public class ImagePagerActivity extends Activity {
             this.imageSize = imageSize;
         }
 
-        public ImageAdapter(Context context) {
+        public ImageAdapter(Activity context) {
             this.context = context;
             this.inflater = LayoutInflater.from(context);
         }
@@ -155,10 +170,12 @@ public class ImagePagerActivity extends Activity {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             View view = inflater.inflate(R.layout.item_pager_image, container, false);
+
             if (view != null) {
-                final ImageView imageView = (ImageView) view.findViewById(R.id.image);
+                final PhotoView imageView = (PhotoView) view.findViewById(R.id.image);
 
                 if (imageSize != null) {
+
                     //预览imageView
                     smallImageView = new ImageView(context);
                     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(imageSize.getWidth(), imageSize.getHeight());
@@ -167,6 +184,15 @@ public class ImagePagerActivity extends Activity {
                     smallImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     ((FrameLayout) view).addView(smallImageView);
                 }
+
+                imageView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+                    @Override
+                    public void onViewTap(View view, float x, float y) {
+                        context.finish();
+
+                    }
+                });
+
 
                 //loading
                 final ProgressBar loading = new ProgressBar(context);
@@ -182,6 +208,10 @@ public class ImagePagerActivity extends Activity {
                 } else {
                     imgurl = MyNetApiConfig.ImageServerAddr + url;
                 }
+
+
+
+
 
                 Glide.with(context)
                         .load(imgurl)
@@ -244,6 +274,8 @@ public class ImagePagerActivity extends Activity {
 
 
     }
+
+
 
     @Override
     protected void onDestroy() {

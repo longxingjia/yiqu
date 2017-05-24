@@ -1,15 +1,21 @@
 package com.yiqu.iyijiayi.fragment.tab3;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -34,6 +40,7 @@ import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.net.UploadImage;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
+import com.yiqu.iyijiayi.view.NoScrollGridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +54,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.adapter.ImageGridAdapter;
@@ -57,15 +65,21 @@ import static android.app.Activity.RESULT_OK;
  * Created by Administrator on 2017/2/15.
  */
 
-public class SharePicFragment extends AbsAllFragment {
+public class SharePicFragment extends AbsAllFragment implements TextWatcher {
 
 
     public static String TAG = "SharePicFragment";
     private ImageShowGridAdapter mImageAdapter;
     @BindView(R.id.grid)
-    public GridView gridView;
+    public NoScrollGridView gridView;
     @BindView(R.id.content)
     public EditText content;
+    @BindView(R.id.submit)
+    public TextView submit;
+    @BindView(R.id.back)
+    public ImageView back;
+    @BindView(R.id.title)
+    public TextView title;
     private ArrayList<String> mSelectPath;
     private int maxNum = 9;
     private int currentNum = 0;
@@ -74,7 +88,7 @@ public class SharePicFragment extends AbsAllFragment {
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_BACK | FLAG_TXT | FLAG_BTN;
+        return FLAG_NONE;
     }
 
     @Override
@@ -85,30 +99,14 @@ public class SharePicFragment extends AbsAllFragment {
 
     @Override
     protected boolean onPageNext() {
-        if (TextUtils.isEmpty(content.getText().toString())) {
-            desc = "分享图片";
-        } else {
-            desc = content.getText().toString();
-        }
-        mSelectPath = mImageAdapter.getData();
-        if (mSelectPath != null && mSelectPath.size() > 0) {
-            upload(mSelectPath);
-        } else {
-            RestNetCallHelper.callNet(getActivity(),
-                    MyNetApiConfig.addTextImage,
-                    MyNetRequestConfig.addTextImage(getActivity()
-                            , desc, AppShare.getUserInfo(getActivity()).uid
-                            , ""),
-                    "addTextImage",
-                    SharePicFragment.this);
-        }
+
         return false;
     }
 
     @Override
     protected void initTitle() {
 
-        setTitleText(getString(R.string.share_pic));
+        //   setTitleText(getString(R.string.share_pic));
     }
 
     public void onResume() {
@@ -136,10 +134,44 @@ public class SharePicFragment extends AbsAllFragment {
     @Override
     protected void initView(View v) {
         ButterKnife.bind(this, v);
+        title.setText(getString(R.string.share_pic));
 
-//        gridView.setNumColumns();
+        content.addTextChangedListener(this);
+        gridView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        submit.setEnabled(false);
+
 
     }
+
+    @OnClick({R.id.back, R.id.submit})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                getActivity().finish();
+                break;
+            case R.id.submit:
+                if (TextUtils.isEmpty(content.getText().toString())) {
+                    desc = "分享图片";
+                } else {
+                    desc = content.getText().toString();
+                }
+                mSelectPath = mImageAdapter.getData();
+                if (mSelectPath != null && mSelectPath.size() > 0) {
+                    upload(mSelectPath);
+                } else {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.addTextImage,
+                            MyNetRequestConfig.addTextImage(getActivity()
+                                    , desc, AppShare.getUserInfo(getActivity()).uid
+                                    , ""),
+                            "addTextImage",
+                            SharePicFragment.this);
+                }
+                break;
+        }
+
+    }
+
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -169,7 +201,22 @@ public class SharePicFragment extends AbsAllFragment {
 
             }
         });
+
+        mImageAdapter.setOnDelListener(new ImageShowGridAdapter.OnDelListener() {
+            @Override
+            public void onDelClick(int size) {
+                if (size == 0 && TextUtils.isEmpty(content.getText().toString())) {
+                    submit.setTextColor(getResources().getColor(R.color.dd_gray));
+                    submit.setEnabled(false);
+                } else {
+//            submit.setBackgroundResource(R.mipmap.submit_clickable);
+                    submit.setTextColor(getResources().getColor(R.color.redMain));
+                    submit.setEnabled(true);
+                }
+            }
+        });
     }
+
 
     private void showAddAction() {
         boolean showCamera = true;
@@ -190,6 +237,10 @@ public class SharePicFragment extends AbsAllFragment {
 
                 mSelectPath = data.getStringArrayListExtra(MultiImageSelector.EXTRA_RESULT);
                 mImageAdapter.setData(mSelectPath);
+                if (mSelectPath.size() > 0) {
+                    submit.setEnabled(true);
+                    submit.setTextColor(getResources().getColor(R.color.redMain));
+                }
 
             }
         }
@@ -202,6 +253,29 @@ public class SharePicFragment extends AbsAllFragment {
         UpLoadTask u = new UpLoadTask(url, params, paths);
         u.execute();
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (TextUtils.isEmpty(content.getText().toString()) && mImageAdapter.getData().size() == 0) {
+
+            submit.setTextColor(getResources().getColor(R.color.dd_gray));
+            submit.setEnabled(false);
+        } else {
+//            submit.setBackgroundResource(R.mipmap.submit_clickable);
+            submit.setTextColor(getResources().getColor(R.color.redMain));
+            submit.setEnabled(true);
+        }
     }
 
     private class UpLoadTask extends AsyncTask<Void, Integer, List<String>> {
@@ -234,9 +308,7 @@ public class SharePicFragment extends AbsAllFragment {
         @Override
         protected List<String> doInBackground(Void... p) {
             for (int i = 0; i < paths.size(); i++) {
-
-                String outPath = Variable.StorageImagePath + System.currentTimeMillis() + ".jpg";
-                BitmapUtil.decodeUriAsBitmap(getActivity(), paths.get(i), outPath);
+                String outPath = BitmapUtil.decodeUriAsBitmap(getActivity(), paths.get(i));
                 File file = new File(outPath);
                 String re = UploadImage.uploadFile(mUrl, params, file);
 
@@ -294,12 +366,12 @@ public class SharePicFragment extends AbsAllFragment {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
         super.onNetEnd(id, type, netResponse);
-        L.e(netResponse.toString());
+
         if (type == NetCallBack.TYPE_SUCCESS) {
 
             getActivity().finish();//此处一定要调用finish()方法
         } else {
-            ToastManager.getInstance(getActivity()).showText(netResponse.result);
+            ToastManager.getInstance(getActivity()).showText("发布失败");
         }
 
 

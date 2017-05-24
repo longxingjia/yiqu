@@ -22,10 +22,17 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.service.PlayService;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.utils.L;
+import com.utils.Player;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
@@ -80,7 +87,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         ;
     };
     private String uid;
-    private ArrayList<Sound> zuoping;
 
     private RefreshList lvSound;
     private Tab1XizuoAdapter tab1XizuoAdapter;
@@ -196,6 +202,48 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         oks.show(getActivity());
     }
 
+    private void shareUmeng() {
+
+//        UMImage thumb = new UMImage($(Activity),thumb_img);
+//        UMWeb web = new UMWeb("");        web.setThumb(thumb);
+//        web.setDescription("");        web.setTitle("");        new ShareAction($(Activity)).withMedia(web).setPlatform($(SHARE_MEDIA)).setCallback($(UMShareListener)).share();
+
+        new ShareAction(getActivity()).withText("hello")
+                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setCallback(umShareListener).open();
+
+
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            //分享开始的回调
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat", "platform" + platform);
+            L.e("platform" + platform);
+
+            //  Toast.makeText(MainActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            //     Toast.makeText(MainActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if (t != null) {
+                Log.d("throw", "throw:" + t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            //     Toast.makeText(MainActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
+
 
     @Override
     public void onResume() {
@@ -208,18 +256,49 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             uid = "0";
         }
 
-   //     onRefresh();
-
         if (mPlayService != null && mPlayService.isPlaying()) {
-
             int sid = mPlayService.getPlayingPosition();
             if (sid > 0) {
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
                         "getSoundDetail", Tab1Fragment.this);
-
             }
+        }
+
+        if (mPlayService != null) {
+//            L.e("fffffffffff");
+            mPlayService.setOnPlayStatusChangeListener(new PlayService.OnPlayStatusChangeListener() {
+                @Override
+                public void onPlayStatusChange(int status) {
+                    onPlayChange(status);
+                }
+            });
+        }
+    }
+
+
+
+    public void onPlayChange(int status) {
+     //   L.e(status + "");
+        if (mPlayService != null) {
+
+            if (status == Player.MusicPlayerState.playing) {
+//                if (mPlayService.isPlaying()) {
+                int sid = mPlayService.getPlayingPosition();
+                if (sid > 0) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                                    .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
+                            "getSoundDetail", Tab1Fragment.this);
+                }
+            } else if (status == Player.MusicPlayerState.stop) {
+                //  mPlayService.stop();
+                top_play.setVisibility(View.GONE);
+                mPlayService.pause();
+                tab1XizuoAdapter.setCurrent(-1);
+            }
+
         }
 
     }
@@ -283,10 +362,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         tab1XizuoAdapter.setOnMoreClickListener(new Tab1XizuoAdapter.OnMoreClickListener() {
             @Override
-            public void onMoreClick(int position) {
-                String url = MyNetApiConfig.ImageServerAddr + zuoping.get(position).soundpath;
-                mPlayService.play(url, zuoping.get(position).sid);
-                initTopPlayUI(zuoping.get(position));
+            public void onMoreClick(int sid) {
+                if (sid > 0) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.getSoundDetail, MyNetRequestConfig
+                                    .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
+                            "getSoundDetail_item", Tab1Fragment.this);
+                }
             }
 
         });
@@ -353,7 +435,9 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 "getBannerList", Tab1Fragment.this, false, true);
 
 
+
     }
+
 
     //设置导航点的状态
     private void setPointStatus(int position) {
@@ -420,7 +504,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     @Override
     protected boolean onPageNext() {
 //        setTitleBtnImg(R.mipmap.edit_tab);
-        showShare();
+           showShare();
+        //    shareUmeng();
         return true;
     }
 
@@ -495,13 +580,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-             L.e(netResponse.toString());
+//        L.e(netResponse.toString());
         if (netResponse != null && "getHomeData".equals(id)) {
             if (netResponse.bool == 1) {
                 ArrayList<Sound> s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
                 tab1XizuoAdapter.setData(s);
-                zuoping = s;
+                //     zuoping = s;
 
                 if (s.size() == rows) {
                     mLoadMoreView.setMoreAble(true);
@@ -518,8 +603,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
             if (type == TYPE_SUCCESS) {
                 ArrayList<Sound> s = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
-                zuoping.addAll(s);
-                //  tab1XizuoAdapter.addData(s);
+                tab1XizuoAdapter.addData(s);
                 if (s.size() < rows) {
                     mLoadMoreView.setMoreAble(false);
                 }
@@ -527,7 +611,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 mLoadMoreView.end();
 
             } else {
-                mLoadMoreView.setMoreAble(false);
+//                mLoadMoreView.setMoreAble(false);
                 mLoadMoreView.end();
             }
         } else if (id.equals("getBannerList")) {
@@ -570,6 +654,17 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 initTopPlayUI(sound);
 
             }
+        } else if (id.equals("getSoundDetail_item")) {
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                Gson gson = new Gson();
+                Sound sound = gson.fromJson(netResponse.data, Sound.class);
+                String url = MyNetApiConfig.ImageServerAddr + sound.soundpath;
+                if (mPlayService != null) {
+                    mPlayService.play(url, sound.sid);
+                }
+                initTopPlayUI(sound);
+
+            }
         }
 
         super.onNetEnd(id, type, netResponse);
@@ -606,7 +701,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                         getActivity(),
                         MyNetApiConfig.getHomeData,
                         MyNetRequestConfig.getHomeData(getActivity(), uid, count, rows, "created"),
-                        "getHomeData_more", Tab1Fragment.this);
+                        "getHomeData_more", Tab1Fragment.this, false, true);
 
             }
         }

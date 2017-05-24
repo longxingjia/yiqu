@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/tab_bg_color"
-        android:dividerHeight="10dp">
+        android:dividerHeight="2dp">
 
     </com.ui.views.RefreshList>
 

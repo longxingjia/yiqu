@@ -115,7 +115,7 @@
             android:drawableRight="@mipmap/top_arrow"
             android:gravity="center"
             android:padding="5dp"
-            android:text="HOT"
+            android:text="HOT作品"
             android:textColor="@color/dd_gray"
             android:textSize="13sp" />
 

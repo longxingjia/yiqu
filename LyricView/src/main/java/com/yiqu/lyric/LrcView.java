@@ -199,12 +199,12 @@ public class LrcView extends View implements ILrcView {
 //        }
 
         //画出正在播放的那句歌词的上面所有的歌词
-		while( rowY > -mLrcFontSize && rowNum >= 0){
-			String text = mLrcRows.get(rowNum).content;
-			canvas.drawText(text, rowX, rowY, mPaint);
-			rowY -=  (mPaddingY + mLrcFontSize);
-			rowNum --;
-		}
+        while( rowY > -mLrcFontSize && rowNum >= 0){
+            String text = mLrcRows.get(rowNum).content;
+            canvas.drawText(text, rowX, rowY, mPaint);
+            rowY -=  (mPaddingY + mLrcFontSize);
+            rowNum --;
+        }
 
         // 3、画出正在播放的那句歌词的下面的可以展示出来的歌词
         rowNum = mHignlightRow + 1;
@@ -216,13 +216,14 @@ public class LrcView extends View implements ILrcView {
 //            canvas.drawText(text2, rowX, rowY, mPaint);
 //        }
 
-		//画出正在播放的那句歌词的所有下面的可以展示出来的歌词
-		while( rowY < height && rowNum < mLrcRows.size()){
-			String text = mLrcRows.get(rowNum).content;
-			canvas.drawText(text, rowX, rowY, mPaint);
-			rowY += (mPaddingY + mLrcFontSize);
-			rowNum ++;
-		}
+        //画出正在播放的那句歌词的所有下面的可以展示出来的歌词
+    //    Log.e(TAG,mLrcRows.size()+"");
+        while( rowY < height && rowNum < mLrcRows.size()){
+            String text = mLrcRows.get(rowNum).content;
+            canvas.drawText(text, rowX, rowY, mPaint);
+            rowY += (mPaddingY + mLrcFontSize);
+            rowNum ++;
+        }
 
     }
 

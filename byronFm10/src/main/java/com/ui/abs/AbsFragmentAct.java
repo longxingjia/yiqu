@@ -161,6 +161,7 @@ public abstract class AbsFragmentAct extends FragmentActivity {
 				public void OnCompletion() {
 
 				}
+
 			};
 
 	/**

@@ -856,7 +856,6 @@ public class RecordAllActivity extends Activity
                                                 VoiceFunctionF2.StopVoice();
                                             }
                                             VoiceFunctionF2.StopRecordVoice(is2mp3);
-
                                             icon_finish.setImageResource(R.mipmap.upload);
                                             hideSoftInput();
 
@@ -870,8 +869,12 @@ public class RecordAllActivity extends Activity
                             }
                             icon_record.setImageResource(R.mipmap.icon_record);
                         } else {
+                            if (!is2mp3){
+                                VoiceFunctionF2.StopVoice();
+                            }
+                         //
                             VoiceFunctionF2.StopRecordVoice(is2mp3);
-                            VoiceFunctionF2.StopVoice();
+
                             icon_finish.setImageResource(R.mipmap.upload);
                         }
 
@@ -992,7 +995,13 @@ public class RecordAllActivity extends Activity
             et_content.setVisibility(View.VISIBLE);
             content.setVisibility(View.GONE);
             content.setText("");
+            select_article.setText("请选择范文");
+
         }
+        if (music == null || is2mp3 ){
+            select_music.setText("请选择配乐");
+        }
+
     }
 
     private void upload() {
@@ -1028,6 +1037,7 @@ public class RecordAllActivity extends Activity
         });
         menuDialogSelectTeaHelper.show(recordVoiceButton);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

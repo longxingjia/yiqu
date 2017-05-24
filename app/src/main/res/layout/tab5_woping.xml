@@ -100,8 +100,7 @@
             android:id="@+id/musictype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:background="@mipmap/shengyue"
+            android:src="@mipmap/shengyue"
             android:gravity="center" />
         <TextView
             android:id="@+id/musicname"

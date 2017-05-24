@@ -37,6 +37,7 @@ public class ImageShowGridAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private boolean showAdd = true;
+    private OnDelListener mListener;
 
     private ArrayList<String> mImages = new ArrayList<String>();
 //    private List<Image> mSelectedImages = new ArrayList<>();
@@ -70,6 +71,14 @@ public class ImageShowGridAdapter extends BaseAdapter {
         return showAdd;
     }
 
+    public interface OnDelListener {
+        public void onDelClick(int size);
+
+    }
+
+    public void setOnDelListener(OnDelListener l) {
+        mListener = l;
+    }
 
 //    /**
 //     * 通过图片路径设置默认选择
@@ -174,6 +183,9 @@ public class ImageShowGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     mImages.remove(pos);
+                    if (mListener!=null){
+                        mListener.onDelClick(mImages.size());
+                    }
                     notifyDataSetChanged();
                 }
             });

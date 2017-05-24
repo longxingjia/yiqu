@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -97,6 +98,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
         TextView listener;
         TextView tea_listen;
         TextView like;
+        LinearLayout ll_question;
     }
 
     @Override
@@ -119,6 +121,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
                 h.like = (TextView) v.findViewById(R.id.like);
                 h.tea_header = (ImageView) v.findViewById(R.id.tea_header);
                 h.comment = (TextView) v.findViewById(R.id.comment);
+                h.ll_question = (LinearLayout) v.findViewById(R.id.ll_question);
                 v.setTag(h);
             }
 
@@ -133,10 +136,14 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             h.tectitle.setText(f.tectitle);
             h.like.setText(String.valueOf(f.like));
             //  LogUtils.LOGE(tag,f.soundpath);
-            if (f.type==1){
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+            if (f.type == 1) {
+                h.ll_question.setVisibility(View.VISIBLE);
+                h.musictype.setImageResource(R.mipmap.shengyue);
+            } else if (f.type == 2){
+                h.ll_question.setVisibility(View.VISIBLE);
+                h.musictype.setImageResource(R.mipmap.boyin);
             }else {
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
+                h.ll_question.setVisibility(View.GONE);
             }
 
             long time = System.currentTimeMillis() / 1000 - f.edited;

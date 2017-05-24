@@ -20,6 +20,7 @@ import com.base.utils.ToastManager;
 import com.byron.framework.R;
 import com.service.DownloadService;
 import com.service.PlayService;
+import com.utils.L;
 import com.utils.LogUtils;
 
 public abstract class AbsFragment extends Fragment {
@@ -65,7 +66,7 @@ public abstract class AbsFragment extends Fragment {
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			mPlayService = ((PlayService.PlayBinder) service).getService();
 			mPlayService.setOnMusicEventListener(mMusicEventListener);
-			//LogUtils.LOGE("abs","onServiceConnected");
+	//		LogUtils.LOGE("abs","onServiceConnected");
 			onChange(mPlayService.getPlayingPosition());
 		}
 	};
@@ -93,6 +94,7 @@ public abstract class AbsFragment extends Fragment {
 				public void OnCompletion() {
 					AbsFragment.this.OnCompletion();
 				}
+
 			};
 	/**
 	 * Fragment的view加载完成后回调
@@ -123,6 +125,7 @@ public abstract class AbsFragment extends Fragment {
 	public  void OnCompletion(){
 
 	};
+
 
 	/**
 	 * 切换歌曲

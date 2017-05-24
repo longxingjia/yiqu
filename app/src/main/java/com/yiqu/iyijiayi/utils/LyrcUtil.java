@@ -67,7 +67,9 @@ public class LyrcUtil {
                 String line = "";
                 try {
                     InputStream is = new FileInputStream(f);
-                    InputStreamReader input = new InputStreamReader(is, "UTF-8");
+                    //    InputStreamReader input = new InputStreamReader(is, "GBK");
+                              InputStreamReader input = new InputStreamReader(is, "UTF-8");
+                    //         InputStreamReader input = new InputStreamReader(is);
                     BufferedReader reader = new BufferedReader(input);
                     while ((line = reader.readLine()) != null) {
                         if (line.trim().equals(""))

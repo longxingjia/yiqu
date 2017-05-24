@@ -27,6 +27,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     //private SensorManager mSensorManager;
 
     private Player mPlayer;
+    private OnPlayStatusChangeListener onPlayStatusChangeListener;
     private OnMusicEventListener mListener;
     private int sid; // 当前正在播放
     private String tag = PlayService.class.getSimpleName();
@@ -51,10 +52,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-        //	mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
-//		MusicUtils.initMusicList();
-//		mPlayingPosition = (Integer) SpUtils.get(this, Constants.PLAY_POS, 0);
 
 
         mPlayer = new Player(this, null, null, null, null, new Player.onPlayCompletion() {
@@ -69,6 +66,21 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             @Override
             public void onPreparedCompletion() {
                 mProgressUpdatedListener.execute(mPublishProgressRunnable);
+            }
+        });
+
+        mPlayer.setOnPlayStatusChange(new Player.onPlayStatusChange() {
+            @Override
+            public void onPlayStatusChange(int status) {
+//                L.e(status+"");
+
+                if (onPlayStatusChangeListener!=null){
+//                    L.e(status+"status");
+                    onPlayStatusChangeListener.onPlayStatusChange(status);
+                }
+
+
+
             }
         });
 
@@ -101,6 +113,15 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      */
     public void setOnMusicEventListener(OnMusicEventListener l) {
         mListener = l;
+    }
+
+    /**
+     * 设置回调
+     *
+     * @param l
+     */
+    public void setOnPlayStatusChangeListener(OnPlayStatusChangeListener l) {
+        onPlayStatusChangeListener = l;
     }
 
 
@@ -266,5 +287,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         public void onChange(int position);
 
         public void OnCompletion();
+
+    }
+
+    public interface  OnPlayStatusChangeListener{
+        public void onPlayStatusChange(int status);
     }
 }

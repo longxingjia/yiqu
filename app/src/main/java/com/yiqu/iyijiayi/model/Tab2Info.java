@@ -9,5 +9,6 @@ import java.util.ArrayList;
 public class Tab2Info {
    public   ArrayList<UserInfo> topusers;
     public   ArrayList<Tab2_groups> groups;
+    public   ArrayList<UserInfo> recommends;
 
 }

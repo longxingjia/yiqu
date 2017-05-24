@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab2ListAdapter;
@@ -83,17 +84,6 @@ public class Tab2Fragment extends TabContentFragment {
         tab2UserInfoAdapter = new Tab2UserInfoAdapter(mContext);
         gridview.setAdapter(tab2UserInfoAdapter);
         gridview.setOnItemClickListener(tab2UserInfoAdapter);
-//        gridview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-//
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-//
-//            }
-//        });
 
         tab2ListAdapter = new Tab2ListAdapter(mContext);
         listView.setAdapter(tab2ListAdapter);
@@ -109,8 +99,6 @@ public class Tab2Fragment extends TabContentFragment {
     @Override
     protected void init(Bundle savedInstanceState) {
         tab_teacher.setSelected(true);
-
-
 
     }
 
@@ -147,15 +135,13 @@ public class Tab2Fragment extends TabContentFragment {
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
+//        L.e(netResponse.toString());
 
         if (id.equals("findPeople")) {
             if (type == TYPE_SUCCESS) {
-                LogUtils.LOGE(tag, netResponse.toString());
 
                 Tab2Info tab2Info = new Gson().fromJson(netResponse.data, Tab2Info.class);
-
-                tab2UserInfoAdapter.setData(tab2Info.topusers);
-
+                tab2UserInfoAdapter.setData(tab2Info.recommends);
                 tab2ListAdapter.setData(tab2Info.groups);
             }
         }

@@ -108,7 +108,7 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
             HoldChild h;
             if (v == null) {
                 h = new HoldChild();
-                v = mLayoutInflater.inflate(R.layout.tab1_zuoping_adapter, null);
+                v = mLayoutInflater.inflate(R.layout.tab1_zuoping_adapter_test, null);
                 h.musicname = (TextView) v.findViewById(R.id.musicname);
                 h.content = (TextView) v.findViewById(R.id.desc);
                 h.author = (TextView) v.findViewById(R.id.author);
@@ -193,7 +193,7 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
             if (fragmentName.equals("Tab1Fragment")){
                 if (position<9){
                     h.iv_status.setVisibility(View.VISIBLE);
-                    h.iv_status.setBackgroundResource(R.mipmap.icon_new);
+                    h.iv_status.setImageResource(R.mipmap.icon_new);
                 }else {
                     h.iv_status.setVisibility(View.GONE);
                 }
@@ -202,7 +202,7 @@ public class Tab1XizuoAdapterTest extends BaseAdapter implements OnItemClickList
 
                 if (position<9){
                     h.iv_status.setVisibility(View.VISIBLE);
-                    h.iv_status.setBackgroundResource(R.mipmap.icon_hot);
+                    h.iv_status.setImageResource(R.mipmap.icon_hot);
                 }else {
                     h.iv_status.setVisibility(View.GONE);
                 }

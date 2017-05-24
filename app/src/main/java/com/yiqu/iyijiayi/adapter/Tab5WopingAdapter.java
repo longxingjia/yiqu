@@ -124,9 +124,9 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
 
 
             if (f.type == 1) {
-                h.musictype.setBackgroundResource(R.mipmap.shengyue);
+                h.musictype.setImageResource(R.mipmap.shengyue);
             } else if (f.type ==2){
-                h.musictype.setBackgroundResource(R.mipmap.boyin);
+                h.musictype.setImageResource(R.mipmap.boyin);
             }else {
                 h.music_desc.setVisibility(View.GONE);
             }
