@@ -138,11 +138,11 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             h.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
             if (f.type == 1) {
                 h.musictype.setImageResource(R.mipmap.shengyue);
-                
+
             } else {
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
-            PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
+            PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47); 
             PictureUtils.showPictureAlbum(mContext, f.stuimage, h.album, 75);
             if (flag) {
                 L.e(String.valueOf(flag));
