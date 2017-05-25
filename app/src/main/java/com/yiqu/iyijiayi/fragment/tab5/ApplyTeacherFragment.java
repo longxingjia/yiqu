@@ -195,7 +195,7 @@ public class ApplyTeacherFragment extends AbsAllFragment {
            //     LogUtils.LOGE(tag, teacherApply.toString());
             //    AppShare.setTeacherApplyInfo(getActivity(), teacherApply);
                 if (teacherApply.status == 0) {
-                    ToastManager.getInstance(getActivity()).showText("正在审核中，请耐心等待。。。");
+                    ToastManager.getInstance(getActivity()).showText("提交成功，请耐心等待。。。");
                 } else if (teacherApply.status == 1) {
                     ToastManager.getInstance(getActivity()).showText("恭喜您，审核已经通过。");
                 } else if (teacherApply.status == -1) {
@@ -220,6 +220,7 @@ public class ApplyTeacherFragment extends AbsAllFragment {
                     ToastManager.getInstance(getActivity()).showText("正在审核中，请耐心等待。。。");
                 } else if (teacherApply.status == 1) {
                     ToastManager.getInstance(getActivity()).showText("恭喜您，审核已经通过。");
+                    getActivity().finish();
                 } else if (teacherApply.status == -1) {
                     ToastManager.getInstance(getActivity()).showText("对不起，审核被拒绝了。");
                 }

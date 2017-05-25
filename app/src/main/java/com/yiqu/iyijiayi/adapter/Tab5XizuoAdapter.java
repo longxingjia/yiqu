@@ -142,7 +142,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             } else {
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
-            PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47); 
+            PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
             PictureUtils.showPictureAlbum(mContext, f.stuimage, h.album, 75);
             if (flag) {
                 L.e(String.valueOf(flag));

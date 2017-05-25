@@ -526,6 +526,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             if (type == TYPE_SUCCESS) {
                 rejuse.setVisibility(View.INVISIBLE);
                 ToastManager.getInstance(getActivity()).showText("拒绝成功");
+                getActivity().finish();
             } else {
                 ToastManager.getInstance(getActivity()).showText(netResponse.result);
 
