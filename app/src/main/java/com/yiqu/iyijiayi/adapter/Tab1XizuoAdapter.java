@@ -265,7 +265,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private void typeQuestion(ViewHolder1 holder, int position) {
         final Sound f = getItem(position);
         holder.musicname.setText(f.musicname);
-        holder.desc.setText(f.desc);
+        holder.desc.setText(EmojiCharacterUtil.decode(f.desc));
         holder.time.setText(f.commenttime + "\"");
         holder.tea_name.setText(f.tecname);
         holder.listener.setText(String.valueOf(f.views));
@@ -477,7 +477,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
     private void typeSound(ViewHolder2 holder2, int position) throws ParseException {
         final Sound f = getItem(position);
         holder2.musicname.setText(f.musicname);
-        holder2.content.setText(f.desc);
+        holder2.content.setText(EmojiCharacterUtil.decode(f.desc));
         holder2.comment.setText(f.comments);
         holder2.like.setText(String.valueOf(f.like));
         holder2.listener.setText(String.valueOf(f.views));
@@ -577,7 +577,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         });
 
         PictureUtils.showPicture(mContext, f.stuimage, holder2.icon, 47);
-        PictureUtils.showPicture(mContext, f.stuimage, holder2.album, 75);
+        PictureUtils.showPictureAlbum(mContext, f.stuimage, holder2.album, 75);
     }
 
 

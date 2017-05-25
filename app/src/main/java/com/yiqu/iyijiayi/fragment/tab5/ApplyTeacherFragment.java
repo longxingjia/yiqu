@@ -2,6 +2,7 @@ package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +12,14 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
+import com.ui.views.DialogUtil;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.TeacherApply;
+import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -90,32 +94,44 @@ public class ApplyTeacherFragment extends AbsAllFragment {
     protected void init(Bundle savedInstanceState) {
         tips.setText(Html.fromHtml("当您提交了以上真实信息后，" +
                 "我们工作人员会第一时间联系您，还请耐心等候！一般处理周期为" +
-               "<font color=\'#ff0000\'>3个工作日</font>" +"左右"));
+                "<font color=\'#ff0000\'>3个工作日</font>" + "左右"));
         if (AppShare.getIsLogin(getActivity())) {
-            uid = AppShare.getUserInfo(getActivity()).uid;
+            UserInfo userInfo = AppShare.getUserInfo(getActivity());
+            uid = userInfo.uid;
+            String UserImage = userInfo.userimage;
+            if (TextUtils.isEmpty(UserImage)){
+                DialogUtil.showDialog(getActivity(),"请先上传您的头像");
+                getActivity().finish();
+            }
+
         } else {
             Model.startNextAct(getActivity(),
                     SelectLoginFragment.class.getName());
         }
-        TeacherApply teacherApply = AppShare.getTeacherApplyInfo(getActivity());
-        if (teacherApply != null) {
-            name.setText(teacherApply.username);
-            school.setText(teacherApply.school);
-            title.setText(teacherApply.title);
-            phonenum.setText(teacherApply.phone);
-            city.setText(teacherApply.address);
-            from.setText(teacherApply.source);
-            desc.setText(teacherApply.desc);
+//        TeacherApply teacherApply = AppShare.getTeacherApplyInfo(getActivity());
+//        if (teacherApply != null) {
+//            name.setText(teacherApply.username);
+//            school.setText(teacherApply.school);
+//            title.setText(teacherApply.title);
+//            phonenum.setText(teacherApply.phone);
+//            city.setText(teacherApply.address);
+//            from.setText(teacherApply.source);
+//            desc.setText(teacherApply.desc);
 
-            LogUtils.LOGE(tag, teacherApply.toString());
+       //     LogUtils.LOGE(tag, teacherApply.toString());
 
-            RestNetCallHelper.callNet(getActivity(),
-                    MyNetApiConfig.getTeacherApply, MyNetRequestConfig
-                            .getTeacherApply(getActivity(), uid),
-                    "getTeacherApply", ApplyTeacherFragment.this);
+//            RestNetCallHelper.callNet(getActivity(),
+//                    MyNetApiConfig.getTeacherApply, MyNetRequestConfig
+//                            .getTeacherApply(getActivity(), uid),
+//                    "getTeacherApply", ApplyTeacherFragment.this);
 
 
-        }
+//        }
+
+        RestNetCallHelper.callNet(getActivity(),
+                MyNetApiConfig.getTeacherApply, MyNetRequestConfig
+                        .getTeacherApply(getActivity(), uid),
+                "getTeacherApply", ApplyTeacherFragment.this);
 
         sumbit.setOnClickListener(new View.OnClickListener() {
 
@@ -158,25 +174,26 @@ public class ApplyTeacherFragment extends AbsAllFragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("申请导师"); //统计页面，"MainScreen"为页面名称，可自定义
-        JAnalyticsInterface.onPageStart(getActivity(),"申请导师");
+        JAnalyticsInterface.onPageStart(getActivity(), "申请导师");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("申请导师");
-        JAnalyticsInterface.onPageEnd(getActivity(),"申请导师");
+        JAnalyticsInterface.onPageEnd(getActivity(), "申请导师");
     }
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-        LogUtils.LOGE(tag, netResponse.toString());
+        //      LogUtils.LOGE(tag, netResponse.toString());
         if (id.equals("addTeacherApply")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
+                L.e(netResponse.toString());
 
                 TeacherApply teacherApply = new Gson().fromJson(netResponse.data, TeacherApply.class);
-                LogUtils.LOGE(tag, teacherApply.toString());
-                AppShare.setTeacherApplyInfo(getActivity(), teacherApply);
+           //     LogUtils.LOGE(tag, teacherApply.toString());
+            //    AppShare.setTeacherApplyInfo(getActivity(), teacherApply);
                 if (teacherApply.status == 0) {
                     ToastManager.getInstance(getActivity()).showText("正在审核中，请耐心等待。。。");
                 } else if (teacherApply.status == 1) {
@@ -187,8 +204,18 @@ public class ApplyTeacherFragment extends AbsAllFragment {
             }
 
         } else if (id.equals("getTeacherApply")) {
+
             if (type == NetCallBack.TYPE_SUCCESS) {
+                L.e(netResponse.toString());
                 TeacherApply teacherApply = new Gson().fromJson(netResponse.data, TeacherApply.class);
+                name.setText(teacherApply.username);
+                school.setText(teacherApply.school);
+                title.setText(teacherApply.title);
+                phonenum.setText(teacherApply.phone);
+                city.setText(teacherApply.address);
+                from.setText(teacherApply.source);
+                desc.setText(teacherApply.desc);
+
                 if (teacherApply.status == 0) {
                     ToastManager.getInstance(getActivity()).showText("正在审核中，请耐心等待。。。");
                 } else if (teacherApply.status == 1) {

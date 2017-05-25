@@ -48,6 +48,7 @@ import com.yiqu.iyijiayi.net.UploadImage;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.BitmapUtil;
 import com.yiqu.iyijiayi.utils.DianZanUtils;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.MultiView.MultiImageView;
@@ -95,8 +96,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
     public TextView like;
     @BindView(R.id.comment)
     public TextView comment;
-    @BindView(R.id.add_comment)
-    public TextView add_comment;
+
     @BindView(R.id.no_comments)
     public TextView no_comments;
     @BindView(R.id.multiImageView)
@@ -368,7 +368,8 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
         }
 
         author.setText(sound.stuname);
-        content.setText(sound.desc);
+//        content.setText(sound.desc);
+        content.setText(EmojiCharacterUtil.decode(sound.desc));
         comment.setText(sound.comments);
         like.setText(String.valueOf(sound.like));
         listener.setText(String.valueOf(sound.views));
@@ -494,7 +495,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     }
     private Sound soundWorth;
-    @OnClick({R.id.add_comment,R.id.header,R.id.ll_worth})
+    @OnClick({R.id.comment,R.id.header,R.id.ll_worth})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_worth:
@@ -528,7 +529,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
                     ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
                 }
                 break;
-            case R.id.add_comment:
+            case R.id.comment:
 
                 if (AppShare.getIsLogin(getActivity())) {
                     Intent intent = new Intent(getActivity(), CommentActivity.class);

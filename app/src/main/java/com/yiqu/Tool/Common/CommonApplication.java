@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.umeng.socialize.PlatformConfig;
 import com.yiqu.Tool.Function.CommonFunction;
 import com.yiqu.Tool.Function.FileFunction;
 import com.yiqu.Tool.Function.InitFunction;
@@ -58,9 +57,9 @@ public class CommonApplication extends Application {
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         registerReceiver(myReceiver, filter );
 
-        PlatformConfig.setWeixin("wx6926bd130c563b44","988af2a73db57256efd94f55a44284b7");
-        PlatformConfig.setQQZone("1105953754","OstPkIeEQFsXv6WZ");
-        PlatformConfig.setSinaWeibo("1751734663","220f18631439f192b857669710dfef98","");
+//        PlatformConfig.setWeixin("wx6926bd130c563b44","988af2a73db57256efd94f55a44284b7");
+//        PlatformConfig.setQQZone("1105953754","OstPkIeEQFsXv6WZ");
+//        PlatformConfig.setSinaWeibo("1751734663","220f18631439f192b857669710dfef98","");
     }
 
     public synchronized void initialise() {

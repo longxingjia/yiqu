@@ -41,6 +41,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.utils.Tab5DelDialog;
@@ -164,7 +165,7 @@ public class Tab5PicAdapter extends BaseAdapter implements OnItemClickListener,
             }
 
             holder.author.setText(f.stuname);
-            holder.content.setText(f.desc);
+            holder.content.setText(EmojiCharacterUtil.decode(f.desc));
             holder.comment.setText(f.comments);
             holder.like.setText(String.valueOf(f.like));
             holder.listener.setText(String.valueOf(f.views));

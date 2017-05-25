@@ -345,7 +345,7 @@ public class SharePicFragment extends AbsAllFragment implements TextWatcher {
             }
             Gson gson = new Gson();
             String images = gson.toJson(pathsServer);
-            L.e(images);
+//            L.e(images);
 
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.addTextImage,

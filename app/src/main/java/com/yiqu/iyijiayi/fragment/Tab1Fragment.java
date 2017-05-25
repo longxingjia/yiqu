@@ -26,11 +26,6 @@ import com.service.PlayService;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.utils.L;
 import com.utils.Player;
 import com.yiqu.iyijiayi.R;
@@ -202,47 +197,47 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         oks.show(getActivity());
     }
 
-    private void shareUmeng() {
+//    private void shareUmeng() {
+//
+////        UMImage thumb = new UMImage($(Activity),thumb_img);
+////        UMWeb web = new UMWeb("");        web.setThumb(thumb);
+////        web.setDescription("");        web.setTitle("");        new ShareAction($(Activity)).withMedia(web).setPlatform($(SHARE_MEDIA)).setCallback($(UMShareListener)).share();
+//
+//        new ShareAction(getActivity()).withText("hello")
+//                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+//                .setCallback(umShareListener).open();
+//
+//
+//    }
 
-//        UMImage thumb = new UMImage($(Activity),thumb_img);
-//        UMWeb web = new UMWeb("");        web.setThumb(thumb);
-//        web.setDescription("");        web.setTitle("");        new ShareAction($(Activity)).withMedia(web).setPlatform($(SHARE_MEDIA)).setCallback($(UMShareListener)).share();
-
-        new ShareAction(getActivity()).withText("hello")
-                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
-                .setCallback(umShareListener).open();
-
-
-    }
-
-    private UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA platform) {
-            //分享开始的回调
-        }
-
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            Log.d("plat", "platform" + platform);
-            L.e("platform" + platform);
-
-            //  Toast.makeText(MainActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            //     Toast.makeText(MainActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
-            if (t != null) {
-                Log.d("throw", "throw:" + t.getMessage());
-            }
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            //     Toast.makeText(MainActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
-        }
-    };
+//    private UMShareListener umShareListener = new UMShareListener() {
+//        @Override
+//        public void onStart(SHARE_MEDIA platform) {
+//            //分享开始的回调
+//        }
+//
+//        @Override
+//        public void onResult(SHARE_MEDIA platform) {
+//            Log.d("plat", "platform" + platform);
+//            L.e("platform" + platform);
+//
+//            //  Toast.makeText(MainActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+//
+//        }
+//
+//        @Override
+//        public void onError(SHARE_MEDIA platform, Throwable t) {
+//            //     Toast.makeText(MainActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+//            if (t != null) {
+//                Log.d("throw", "throw:" + t.getMessage());
+//            }
+//        }
+//
+//        @Override
+//        public void onCancel(SHARE_MEDIA platform) {
+//            //     Toast.makeText(MainActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
 
     @Override

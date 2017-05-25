@@ -11,13 +11,16 @@ public class TeacherApply {
     public  String username;
     public  String school;
     public  String title;
+    public  String id_img;
+    public  String teacher_img;
     public  String desc;
     public  String phone;
     public  String address;
     public  String source;
-    public  int reason;
+    public  String reason;
     public  int status;
-
+    public  long created;
+    public  long edited;
 
     @Override
     public String toString() {
@@ -28,7 +31,6 @@ public class TeacherApply {
                 ", school='" + school + '\'' +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
-
                 ", reason=" + reason +
                 ", status=" + status +
                 '}';

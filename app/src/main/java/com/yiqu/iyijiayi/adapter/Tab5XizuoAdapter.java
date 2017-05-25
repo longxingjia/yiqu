@@ -36,6 +36,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.MultiView.ExpandTextView;
@@ -129,7 +130,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
             h = (HoldChild) v.getTag();
             final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
-            h.content.setText(f.desc);
+            h.content.setText(EmojiCharacterUtil.decode(f.desc));
             h.comment.setText(String.valueOf(f.comments));
             h.like.setText(String.valueOf(f.like));
             h.listener.setText(String.valueOf(f.views));
@@ -141,7 +142,7 @@ public class Tab5XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 h.musictype.setImageResource(R.mipmap.boyin);
             }
             PictureUtils.showPicture(mContext, f.stuimage, h.icon, 47);
-            PictureUtils.showPicture(mContext, f.stuimage, h.album, 75);
+            PictureUtils.showPictureAlbum(mContext, f.stuimage, h.album, 75);
             if (flag) {
                 L.e(String.valueOf(flag));
                 final int pos = position;

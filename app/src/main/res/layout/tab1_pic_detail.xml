@@ -175,6 +175,7 @@
                 android:drawableLeft="@mipmap/comment"
                 android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
+                android:visibility="gone"
                 android:paddingTop="2dp"
                 android:textColor="@color/redMain"
                 android:textSize="16sp"/>

@@ -185,7 +185,7 @@ public class MultiImageView extends LinearLayout {
             imageView.setLayoutParams(position % MAX_PER_ROW_COUNT == 0 ? moreParaColumnFirst : morePara);
         } else {
             imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ScaleType.CENTER_INSIDE);
+            imageView.setScaleType(ScaleType.CENTER_CROP);
             //imageView.setMaxHeight(pxOneMaxWandH);
 
             int expectW = 0;
@@ -195,8 +195,9 @@ public class MultiImageView extends LinearLayout {
             if (expectW == 0 || expectH == 0) {
              //   imageView.setLayoutParams(onePicPara);
                 int width = MAX_WIDTH * 5 /10;
+                int height = MAX_WIDTH * 5 /10;
 
-                imageView.setLayoutParams(new LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
+                imageView.setLayoutParams(new LayoutParams(width, height));
             } else {
                 int actualW = 0;
                 int actualH = 0;

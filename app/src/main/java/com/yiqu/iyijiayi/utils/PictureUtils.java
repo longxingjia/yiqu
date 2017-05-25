@@ -76,6 +76,29 @@ public class PictureUtils {
             Picasso.with(context).load(R.mipmap.menu_head).into(icon);
         }
     }
+
+
+    public static void showPictureAlbum(Context context, String url, ImageView icon,int sizedp) {
+
+        if (url != null) {
+            if (url.contains("http://wx.qlogo.cn")) {
+                Picasso.with(context).load(url)
+                        .resize(DensityUtil.dip2px(context,sizedp), DensityUtil.dip2px(context,sizedp))
+                        .centerCrop()
+                        .placeholder(R.mipmap.music_head).into(icon);
+            } else {
+                Picasso.with(context).load(MyNetApiConfig.ImageServerAddr + url)
+                        .resize(DensityUtil.dip2px(context,sizedp), DensityUtil.dip2px(context,sizedp))
+                        .centerCrop()
+                        .placeholder(R.mipmap.music_head).into(icon);
+            }
+        }else {
+            Picasso.with(context).load(R.mipmap.music_head).into(icon);
+        }
+    }
+
+
+
     public static void showPictureFile(Context context, File file, ImageView icon, int sizedp) {
 
       //  Picasso.with(context).load(file).into(icon);

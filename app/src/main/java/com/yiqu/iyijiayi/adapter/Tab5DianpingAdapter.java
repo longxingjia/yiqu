@@ -38,6 +38,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.utils.LogUtils;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class Tab5DianpingAdapter extends BaseAdapter implements OnItemClickListe
             h = (HoldChild) v.getTag();
             final Sound f = getItem(position);
             h.musicname.setText(f.musicname);
-            h.desc.setText(f.desc);
+            h.desc.setText(EmojiCharacterUtil.decode(f.desc));
             h.time.setText(f.commenttime + "\"");
             h.tea_name.setText(f.tecname);
             h.listener.setText(String.valueOf(f.views));
