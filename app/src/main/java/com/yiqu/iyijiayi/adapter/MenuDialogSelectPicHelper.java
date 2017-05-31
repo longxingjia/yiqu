@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.math.MathContext;
 
 public class MenuDialogSelectPicHelper {
 
@@ -122,7 +123,7 @@ public class MenuDialogSelectPicHelper {
     }
 
     private void getFile() {
-        String localFile1 = Variable.StorageDirectoryPath;
+        String localFile1 = Variable.StorageDirectoryPath(context);
         File localFile2 = new File(localFile1, "/image/");
         if (!localFile2.exists()) {
             localFile2.mkdirs();

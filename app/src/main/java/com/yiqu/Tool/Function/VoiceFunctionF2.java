@@ -1,5 +1,7 @@
 package com.yiqu.Tool.Function;
 
+import android.content.Context;
+
 import com.utils.L;
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
@@ -17,20 +19,18 @@ public class VoiceFunctionF2 {
     private static String filePath;
     private static String tmpName;
 
-    public static boolean IsRecordingVoice() {
-        return RecorderEngine.getInstance().IsRecording();
-    }
 
-    public synchronized static String StartRecordVoice(boolean is2mp3, VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
+
+    public synchronized static String StartRecordVoice(boolean is2mp3, Context context, VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
         tmpName = System.currentTimeMillis()+"";
 
         if (is2mp3) {
-            filePath =  Variable.StorageMusicPath +tmpName + ".mp3";
+            filePath =  Variable.StorageMusicPath (context)+tmpName + ".mp3";
             Mp3RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
             //    LogUtils.LOGE("path",filePath);
         } else {
-            filePath = Variable.StorageMusicPath + tmpName + ".pcm";
+            filePath = Variable.StorageMusicPath (context)+ tmpName + ".pcm";
             RecorderEngine.getInstance()
                     .startRecordVoice(filePath, voiceRecorderOperateInterface);
             //   LogUtils.LOGE("path",filePath);
@@ -61,6 +61,16 @@ public class VoiceFunctionF2 {
         } else {
             RecorderEngine.getInstance().stopRecordVoice();
         }
+    }
+
+    public static boolean IsRecordingVoice(boolean is2mp3) {
+
+        if (is2mp3) {
+            return   Mp3RecorderEngine.getInstance().IsRecording();
+        } else {
+            return   RecorderEngine.getInstance().IsRecording();
+        }
+
     }
 
     public static boolean isPauseRecordVoice(boolean is2mp3) {

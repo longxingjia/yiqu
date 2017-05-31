@@ -128,7 +128,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected int getTitleBarType() {
-        return FLAG_BACK | FLAG_TXT ;
+        return FLAG_BACK | FLAG_TXT | FLAG_BTN ;
     }
 
     @Override
@@ -139,8 +139,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected boolean onPageNext() {
-
-     //   showShare();
+        showShare();
         return false;
     }
 
@@ -155,11 +154,11 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
         //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
-        oks.setTitle(sound.musicname);
+        oks.setTitle(sound.stuname);
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
 //        oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(sound.stuname);
+        oks.setText(sound.desc);
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
@@ -273,7 +272,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected void initTitle() {
-
+        setTitleBtnImg(R.mipmap.share_icon);
         setTitleText(getString(R.string.detail_pic));
     }
 
@@ -296,7 +295,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab1;
     }
 
     @Override

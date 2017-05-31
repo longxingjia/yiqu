@@ -174,7 +174,6 @@ public class Tab5PicAdapter extends BaseAdapter implements OnItemClickListener,
 //            L.e(String.valueOf(flag));
 
             if (flag){
-                L.e(String.valueOf(flag));
                 final int pos=position;
 
                 holder.iv_status.setVisibility(View.VISIBLE);

@@ -9,6 +9,7 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.view.MultiView.spannable.CircleMovementMethod;
 
@@ -24,6 +25,7 @@ public class ExpandTextView extends LinearLayout {
     private int showLines;
 
     private ExpandStatusListener expandStatusListener;
+    private onClickListener onClickListener;
     private boolean isExpand;
 
     public ExpandTextView(Context context) {
@@ -68,6 +70,15 @@ public class ExpandTextView extends LinearLayout {
                 //通知外部状态已变更
                 if(expandStatusListener != null){
                     expandStatusListener.statusChange(isExpand());
+                }
+            }
+        });
+
+        contentText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickListener!=null){
+                    onClickListener.onClick(v);
                 }
             }
         });
@@ -127,10 +138,18 @@ public class ExpandTextView extends LinearLayout {
     public void setExpandStatusListener(ExpandStatusListener listener){
         this.expandStatusListener = listener;
     }
+    public void setOnClickListener(onClickListener listener){
+        onClickListener = listener;
+    }
 
     public static interface ExpandStatusListener{
 
         void statusChange(boolean isExpand);
+    }
+
+
+    public static interface onClickListener{
+        void onClick(View view);
     }
 
 }

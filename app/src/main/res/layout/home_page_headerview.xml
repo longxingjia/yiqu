@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="190dp">
+        android:layout_height="192dp">
 
         <ImageView
             android:id="@+id/background"
@@ -23,7 +23,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:background="@mipmap/menu_head" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_below="@+id/head"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="6dp"
             android:text=""
             android:textColor="@color/white"
             android:textSize="20dp" />
@@ -43,7 +43,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_below="@+id/head"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/name"
             android:background="@mipmap/sex_female" />
 
@@ -68,7 +68,7 @@
             android:layout_marginRight="15dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="2"
+            android:maxLines="3"
             android:text="未填写"
             android:textColor="@color/white"
             android:textSize="14dp" />

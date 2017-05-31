@@ -41,7 +41,6 @@ public class Sound implements Serializable {
     public String tectitle;
     public int listen; //0,1 是否不用支付试听
     public int islike;
-
     public int isopen; //1：公开 0：不公开
     public int ispay; //0:未支付，1：支付成功
     public int mid; //伴奏歌曲ID
@@ -52,7 +51,6 @@ public class Sound implements Serializable {
     public int isnewreply; //是否有新追问(导师) 1:有 0:没有
     public String followcount;
     public int isnewread;
-
     public String lrc_url;
     public String lrcpath;
     public String stuschool;

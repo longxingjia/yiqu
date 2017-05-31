@@ -1243,7 +1243,7 @@ public class ItemDetailTextFragment extends AbsAllFragment implements View.OnCli
                 L.e(sound.lrc_url);
                 String lyricUrl = MyNetApiConfig.ImageServerAddr + sound.lrc_url;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/") + 1, lyricUrl.length());
-                File file = new File(Variable.StorageLyricCachPath, lyricname);
+                File file = new File(Variable.StorageLyricCachPath(getActivity()), lyricname);
                 if (file.exists()) {
                     String result = LyrcUtil.readLRCFile(file);
                     //解析歌词构造器
@@ -1256,7 +1256,7 @@ public class ItemDetailTextFragment extends AbsAllFragment implements View.OnCli
                     L.e("fd");
                     if (mDownloadService != null) {
                         L.e("f");
-                        mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
+                        mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath(getActivity()),
                                 lyricname);
                     }
                 }
@@ -1282,7 +1282,7 @@ public class ItemDetailTextFragment extends AbsAllFragment implements View.OnCli
 
                 @Override
                 public void onSuccess(int downloadId) {
-                    File f1 = new File(Variable.StorageLyricCachPath, lyricname);
+                    File f1 = new File(Variable.StorageLyricCachPath(getActivity()), lyricname);
                     String result = LyrcUtil.readLRCFile(f1);
                     //解析歌词构造器
                     ILrcBuilder builder = new DefaultLrcBuilder();

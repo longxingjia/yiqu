@@ -1,3 +1,2 @@
-include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':waveview', ':LyricView', 'aacDecode', ':rbaudiomixlibrary', ':multi-image-selector'
+include ':app', ':byronFm10', ':badgeView', ':permissiongen', ':waveview', ':LyricView', 'aacDecode', ':multi-image-selector'
 
-include ':base_library_pullToRefresh_chenyoca'

@@ -40,7 +40,7 @@
         <!--</RelativeLayout>-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             >
             <!--android:scaleType="centerCrop"-->
             <ImageView
@@ -57,7 +57,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:background="@mipmap/menu_head" />
 
 
@@ -110,8 +110,10 @@
                     android:layout_marginRight="5dp"
                     android:gravity="center"
                     android:text="未填写"
+                    android:ellipsize="end"
+                    android:maxLines="3"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="14dp" />
 
 
             </RelativeLayout>
@@ -561,12 +563,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="horizontal">
 
-
-
         <View
-
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"/>

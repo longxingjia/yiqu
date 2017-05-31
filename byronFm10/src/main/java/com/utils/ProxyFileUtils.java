@@ -3,14 +3,12 @@ package com.utils;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
-
 import com.db.CachFileDBHelper;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.math.MathContext;
 import java.net.URI;
 
 public class ProxyFileUtils {
@@ -67,7 +65,7 @@ public class ProxyFileUtils {
 
 		try {
 			// 判断外部存储器是否可用
-			File dir = new File(Constants.DOWNLOAD_PATH);
+			File dir = new File(Variable.StorageQandAPath(mContext));
 			if (!dir.exists()) {
 				dir.mkdirs();
 				if(!dir.exists()){
@@ -75,9 +73,9 @@ public class ProxyFileUtils {
 				}
 			}
 			// 删除部分缓存文件
-			ProxyUtils.asynRemoveBufferFile(Constants.CACHE_FILE_NUMBER);
+			ProxyUtils.asynRemoveBufferFile(mContext,Constants.CACHE_FILE_NUMBER);
 			// 可用空间大小是否大于SD卡预留最小值
-			long freeSize = ProxyUtils.getAvailaleSize(Constants.DOWNLOAD_PATH);
+			long freeSize = ProxyUtils.getAvailaleSize(Variable.StorageQandAPath(mContext));
 			if (freeSize > Constants.SD_REMAIN_SIZE) {
 				return true;
 			} else {
@@ -102,9 +100,9 @@ public class ProxyFileUtils {
 		}
 
 		try {
-			file = new File(Constants.DOWNLOAD_PATH + name);
+			file = new File(Variable.StorageQandAPath(mContext) , name);
 			if (!file.exists()) {
-				File dir = new File(Constants.DOWNLOAD_PATH);
+				File dir = new File(Variable.StorageQandAPath(mContext));
 				dir.mkdirs();
 				file.createNewFile();
 			}

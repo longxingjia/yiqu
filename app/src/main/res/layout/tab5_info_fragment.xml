@@ -156,7 +156,6 @@
             android:id="@+id/rl_edit_introduction"
             style="@style/textview_edit_layout">
             <TextView
-
                 style="@style/textview_edit_left"
                 android:text="个人简介" />
 
@@ -164,6 +163,7 @@
                 android:id="@+id/edit_introduction"
                 android:layout_width="wrap_content"
                 android:singleLine="true"
+                android:maxWidth="200dp"
                 android:gravity="center_vertical"
                 style="@style/textview_edit_right"
                 android:text="" />

@@ -498,9 +498,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
-//        setTitleBtnImg(R.mipmap.edit_tab);
            showShare();
-        //    shareUmeng();
         return true;
     }
 

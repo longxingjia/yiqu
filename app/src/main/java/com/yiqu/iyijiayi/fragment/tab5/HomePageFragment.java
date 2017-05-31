@@ -25,6 +25,7 @@ import com.yiqu.iyijiayi.ImagePagerActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
+import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.adapter.Tab1SoundAdapter;
 import com.yiqu.iyijiayi.adapter.Tab5DianpingAdapter;
 
@@ -34,6 +35,7 @@ import com.yiqu.iyijiayi.adapter.Tab5XizuoAdapter;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab3.RecordFragment;
 import com.yiqu.iyijiayi.fragment.tab3.Tab3Activity;
+import com.yiqu.iyijiayi.fragment.tab3.TextQuestionFragment;
 import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
@@ -221,13 +223,23 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
              //   tab1SoundAdapter.setData(sounds);
              //   listView.setOnItemClickListener(tab1SoundAdapter);
 //            }
+            if (userInfo.type.equals("2")){
+                ll_tw.setVisibility(View.VISIBLE);
+            }
+
         }
+        if (AppShare.getUserInfo(getActivity())!=null &&AppShare.getUserInfo(getActivity()).uid.equals(userInfo.uid) ){
+            ll_tw.setVisibility(View.GONE);
+        }
+
+
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
         tab1SoundAdapter = new Tab1SoundAdapter(this);
         tab5PicAdapter = new Tab5PicAdapter(getActivity(),flag);
         tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity(),flag);
         listView.setAdapter(tab5PicAdapter);
         listView.setOnItemClickListener(tab5PicAdapter);
+
 
         TYPE = 4;
         RestNetCallHelper.callNet(getActivity(),
@@ -249,9 +261,41 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 //                bundle.putSerializable("data", userInfo);
 //                intent.putExtras(bundle);
 //                startActivity(intent);
-                Intent i = new Intent(getActivity(), StubActivity.class);
-                i.putExtra("fragment", RecordFragment.class.getName());
-                getActivity().startActivity(i);
+                if (!AppShare.getIsLogin(getActivity())) {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                    return;
+
+                }
+
+                String title = "提示";
+                String[] items = new String[]{"文字提问","作品提问"};
+
+                MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(mContext, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
+                    @Override
+                    public void onTea(int tea) {
+                        switch (tea) {
+                            case 0:
+                                Model.startNextAct(getActivity(),
+                                        TextQuestionFragment.class.getName());
+                                break;
+                            case 1:
+                                Model.startNextAct(getActivity(),
+                                        RecordFragment.class.getName());
+//                                Intent i = new Intent(getActivity(), StubActivity.class);
+//                                i.putExtra("fragment", RecordFragment.class.getName());
+//                                getActivity().startActivity(i);
+                                break;
+                        }
+                    }
+                });
+                menuDialogSelectTeaHelper.show(v);
+
+
+
+
+
 
             }
         });
@@ -368,10 +412,14 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (userInfo.type.equals("2")) {
             InitCursor(4);
             dianping_tab.setVisibility(View.VISIBLE);
+            String title =  userInfo.title;
+            if (title.length()>14){
+                title = title.substring(0,14);
+            }
             if (TextUtils.isEmpty(userInfo.title)) {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
             } else {
-                descStr = String.format("%s | 粉丝:%s | 收听:%s", userInfo.title, userInfo.followcount, userInfo.myfollowcount);
+                descStr = String.format("%s | 粉丝:%s | 收听:%s",title , userInfo.followcount, userInfo.myfollowcount);
             }
             TYPE = 4;
 

@@ -6,7 +6,7 @@ public class Constants {
 	/** SD卡路径 */
 	public static final String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/";
 	/** 缓存保存路径 */
-	public static final String DOWNLOAD_PATH = Variable.StorageQandAPath;
+//	public static final String DOWNLOAD_PATH = Variable.StorageQandAPath;
 	/** SD卡预留最小值 */
 	public static final int SD_REMAIN_SIZE = 50 * 1024 * 1024;
 	/** 单次缓存文件最大值 */

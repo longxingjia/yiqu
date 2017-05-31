@@ -21,8 +21,8 @@ public class InitFunction {
     public static synchronized void Initialise(Application application) {
         TestCPU();
 
-        FileFunction.InitStorage(application);
+        //FileFunction.InitStorage(application);
 
-        LogFunction.UpdateErrorOutputStream();
+        LogFunction.UpdateErrorOutputStream(application);
     }
 }

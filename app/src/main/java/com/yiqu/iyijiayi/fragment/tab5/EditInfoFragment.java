@@ -1,13 +1,17 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
@@ -29,7 +33,7 @@ import cn.jiguang.analytics.android.api.JAnalyticsInterface;
  * Created by Administrator on 2017/2/15.
  */
 
-public class EditInfoFragment extends AbsAllFragment {
+public class EditInfoFragment extends AbsAllFragment implements TextWatcher {
 
     private String data;
     private EditText content;
@@ -38,6 +42,8 @@ public class EditInfoFragment extends AbsAllFragment {
     private String datastr = "";
     private String uid;
     private String tag = "EditInfoFragment";
+    private TextView num;
+    private TextView total_num;
 
     @Override
     protected int getTitleBarType() {
@@ -118,6 +124,8 @@ public class EditInfoFragment extends AbsAllFragment {
     protected void initView(View v) {
         content = (EditText) v.findViewById(R.id.content);
         sumbit = (Button) v.findViewById(R.id.submit);
+        num = (TextView) v.findViewById(R.id.num);
+        total_num = (TextView) v.findViewById(R.id.total_num);
 
         if (AppShare.getIsLogin(getActivity())) {
             uid = AppShare.getUserInfo(getActivity()).uid;
@@ -143,6 +151,8 @@ public class EditInfoFragment extends AbsAllFragment {
                 return false;
             }
         });
+
+        content.addTextChangedListener(this);
     }
 
     private void next() {
@@ -172,14 +182,8 @@ public class EditInfoFragment extends AbsAllFragment {
                 if (netResponse.bool == 1) {
                     Gson gson = new Gson();
                     UserInfo userInfo = gson.fromJson(netResponse.data, UserInfo.class);
-
                     AppShare.setUserInfo(getActivity(), userInfo);
-//                Intent i = new Intent(getActivity(), StubActivity.class);
-//                i.putExtra("fragment", InfoFragment.class.getName());
-////                    i.putExtra("fromLogin", "10");
                     getActivity().finish();
-//                getActivity().startActivity(i);
-
 
                 } else {
                     ToastManager.getInstance(getActivity()).showText(netResponse.result);
@@ -190,8 +194,6 @@ public class EditInfoFragment extends AbsAllFragment {
                 getActivity().finish();
                 ToastManager.getInstance(getActivity()).showText("提交成功，请耐心等下我们的工作人员与您联系");
             }
-
-
         }
 
         super.onNetEnd(id, type, netResponse);
@@ -201,17 +203,42 @@ public class EditInfoFragment extends AbsAllFragment {
     protected void init(Bundle savedInstanceState) {
         content.setHint("请填写您的" + datastr);
         if (data.equals("desc") || data.equals("advices")) {
-
             ViewGroup.LayoutParams lp = content.getLayoutParams();
             lp.height = DensityUtil.dip2px(getActivity(), 200);
             content.setLayoutParams(lp);
             content.setGravity(Gravity.TOP);
-            content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
-            //  content.setHeight(DensityUtil.dip2px(getActivity(),200));
+            content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(60)});
+            total_num.setText("60");
         }else if (data.equals("username")){
             content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+            total_num.setText("8");
+            content.setMaxLines(1);
+        }else if (data.equals("price")){
+            content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+            total_num.setText("5");
+            content.setInputType(InputType.TYPE_CLASS_PHONE);
+            content.setMaxLines(1);
+        }else {
+            content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+            total_num.setText("15");
+            content.setMaxLines(1);
         }
 
         super.init(savedInstanceState);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        num.setText(content.getText().toString().length()+"");
     }
 }

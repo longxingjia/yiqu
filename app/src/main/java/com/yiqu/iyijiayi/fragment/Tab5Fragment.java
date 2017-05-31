@@ -91,7 +91,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
 
         Btlogin = (Button) v.findViewById(R.id.tab5_login);
         logOutBt = (Button) v.findViewById(R.id.logout);
-
         llUserInfo = (RelativeLayout) v.findViewById(R.id.userinfo);
         background = (ImageView) v.findViewById(R.id.background);
         ll_tabs = (LinearLayout) v.findViewById(R.id.ll_tabs);
@@ -115,7 +114,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         menu_item_wodeyijiayizhuye.setOnClickListener(this);
         menu_item_wowen.setOnClickListener(this);
         menu_item_woting.setOnClickListener(this);
-
         menu_item_wodeyibi.setOnClickListener(this);
         menu_item_shezhi.setOnClickListener(this);
         menu_item_jiesuanshuoming.setOnClickListener(this);
@@ -133,7 +131,6 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
         user_desc = (TextView) v.findViewById(R.id.desc);
         content = (TextView) v.findViewById(R.id.content);
         sex = (ImageView) v.findViewById(R.id.sex);
-
 
     }
 
@@ -160,13 +157,8 @@ public class Tab5Fragment extends TabContentFragment implements View.OnClickList
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getUserByPhoneUid, MyNetRequestConfig.getUserByPhoneUid(
                             getActivity(), userInfo.uid), "getUserByPhoneUid", Tab5Fragment.this, false, true);
-
-
             llUserInfo.setVisibility(View.VISIBLE);
             logOutBt.setVisibility(View.VISIBLE);
-
-
-
         } else {
             logOutBt.setVisibility(View.GONE);
             ll_tabs.setVisibility(View.GONE);

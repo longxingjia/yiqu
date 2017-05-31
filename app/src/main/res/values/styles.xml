@@ -44,6 +44,19 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="textview_setting_cache">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawableRight">@mipmap/arrow</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="textview_edit_left">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>

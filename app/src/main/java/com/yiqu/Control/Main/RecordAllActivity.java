@@ -191,7 +191,6 @@ public class RecordAllActivity extends Activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-
     private void init(int layoutId) {
         setContentView(layoutId);
         ButterKnife.bind(this);
@@ -261,7 +260,7 @@ public class RecordAllActivity extends Activity
                 url = MyNetApiConfig.ImageServerAddr + url;
             }
             String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-            File file = new File(Variable.StorageImagePath, fileName);
+            File file = new File(Variable.StorageImagePath(instance), fileName);
             //   background.setBackgroundResource(R.color.wechat_green);
             if (file.exists()) {
                 try {
@@ -270,7 +269,7 @@ public class RecordAllActivity extends Activity
                     e.printStackTrace();
                 }
             } else {
-                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath(instance), image_anim, background);
                 downLoaderTask.execute();
             }
         } else {
@@ -327,11 +326,11 @@ public class RecordAllActivity extends Activity
         is2mp3 = false;
         musicFileUrl = backgroudMusciFile.getAbsolutePath();
         String tempfileName = fileName.substring(0, fileName.lastIndexOf("."));
-        decodeFileUrl = Variable.StorageMusicPath + tempfileName + ".pcm";
+        decodeFileUrl = Variable.StorageMusicPath(instance) + tempfileName + ".pcm";
         recordTime = 0;
         long t = System.currentTimeMillis() / 1000;
         fileNameCom = music.musicname + t + "cv.mp3";
-        composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
+        composeVoiceUrl = Variable.StorageMusicPath(instance) + fileNameCom;
         mid = music.mid;
 //        totalTime = music.time;
         tv_totaltime.setText(string2TimeUtils.stringForTimeS(totalTime));
@@ -812,7 +811,7 @@ public class RecordAllActivity extends Activity
                     } else {
                         select_music.setText("无配乐");
                     }
-                    VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
+                    VoiceFunctionF2.StartRecordVoice(is2mp3, instance,instance);
                     select_music.setEnabled(false);
                     add_article.setEnabled(false);
                     add_music.setEnabled(false);

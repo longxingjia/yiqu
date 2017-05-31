@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.utils.L;
 import com.utils.Variable;
 import com.base.utils.ToastManager;
 import com.fwrestnet.NetResponse;
@@ -27,6 +29,8 @@ import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.adapter.MenuDialogGiveupRecordHelper;
+import com.yiqu.iyijiayi.adapter.MenuDialogListerner;
 import com.yiqu.iyijiayi.adapter.UploaderTask;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -64,11 +68,10 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private TextView created;
     private TextView views;
     private ImageView stu_header;
-    private int totalTime = 10 * 60;
+    private int totalTime = 2 * 60;
 
     private String fileName;
     private String url;
-    private File mFile;
 
     private ImageView musictype;
     private Sound sound;
@@ -76,14 +79,13 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private ImageView record;
     private ImageView new_record;
     private ImageView play;
-    private boolean mIsRecording = false;
+//    private boolean mIsRecording = false;
     private Animation rotate;
     //  private RecorderAndPlayUtil mRecorderUtil;
     private int recordTime;
     private TextView msecond;
     private String recordPath;
     private ImageView recording;
-    private TextView stop_text;
     private ImageView rejuse;
 
     @BindView(R.id.question_type)
@@ -114,8 +116,41 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
     @Override
     protected boolean onPageBack() {
-        return false;
+        exit();
+        return true;
     }
+
+
+    private void exit() {
+        L.e(String.valueOf(VoiceFunctionF2.IsRecordingVoice(is2mp3)));
+        if (VoiceFunctionF2.IsRecordingVoice(is2mp3)) {
+
+            MenuDialogGiveupRecordHelper menuDialogGiveupRecordHelper = new MenuDialogGiveupRecordHelper(getActivity(), new MenuDialogListerner() {
+                @Override
+                public void onSelected(int selected) {
+                    switch (selected) {
+                        case 0:
+                            recordComFinish = false;
+                            VoiceFunctionF2.StopRecordVoice(is2mp3);
+                            VoiceFunctionF2.StopVoice();
+                            msecond.setText("0");
+                            record.setVisibility(View.VISIBLE);
+                            recording.setVisibility(View.GONE);
+
+                            break;
+                        case 1:
+                            VoiceFunctionF2.GiveUpRecordVoice(true);
+                            getActivity().finish();
+                            break;
+                    }
+                }
+            });
+            menuDialogGiveupRecordHelper.show(now_time);
+        } else {
+            getActivity().finish();
+        }
+    }
+
 
     @Override
     protected boolean onPageNext() {
@@ -171,7 +206,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
         recording.setOnClickListener(this);
         rejuse.setOnClickListener(this);
-        stop_text = (TextView) v.findViewById(R.id.stop_text);
         send = (ImageView) v.findViewById(R.id.send);
         record = (ImageView) v.findViewById(R.id.record);
         new_record = (ImageView) v.findViewById(R.id.new_record);
@@ -197,6 +231,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
             if (leftTime <= 0) {
                 VoiceFunctionF2.StopRecordVoice(is2mp3);
+                recording.setImageResource(R.mipmap.tab5_icon_pause);
             }
         }
 
@@ -278,7 +313,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 url.lastIndexOf("/") + 1,
                 url.length());
         fileName = sound.musicname + "_" + fileName;
-        mFile = new File(Variable.StorageMusicCachPath(getActivity()), fileName);
         rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.recording_animation);
         LinearInterpolator lin = new LinearInterpolator();
         rotate.setInterpolator(lin);//setInterpolator表示设置旋转速率。LinearInterpolator为匀速效果，Accelerateinterpolator为加速效果、DecelerateInterpolator为减速效果
@@ -335,12 +369,10 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                     video_play.setImageResource(R.mipmap.video_pause);
                 }
 
-
                 break;
             case R.id.send:
                 if (recordComFinish) {
                     final Map<String, String> params = new HashMap<String, String>();
-
                     params.put("type", String.valueOf(1));
                     if (!TextUtils.isEmpty(recordPath)) {
                         File file = new File(recordPath);
@@ -359,18 +391,33 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                         mPlayService.pause();
                     }
                 }
-                VoiceFunctionF2.StartRecordVoice(is2mp3, this);
-                startAnimation();
+                VoiceFunctionF2.StopVoice();
+                VoiceFunctionF2.StartRecordVoice(is2mp3, getActivity(),this);
+
                 recordPath = VoiceFunctionF2.getRecorderPath();
                 record.setVisibility(View.GONE);
                 recording.setVisibility(View.VISIBLE);
-                stop_text.setVisibility(View.VISIBLE);
-                mIsRecording = true;
+
+             //   mIsRecording = true;
 
 
                 break;
+            case R.id.recording:
+                if (!VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
+                    VoiceFunctionF2.pauseRecordVoice(is2mp3);
+                  //  stopAnimation();
+                 //   mIsRecording = false;
+                    recording.setImageResource(R.mipmap.tab5_icon_pause);
+//                    recording.setVisibility(View.GONE);
+//                    record.setVisibility(View.VISIBLE);
+                        recordComFinish = true;
+                }else {
+                    VoiceFunctionF2. restartRecording(is2mp3);
+                    recording.setImageResource(R.mipmap.icon_recording);
+                    recordComFinish = false;
+                }
+                break;
             case R.id.new_record:
-
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("重新录制");
@@ -380,42 +427,25 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //  recordVoiceButton.setText(getResources().getString(R.string.start_recording));
-
                         recordComFinish = false;
                         VoiceFunctionF2.StopRecordVoice(is2mp3);
                         VoiceFunctionF2.StopVoice();
-
                         msecond.setText("0");
                         record.setVisibility(View.VISIBLE);
                         recording.setVisibility(View.GONE);
-                        stop_text.setVisibility(View.GONE);
                     }
                 });
                 builder.show();
-
 
                 break;
             case R.id.play:
 
                 if (recordComFinish && !TextUtils.isEmpty(recordPath)) {
-
                     VoiceFunctionF2.StopVoice();
                     VoiceFunctionF2.PlayToggleVoice(recordPath, this);
                 }
                 break;
-            case R.id.recording:
-                if (mIsRecording) {
-                    VoiceFunctionF2.StopRecordVoice(is2mp3);
-                    stopAnimation();
-                    mIsRecording = false;
-                    recording.setVisibility(View.GONE);
-                    record.setVisibility(View.VISIBLE);
-                    stop_text.setVisibility(View.GONE);
-                    recordComFinish = true;
-                }
 
-
-                break;
             case R.id.rejuse:
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.refuseReply, MyNetRequestConfig.refuseReply(
@@ -424,6 +454,17 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 break;
         }
     }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) { //监控/拦截/屏蔽返回键
+////            dialog();
+//            exit();
+//            return false;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+
 
 
     @Override
@@ -473,7 +514,15 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                     now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
                 }
             });
+
+
+
         }
+
+
+
+
+
     }
 
     @Override
@@ -487,21 +536,16 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
             }
         }
 
-        if (mIsRecording) {
-            VoiceFunctionF2.StopRecordVoice(is2mp3);
-        }
+//        if (mIsRecording) {
+//            VoiceFunctionF2.StopRecordVoice(is2mp3);
+//        }
 
         super.onDestroy();
     }
 
     @PermissionSuccess(requestCode = 100)
     public void openContact() {
-        if (mIsRecording) {
-            //  StopRecording();
 
-        } else {
-            //   initRecord();
-        }
     }
 
 

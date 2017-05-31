@@ -154,10 +154,12 @@ public class Tab4NewAdapter extends BaseAdapter implements OnItemClickListener {
             h.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
 
             Tab4hotCommentsAdapter tab4hotCommentsAdapter = new Tab4hotCommentsAdapter(mContext, String.valueOf(f.sid), String.valueOf(f.fromuid));
-
             h.comments.setAdapter(tab4hotCommentsAdapter);
-            //  h.comments.setItemsCanFocus(false);
-            tab4hotCommentsAdapter.setData(f.top_comments);
+            if(f.top_comments.size()==0){
+                h.comments.setVisibility(View.GONE);
+            }else {
+                tab4hotCommentsAdapter.setData(f.top_comments);
+            }
             setListViewHeightBasedOnChildren(h.comments);
 
             if (f.islike == 0) {

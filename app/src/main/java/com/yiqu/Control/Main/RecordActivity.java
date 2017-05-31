@@ -145,15 +145,15 @@ public class RecordActivity extends Activity
             musicFileUrl = mFile.getAbsolutePath();
             getDuration(musicFileUrl);//设置音乐总时间
 
-            decodeFileUrl = Variable.StorageMusicPath + fileName + ".pcm";
+            decodeFileUrl = Variable.StorageMusicPath(instance) + fileName + ".pcm";
 
             musicSize.setText(FileSizeUtil.getAutoFileOrFilesSize(mFile.getAbsolutePath()));
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 
-            tempVoicePcmUrl = Variable.StorageMusicPath + music.musicname + "_tempVoice.pcm";
+            tempVoicePcmUrl = Variable.StorageMusicPath(instance) + music.musicname + "_tempVoice.pcm";
             fileNameCom = music.musicname + t + "_composeVoice.mp3";
-            composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
+            composeVoiceUrl = Variable.StorageMusicPath(instance) + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
         }
 
@@ -501,7 +501,7 @@ public class RecordActivity extends Activity
                         LogUtils.LOGE(tag,"ccc");
 
                         startAnimation();
-                        VoiceFunction.StartRecordVoice( instance);
+                        VoiceFunction.StartRecordVoice( instance,instance);
                         VoiceFunction.PlayToggleVoice(musicFileUrl, instance);
 
                         recordVoiceButton.setText("完成录制");

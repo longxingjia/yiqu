@@ -1,5 +1,7 @@
 package com.yiqu.Tool.Function;
 
+import android.content.Context;
+
 import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.Tool.Interface.VoiceRecorderOperateInterface;
@@ -18,9 +20,9 @@ public class VoiceFunction {
         return RecorderEngine.getInstance().IsRecording();
     }
 
-    public synchronized static String StartRecordVoice(
+    public synchronized static String StartRecordVoice(Context context,
             VoiceRecorderOperateInterface voiceRecorderOperateInterface) {
-        String tmp = Variable.StorageMusicPath + System.currentTimeMillis();
+        String tmp = Variable.StorageMusicPath(context) + System.currentTimeMillis();
         mp3FilePath = tmp + ".mp3";
         pcmFilePath = tmp + ".pcm";
         RecorderEngine.getInstance()

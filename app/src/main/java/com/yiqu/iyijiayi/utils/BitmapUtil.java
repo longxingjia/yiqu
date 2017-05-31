@@ -93,7 +93,7 @@ public class BitmapUtil {
      */
     public static String decodeUriAsBitmap(Context context, String inputPath) {
 
-        String outPath = Variable.StorageImagePath + System.currentTimeMillis() + ".jpg";
+        String outPath = Variable.StorageImagePath(context) + System.currentTimeMillis() + ".jpg";
      //   String temPath = Variable.StorageImagePath + "temPath.jpg";
 
         if (context == null || inputPath == null)

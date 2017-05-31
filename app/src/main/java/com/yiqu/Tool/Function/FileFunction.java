@@ -35,30 +35,31 @@ public class FileFunction {
             dir.mkdirs();
         }
     }
-
-    public static void InitStorage(Application application) {
-        if (!FileFunction.IsExitsSdcard()) {
-//            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
-            Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
-
-        } else {
-            Variable.StorageDirectoryPath = application.getExternalCacheDir().getAbsolutePath();
-        }
-
-        Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
-        Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
-        Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
-        Variable.StorageLyricCachPath = Variable.StorageDirectoryPath + "/lyric/";
-
-        Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-
-        CreateDirectory(Variable.StorageDirectoryPath);
-        CreateDirectory(Variable.StorageMusicPath);
-        CreateDirectory(Variable.StorageImagePath);
-        CreateDirectory(Variable.StorageQandAPath);
-        CreateDirectory(Variable.StorageLyricCachPath);
-
-    }
+//
+//    public static void InitStorage(Application application) {
+//        if (!FileFunction.IsExitsSdcard()) {
+////            Variable.StorageDirectoryPath = application.getFilesDir().getAbsolutePath();
+//            Variable.StorageDirectoryPath = application.getCacheDir().getAbsolutePath();
+//
+//        } else {
+//            Variable.StorageDirectoryPath = application.getExternalCacheDir().getAbsolutePath();
+//        }
+//
+//        Variable.ErrorFilePath = Variable.StorageDirectoryPath + "error.txt";
+//        Variable.StorageImagePath = Variable.StorageDirectoryPath + "/image/";
+//        Variable.StorageMusicPath = Variable.StorageDirectoryPath + "/music/";
+//        Variable.StorageLyricCachPath = Variable.StorageDirectoryPath + "/lyric/";
+//
+//      //  Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+////        Variable.StorageQandAPath = application.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+//
+//        CreateDirectory(Variable.StorageDirectoryPath);
+//        CreateDirectory(Variable.StorageMusicPath);
+//        CreateDirectory(Variable.StorageImagePath);
+//     //   CreateDirectory(Variable.StorageQandAPath);
+//        CreateDirectory(Variable.StorageLyricCachPath);
+//
+//    }
 
     public static void SaveFile(String url, String content) {
         SaveFile(url, content, true, false);

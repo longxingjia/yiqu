@@ -70,8 +70,9 @@
         android:drawablePadding="5dp"
         android:textColor="@color/dd_gray" />
 
+
     <TextView
-        android:visibility="gone"
+        android:id="@+id/clear_cach"
         style="@style/textview_setting"
         android:text="缓存" />
 

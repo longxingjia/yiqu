@@ -240,6 +240,7 @@ public class InfoFragment extends AbsAllFragment implements View.OnClickListener
                 ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(rl_edit_photo.getMeasuredWidth(), rl_edit_photo.getMeasuredHeight());
                 ImagePagerActivity.startImagePagerActivity((getActivity()), imagesList, 0, imageSize);
 
+
                 break;
             case R.id.rl_edit_price:
                 in.putExtra("fragment", EditInfoFragment.class.getName());

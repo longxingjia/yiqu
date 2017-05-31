@@ -203,12 +203,12 @@ public class RecordOnlyActivity extends Activity
                 url = MyNetApiConfig.ImageServerAddr + url;
             }
             String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-            File file = new File(Variable.StorageImagePath, fileName);
+            File file = new File(Variable.StorageImagePath(instance), fileName);
 
             if (file.exists()) {
                 initBackground(file);
             } else {
-                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath(instance), image_anim, background);
                 downLoaderTask.execute();
             }
         }

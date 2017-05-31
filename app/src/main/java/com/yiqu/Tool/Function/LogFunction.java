@@ -1,5 +1,6 @@
 package com.yiqu.Tool.Function;
 
+import android.app.Application;
 import android.util.Log;
 
 import com.czt.mp3recorder.RecordConstant;
@@ -21,18 +22,18 @@ public class LogFunction {
 
     private static BufferedWriter errorOutputStream;
 
-    public static synchronized void UpdateErrorOutputStream() {
+    public static synchronized void UpdateErrorOutputStream (Application application) {
         try {
             Log.d("刷新error文件输出流", "刷新开始");
 
-            File file = new File(Variable.ErrorFilePath);
+            File file = new File(Variable.ErrorFilePath(application));
 
             if (!file.exists()) {
                 file.createNewFile();
             }
 
             errorOutputStream = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(Variable.ErrorFilePath, true)));
+                    new OutputStreamWriter(new FileOutputStream(Variable.ErrorFilePath(application), true)));
         } catch (Exception e) {
             Log.e("刷新error日志文件输出流出错", e.toString());
         }
@@ -101,17 +102,17 @@ public class LogFunction {
             Log.w(tag + " :" + title, getStackInformation(content));
         }
 
-        try {
-            if (errorOutputStream == null || !FileFunction.IsFileExists(Variable.ErrorFilePath)) {
-                UpdateErrorOutputStream();
-            }
-
-            errorOutputStream
-                    .write(CommonFunction.GetDate() + "   " + title + ":" + content + "\r\n");
-            errorOutputStream.flush();
-        } catch (Exception e) {
-            Log.e(tag + ":打印error数据异常", e.toString());
-        }
+//        try {
+//            if (errorOutputStream == null || !FileFunction.IsFileExists(Variable.ErrorFilePath)) {
+//                UpdateErrorOutputStream();
+//            }
+//
+//            errorOutputStream
+//                    .write(CommonFunction.GetDate() + "   " + title + ":" + content + "\r\n");
+//            errorOutputStream.flush();
+//        } catch (Exception e) {
+//            Log.e(tag + ":打印error数据异常", e.toString());
+//        }
     }
 
     /*
@@ -122,17 +123,17 @@ public class LogFunction {
             Log.e(tag + ":" + title, getStackInformation(exception.toString()));
         }
 
-        try {
-            if (errorOutputStream == null || !FileFunction.IsFileExists(Variable.ErrorFilePath)) {
-                UpdateErrorOutputStream();
-            }
-
-            errorOutputStream
-                    .write(CommonFunction.GetDate() + "   " + title + ":" + exception.toString() +
-                            "\r\n");
-            errorOutputStream.flush();
-        } catch (Exception e) {
-            Log.e(tag + ":打印error数据异常", e.toString());
-        }
+//        try {
+//            if (errorOutputStream == null || !FileFunction.IsFileExists(Variable.ErrorFilePath)) {
+//                UpdateErrorOutputStream();
+//            }
+//
+//            errorOutputStream
+//                    .write(CommonFunction.GetDate() + "   " + title + ":" + exception.toString() +
+//                            "\r\n");
+//            errorOutputStream.flush();
+//        } catch (Exception e) {
+//            Log.e(tag + ":打印error数据异常", e.toString());
+//        }
     }
 }

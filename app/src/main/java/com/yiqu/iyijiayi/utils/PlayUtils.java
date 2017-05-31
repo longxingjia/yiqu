@@ -6,19 +6,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
-import com.yiqu.iyijiayi.R;
-import com.yiqu.iyijiayi.fileutils.utils.MediaPlayerProxy;
-
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class PlayUtils implements  OnCompletionListener, MediaPlayer.OnPreparedListener {
     public MediaPlayer mediaPlayer;

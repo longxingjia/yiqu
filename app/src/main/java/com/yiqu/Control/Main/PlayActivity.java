@@ -247,11 +247,11 @@ public class PlayActivity extends BaseActivity
                     url = MyNetApiConfig.ImageServerAddr + url;
                 }
                 String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-                File file = new File(Variable.StorageImagePath, fileName);
+                File file = new File(Variable.StorageImagePath(this), fileName);
                 if (file.exists()) {
                     initBackground(file);
                 } else {
-                    DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                    DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath(this), image_anim, background);
                     downLoaderTask.execute();
                 }
             }
@@ -261,7 +261,7 @@ public class PlayActivity extends BaseActivity
 
             String  lyricUrl = MyNetApiConfig.ImageServerAddr + voice.lrcpath;
             String   lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")+1, lyricUrl.length());
-            File file = new File(Variable.StorageLyricCachPath, lyricname);
+            File file = new File(Variable.StorageLyricCachPath(this), lyricname);
             if (file.exists()) {
                 String result = LyrcUtil.readLRCFile(file);
                 //解析歌词构造器

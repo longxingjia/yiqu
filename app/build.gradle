@@ -17,7 +17,6 @@ android {
             keyAlias 'iyijiayi'
             keyPassword 'iyijiayi'
             storePassword 'iyijiayi'
-
             //   v2SigningEnabled false
             //   v1SigningEnabled false
         }
@@ -48,7 +47,7 @@ android {
         versionCode 3
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
-        versionName "1.2.5"
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -89,15 +88,24 @@ android {
 
     productFlavors {
 
+        sougou {}
+        huawei {}
+        meizu {}
+        wostore {}
+        yiqu {}
+        c91 {}
+        oppo {}
+        vivo {}
         wandoujia {}
-        baidu {}
         c360 {}
+        uc {}
+        pp {}
         qq {}
         xiaomi {}
-        huawei {}
-        wostore {}
-        liqucn {}
-        yiqu {}
+        anzhi {}
+        baidu {}
+        lestore {}
+        jifeng {}
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
@@ -109,11 +117,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
-
-
-
-
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -142,11 +145,8 @@ dependencies {
     compile 'cn.jiguang.sdk:janalytics:1.1.1'
     // 此处以JAnalytics 1.1.1 版本为例。
     compile project(':LyricView')
-    compile project(':base_library_pullToRefresh_chenyoca')
     compile files('libs/MobCommons-2017.0412.1554.jar')
     compile files('libs/MobTools-2017.0412.1554.jar')
-    compile project(':aacDecode')
-    compile project(':rbaudiomixlibrary')
     compile project(':multi-image-selector')
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.chrisbanes:PhotoView:1.3.0'

@@ -39,8 +39,8 @@ public class CommonApplication extends Application {
         JPushInterface.init(this);
         JAnalyticsInterface.init(this);
 
-        JAnalyticsInterface.setDebugMode(true);  //参数为 true 表示打开调试模式，可看到 sdk 的日志。
-        JPushInterface.setDebugMode(true);
+        JAnalyticsInterface.setDebugMode(false);  //参数为 true 表示打开调试模式，可看到 sdk 的日志。
+        JPushInterface.setDebugMode(false);
         instance = this;
 
         if (CommonFunction.isEmpty(CommonFunction.GetPackageName())) {

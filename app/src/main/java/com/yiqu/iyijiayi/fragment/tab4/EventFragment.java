@@ -62,8 +62,6 @@ public class EventFragment extends AbsAllFragment implements LoadMoreView.OnMore
     private String arr;
     private ArrayList<Sound> sounds;
 
-
-
     @Override
     protected int getTitleView() {
         return R.layout.titlebar_tab5;

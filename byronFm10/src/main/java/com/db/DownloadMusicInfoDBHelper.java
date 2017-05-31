@@ -299,7 +299,6 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
      * @version 1.0
      */
     public int update(Music cc, String mid) {
-        // TODO Auto-generated method stub
         try {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues c = new ContentValues();
@@ -339,7 +338,6 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
      * @version 1.0
      */
     public int delete(String mid) {
-        // TODO Auto-generated method stub
         try {
             SQLiteDatabase db = getWritableDatabase();
 
@@ -359,7 +357,6 @@ public class DownloadMusicInfoDBHelper extends AbsDBHelper {
      * @version 1.0
      */
     public int deleteAll() {
-        // TODO Auto-generated method stub
         try {
             SQLiteDatabase db = getWritableDatabase();
             return db.delete(TABLE_NAME, null, null);

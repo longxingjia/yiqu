@@ -66,10 +66,10 @@ public class MenuDialogPicHelper {
             public void onMenuClick(MenuDialog dialog, int which, String item) {
                 switch (which) {
                     case 0:
-                        catchPicture();//调用具体方法
+                        catchPicture(mContext);//调用具体方法
                         break;
                     case 1:
-                        selectFromAlbum();
+                        selectFromAlbum(mContext);
                         break;
                 }
             }
@@ -93,10 +93,10 @@ public class MenuDialogPicHelper {
     /**
      * 拍照
      */
-    private void catchPicture() {
+    private void catchPicture(Context context) {
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
-            getFile();
+            getFile(context);
             File file = new File(tempFile);
 //            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
             if (Build.VERSION.SDK_INT >= 24) {
@@ -118,16 +118,16 @@ public class MenuDialogPicHelper {
     /**
      * 从相册选择
      */
-    private void selectFromAlbum() {
-        getFile();
+    private void selectFromAlbum(Context context) {
+        getFile(context);
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         mFragment.startActivityForResult(intent,
                 REQUEST_FROM_GALLERY);
     }
 
-    private void getFile() {
-        String localFile1 = Variable.StorageDirectoryPath;
+    private void getFile(Context context) {
+        String localFile1 = Variable.StorageDirectoryPath(context);
         File localFile2 = new File(localFile1, "/image/");
         if (!localFile2.exists()) {
             localFile2.mkdirs();
@@ -332,7 +332,10 @@ public class MenuDialogPicHelper {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", outputX);// 输出图片大小
         intent.putExtra("outputY", outputY);
+
+        //加上下面的这两句之后，系统就会把图片给我们拉伸了，哇哈哈，愁死我例差点
         intent.putExtra("scale", true);
+        intent.putExtra("scaleUpIfNeeded", true);
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
         intent.putExtra("outputFormat",

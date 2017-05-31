@@ -242,12 +242,12 @@ public class RecordComActivity extends Activity
             musicFileUrl = mFile.getAbsolutePath();
             getDuration(musicFileUrl);//设置音乐总时间
             String tempfileName = fileName.substring(0, fileName.lastIndexOf("."));
-            decodeFileUrl = Variable.StorageMusicPath + tempfileName + ".pcm";
+            decodeFileUrl = Variable.StorageMusicPath(instance) + tempfileName + ".pcm";
             recordTime = 0;
             long t = System.currentTimeMillis() / 1000;
 
             fileNameCom = music.musicname + t + "cv.mp3";
-            composeVoiceUrl = Variable.StorageMusicPath + fileNameCom;
+            composeVoiceUrl = Variable.StorageMusicPath(instance) + fileNameCom;
             recordVoiceButton.setOnClickListener(this);
 
         }
@@ -590,7 +590,7 @@ public class RecordComActivity extends Activity
                     }
                 } else {
                     VoiceFunctionF2.PlayToggleVoice(musicFileUrl, this);
-                    VoiceFunctionF2.StartRecordVoice(is2mp3, instance);
+                    VoiceFunctionF2.StartRecordVoice(is2mp3,instance, instance);
                     tempVoicePcmUrl = VoiceFunctionF2.getRecorderPath();
                     icon_record.setImageResource(R.mipmap.icon_pause);
                 }
@@ -726,7 +726,7 @@ public class RecordComActivity extends Activity
 
                 @Override
                 public void onSuccess(int downloadId) {
-                    File f1 = new File(Variable.StorageLyricCachPath, lyricname);
+                    File f1 = new File(Variable.StorageLyricCachPath(instance), lyricname);
                     String result = LyrcUtil.readLRCFile(f1);
                     //解析歌词构造器
                     ILrcBuilder builder = new DefaultLrcBuilder();
@@ -778,11 +778,11 @@ public class RecordComActivity extends Activity
                         url = MyNetApiConfig.ImageServerAddr + url;
                     }
                     String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
-                    File file = new File(Variable.StorageImagePath, fileName);
+                    File file = new File(Variable.StorageImagePath(instance), fileName);
                     if (file.exists()) {
                         initBackground(file);
                     } else {
-                        DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath, image_anim, background);
+                        DownLoaderTask downLoaderTask = new DownLoaderTask(url, fileName, Variable.StorageImagePath(instance), image_anim, background);
                         downLoaderTask.execute();
                     }
                 }
@@ -790,7 +790,7 @@ public class RecordComActivity extends Activity
                 lyricUrl = MyNetApiConfig.ImageServerAddr + music.lrcpath;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/")+1, lyricUrl.length());
 
-                File file = new File(Variable.StorageLyricCachPath, lyricname);
+                File file = new File(Variable.StorageLyricCachPath(instance), lyricname);
                 if (file.exists()) {
                     String result = LyrcUtil.readLRCFile(file);
                     //解析歌词构造器
@@ -801,7 +801,7 @@ public class RecordComActivity extends Activity
 
                 } else {
                     if (mDownloadService != null) {
-                        mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath,
+                        mDownloadService.download(music.mid, lyricUrl, Variable.StorageLyricCachPath(instance),
                                 lyricname);
                     }
                 }

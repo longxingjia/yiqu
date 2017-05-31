@@ -72,6 +72,7 @@ public class SettingFragment extends AbsAllFragment implements View.OnClickListe
         v.findViewById(R.id.help).setOnClickListener(this);
         v.findViewById(R.id.about).setOnClickListener(this);
         v.findViewById(R.id.advices).setOnClickListener(this);
+        v.findViewById(R.id.clear_cach).setOnClickListener(this);
 
 
     }
@@ -104,6 +105,10 @@ public class SettingFragment extends AbsAllFragment implements View.OnClickListe
                 intent.putExtra("fragment", EditInfoFragment.class.getName());
                 intent.putExtra("data", "advices");
                 getActivity().startActivity(intent);
+                break;
+            case R.id.clear_cach:
+                Model.startNextAct(getActivity(),
+                        ClearCacheFragment.class.getName());
                 break;
         }
 

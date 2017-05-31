@@ -200,7 +200,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @BindView(R.id.scrollView)
     public ObservableScrollView scrollView;
 
-
     @BindView(R.id.no_comments)
     public TextView no_comments;
     @BindView(R.id.comment)
@@ -208,29 +207,14 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @BindView(R.id.article_content)
     public TextView article_content;
 
-    private int teatotalTime;
-    private int stutotalTime;
-    private int stucurrentTime;
-    private int teacurrentTime;
-    private String stufileName;
     private String teafileName;
     private String stuUrl;
     private String teaUrl;
-    //    private File stuFile;
-    //    private File teaFile;
-    private Timer mTimer;
-    private TimerTask mTimerTask;
-
     private Sound sound;
     private AlertDialog dialog;
     private UserInfo userInfo;
     private String sid;
-    private DownloadManager downloadManager;
 
-    ScheduledExecutorService scheduledExecutorService;
-    Future<?> future;
-    private long downloadTeaId = -1;
-    private long downloadStuId = -1;
     private int mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
     private boolean isBoundDownload;
 
@@ -241,8 +225,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private Tab1CommentsAdapter tab1CommentsAdapter;
 
     private int payforTag = 0;
-    private int position;
-    //  private Player player;
     private Sound soundWorth;
     private String2TimeUtils string2TimeUtils = new String2TimeUtils();
     private String lyricname;
@@ -260,7 +242,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
         seekbar.setMax(100);
         initListeners();
-
     }
 
     private int imageHeight;
@@ -277,7 +258,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     now_time.setText(string2TimeUtils.stringForTimeS(progress / 1000));
                 }
             });
-
         }
     }
 
@@ -388,7 +368,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-                L.e(netResponse.toString());
+
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
 
@@ -433,8 +413,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 LogUtils.LOGE(tag, netResponse.toString());
             }
         } else if (id.equals("worthSoundList")) {
-
-
+//            L.e(netResponse.toString());
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.views, MyNetRequestConfig
                             .getComments(getActivity(), sid),
@@ -445,7 +424,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 }.getType());
                 soundWorth = sounds.get(0);
                 if (sound != null) {
-                    //   LogUtils.LOGE(tag, netResponse.toString());
                     worth_name.setText(soundWorth.musicname);
                     if (!TextUtils.isEmpty(soundWorth.desc))
                         worth_desc.setText(soundWorth.desc);
@@ -454,8 +432,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     } else {
                         worth_type.setImageResource(R.mipmap.boyin);
                     }
-                    PictureUtils.showPicture(getActivity(), soundWorth.tecimage, worth_header, 40);
-                    worth_teacher_name.setText(soundWorth.tecname);
+                    PictureUtils.showPicture(getActivity(), soundWorth.stuimage, worth_header, 40);
+                    worth_teacher_name.setText(soundWorth.stuname);
                     worth_teacher_desc.setText(sound.tectitle);
                     worth_like.setText(String.valueOf(soundWorth.like));
                     worth_comment.setText(String.valueOf(soundWorth.comments));
@@ -546,19 +524,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 text = text + sound.musictype + " | ";
             }
 
-
         } else {
             musictype.setImageResource(R.mipmap.boyin);
         }
 
 
-        if (sound.touid == 0) {
-            teacher_info.setVisibility(View.GONE);
-            // title.setText("作品详情");
-        } else {
-            teacher_info.setVisibility(View.VISIBLE);
-            // title.setText("问题详情");
-        }
+
 
         long t = System.currentTimeMillis() / 1000 - sound.edited;
         if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
@@ -579,7 +550,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         tab1CommentsAdapter.setOnMoreClickListener(new Tab1CommentsAdapter.setDeleteCom() {
             @Override
             public void onDeleteCom() {
-                //     L.e("f");
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getComments, MyNetRequestConfig
                                 .getComments(getActivity(), sid),
@@ -617,14 +587,22 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         if (sound.islike != 0) {
             initDianZan();
         }
-
-
         NSDictionary nsDictionary = new NSDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
+
         nsDictionary.status = "1";
-        nsDictionary.stype = "1";
+        if (sound.touid == 0) {
+            nsDictionary.stype = "2";
+            teacher_info.setVisibility(View.GONE);
+            // title.setText("作品详情");
+        } else {
+            teacher_info.setVisibility(View.VISIBLE);
+            nsDictionary.stype = "1";
+            // title.setText("问题详情");
+        }
+
 
         Gson gson = new Gson();
         String arr = gson.toJson(nsDictionary);
@@ -641,7 +619,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     protected void init(Bundle savedInstanceState) {
 
         sound = (Sound) getActivity().getIntent().getSerializableExtra("Sound");
-        position = getActivity().getIntent().getIntExtra("position", -1);
         userInfo = AppShare.getUserInfo(getActivity());
 
         if (sound == null) {
@@ -1081,13 +1058,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     public void onPause() {
-//        getActivity().unregisterReceiver(downloadCompleteReceiver);
-        if (scheduledExecutorService != null && !scheduledExecutorService.isShutdown()) {
-            future.cancel(true);
-            scheduledExecutorService.shutdown();
-            scheduledExecutorService = null;
 
-        }
         MobclickAgent.onPageEnd("声乐详情");
         super.onPause();
         JAnalyticsInterface.onPageEnd(getActivity(), "声乐详情");
@@ -1150,7 +1121,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 //                L.e(lrcUrl);
                 String lyricUrl = MyNetApiConfig.ImageServerAddr + lrcUrl;
                 lyricname = lyricUrl.substring(lyricUrl.lastIndexOf("/") + 1, lyricUrl.length());
-                File file = new File(Variable.StorageLyricCachPath, lyricname);
+                File file = new File(Variable.StorageLyricCachPath(getActivity()), lyricname);
 
                 if (file.exists()) {
                     String result = LyrcUtil.readLRCFile(file);
@@ -1165,7 +1136,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
                 } else {
                     if (mDownloadService != null) {
-                        mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath,
+                        mDownloadService.download(sound.mid, lyricUrl, Variable.StorageLyricCachPath(getActivity()),
                                 lyricname);
                     }
                 }
@@ -1191,7 +1162,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
                 @Override
                 public void onSuccess(int downloadId) {
-                    File f1 = new File(Variable.StorageLyricCachPath, lyricname);
+                    File f1 = new File(Variable.StorageLyricCachPath(getActivity()), lyricname);
                     String result = LyrcUtil.readLRCFile(f1);
                     //解析歌词构造器
                     ILrcBuilder builder = new DefaultLrcBuilder();
@@ -1245,17 +1216,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @Override
     public void playVoiceFinish() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
 
-        stucurrentTime = 0;
-        teacurrentTime = 0;
         commenttime.setText(sound.commenttime + "\"");
         soundtime.setText(sound.soundtime + "\"");
 
@@ -1270,27 +1231,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     mPlayService.pause();
                 }
             }
-        }
-
-
-        stucurrentTime = 0;
-        teacurrentTime = 0;
-
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
-
-        if (downloadManager != null) {
-            if (downloadTeaId != -1) {
-                downloadManager.remove(downloadTeaId);
-            }
-            if (downloadStuId != -1) {
-                downloadManager.remove(downloadStuId);
-            }
-
         }
 
         super.onDestroy();

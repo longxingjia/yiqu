@@ -1,5 +1,6 @@
 package com.utils;
 
+import android.content.Context;
 import android.os.StatFs;
 
 import java.io.File;
@@ -19,10 +20,10 @@ public class ProxyUtils {
 	 * @param maximun
 	 *            缓存文件的最大数量
 	 */
-	static protected void asynRemoveBufferFile(final int maximun) {
+	static protected void asynRemoveBufferFile(final Context context, final int maximun) {
 		new Thread() {
 			public void run() {
-				List<File> lstBufferFile = getFilesSortByDate(Constants.DOWNLOAD_PATH);
+				List<File> lstBufferFile = getFilesSortByDate(Variable.StorageQandAPath(context));
 				while (lstBufferFile.size() > maximun) {
 					lstBufferFile.get(0).delete();
 					lstBufferFile.remove(0);

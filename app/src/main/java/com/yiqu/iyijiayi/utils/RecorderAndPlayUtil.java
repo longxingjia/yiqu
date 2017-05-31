@@ -24,7 +24,7 @@ public class RecorderAndPlayUtil {
 
     public RecorderAndPlayUtil(Context context) {
         this.context = context;
-        filePath = Variable.StorageMusicPath + System.currentTimeMillis() + ".mp3";
+        filePath = Variable.StorageMusicPath(context) + System.currentTimeMillis() + ".mp3";
         //mRecorder = new MP3Recorder(new File(filePath));
     }
 

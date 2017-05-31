@@ -3,7 +3,9 @@ package com.yiqu.iyijiayi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -19,18 +21,34 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.base.utils.ToastManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.fwrestnet.NetCallBack;
+import com.fwrestnet.NetResponse;
 import com.utils.L;
+import com.utils.Variable;
 import com.yiqu.YWActivity;
+import com.yiqu.iyijiayi.adapter.MenuDialogSelectTeaHelper;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
+import com.yiqu.iyijiayi.net.MyNetRequestConfig;
+import com.yiqu.iyijiayi.net.RestNetCallHelper;
+import com.yiqu.iyijiayi.utils.AppShare;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -46,6 +64,7 @@ public class ImagePagerActivity extends Activity {
     private List<View> guideViewList = new ArrayList<View>();
     private LinearLayout guideGroup;
     public ImageSize imageSize;
+    private static Context mContext;
     private int startPos;
     private ArrayList<String> imgUrls;
 
@@ -60,6 +79,7 @@ public class ImagePagerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_imagepager);
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         guideGroup = (LinearLayout) findViewById(R.id.guideGroup);
@@ -145,6 +165,7 @@ public class ImagePagerActivity extends Activity {
         private Activity context;
         private ImageSize imageSize;
         private ImageView smallImageView = null;
+        private Bitmap bitmap;
 
         public void setDatas(List<String> datas) {
             if (datas != null)
@@ -168,8 +189,9 @@ public class ImagePagerActivity extends Activity {
 
 
         @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
+        public Object instantiateItem(ViewGroup container, int position) {
             View view = inflater.inflate(R.layout.item_pager_image, container, false);
+            final int pos = position;
 
             if (view != null) {
                 final PhotoView imageView = (PhotoView) view.findViewById(R.id.image);
@@ -184,23 +206,6 @@ public class ImagePagerActivity extends Activity {
                     smallImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     ((FrameLayout) view).addView(smallImageView);
                 }
-
-                imageView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-                    @Override
-                    public void onViewTap(View view, float x, float y) {
-                        context.finish();
-
-                    }
-                });
-
-
-                //loading
-                final ProgressBar loading = new ProgressBar(context);
-                FrameLayout.LayoutParams loadingLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                loadingLayoutParams.gravity = Gravity.CENTER;
-                loading.setLayoutParams(loadingLayoutParams);
-                ((FrameLayout) view).addView(loading);
                 String url = datas.get(position);
                 final String imgurl;
                 if (url.contains("http://wx.qlogo.cn")) {
@@ -209,44 +214,121 @@ public class ImagePagerActivity extends Activity {
                     imgurl = MyNetApiConfig.ImageServerAddr + url;
                 }
 
+                imageView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+                    @Override
+                    public void onViewTap(View view, float x, float y) {
+                        context.finish();
+                    }
+                });
+
+                imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        String title = "提示";
+                        String[] items = new String[]{"保存"};
+
+                        MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(mContext, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
+                            @Override
+                            public void onTea(int tea) {
+                                switch (tea) {
+                                    case 0:
+                                        if (bitmap!=null){
+                                            saveImageToGallery(mContext, bitmap);
+                                        }
+
+                                        break;
+                                }
+                            }
+                        });
+                        menuDialogSelectTeaHelper.show(v);
 
 
+                        return true;
+                    }
+                });
 
+
+                //loading
+//                final ProgressBar loading = new ProgressBar(context);
+//                FrameLayout.LayoutParams loadingLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//                loadingLayoutParams.gravity = Gravity.CENTER;
+//                loading.setLayoutParams(loadingLayoutParams);
+//                ((FrameLayout) view).addView(loading);
+
+
+//                Glide.with(context)
+//                        .load(imgurl)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存多个尺寸
+//                        .thumbnail(0.1f)//先显示缩略图  缩略图为原图的1/10
+//                        .error(R.mipmap.ic_launcher)
+//                        .into(new GlideDrawableImageViewTarget(imageView) {
+//                            @Override
+//                            public void onLoadStarted(Drawable placeholder) {
+//                                super.onLoadStarted(placeholder);
+//                               /* if(smallImageView!=null){
+//                                    smallImageView.setVisibility(View.VISIBLE);
+//                                    Glide.with(context).load(imgurl).into(smallImageView);
+//                                }*/
+//                                loading.setVisibility(View.VISIBLE);
+//                            }
+//
+//                            @Override
+//                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                                super.onLoadFailed(e, errorDrawable);
+//                                /*if(smallImageView!=null){
+//                                    smallImageView.setVisibility(View.GONE);
+//                                }*/
+//                                loading.setVisibility(View.GONE);
+//                            }
+//
+//                            @Override
+//                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                                super.onResourceReady(resource, animation);
+//                                loading.setVisibility(View.GONE);
+//                                /*if(smallImageView!=null){
+//                                    smallImageView.setVisibility(View.GONE);
+//                                }*/
+//                            }
+//                        });
 
                 Glide.with(context)
                         .load(imgurl)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存多个尺寸
-                        .thumbnail(0.1f)//先显示缩略图  缩略图为原图的1/10
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)//缓存多个尺寸
+                        //       .thumbnail(0.1f)//先显示缩略图  缩略图为原图的1/10
                         .error(R.mipmap.ic_launcher)
-                        .into(new GlideDrawableImageViewTarget(imageView) {
+                        .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                             @Override
-                            public void onLoadStarted(Drawable placeholder) {
-                                super.onLoadStarted(placeholder);
-                               /* if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.VISIBLE);
-                                    Glide.with(context).load(imgurl).into(smallImageView);
-                                }*/
-                                loading.setVisibility(View.VISIBLE);
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                           //     L.e("ff");
+                                bitmap = resource;
+                                imageView.setImageBitmap(resource);
+//                                int imageHeight = resource.getHeight();
+//                                if (imageHeight > 4096) {
+//                                    imageHeight = 4096;
+//                                    ViewGroup.LayoutParams para = imageview.getLayoutParams();
+//                                    para.width = LayoutParams.MATCH_PARENT;
+//                                    para.height = imageHeight;
+//                                    imageview.setLayoutParams(para);
+//
+//                                    Glide.with(context)
+//                                            .load(url)
+//                                            .placeholder(R.drawable. default)
+//                            .dontAnimate()
+//                                                .centerCrop()
+//                                                .into(imageview);
+//                                } else {
+//                                    Glide.with(context)
+//                                            .load(url)
+//                                            .placeholder(R.drawable. default)
+//                            .dontAnimate()
+//                                                .into(imageview);
+//                                }
                             }
 
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
-                                /*if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.GONE);
-                                }*/
-                                loading.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                                super.onResourceReady(resource, animation);
-                                loading.setVisibility(View.GONE);
-                                /*if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.GONE);
-                                }*/
-                            }
                         });
+
 
                 container.addView(view, 0);
             }
@@ -273,9 +355,45 @@ public class ImagePagerActivity extends Activity {
         }
 
 
+        public void saveImageToGallery(Context context, Bitmap bmp) {
+            // 首先保存图片
+            String fileName =  System.currentTimeMillis() + ".jpg";
+            File currentFile = new File(Variable.StorageSaveImagePath(),fileName);
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(currentFile);
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                ToastManager.getInstance(mContext).showText("保存成功");
+            } catch (FileNotFoundException e) {
+                ToastManager.getInstance(mContext).showText("保存失败");
+                e.printStackTrace();
+            } catch (IOException e) {
+                ToastManager.getInstance(mContext).showText("保存失败");
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // 其次把文件插入到系统图库
+//        try {
+//            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                    currentFile.getAbsolutePath(), fileName, null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+            // 最后通知图库更新
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.fromFile(new File(currentFile.getPath()))));
+        }
     }
-
-
 
     @Override
     protected void onDestroy() {

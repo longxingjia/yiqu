@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener {
-    private String tag = "Tab1XizuoAdapterTest";
+
     private LayoutInflater mLayoutInflater;
     private ArrayList<Sound> datas = new ArrayList<Sound>();
     private Context mContext;
@@ -123,7 +123,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
     private class ViewHolder1 {
         TextView musicname;
-        TextView desc;
+        ExpandTextView desc;
         TextView time;
         TextView tea_name;
         TextView tectitle;
@@ -180,7 +180,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                         holder1 = new ViewHolder1();
                         v = mLayoutInflater.inflate(R.layout.tab1_question_list_adapter, null);
                         holder1.musicname = (TextView) v.findViewById(R.id.musicname);
-                        holder1.desc = (TextView) v.findViewById(R.id.desc);
+                        holder1.desc = (ExpandTextView) v.findViewById(R.id.desc);
                         holder1.time = (TextView) v.findViewById(R.id.time);
                         holder1.tea_name = (TextView) v.findViewById(R.id.tea_name);
                         holder1.tectitle = (TextView) v.findViewById(R.id.tectitle);
@@ -285,6 +285,23 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             }
 
         }
+        holder.desc.setOnClickListener(new ExpandTextView.onClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, StubActivity.class);
+                if (f.type == 1) {
+                    i.putExtra("fragment", ItemDetailFragment.class.getName());
+                } else if (f.type == 2) {
+                    i.putExtra("fragment", ItemDetailFragment.class.getName());
+                } else {
+                    i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+                }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Sound", f);
+                i.putExtras(bundle);
+                mContext.startActivity(i);
+            }
+        });
 
         if (f.islike == 0) {
             initDianZan(holder.like, false);
@@ -338,10 +355,10 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         if (f.type == 1) {
             holder.ll_question.setVisibility(View.VISIBLE);
             holder.musictype.setImageResource(R.mipmap.shengyue);
-        } else if (f.type == 2){
+        } else if (f.type == 2) {
             holder.ll_question.setVisibility(View.VISIBLE);
             holder.musictype.setImageResource(R.mipmap.boyin);
-        }else {
+        } else {
             holder.ll_question.setVisibility(View.GONE);
         }
 
@@ -401,12 +418,23 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 
         holder.author.setText(f.stuname);
         holder.content.setText(EmojiCharacterUtil.decode(f.desc));
-//        L.e(EmojiCharacterUtil.decode(f.desc));
         holder.comment.setText(f.comments);
         holder.like.setText(String.valueOf(f.like));
         holder.listener.setText(String.valueOf(f.views));
         holder.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
         PictureUtils.showPicture(mContext, f.stuimage, holder.header, 47);
+
+        holder.content.setOnClickListener(new ExpandTextView.onClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", ItemDetailPicFragment.class.getName());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Sound", f);
+                i.putExtras(bundle);
+                mContext.startActivity(i);
+            }
+        });
 
         if (f.islike == 0) {
             initDianZan(holder.like, false);
@@ -486,10 +514,10 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         if (f.type == 1) {
             holder2.musictype.setVisibility(View.VISIBLE);
             holder2.musictype.setImageResource(R.mipmap.shengyue);
-        } else if (f.type == 2){
+        } else if (f.type == 2) {
             holder2.musictype.setVisibility(View.VISIBLE);
             holder2.musictype.setImageResource(R.mipmap.boyin);
-        }else {
+        } else {
             holder2.musictype.setVisibility(View.GONE);
         }
         if (f.islike == 0) {
@@ -497,6 +525,17 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         } else {
             initDianZan(holder2.like, true);
         }
+        holder2.content.setOnClickListener(new ExpandTextView.onClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, StubActivity.class);
+                i.putExtra("fragment", ItemDetailPicFragment.class.getName());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Sound", f);
+                i.putExtras(bundle);
+                mContext.startActivity(i);
+            }
+        });
 
         holder2.like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -557,8 +596,6 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 holder2.iv_status.setVisibility(View.GONE);
             }
         }
-
-
         if (mCurrent == f.sid) {
             holder2.musicname.setTextColor(mContext.getResources().getColor(R.color.redMain));
 
@@ -628,9 +665,9 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 //   holder1 = (ViewHolder1) convertView.getTag();
                 if (f.type == 1) {
                     i.putExtra("fragment", ItemDetailFragment.class.getName());
-                } else if (f.type == 2){
+                } else if (f.type == 2) {
                     i.putExtra("fragment", ItemDetailFragment.class.getName());
-                }else {
+                } else {
                     i.putExtra("fragment", ItemDetailTextFragment.class.getName());
                 }
 
