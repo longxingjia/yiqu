@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,10 +30,12 @@ import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
 import com.utils.L;
+import com.utils.LogUtils;
 import com.utils.Player;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.BannerAdapter;
+import com.yiqu.iyijiayi.adapter.Tab1GridviewAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapter;
 import com.yiqu.iyijiayi.adapter.Tab1XizuoAdapterTest;
 import com.yiqu.iyijiayi.fragment.tab1.SearchAllFragment;
@@ -100,11 +103,13 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private ImageView stop;
     private BannerAdapter bannerAdapter;
     private TextView question;
-    private TextView raokouling;
-    private TextView reader;
+//    private TextView raokouling;
+//    private TextView reader;
     private ImageView[] imageViews;
     private LinearLayout mViewPoints;
     private RelativeLayout rl_vp;
+    private GridView gridView;
+    private Tab1GridviewAdapter tab1GridviewAdapter;
 
 
     @Override
@@ -316,15 +321,24 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
         question = (TextView) v.findViewById(R.id.question);
-        raokouling = (TextView) v.findViewById(R.id.raokouling);
-        reader = (TextView) v.findViewById(R.id.reader);
+//        raokouling = (TextView) v.findViewById(R.id.raokouling);
+//        reader = (TextView) v.findViewById(R.id.reader);
         mViewPoints = (LinearLayout) v.findViewById(R.id.viewGroup);
         question.setOnClickListener(this);
-        raokouling.setOnClickListener(this);
-        reader.setOnClickListener(this);
-
+        gridView = (GridView) v.findViewById(R.id.gridview);
+//        raokouling.setOnClickListener(this);
+//        reader.setOnClickListener(this);
+        tab1GridviewAdapter = new Tab1GridviewAdapter(getActivity());
+        gridView.setAdapter(tab1GridviewAdapter);
+        gridView.setOnItemClickListener(tab1GridviewAdapter);
 
         more_xizuo.setOnClickListener(this);
+
+        RestNetCallHelper.callNet(
+                getActivity(),
+                MyNetApiConfig.getEventList,
+                MyNetRequestConfig.getEventList(getActivity(), 0, 10),
+                "getEventList", Tab1Fragment.this,false,true);
 
     }
 
@@ -536,29 +550,29 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 getActivity().startActivity(i);
 
                 break;
-            case R.id.raokouling:
-                Events events = new Events();
-                events.id = 1;
-                events.title = "挑战绕口令";
-
-                i.putExtra("fragment", EventFragment.class.getName());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data", events);
-                i.putExtras(bundle);
-                getActivity().startActivity(i);
-
-                break;
-            case R.id.reader:
-                Events e = new Events();
-                e.id = 2;
-                e.title = "为你朗诵";
-                i.putExtra("fragment", EventFragment.class.getName());
-                Bundle b = new Bundle();
-                b.putSerializable("data", e);
-                i.putExtras(b);
-                getActivity().startActivity(i);
-
-                break;
+//            case R.id.raokouling:
+//                Events events = new Events();
+//                events.id = 1;
+//                events.title = "挑战绕口令";
+//
+//                i.putExtra("fragment", EventFragment.class.getName());
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("data", events);
+//                i.putExtras(bundle);
+//                getActivity().startActivity(i);
+//
+//                break;
+//            case R.id.reader:
+//                Events e = new Events();
+//                e.id = 2;
+//                e.title = "为你朗诵";
+//                i.putExtra("fragment", EventFragment.class.getName());
+//                Bundle b = new Bundle();
+//                b.putSerializable("data", e);
+//                i.putExtras(b);
+//                getActivity().startActivity(i);
+//
+//                break;
         }
 
     }
@@ -670,6 +684,16 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 initTopPlayUI(sound);
 
             }
+        }else    if (id.equals("getEventList")) {
+            if (type == TYPE_SUCCESS) {
+                LogUtils.LOGE(tag, netResponse.toString());
+                ArrayList<Events> events =
+                        new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Events>>() {
+                        }.getType());
+                tab1GridviewAdapter.setData(events);
+
+            }
+
         }
 
         super.onNetEnd(id, type, netResponse);

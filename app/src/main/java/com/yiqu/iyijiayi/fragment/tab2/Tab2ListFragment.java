@@ -148,7 +148,6 @@ public class Tab2ListFragment extends AbsAllFragment implements LoadMoreView.OnM
 
         setTitleText(tab2_groups.group_name);
 
-
     }
 
     @Override
