@@ -3,8 +3,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:fillViewport="true"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -175,10 +175,10 @@
                 android:drawableLeft="@mipmap/comment"
                 android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
-                android:visibility="gone"
                 android:paddingTop="2dp"
                 android:textColor="@color/redMain"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -349,7 +349,8 @@
 
                         <TextView
                             android:id="@+id/worth_teacher_desc"
-                            android:layout_width="100dp"
+                            android:layout_width="wrap_content"
+                            android:layout_marginRight="10dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginTop="5dp"
@@ -404,8 +405,8 @@
                     android:layout_centerVertical="true"
                     android:drawableLeft="@mipmap/comment_normal"
                     android:drawablePadding="5dp"
-                    android:textColor="@color/dd_gray"
                     android:gravity="center"
+                    android:textColor="@color/dd_gray"
                     android:textSize="14sp"/>
 
 

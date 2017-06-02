@@ -691,11 +691,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                         new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Events>>() {
                         }.getType());
                 tab1GridviewAdapter.setData(events);
-
             }
-
         }
-
         super.onNetEnd(id, type, netResponse);
     }
 

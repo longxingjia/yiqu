@@ -37,6 +37,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
+import com.yiqu.iyijiayi.utils.HomePageUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.CommentListView;
@@ -96,7 +97,9 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
 
 
     }
+
     private setDeleteCom mListener;
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
@@ -108,13 +111,12 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
                 h.username = (TextView) v.findViewById(R.id.username);
                 h.comment = (TextView) v.findViewById(R.id.comment);
                 h.time = (TextView) v.findViewById(R.id.time);
-
                 h.header = (ImageView) v.findViewById(R.id.header);
                 v.setTag(h);
             }
             h = (HoldChild) v.getTag();
 
-            CommentsInfo f = getItem(position);
+            final CommentsInfo f = getItem(position);
             h.username.setText(f.fromusername);
 
             if (!uid.equals(f.touid)) {
@@ -123,6 +125,13 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
                 String s = EmojiCharacterUtil.decode(f.comment);
                 h.comment.setText(s);
             }
+
+            h.header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HomePageUtils.initHomepage(mContext, String.valueOf(f.fromuid));
+                }
+            });
 
             h.time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy-MM-dd HH:mm:ss"));
             PictureUtils.showPicture(mContext, f.fromuserimage, h.header, 47);
@@ -168,7 +177,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
 
                                     @Override
                                     public void onNetEnd(String id, int type, NetResponse netResponse) {
-                                        if (type==TYPE_SUCCESS){
+                                        if (type == TYPE_SUCCESS) {
                                             if (mListener != null) mListener.onDeleteCom();
                                         }
 
@@ -230,7 +239,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
         }
     }
 
-    public interface setDeleteCom{
+    public interface setDeleteCom {
         public void onDeleteCom();
     }
 

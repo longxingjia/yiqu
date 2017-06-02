@@ -119,7 +119,7 @@ public class ReplyActivity extends AbsFragmentAct implements NetCallBack, VoiceP
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay(); // 为获取屏幕宽、高
         WindowManager.LayoutParams p = getWindow().getAttributes();
-        p.height = (int) (d.getHeight() * 0.4); // 高度设置为屏幕的0.3
+        p.height = (int) (d.getHeight() * 0.5); // 高度设置为屏幕的0.3
         p.width = (int) (d.getWidth()); // 宽度设置为屏幕
         p.alpha = 1.0f;      //设置本身透明度
         p.dimAmount = 0.5f;      //设置黑暗度

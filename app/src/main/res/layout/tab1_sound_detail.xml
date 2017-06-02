@@ -820,9 +820,11 @@
     </LinearLayout>
 
     <ImageView
+        android:layout_marginTop="10dp"
         android:id="@+id/teacher_answer_q"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginBottom="10dp"
         android:scaleType="centerInside"
         android:visibility="gone"
         android:src="@mipmap/teacher_answer"/>

@@ -41,6 +41,7 @@ import com.yiqu.iyijiayi.model.Like;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.TypeDictionary;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -295,7 +296,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab5;
+        return R.layout.titlebar_tab2;
     }
 
     @Override
@@ -405,12 +406,12 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
                         .getComments(getActivity(),String.valueOf( sound.sid)),
                 "views", ItemDetailPicFragment.this, false, true);
 
-        NSDictionary nsDictionary = new NSDictionary();
+        TypeDictionary nsDictionary = new TypeDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
         nsDictionary.status = "1";
-        nsDictionary.stype = "1";
+        nsDictionary.stype = "2";
 
         Gson gson = new Gson();
         String arr = gson.toJson(nsDictionary);
@@ -418,7 +419,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "views", "desc", "0"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "created", "asc", "0"),
                 "worthSoundList", ItemDetailPicFragment.this, true, true);
 
     }
@@ -477,8 +478,8 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
                     } else {
                         worth_type.setImageResource(R.mipmap.boyin);
                     }
-                    PictureUtils.showPicture(getActivity(), soundWorth.tecimage, worth_header, 40);
-                    worth_teacher_name.setText(soundWorth.tecname);
+                    PictureUtils.showPicture(getActivity(), soundWorth.stuimage, worth_header, 40);
+                    worth_teacher_name.setText(soundWorth.stuname);
                     try {
                         worth_teacher_desc.setText(String2TimeUtils.longToString(soundWorth.created *1000,"yyyy-MM-dd HH:mm:ss"));
                     } catch (ParseException e) {

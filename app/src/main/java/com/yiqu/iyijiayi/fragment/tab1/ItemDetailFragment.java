@@ -284,7 +284,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     @Override
     public void onPublish(final int progress) {
         super.onPublish(progress);
-        if (mPlayService.getPlayingPosition() > 0) {
+        if (mPlayService.getPlayingPosition() > 0 && mPlayService.getDuration()!=0) {
             seekbar.setProgress(progress * 100 / mPlayService.getDuration());
             mHandler.post(new Runnable() {
                 @Override
@@ -479,6 +479,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             }
         } else if (id.equals("worthSoundList")) {
 //            L.e(netResponse.toString());
+            L.e(netResponse.toString());
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.views, MyNetRequestConfig
                             .getComments(getActivity(), sid),

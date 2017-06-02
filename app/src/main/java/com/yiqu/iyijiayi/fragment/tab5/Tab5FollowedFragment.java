@@ -45,7 +45,7 @@ public class Tab5FollowedFragment extends AbsAllFragment implements
 
     private String tag = "Tab5FollowedFragment";
     private String uid;
-    private ScrollViewWithListView lvTeacher;
+//    private ScrollViewWithListView lvTeacher;
 
     private Tab5GuanzhuAdapter tab2StudentAdapter;
     private RefreshList lvStudent;
@@ -70,7 +70,7 @@ public class Tab5FollowedFragment extends AbsAllFragment implements
     @Override
     protected void initView(View v) {
 
-        lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
+//        lvTeacher = (ScrollViewWithListView) v.findViewById(R.id.lv_teacher);
         lvStudent = (RefreshList) v.findViewById(R.id.lv_student);
         loadmore_student = (TextView) v.findViewById(R.id.loadmore_student);
         loadmore_teacher = (TextView) v.findViewById(R.id.loadmore_teacher);

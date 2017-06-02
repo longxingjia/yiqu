@@ -33,6 +33,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.yiqu.iyijiayi.MainActivity;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.adapter.DialogHelper;
+import com.yiqu.iyijiayi.fragment.tab2.SchoolHomePageFragment;
+import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.UpdateInformation;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -166,7 +168,9 @@ public class WelcomePageActivity extends Activity {
     private void begin() {
 
         //      intent = new Intent(this, RecordAacActivity.class);//
-        intent = new Intent(this, MainActivity.class);//
+       intent = new Intent(this, MainActivity.class);//
+//        Model.startNextAct(this,
+//                SchoolHomePageFragment.class.getName());
 
         Message.obtain(handler).sendToTarget();
     }
@@ -259,16 +263,6 @@ public class WelcomePageActivity extends Activity {
 //        begin();
     }
 
-//    private void installApk(File apkFile) {
-//        if (!apkFile.exists()) {
-//            return;
-//        }
-//        Intent i = new Intent(Intent.ACTION_VIEW);
-//        Uri uri = Uri.parse("file://" + apkFile.toString());
-//        i.setDataAndType(uri, "application/vnd.android.package-archive");
-//        startActivity(i);
-//
-//    }
 
     private void installApk(String apkPath) {
         if (TextUtils.isEmpty(apkPath)) {

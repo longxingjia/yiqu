@@ -69,6 +69,7 @@ import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
 import com.yiqu.iyijiayi.model.Question;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.TypeDictionary;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -675,20 +676,20 @@ public class ItemDetailTextFragment extends AbsAllFragment implements View.OnCli
             question.setVisibility(View.GONE);
         }
 
-        NSDictionary nsDictionary = new NSDictionary();
+        TypeDictionary nsDictionary = new TypeDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
         nsDictionary.status = "1";
         nsDictionary.stype = "1";
-
+        nsDictionary.type = "2";
         Gson gson = new Gson();
         String arr = gson.toJson(nsDictionary);
 
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "views", "desc", "0"),
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "created", "asc", "0"),
                 "worthSoundList", ItemDetailTextFragment.this, true, true);
 
         edit_text.addTextChangedListener(ItemDetailTextFragment.this);
