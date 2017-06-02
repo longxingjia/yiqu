@@ -210,10 +210,10 @@ public class Tab5GuanzhuAdapter extends BaseAdapter implements OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-//        if (arg2<1){
-//            return;
-//        }
-        Teacher f = getItem(arg2 );
+        if (arg2<1){
+            return;
+        }
+        Teacher f = getItem(arg2 -1);
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(

@@ -197,6 +197,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CommentsInfo f = getItem(position);
+
 //
         if (!isNetworkConnected(mContext)) {
             ToastManager.getInstance(mContext).showText(
@@ -215,6 +216,7 @@ public class Tab1CommentsAdapter extends BaseAdapter implements OnItemClickListe
             } else {
                 Intent intent = new Intent(mContext, CommentActivity.class);
                 intent.putExtra("sid", sid);
+                intent.putExtra("cid", f.id);
                 intent.putExtra("fromuid", AppShare.getUserInfo(mContext).uid);
                 intent.putExtra("touid", f.fromuid + "");
                 intent.putExtra("toname", f.fromusername + "");

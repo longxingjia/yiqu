@@ -186,6 +186,7 @@ public class ImageShowGridAdapter extends BaseAdapter {
                     if (mListener!=null){
                         mListener.onDelClick(mImages.size());
                     }
+                    setShowAdd(true);
                     notifyDataSetChanged();
                 }
             });

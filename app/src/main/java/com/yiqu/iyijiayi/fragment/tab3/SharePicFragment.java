@@ -192,10 +192,6 @@ public class SharePicFragment extends AbsAllFragment implements TextWatcher {
                     } else {
                         showAddAction();
                     }
-
-                } else {
-//                    Image image = (Image) adapterView.getAdapter().getItem(i);
-//                    selectImageFromGrid(image, mode);
                 }
 
 
@@ -209,7 +205,6 @@ public class SharePicFragment extends AbsAllFragment implements TextWatcher {
                     submit.setTextColor(getResources().getColor(R.color.dd_gray));
                     submit.setEnabled(false);
                 } else {
-//            submit.setBackgroundResource(R.mipmap.submit_clickable);
                     submit.setTextColor(getResources().getColor(R.color.redMain));
                     submit.setEnabled(true);
                 }
@@ -240,6 +235,9 @@ public class SharePicFragment extends AbsAllFragment implements TextWatcher {
                 if (mSelectPath.size() > 0) {
                     submit.setEnabled(true);
                     submit.setTextColor(getResources().getColor(R.color.redMain));
+                }
+                if (mSelectPath.size()==9){
+                    mImageAdapter.setShowAdd(false);
                 }
 
             }

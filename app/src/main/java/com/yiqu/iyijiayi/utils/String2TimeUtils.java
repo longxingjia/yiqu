@@ -50,7 +50,7 @@ public class String2TimeUtils {
         }
     }
 
-    public static String pulishTime(long seconds){
+    public static String pulishTime(long seconds) {
         long currentTimeMillis = System.currentTimeMillis() / 1000;
         long time = currentTimeMillis - seconds;
 
@@ -58,9 +58,9 @@ public class String2TimeUtils {
         long hours = seconds / 3600;
         long days = seconds / 86400;
         long weeks = seconds / 604800;
-        StringBuilder   mFormatBuilder = new StringBuilder();
-        Formatter     mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
-        if (weeks > 0 ) {
+        StringBuilder mFormatBuilder = new StringBuilder();
+        Formatter mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+        if (weeks > 0) {
             return "1星期前";
 
         } else if (days > 0) {
@@ -129,6 +129,14 @@ public class String2TimeUtils {
     public static String longToString(long currentTime, String formatType)
             throws ParseException {
 
+        Date date = longToDate(currentTime, formatType); // long类型转成Date类型
+        String strTime = dateToString(date, formatType); // date类型转成String
+        return strTime;
+    }
+
+    public static String longToString(long currentTime)
+            throws ParseException {
+        String formatType = "yyyy-MM-dd HH:mm:ss";
         Date date = longToDate(currentTime, formatType); // long类型转成Date类型
         String strTime = dateToString(date, formatType); // date类型转成String
         return strTime;

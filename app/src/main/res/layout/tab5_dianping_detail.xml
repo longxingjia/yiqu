@@ -174,7 +174,6 @@
 
             <LinearLayout
 
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/tab_bg_color"
@@ -186,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:gravity="center"
-                    android:text="语言回答，最多录制120秒，点击麦克风图标开始"
+                    android:text="语音回答，最多录制120秒，点击麦克风图标开始"
                     android:textColor="@color/dark_gray"/>
 
 

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.base.utils.ToastManager;
@@ -102,6 +104,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     private TextView reader;
     private ImageView[] imageViews;
     private LinearLayout mViewPoints;
+    private RelativeLayout rl_vp;
 
 
     @Override
@@ -273,9 +276,8 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
     }
 
 
-
     public void onPlayChange(int status) {
-     //   L.e(status + "");
+        //   L.e(status + "");
         if (mPlayService != null) {
 
             if (status == Player.MusicPlayerState.playing) {
@@ -302,6 +304,16 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     private void initHeadView(View v) {
         vp_spinner = (AutoPlayViewPager) v.findViewById(R.id.vp_spinner);
+//        vp_spinner.setLayoutParams(new ViewPager.LayoutParams());
+        DisplayMetrics metric = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metric);
+        rl_vp = (RelativeLayout) v.findViewById(R.id.rl_vp);
+        LinearLayout.LayoutParams laParams=(LinearLayout.LayoutParams)rl_vp.getLayoutParams();
+        laParams.width =  metric.widthPixels;
+        laParams.height = metric.widthPixels * 150/375 ;
+   ;
+        rl_vp.setLayoutParams(laParams);
+
         more_xizuo = (TextView) v.findViewById(R.id.more_xizuo);
         question = (TextView) v.findViewById(R.id.question);
         raokouling = (TextView) v.findViewById(R.id.raokouling);
@@ -310,6 +322,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
         question.setOnClickListener(this);
         raokouling.setOnClickListener(this);
         reader.setOnClickListener(this);
+
 
         more_xizuo.setOnClickListener(this);
 
@@ -430,7 +443,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 "getBannerList", Tab1Fragment.this, false, true);
 
 
-
     }
 
 
@@ -498,7 +510,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
     @Override
     protected boolean onPageNext() {
-           showShare();
+        showShare();
         return true;
     }
 

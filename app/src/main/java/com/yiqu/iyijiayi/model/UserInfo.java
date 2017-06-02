@@ -27,6 +27,7 @@ public class UserInfo implements Serializable {
     public int coin_apple;//
     public String coin_android;//艺币
     public int free_question;//
+    public int isfollow;//
     public String wallet;//
     public String wallet_lock;//
     public String totalincome;// 总收入
@@ -61,6 +62,7 @@ public class UserInfo implements Serializable {
                 ", specialities='" + specialities + '\'' +
                 ", follow='" + follow + '\'' +
                 ", price='" + price + '\'' +
+                ", isfollow='" + isfollow + '\'' +
                 ", coin_apple='" + coin_apple + '\'' +
                 ", coin_android='" + coin_android + '\'' +
                 ", free_question=" + free_question +

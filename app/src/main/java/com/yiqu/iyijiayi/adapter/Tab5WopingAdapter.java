@@ -185,7 +185,7 @@ public class Tab5WopingAdapter extends BaseAdapter implements OnItemClickListene
             }else {
                 i.putExtra("fragment", ItemDetailTextFragment.class.getName());
             }
-            i.putExtra("data",f.sid+"");
+            i.putExtra("Sound",f);
             mContext.startActivity(i);
 
         }

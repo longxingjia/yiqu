@@ -108,7 +108,6 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
     private boolean is2mp3 = true;
     private boolean recordComFinish = false;
 
-
     @Override
     protected int getTitleBarType() {
         return FLAG_BACK;
@@ -122,7 +121,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
 
     private void exit() {
-        L.e(String.valueOf(VoiceFunctionF2.IsRecordingVoice(is2mp3)));
+   //     L.e(String.valueOf(VoiceFunctionF2.IsRecordingVoice(is2mp3)));
         if (VoiceFunctionF2.IsRecordingVoice(is2mp3)) {
 
             MenuDialogGiveupRecordHelper menuDialogGiveupRecordHelper = new MenuDialogGiveupRecordHelper(getActivity(), new MenuDialogListerner() {
@@ -193,9 +192,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
         sound = (Sound) getActivity().getIntent().getExtras().getSerializable("data");
 
         musicname = (TextView) v.findViewById(R.id.musicname);
-
         desc = (TextView) v.findViewById(R.id.desc);
-
         msecond = (TextView) v.findViewById(R.id.msecond);
         created = (TextView) v.findViewById(R.id.created);
 
@@ -403,6 +400,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
 
                 break;
             case R.id.recording:
+                VoiceFunctionF2.StopVoice();
                 if (!VoiceFunctionF2.isPauseRecordVoice(is2mp3)) {
                     VoiceFunctionF2.pauseRecordVoice(is2mp3);
                   //  stopAnimation();
@@ -515,13 +513,7 @@ public class Tab5WopingDetailFragment extends AbsAllFragment implements View.OnC
                 }
             });
 
-
-
         }
-
-
-
-
 
     }
 

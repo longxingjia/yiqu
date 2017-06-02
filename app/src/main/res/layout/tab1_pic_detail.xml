@@ -264,7 +264,7 @@
                             android:layout_marginRight="5dp"
                             android:maxWidth="190dp"
                             android:singleLine="true"
-                            android:text="ww"
+                            android:text=""
                             android:textSize="16dp"/>
 
                         <ImageView
@@ -285,7 +285,7 @@
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:singleLine="true"
-                            android:text="wffsw"
+                            android:text=""
                             android:textColor="@color/dd_gray"/>
 
 

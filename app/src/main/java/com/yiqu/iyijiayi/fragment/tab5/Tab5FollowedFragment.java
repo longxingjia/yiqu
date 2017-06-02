@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ui.views.LoadMoreView;
 import com.ui.views.RefreshList;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab5GuanzhuAdapter;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
 public class Tab5FollowedFragment extends AbsAllFragment implements
-        SwipeRefreshLayout.OnRefreshListener, LoadMoreView.OnMoreListener, View.OnClickListener {
+        RefreshList.IRefreshListViewListener, LoadMoreView.OnMoreListener, View.OnClickListener {
 
     private String tag = "Tab5FollowedFragment";
     private String uid;
@@ -84,7 +85,7 @@ public class Tab5FollowedFragment extends AbsAllFragment implements
         lvStudent.setOnScrollListener(mLoadMoreView);
         lvStudent.setFooterDividersEnabled(false);
         lvStudent.setHeaderDividersEnabled(false);
-
+        lvStudent.setRefreshListListener(this);
         mLoadMoreView.end();
         mLoadMoreView.setMoreAble(false);
         count = 0;
@@ -120,7 +121,7 @@ public class Tab5FollowedFragment extends AbsAllFragment implements
 
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
-
+        L.e(netResponse.toString());
         if (id.equals("teacher")) {
             if (type == TYPE_SUCCESS) {
                 ArrayList<Teacher> teachers = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Teacher>>() {

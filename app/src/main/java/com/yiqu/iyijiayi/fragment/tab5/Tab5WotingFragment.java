@@ -16,10 +16,12 @@ import com.ui.views.LoadMoreView.OnMoreListener;
 import com.ui.views.RefreshList;
 import com.ui.views.RefreshList.IRefreshListViewListener;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.abs.AbsAllFragment;
 import com.yiqu.iyijiayi.adapter.Tab5WotingAdapter;
 import com.yiqu.iyijiayi.model.Listened;
+import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -41,7 +43,7 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
     private RefreshList listView;
     private Tab5WotingAdapter tab5WotingAdapter;
     private String uid;
-    private ArrayList<Listened> listeneds;
+    private ArrayList<Sound> listeneds;
 
 
     @Override
@@ -144,11 +146,11 @@ public class Tab5WotingFragment extends AbsAllFragment implements OnMoreListener
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-
+        L.e(netResponse.toString());
         if (id.equals("getHistory")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
 
-                listeneds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Listened>>() {
+                listeneds = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Sound>>() {
                 }.getType());
 //                    discoveries = JsonUtils.parseDiscoveryList(netResponse.data);
                 tab5WotingAdapter.setData(listeneds);

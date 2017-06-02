@@ -18,6 +18,7 @@ import com.base.utils.ToastManager;
 import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.umeng.analytics.MobclickAgent;
+import com.utils.L;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
@@ -49,58 +50,63 @@ public class CommentActivity extends Activity implements NetCallBack {
 
         Intent intent = getIntent();
         final String sid = intent.getStringExtra("sid");
+        final String cid = intent.getStringExtra("cid");
         final String fromuid = intent.getStringExtra("fromuid");
         final String touid = intent.getStringExtra("touid");
         final String toname = intent.getStringExtra("toname");
 
         if (!TextUtils.isEmpty(toname)) {
-
             edit.setHint("回复 " + toname + ":");
             edit.setHintTextColor(getResources().getColor(R.color.dd_gray));
-
         }
-        String s =AppShare.getLastComment(this);
-        if (!TextUtils.isEmpty(s)){
+
+        String s = AppShare.getLastComment(this);
+        if (!TextUtils.isEmpty(s)) {
             edit.setText(s);
         }
-
 
         butt2 = (Button) findViewById(R.id.butt2);
         butt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
-//                test_emoji.setText(edit.getText().toString());
-//                String s = EmojiFilter.filterEmoji(edit.getText().toString());
                 String s = edit.getText().toString();
                 if (TextUtils.isEmpty(s)) {
                     ToastManager.getInstance(CommentActivity.this).showText("请填写你的文字后再提交");
                     return;
                 }
+                if (cid==null || TextUtils.isEmpty(cid)){
+                    RestNetCallHelper.callNet(CommentActivity.this,
+                            MyNetApiConfig.addComment, MyNetRequestConfig
+                                    .addComment(CommentActivity.this, sid, fromuid, touid, s),
+                            "addComment", CommentActivity.this, true, true);
+                }else {
 
-                RestNetCallHelper.callNet(CommentActivity.this,
-                        MyNetApiConfig.addComment, MyNetRequestConfig
-                                .addComment(CommentActivity.this, sid, fromuid, touid, s),
-                        "addComment", CommentActivity.this, true, true);
-    }
-});
+                    RestNetCallHelper.callNet(CommentActivity.this,
+                            MyNetApiConfig.replyComment, MyNetRequestConfig
+                                    .replyComment(CommentActivity.this,cid, sid, fromuid, touid, s),
+                            "replyComment", CommentActivity.this, true, true);
+                }
+
+
+            }
+        });
 
     }
 
     public void onResume() {
         super.onResume();
-        JAnalyticsInterface.onPageStart(this,"评论");
+        JAnalyticsInterface.onPageStart(this, "评论");
         MobclickAgent.onPageStart("评论"); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);          //统计时长
     }
 
     public void onPause() {
         super.onPause();
-        JAnalyticsInterface.onPageEnd(this,"评论");
+        JAnalyticsInterface.onPageEnd(this, "评论");
         MobclickAgent.onPageEnd("评论"); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
         MobclickAgent.onPause(this);
-        AppShare.setLastComment(this,edit.getText().toString());
+        AppShare.setLastComment(this, edit.getText().toString());
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener getGlobalLayoutListener(final View decorView, final View contentView) {
@@ -139,10 +145,19 @@ public class CommentActivity extends Activity implements NetCallBack {
     @Override
     public void onNetEnd(String id, int type, NetResponse netResponse) {
 
-        if (type == TYPE_SUCCESS) {
-            ToastManager.getInstance(CommentActivity.this).showText(netResponse.result.toString());
-            edit.setText("");
-            finish();
+        L.e(netResponse.toString());
+        if (id.equals("addComment")){
+            if (type == TYPE_SUCCESS) {
+                ToastManager.getInstance(CommentActivity.this).showText(netResponse.result.toString());
+                edit.setText("");
+                finish();
+            }
+        }else if (id.equals("replyComment")) {
+            if (type == TYPE_SUCCESS) {
+                ToastManager.getInstance(CommentActivity.this).showText(netResponse.result.toString());
+                edit.setText("");
+                finish();
+            }
         }
 
     }

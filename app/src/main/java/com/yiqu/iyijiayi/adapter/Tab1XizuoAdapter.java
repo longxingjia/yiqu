@@ -30,7 +30,9 @@ import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailFragment;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailPicFragment;
 import com.yiqu.iyijiayi.fragment.tab1.ItemDetailTextFragment;
+import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
 import com.yiqu.iyijiayi.fragment.tab5.SelectLoginFragment;
+import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.Sound;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
@@ -38,6 +40,7 @@ import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
 import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
+import com.yiqu.iyijiayi.utils.HomePageUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
 import com.yiqu.iyijiayi.utils.String2TimeUtils;
 import com.yiqu.iyijiayi.view.MultiView.ExpandTextView;
@@ -294,7 +297,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
                 } else if (f.type == 2) {
                     i.putExtra("fragment", ItemDetailFragment.class.getName());
                 } else {
-                    i.putExtra("fragment", ItemDetailTextFragment.class.getName());
+                    i.putExtra("fragment", ItemDetailFragment.class.getName());
                 }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Sound", f);
@@ -365,6 +368,7 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         PictureUtils.showPicture(mContext, f.tecimage, holder.tea_header);
         PictureUtils.showPicture(mContext, f.stuimage, holder.stu_header);
 
+
 //        if (fragmentName.equals("Tab1Fragment")) {
 //            if (position < 9) {
 //                holder.iv_status.setVisibility(View.VISIBLE);
@@ -381,12 +385,12 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 //            }
 //        }
 
-//        holder.tea_header.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                initHomepage(String.valueOf(f.touid));
-//            }
-//        });
+        holder.tea_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomePageUtils.initHomepage(mContext,String.valueOf(f.touid));
+            }
+        });
 //        holder.stu_header.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -395,6 +399,8 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
 //        });
 
     }
+
+
 
 
     private void typeImage(ViewHolder3 holder, int position) throws ParseException {
@@ -423,6 +429,13 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
         holder.listener.setText(String.valueOf(f.views));
         holder.publish_time.setText(String2TimeUtils.longToString(f.created * 1000, "yyyy/MM/dd HH:mm"));
         PictureUtils.showPicture(mContext, f.stuimage, holder.header, 47);
+
+        holder.header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomePageUtils.initHomepage(mContext,String.valueOf(f.fromuid));
+            }
+        });
 
         holder.content.setOnClickListener(new ExpandTextView.onClickListener() {
             @Override
@@ -529,13 +542,20 @@ public class Tab1XizuoAdapter extends BaseAdapter implements OnItemClickListener
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(mContext, StubActivity.class);
-                i.putExtra("fragment", ItemDetailPicFragment.class.getName());
+                i.putExtra("fragment", ItemDetailFragment.class.getName());
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Sound", f);
                 i.putExtras(bundle);
                 mContext.startActivity(i);
             }
         });
+        holder2.icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomePageUtils.initHomepage(mContext,String.valueOf(f.fromuid));
+            }
+        });
+
 
         holder2.like.setOnClickListener(new View.OnClickListener() {
             @Override

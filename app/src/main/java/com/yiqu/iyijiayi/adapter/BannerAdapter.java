@@ -65,6 +65,7 @@ public class BannerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = new ImageView(mContext);
+//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //        imageView.setImageResource(banners.get());
         final Banner banner  =  banners.get(position % banners.size());
         PictureUtils.showBannersPicture(mContext,banner.image, imageView);

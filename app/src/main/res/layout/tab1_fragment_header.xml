@@ -7,17 +7,20 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:background="@color/dark_gray" />
 
     <RelativeLayout
+        android:id="@+id/rl_vp"
         android:layout_width="match_parent"
-        android:layout_height="144dp"
+        android:layout_height="wrap_content"
+        android:minHeight="144dp"
         >
 
         <com.yiqu.iyijiayi.view.AutoPlayViewPager
             android:id="@+id/vp_spinner"
             android:layout_width="match_parent"
-            android:layout_height="144dp">
+            android:layout_height="match_parent">
         </com.yiqu.iyijiayi.view.AutoPlayViewPager>
 
         <LinearLayout

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/tab_bg_color"
+        android:text="追问"
+        android:textSize="16sp"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"/>
+
+    <TextView
+        android:id="@+id/question_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/question_answer"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <com.ui.views.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/head_bg"
+                android:padding="24dp"/>
+
+            <com.ui.views.CircleImageView
+                android:id="@+id/question_tea_header"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:padding="24dp"
+                android:src="@mipmap/menu_head"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="172dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/tea_voice"/>
+
+            <TextView
+                android:id="@+id/question_tea_listen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/bofang_right"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/question_commenttime"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/redMain"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

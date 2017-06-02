@@ -155,6 +155,13 @@ public class MyNetRequestConfig {
         return r;
     }
 
+    /**
+     *
+     * @param c
+     * @param uid 自己的uid
+     * @param fuid 要关注人的uid
+     * @return
+     */
     public static NetRequest addfollow(Context c, String uid, String fuid) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("uid", uid);
@@ -304,6 +311,17 @@ public class MyNetRequestConfig {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("sid", sid);
         r.addHttpParam("checkpay", uid);
+        return r;
+    }
+    public static NetRequest addsoundQuestion(Context c, String sid,
+                                            String fromuid,String touid,String desc) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("touid", touid);
+        r.addHttpParam("soundtime", "0");
+        r.addHttpParam("soundpath", "");
+        r.addHttpParam("desc", desc);
         return r;
     }
     public static NetRequest addHistory(Context c, String sid,
@@ -596,6 +614,16 @@ public class MyNetRequestConfig {
         r.addHttpParam("isnew", isnew);
         return r;
     }
+    public static NetRequest questionReply(Context c, String id, String sid,
+                                        String commentpath, String commenttime, String isnew) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("id", id);
+        r.addHttpParam("commentpath", commentpath);
+        r.addHttpParam("commenttime", commenttime);
+        r.addHttpParam("isnew", isnew);
+        return r;
+    }
 
     /**
      */
@@ -623,6 +651,15 @@ public class MyNetRequestConfig {
     public static NetRequest addComment(Context c, String sid, String fromuid, String touid, String comment) {
         MyNetRequest r = new MyNetRequest(c);
         r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("sid", sid);
+        r.addHttpParam("touid", touid);
+        r.addHttpParam("comment", comment);
+        return r;
+    }
+    public static NetRequest replyComment(Context c,String cid, String sid, String fromuid, String touid, String comment) {
+        MyNetRequest r = new MyNetRequest(c);
+        r.addHttpParam("fromuid", fromuid);
+        r.addHttpParam("cid", cid);
         r.addHttpParam("sid", sid);
         r.addHttpParam("touid", touid);
         r.addHttpParam("comment", comment);

@@ -1,6 +1,7 @@
 package com.yiqu.iyijiayi.fragment.tab5;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,7 +56,8 @@ import java.util.ArrayList;
 
 import cn.jiguang.analytics.android.api.JAnalyticsInterface;
 
-public class HomePageFragment extends AbsAllFragment implements RefreshList.IRefreshListViewListener, LoadMoreView.OnMoreListener {
+public class HomePageFragment extends AbsAllFragment implements RefreshList.IRefreshListViewListener,
+        LoadMoreView.OnMoreListener, View.OnClickListener {
 
 
     private PageCursorView cursor;
@@ -99,6 +101,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
      * 是否是自己的个人主页，true 是
      */
     private boolean flag = false;
+    private ImageView home_like;
 
     @Override
     protected int getTitleView() {
@@ -148,7 +151,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         MobclickAgent.onPageStart("个人主页"); //统计页面，"MainScreen"为页面名称，可自定义
         JAnalyticsInterface.onPageStart(getActivity(), "个人主页");
 
-
     }
 
     @Override
@@ -182,7 +184,6 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (AppShare.getIsLogin(mContext))
             myUid = AppShare.getUserInfo(mContext).uid;
 
-
         listView.setRefreshListListener(this);
         if (homePage == null) {
             userInfo = AppShare.getUserInfo(mContext);
@@ -212,34 +213,24 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             flag = false;
             userInfo = homePage.user;
             sounds = homePage.sound;
-//            if (userInfo.type.equals("2")) {
-//                listView.setAdapter(tab5DianpingAdapter);
-//                listView.setOnItemClickListener(tab5DianpingAdapter);
-//                tab5DianpingAdapter.setData(sounds);
-//                price1.setText(userInfo.price + "");
 
-//            } else {
-              //  listView.setAdapter(tab1SoundAdapter);
-             //   tab1SoundAdapter.setData(sounds);
-             //   listView.setOnItemClickListener(tab1SoundAdapter);
-//            }
-            if (userInfo.type.equals("2")){
+
+            if (userInfo.type.equals("2")) {
                 ll_tw.setVisibility(View.VISIBLE);
             }
 
         }
-        if (AppShare.getUserInfo(getActivity())!=null &&AppShare.getUserInfo(getActivity()).uid.equals(userInfo.uid) ){
+        if (AppShare.getUserInfo(getActivity()) != null && AppShare.getUserInfo(getActivity()).uid.equals(userInfo.uid)) {
             ll_tw.setVisibility(View.GONE);
         }
 
 
         tab5DianpingAdapter = new Tab5DianpingAdapter(getActivity(), uid);
         tab1SoundAdapter = new Tab1SoundAdapter(this);
-        tab5PicAdapter = new Tab5PicAdapter(getActivity(),flag);
-        tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity(),flag);
+        tab5PicAdapter = new Tab5PicAdapter(getActivity(), flag);
+        tab5XizuoAdapter = new Tab5XizuoAdapter(getActivity(), flag);
         listView.setAdapter(tab5PicAdapter);
         listView.setOnItemClickListener(tab5PicAdapter);
-
 
         TYPE = 4;
         RestNetCallHelper.callNet(getActivity(),
@@ -270,31 +261,34 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                 }
 
                 String title = "提示";
-                String[] items = new String[]{"文字提问","作品提问"};
+                String[] items = new String[]{"文字提问", "作品提问"};
 
                 MenuDialogSelectTeaHelper menuDialogSelectTeaHelper = new MenuDialogSelectTeaHelper(mContext, title, items, new MenuDialogSelectTeaHelper.TeaListener() {
                     @Override
                     public void onTea(int tea) {
+                        Intent i = new Intent(getActivity(), StubActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("data",userInfo);
+                        i.putExtras(bundle);
                         switch (tea) {
+
                             case 0:
-                                Model.startNextAct(getActivity(),
-                                        TextQuestionFragment.class.getName());
+//                                Model.startNextAct(getActivity(),
+//                                        TextQuestionFragment.class.getName());
+                                i.putExtra("fragment", TextQuestionFragment.class.getName());
                                 break;
                             case 1:
-                                Model.startNextAct(getActivity(),
-                                        RecordFragment.class.getName());
-//                                Intent i = new Intent(getActivity(), StubActivity.class);
-//                                i.putExtra("fragment", RecordFragment.class.getName());
-//                                getActivity().startActivity(i);
+//                                Model.startNextAct(getActivity(),
+//                                        RecordFragment.class.getName());
+//
+                                i.putExtra("fragment", RecordFragment.class.getName());
+//
                                 break;
                         }
+                        getActivity().startActivity(i);
                     }
                 });
                 menuDialogSelectTeaHelper.show(v);
-
-
-
-
 
 
             }
@@ -317,6 +311,7 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         questionincome = (TextView) v.findViewById(R.id.questionincome);
         sex = (ImageView) v.findViewById(R.id.sex);
         head = (ImageView) v.findViewById(R.id.head);
+        home_like = (ImageView) v.findViewById(R.id.home_like);
         background = (ImageView) v.findViewById(R.id.background);
         dianping_tab = (LinearLayout) v.findViewById(R.id.dianping_tab);
         tiwen_tab = (LinearLayout) v.findViewById(R.id.tiwen_tab);
@@ -335,6 +330,42 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
             }
         });
 
+        home_like.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.home_like:
+                if (AppShare.getIsLogin(getActivity())) {
+                    if (userInfo.isfollow == 0) {  //没有关注
+//                        h.follow.setBackgroundResource(R.mipmap.follow);
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.addfollow,
+                                MyNetRequestConfig.addfollow(mContext, myUid, userInfo.uid),
+                                "addfollow", HomePageFragment.this);
+
+                    } else {
+                        RestNetCallHelper.callNet(
+                                mContext,
+                                MyNetApiConfig.delfollow,
+                                MyNetRequestConfig.delfollow(mContext, myUid, userInfo.uid),
+                                "delfollow", HomePageFragment.this);
+                    }
+
+                } else {
+                    Intent i = new Intent(mContext, StubActivity.class);
+                    i.putExtra("fragment", SelectLoginFragment.class.getName());
+                    mContext.startActivity(i);
+                    ToastManager.getInstance(mContext).showText("请登录后在操作");
+
+                }
+
+                break;
+        }
 
     }
 
@@ -412,26 +443,22 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
         if (userInfo.type.equals("2")) {
             InitCursor(4);
             dianping_tab.setVisibility(View.VISIBLE);
-            String title =  userInfo.title;
-            if (title.length()>14){
-                title = title.substring(0,14);
+            String title = userInfo.title;
+            if (title.length() > 14) {
+                title = title.substring(0, 14);
             }
             if (TextUtils.isEmpty(userInfo.title)) {
                 descStr = String.format("%s | 粉丝:%s | 收听:%s", "未填写", userInfo.followcount, userInfo.myfollowcount);
             } else {
-                descStr = String.format("%s | 粉丝:%s | 收听:%s",title , userInfo.followcount, userInfo.myfollowcount);
+                descStr = String.format("%s | 粉丝:%s | 收听:%s", title, userInfo.followcount, userInfo.myfollowcount);
             }
             TYPE = 4;
 
-//            tea.setVisibility(View.VISIBLE);
-//            stu.setVisibility(View.GONE);
             price.setText(userInfo.price);
             questioncount.setText(userInfo.questioncount);
             questionincome.setText(userInfo.questionincome);
             totalincome.setText(userInfo.totalincome);
         } else {
-//            tea.setVisibility(View.GONE);
-//            stu.setVisibility(View.VISIBLE);
             InitCursor(3);
             dianping_tab.setVisibility(View.GONE);
             if (TextUtils.isEmpty(userInfo.school)) {
@@ -461,6 +488,19 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
 
         PictureUtils.showPicture(getActivity(), userInfo.userimage, head);
         PictureUtils.showBackgroudPicture(getActivity(), userInfo.backgroundimage, background);
+//        L.e(userInfo.toString());
+//        L.e(userInfo.);
+        if (!flag) {
+            home_like.setVisibility(View.VISIBLE);
+        } else {
+            home_like.setVisibility(View.GONE);
+        }
+
+        if (userInfo.isfollow == 0) {
+            home_like.setImageResource(R.mipmap.home_unlike);
+        } else {
+            home_like.setImageResource(R.mipmap.home_islike);
+        }
 
     }
 
@@ -611,6 +651,16 @@ public class HomePageFragment extends AbsAllFragment implements RefreshList.IRef
                 LogUtils.LOGE(tag, netResponse.toString());
 
 
+            }
+        } else if ("delfollow".equals(id)) {
+            if (type == TYPE_SUCCESS) {
+                home_like.setImageResource(R.mipmap.home_unlike);
+                userInfo.isfollow = 0;
+            }
+        } else if ("addfollow".equals(id)) {
+            if (type == TYPE_SUCCESS) {
+                userInfo.isfollow = 1;
+                home_like.setImageResource(R.mipmap.home_islike);
             }
         }
         super.onNetEnd(id, type, netResponse);

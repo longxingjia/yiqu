@@ -141,65 +141,65 @@ public class ClearCacheFragment extends AbsAllFragment implements View.OnClickLi
 
         switch (v.getId()) {
             case R.id.ll_image:
-                DialogUtil.showDialog(getActivity(), title, content + "图片缓存吗", "取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }, "确定", new DialogInterface.OnClickListener() {
+                DialogUtil.showDialog(getActivity(), title, content + "图片缓存吗", "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         type = IMAGE;
                         DelCacheTask delCacheTask = new DelCacheTask(getActivity(), type);
                         delCacheTask.execute();
                     }
-                });
-                L.e("ff");
-                break;
-            case R.id.ll_play:
-                DialogUtil.showDialog(getActivity(), title, content + "播放缓存吗", "取消", new DialogInterface.OnClickListener() {
+                }, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                }, "确定", new DialogInterface.OnClickListener() {
+                });
+
+                break;
+            case R.id.ll_play:
+                DialogUtil.showDialog(getActivity(), title, content + "播放缓存吗", "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         type = PLAY;
                         DelCacheTask delCacheTask = new DelCacheTask(getActivity(), type);
                         delCacheTask.execute();
                     }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
                 });
 
 
                 break;
             case R.id.ll_record:
-                DialogUtil.showDialog(getActivity(), title, content + "录音缓存吗", "取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }, "确定", new DialogInterface.OnClickListener() {
+                DialogUtil.showDialog(getActivity(), title, content + "录音缓存吗", "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         type = RECORD;
                         DelCacheTask delCacheTask = new DelCacheTask(getActivity(), type);
                         delCacheTask.execute();
                     }
-                });
-                break;
-            case R.id.ll_music:
-                DialogUtil.showDialog(getActivity(), title, content + "伴奏缓存吗", "取消", new DialogInterface.OnClickListener() {
+                }, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                }, "确定", new DialogInterface.OnClickListener() {
+                });
+                break;
+            case R.id.ll_music:
+                DialogUtil.showDialog(getActivity(), title, content + "伴奏缓存吗", "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         type = MUSIC;
                         DelCacheTask delCacheTask = new DelCacheTask(getActivity(), type);
                         delCacheTask.execute();
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 });
                 break;

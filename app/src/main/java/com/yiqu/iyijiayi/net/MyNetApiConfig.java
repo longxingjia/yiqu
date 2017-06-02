@@ -480,6 +480,12 @@ public class MyNetApiConfig {
         }
 
     };
+    public static MyNetApi addsoundQuestion = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/add-sound-question";
+        }
+    };
     public static MyNetApi getUserPageSoundList = new MyNetApi() {
         @Override
         public String getPath() {
@@ -492,6 +498,7 @@ public class MyNetApiConfig {
         }
 
     };
+
     public static MyNetApi getBackgroundMusicList = new MyNetApi() {
         @Override
         public String getPath() {
@@ -596,7 +603,13 @@ public class MyNetApiConfig {
         public String getPath() {
             return ServerAddr + "/sound/sound-reply";
         }
-//        public static String uploadSounds = ServerAddr+"";
+
+    };
+    public static MyNetApi questionReply = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/sound/question-reply";
+        }
 
     };
     public static MyNetApi addSound = new MyNetApi() {
@@ -746,6 +759,13 @@ public class MyNetApiConfig {
         @Override
         public String getPath() {
             return ServerAddr + "/comment/addcomment";
+        }
+
+    };
+    public static MyNetApi replyComment = new MyNetApi() {
+        @Override
+        public String getPath() {
+            return ServerAddr + "/comment/replycomment";
         }
 
     };

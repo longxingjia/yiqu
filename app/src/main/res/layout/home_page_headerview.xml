@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fafafa"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fafafa"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
 
 
     <RelativeLayout
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@mipmap/home_bg" />
+            android:src="@mipmap/home_bg"/>
 
         <com.ui.views.CircleImageView
             android:id="@+id/head"
@@ -24,7 +24,7 @@
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:background="@mipmap/menu_head" />
+            android:background="@mipmap/menu_head"/>
 
         <TextView
             android:id="@+id/name"
@@ -36,7 +36,7 @@
             android:layout_marginTop="6dp"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <ImageView
             android:id="@+id/sex"
@@ -45,7 +45,7 @@
             android:layout_below="@+id/head"
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/name"
-            android:background="@mipmap/sex_female" />
+            android:background="@mipmap/sex_female"/>
 
         <TextView
             android:id="@+id/content"
@@ -56,7 +56,7 @@
             android:layout_marginRight="5dp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="16dp"/>
 
         <TextView
             android:id="@+id/desc"
@@ -71,7 +71,17 @@
             android:maxLines="3"
             android:text="未填写"
             android:textColor="@color/white"
-            android:textSize="14dp" />
+            android:textSize="14dp"/>
+
+
+        <ImageView
+            android:id="@+id/home_like"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="26dp"
+            android:src="@mipmap/home_unlike"/>
 
 
     </RelativeLayout>
@@ -97,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="图文"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
         </LinearLayout>
 
@@ -116,7 +126,7 @@
                 android:drawablePadding="5dp"
                 android:text="@string/zuopin"
                 android:textColor="#000000"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
         </RelativeLayout>
 
 
@@ -135,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="点评"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
 
         </LinearLayout>
@@ -159,12 +169,10 @@
                 android:gravity="center"
                 android:text="提问"
                 android:textColor="#000000"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>
@@ -178,26 +186,25 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_centerVertical="true"
-            android:background="@color/tab_bg_color" />
+            android:background="@color/tab_bg_color"/>
 
         <com.yiqu.iyijiayi.utils.PageCursorView
             android:id="@+id/cursor"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
 
     <LinearLayout
         android:id="@+id/tea"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_marginTop="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
@@ -205,14 +212,15 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/rectangle_bg"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="向我提问需要支付￥"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/price"
@@ -221,39 +229,39 @@
                 android:gravity="center"
                 android:text="1"
                 android:textColor="@color/redMain"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text=" 元"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <TextView
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="小提示：收入90%归您，每夜结算，自动入库微信红包"
             android:textColor="@color/dd_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="点评了" />
+                android:text="点评了"/>
 
             <TextView
                 android:id="@+id/questioncount"
@@ -262,13 +270,13 @@
                 android:gravity="center"
                 android:text="2"
                 android:textColor="@color/redMain"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="个作品，点评收入" />
+                android:text="个作品，点评收入"/>
 
             <TextView
                 android:id="@+id/questionincome"
@@ -277,30 +285,30 @@
                 android:gravity="center"
                 android:text="2"
                 android:textColor="@color/redMain"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text=" 元" />
+                android:text=" 元"/>
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="总收入: " />
+                android:text="总收入: "/>
 
             <TextView
                 android:id="@+id/totalincome"
@@ -309,13 +317,13 @@
                 android:gravity="center"
                 android:text="2"
                 android:textColor="@color/redMain"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text=" 元" />
+                android:text=" 元"/>
 
 
         </LinearLayout>
@@ -323,11 +331,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/stu"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:orientation="vertical"
+        android:visibility="gone"
         >
 
         <LinearLayout
@@ -341,7 +349,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="总收入: " />
+                android:text="总收入: "/>
 
             <TextView
                 android:id="@+id/tincome"
@@ -350,13 +358,13 @@
                 android:gravity="center"
                 android:text="2"
                 android:textColor="@color/redMain"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text=" 元" />
+                android:text=" 元"/>
 
 
         </LinearLayout>
@@ -367,14 +375,13 @@
             android:gravity="center"
             android:text="小提示：收入90%归您，每夜结算，自动入库微信红包"
             android:textColor="@color/dd_gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_marginTop="5dp"
-            android:background="@color/tab_bg_color" />
-
+            android:background="@color/tab_bg_color"/>
 
 
     </LinearLayout>

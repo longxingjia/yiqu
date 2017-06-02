@@ -91,6 +91,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"/>
+
+        <activity
+            android:name=".CommentActivity"
+            android:theme="@style/dialogstyle"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity
+            android:name=".ReplyActivity"
+            android:theme="@style/dialogstyle"
+            />
         <activity
             android:name=".fragment.tab3.Tab3Activity"
             android:screenOrientation="portrait"/>
@@ -114,10 +123,7 @@
                 android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity
-            android:name=".CommentActivity"
-            android:theme="@style/dialogstyle"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+
 
         <meta-data
             android:name="UMENG_APPKEY"

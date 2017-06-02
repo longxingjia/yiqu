@@ -20,11 +20,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.text.method.NumberKeyListener;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -41,6 +45,7 @@ import com.google.gson.reflect.TypeToken;
 import com.service.Download;
 import com.service.DownloadService;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestHandler;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
@@ -59,6 +64,7 @@ import com.utils.Variable;
 import com.yiqu.Tool.Interface.VoicePlayerInterface;
 import com.yiqu.iyijiayi.CommentActivity;
 import com.yiqu.iyijiayi.R;
+import com.yiqu.iyijiayi.ReplyActivity;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.adapter.Tab1CommentsAdapter;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
@@ -70,7 +76,9 @@ import com.yiqu.iyijiayi.model.HomePage;
 import com.yiqu.iyijiayi.model.Lyrc;
 import com.yiqu.iyijiayi.model.Model;
 import com.yiqu.iyijiayi.model.NSDictionary;
+import com.yiqu.iyijiayi.model.Question;
 import com.yiqu.iyijiayi.model.Sound;
+import com.yiqu.iyijiayi.model.TypeDictionary;
 import com.yiqu.iyijiayi.model.UserInfo;
 import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
@@ -80,6 +88,7 @@ import com.yiqu.iyijiayi.utils.AppShare;
 import com.utils.LogUtils;
 import com.utils.L;
 import com.yiqu.iyijiayi.utils.DensityUtil;
+import com.yiqu.iyijiayi.utils.EmojiCharacterUtil;
 import com.yiqu.iyijiayi.utils.LyrcUtil;
 import com.yiqu.iyijiayi.utils.MathUtils;
 import com.yiqu.iyijiayi.utils.PictureUtils;
@@ -116,12 +125,14 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Administrator on 2017/2/20.
  */
 
 public class ItemDetailFragment extends AbsFragment implements View.OnClickListener,
-        VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener {
+        VoicePlayerInterface, NetCallBack, ObservableScrollView.ScrollViewListener, TextWatcher {
     String tag = "ItemDetailFragment";
     @BindView(R.id.back)
     public ImageView back;
@@ -169,6 +180,10 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView worth_desc;
     @BindView(R.id.worth_header)
     public ImageView worth_header;
+
+    @BindView(R.id.teacher_answer_q)
+    public ImageView teacher_answer_q;
+
     @BindView(R.id.worth_teacher_name)
     public TextView worth_teacher_name;
     @BindView(R.id.worth_teacher_desc)
@@ -191,6 +206,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     @BindView(R.id.ll_title)
     public LinearLayout ll_title;
+    @BindView(R.id.question)
+    public LinearLayout question;
     @BindView(R.id.ll_backgroud)
     public LinearLayout ll_backgroud;
     @BindView(R.id.listview)
@@ -206,6 +223,23 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     public TextView comment;
     @BindView(R.id.article_content)
     public TextView article_content;
+
+    @BindView(R.id.tab1_question)
+    public LinearLayout tab1_question;
+    @BindView(R.id.question_answer)
+    public LinearLayout question_answer;
+    @BindView(R.id.question_desc)
+    public TextView question_desc;
+    @BindView(R.id.question_tea_listen)
+    public TextView question_tea_listen;
+    @BindView(R.id.question_commenttime)
+    public TextView question_commenttime;
+    @BindView(R.id.question_tea_header)
+    public ImageView question_tea_header;
+    @BindView(R.id.tv_sendmsg)
+    public TextView tv_sendmsg;
+    @BindView(R.id.edit_text)
+    public EditText edit_text;
 
     private String teafileName;
     private String stuUrl;
@@ -229,6 +263,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     private String2TimeUtils string2TimeUtils = new String2TimeUtils();
     private String lyricname;
     private IWXAPI api;
+    private Question que;
 
     @Override
     protected int getContentView() {
@@ -302,6 +337,27 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (TextUtils.isEmpty(edit_text.getText().toString())) {
+            tv_sendmsg.setTextColor(getResources().getColor(R.color.dd_gray));
+            tv_sendmsg.setEnabled(false);
+        } else {
+            tv_sendmsg.setTextColor(getResources().getColor(R.color.redMain));
+            tv_sendmsg.setEnabled(true);
+        }
+    }
+
 
     class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
         int pro;
@@ -352,7 +408,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), sid, userInfo.uid),
-                        "getSoundDetail", ItemDetailFragment.this, true, true);
+                        "getSoundDetail", ItemDetailFragment.this, false, true);
 
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.addHistory, MyNetRequestConfig
@@ -367,7 +423,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         } else if (id.equals("getSoundDetail")) {
             if (type == NetCallBack.TYPE_SUCCESS) {
-
 
                 Gson gson = new Gson();
                 sound = gson.fromJson(netResponse.data, Sound.class);
@@ -388,7 +443,17 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     initDianZan();
                 }
 
-            } else {
+            }
+        }else if (id.equals("worth_like")) {
+
+            if (type == NetCallBack.TYPE_SUCCESS) {
+                if (sound.islike == 0) {
+                    worth_like.setText(String.valueOf(soundWorth.like + 1));
+                    initDianZan();
+                    Drawable leftDrawable = getResources().getDrawable(R.mipmap.dianzan_pressed_new);
+                    leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+                    worth_like.setCompoundDrawables(leftDrawable, null, null, null); //(Drawable left, Drawable top, Drawable right, Drawable bottom)
+                }
 
             }
         } else if (id.equals("getComments")) {
@@ -426,7 +491,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 if (sound != null) {
                     worth_name.setText(soundWorth.musicname);
                     if (!TextUtils.isEmpty(soundWorth.desc))
-                        worth_desc.setText(soundWorth.desc);
+                        worth_desc.setText(EmojiCharacterUtil.decode(soundWorth.desc));
                     if (soundWorth.type == 1) {
                         worth_type.setImageResource(R.mipmap.shengyue);
                     } else {
@@ -434,7 +499,12 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     }
                     PictureUtils.showPicture(getActivity(), soundWorth.stuimage, worth_header, 40);
                     worth_teacher_name.setText(soundWorth.stuname);
-                    worth_teacher_desc.setText(sound.tectitle);
+                    //     L.e(soundWorth.toString());
+                    try {
+                        worth_teacher_desc.setText(String2TimeUtils.longToString(soundWorth.created * 1000, "yyyy-MM-dd HH:mm:ss"));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     worth_like.setText(String.valueOf(soundWorth.like));
                     worth_comment.setText(String.valueOf(soundWorth.comments));
                     worth_listener.setText(String.valueOf(soundWorth.views));
@@ -449,6 +519,25 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             if (type == TYPE_SUCCESS) {
 
             }
+        } else if (id.equals("addsoundQuestion")) {
+
+            if (type == TYPE_SUCCESS) {
+                ArrayList<Question> questions = new Gson().fromJson(netResponse.data, new TypeToken<ArrayList<Question>>() {
+                }.getType());
+                Question q = questions.get(0);
+                question_desc.setText(q.desc);
+                tab1_question.setVisibility(View.VISIBLE);
+                if (q.commenttime == 0) {
+                    question_answer.setVisibility(View.GONE);
+                } else {
+                    question_answer.setVisibility(View.VISIBLE);
+                    question_tea_listen.setText("限时免费听");
+                    question_commenttime.setText(q.commenttime + "\"");
+                    PictureUtils.showPicture(getActivity(), sound.tecimage, question_tea_header);
+                }
+                question.setVisibility(View.GONE);
+
+            }
         }
 
 
@@ -456,7 +545,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     private void initData() {
         getActivity().bindService(new Intent(getActivity(), DownloadService.class), mDownloadServiceConnection, Context.BIND_AUTO_CREATE);
-        desc.setText(sound.desc);
+        desc.setText(EmojiCharacterUtil.decode(sound.desc));
         tea_name.setText(sound.tecname);
         stu_name.setText(sound.stuname);
         if (!TextUtils.isEmpty(sound.article_content)) {
@@ -466,7 +555,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
         video_play.setImageResource(R.mipmap.video_pause);
         article_content.setMovementMethod(new ScrollingMovementMethod());
-
         article_content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -528,9 +616,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             musictype.setImageResource(R.mipmap.boyin);
         }
 
-
-
-
         long t = System.currentTimeMillis() / 1000 - sound.edited;
         if (t < 2 * 24 * 60 * 60 * 1000 && t > 0) {
             tea_listen.setText("限时免费听");
@@ -587,20 +672,52 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         if (sound.islike != 0) {
             initDianZan();
         }
-        NSDictionary nsDictionary = new NSDictionary();
+
+        if (userInfo != null && userInfo.uid.equals(sound.fromuid + "")) {
+            question.setVisibility(View.VISIBLE);
+        } else {
+            question.setVisibility(View.GONE);
+        }
+        TypeDictionary nsDictionary = new TypeDictionary();
         nsDictionary.isopen = "1";
         nsDictionary.ispay = "1";
         nsDictionary.isreply = "1";
-
         nsDictionary.status = "1";
+
         if (sound.touid == 0) {
             nsDictionary.stype = "2";
             teacher_info.setVisibility(View.GONE);
+            question.setVisibility(View.GONE);
             // title.setText("作品详情");
         } else {
             teacher_info.setVisibility(View.VISIBLE);
             nsDictionary.stype = "1";
             // title.setText("问题详情");
+            if (sound.type == 1) {
+                nsDictionary.type = "1";
+            } else {
+                nsDictionary.type = "2";
+            }
+
+        }
+        edit_text.addTextChangedListener(ItemDetailFragment.this);
+        if (sound.question != null && sound.question.size() > 0) {
+            tab1_question.setVisibility(View.VISIBLE);
+            que = sound.question.get(0);
+            question_desc.setText(EmojiCharacterUtil.decode(que.desc));
+
+            if (que.commenttime != 0) {
+                question_answer.setVisibility(View.VISIBLE);
+            } else {
+
+                if (userInfo != null && userInfo.uid.equals(que.touid + "")) {
+                    teacher_answer_q.setVisibility(View.VISIBLE);
+                }
+            }
+            question_tea_listen.setText("限时免费听");
+            question_commenttime.setText(que.commenttime + "\"");
+            PictureUtils.showPicture(getActivity(), sound.tecimage, question_tea_header);
+            question.setVisibility(View.GONE);
         }
 
 
@@ -610,8 +727,8 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         RestNetCallHelper.callNet(
                 getActivity(),
                 MyNetApiConfig.getSoundList,
-                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "views", "desc", "0"),
-                "worthSoundList", ItemDetailFragment.this, true, true);
+                MyNetRequestConfig.getSoundList(getActivity(), arr, 0, 1, "created", "asc", "0"),
+                "worthSoundList", ItemDetailFragment.this, false, true);
 
     }
 
@@ -631,7 +748,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                             .getSoundDetail(getActivity(), sid, uid),
-                    "getSoundDetail", ItemDetailFragment.this, true, false);
+                    "getSoundDetail", ItemDetailFragment.this, false, true);
 
         } else {
             sid = String.valueOf(sound.sid);
@@ -643,7 +760,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             RestNetCallHelper.callNet(getActivity(),
                     MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                             .getSoundDetail(getActivity(), sid, uid),
-                    "getSoundDetail", ItemDetailFragment.this, true, false);
+                    "getSoundDetail", ItemDetailFragment.this, false, true);
 
         }
 
@@ -651,7 +768,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
     }
 
     @OnClick({R.id.tea_listen, R.id.like, R.id.comments, R.id.stu_header, R.id.tea_header,
-            R.id.video_play, R.id.back, R.id.add_follow, R.id.ll_worth, R.id.share})
+            R.id.video_play, R.id.back, R.id.add_follow, R.id.ll_worth, R.id.share,
+            R.id.tv_sendmsg, R.id.teacher_answer_q, R.id.question_tea_listen,
+            R.id.worth_like,R.id.worth_header})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_worth:
@@ -660,9 +779,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     Intent i = new Intent(getActivity(), StubActivity.class);
                     if (soundWorth.type == 1) {
                         i.putExtra("fragment", ItemDetailFragment.class.getName());
-                    } else if (soundWorth.type == 2){
+                    } else if (soundWorth.type == 2) {
                         i.putExtra("fragment", ItemDetailFragment.class.getName());
-                    }else {
+                    } else {
                         i.putExtra("fragment", ItemDetailTextFragment.class.getName());
                     }
                     Bundle bundle = new Bundle();
@@ -675,6 +794,32 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
             case R.id.add_follow:
 
+
+                break;
+            case R.id.teacher_answer_q:
+
+                if (AppShare.getIsLogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), ReplyActivity.class);
+                    intent.putExtra("sid", String.valueOf(que.sid));
+                    intent.putExtra("id", String.valueOf(que.id));
+//                    getActivity().startActivity(intent);
+                    startActivityForResult(intent, 0);
+                    if (mPlayService != null) {
+                        mPlayService.pause();
+                        video_play.setImageResource(R.mipmap.video_play);
+                    }
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+
+                break;
+            case R.id.tv_sendmsg:
+                RestNetCallHelper.callNet(getActivity(),
+                        MyNetApiConfig.addsoundQuestion, MyNetRequestConfig
+                                .addsoundQuestion(getActivity(), sid, String.valueOf(sound.fromuid), String.valueOf(sound.touid), edit_text.getText().toString()),
+                        "addsoundQuestion", ItemDetailFragment.this, true, true);
 
                 break;
             case R.id.back:
@@ -699,6 +844,19 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     video_play.setImageResource(R.mipmap.video_pause);
                 }
                 break;
+            case R.id.question_tea_listen:
+                if (mPlayService.getPlayingPosition() == -1) {
+                    if (mPlayService.isPlaying()) {
+                        mPlayService.pause();
+                    } else {
+                        mPlayService.play(MyNetApiConfig.ImageServerAddr + que.commentpath, -1);
+                    }
+                } else {
+                    if (mPlayService != null) {
+                        mPlayService.play(MyNetApiConfig.ImageServerAddr + que.commentpath, -1);
+                    }
+                }
+                break;
 
             case R.id.tea_listen:
                 long t = System.currentTimeMillis() / 1000 - sound.edited;
@@ -708,7 +866,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                         if (mPlayService.isPlaying()) {
                             mPlayService.pause();
                         } else {
-                            mPlayService.resume();
+                            palyTeacherVoice();
                         }
                     } else {
                         palyTeacherVoice();
@@ -772,6 +930,22 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 }
 
                 break;
+            case R.id.worth_like:
+                if (AppShare.getIsLogin(getActivity())) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.like, MyNetRequestConfig
+                                    .like(getActivity(), AppShare.getUserInfo(getActivity()).uid,String.valueOf(soundWorth.sid) ),
+                            "worth_like", ItemDetailFragment.this, false, true);
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+
+                break;
+            case R.id.worth_header:
+                initHomepage(getActivity(), String.valueOf(soundWorth.fromuid));
+                break;
             case R.id.comments:
 
 
@@ -786,11 +960,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                             SelectLoginFragment.class.getName());
                     ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
                 }
-//                Intent intent = new Intent(getActivity(), CommentActivity.class);
-//                    intent.putExtra("sid", String.valueOf(sid));
-//                    intent.putExtra("fromuid",String.valueOf(AppShare.getUserInfo(getActivity()).uid));
-//                    intent.putExtra("touid", String.valueOf(sound.fromuid ));
-//                    getActivity().startActivity(intent);
+
 
                 break;
 
@@ -802,9 +972,31 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 break;
             case R.id.share:
                 showShare();
-
                 //            showShareOri();
                 break;
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            que = (Question) data.getSerializableExtra("data");
+            L.e(que.toString());
+            if (que.commenttime != 0) {
+                question_answer.setVisibility(View.VISIBLE);
+                teacher_answer_q.setVisibility(View.GONE);
+            } else {
+                if (userInfo != null && userInfo.uid.equals(que.touid + "")) {
+                    teacher_answer_q.setVisibility(View.VISIBLE);
+                }
+            }
+            question_tea_listen.setText("限时免费听");
+            question_commenttime.setText(que.commenttime + "\"");
+            PictureUtils.showPicture(getActivity(), sound.tecimage, question_tea_header);
+            question.setVisibility(View.GONE);
+
 
         }
     }
@@ -1089,7 +1281,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
 
     private void palyTeacherVoice() {
-
         if (mPlayService != null) {
             mPlayService.play(teaUrl, 0);
         }
@@ -1109,9 +1300,9 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
             mDownloadService.setOnDownloadEventListener(downloadListener);
             isBoundDownload = true;
             String lrcUrl = "";
-            if (!TextUtils.isEmpty(sound.lrcpath)){
+            if (!TextUtils.isEmpty(sound.lrcpath)) {
                 lrcUrl = sound.lrcpath;
-            }else if (!TextUtils.isEmpty(sound.lrc_url)){
+            } else if (!TextUtils.isEmpty(sound.lrc_url)) {
                 lrcUrl = sound.lrc_url;
             }
 
@@ -1131,7 +1322,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     //解析歌词返回LrcRow集合
                     List<LrcRow> rows = builder.getLrcRows(result);
 
-          //          L.e(rows.size()+"");
+                    //          L.e(rows.size()+"");
                     mLrcView.setLrc(rows);
 
                 } else {
@@ -1169,8 +1360,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     //解析歌词返回LrcRow集合
                     List<LrcRow> rows = builder.getLrcRows(result);
                     mLrcView.setLrc(rows);
-
-
                 }
 
                 @Override
@@ -1222,7 +1411,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
 
     }
 
-
     @Override
     public void onDestroy() {
         if (mPlayService != null) {
@@ -1232,7 +1420,6 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                 }
             }
         }
-
         super.onDestroy();
     }
 }

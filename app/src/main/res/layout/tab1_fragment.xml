@@ -7,9 +7,13 @@
     <include
         android:id="@+id/top_play"
         layout="@layout/top_play"
-        android:background="#ffffff"
         android:visibility="gone"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab_bg_color"/>
 
     <com.ui.views.RefreshList
         android:id="@+id/lv_sound"

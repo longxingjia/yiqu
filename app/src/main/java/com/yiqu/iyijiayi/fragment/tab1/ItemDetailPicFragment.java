@@ -295,7 +295,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     @Override
     protected int getTitleView() {
-        return R.layout.titlebar_tab1;
+        return R.layout.titlebar_tab5;
     }
 
     @Override
@@ -460,7 +460,7 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
             }
         }else if (id.equals("view")){
-            L.e(netResponse.toString());
+//            L.e(netResponse.toString());
         }else if (id.equals("worthSoundList")) {
 
             if (type == NetCallBack.TYPE_SUCCESS) {
@@ -479,10 +479,16 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
                     }
                     PictureUtils.showPicture(getActivity(), soundWorth.tecimage, worth_header, 40);
                     worth_teacher_name.setText(soundWorth.tecname);
-                    worth_teacher_desc.setText(sound.tectitle);
+                    try {
+                        worth_teacher_desc.setText(String2TimeUtils.longToString(soundWorth.created *1000,"yyyy-MM-dd HH:mm:ss"));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     worth_like.setText(String.valueOf(soundWorth.like));
                     worth_comment.setText(String.valueOf(soundWorth.comments));
                     worth_listener.setText(String.valueOf(soundWorth.views));
+
+
 
                 }
 
@@ -494,7 +500,8 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
 
     }
     private Sound soundWorth;
-    @OnClick({R.id.comment,R.id.header,R.id.ll_worth})
+    @OnClick({R.id.comment,R.id.header,R.id.ll_worth,
+            R.id.worth_like,R.id.worth_header})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_worth:
@@ -515,6 +522,22 @@ public class ItemDetailPicFragment extends AbsAllFragment implements View.OnClic
                     getActivity().finish();
 
                 }
+                break;
+            case R.id.worth_like:
+                if (AppShare.getIsLogin(getActivity())) {
+                    RestNetCallHelper.callNet(getActivity(),
+                            MyNetApiConfig.like, MyNetRequestConfig
+                                    .like(getActivity(), AppShare.getUserInfo(getActivity()).uid,String.valueOf(soundWorth.sid) ),
+                            "worth_like", ItemDetailPicFragment.this, false, true);
+                } else {
+                    Model.startNextAct(getActivity(),
+                            SelectLoginFragment.class.getName());
+                    ToastManager.getInstance(getActivity()).showText(getString(R.string.login_tips));
+                }
+
+                break;
+            case R.id.worth_header:
+                initHomepage(getActivity(), String.valueOf(soundWorth.fromuid));
                 break;
             case R.id.like:
                 if (AppShare.getIsLogin(getActivity())) {

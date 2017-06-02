@@ -59,8 +59,8 @@ public class Sound implements Serializable {
 //    public ArrayList<String> images;
     public String images;
 
-
     public ArrayList<CommentsInfo> top_comments;
+    public ArrayList<Question> question;
 
     @Override
     public String toString() {

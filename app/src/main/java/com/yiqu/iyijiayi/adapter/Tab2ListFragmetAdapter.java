@@ -26,6 +26,7 @@ import com.fwrestnet.NetCallBack;
 import com.fwrestnet.NetResponse;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.utils.L;
 import com.yiqu.iyijiayi.R;
 import com.yiqu.iyijiayi.StubActivity;
 import com.yiqu.iyijiayi.fragment.tab5.HomePageFragment;
@@ -237,6 +238,7 @@ public class Tab2ListFragmetAdapter extends BaseAdapter implements OnItemClickLi
 
                         @Override
                         public void onNetEnd(String id, int type, NetResponse netResponse) {
+                            L.e(netResponse.toString());
                             if (TYPE_SUCCESS == type) {
                                 Gson gson = new Gson();
                                 HomePage homePage = gson.fromJson(netResponse.data, HomePage.class);

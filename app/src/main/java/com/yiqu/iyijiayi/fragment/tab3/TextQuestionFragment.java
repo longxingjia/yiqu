@@ -29,6 +29,7 @@ import com.yiqu.iyijiayi.net.MyNetApiConfig;
 import com.yiqu.iyijiayi.net.MyNetRequestConfig;
 import com.yiqu.iyijiayi.net.RestNetCallHelper;
 import com.yiqu.iyijiayi.utils.AppShare;
+import com.yiqu.iyijiayi.view.MultiView.bean.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -114,6 +115,12 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
         userInfo = AppShare.getUserInfo(getActivity());
         times.setText(String.valueOf(userInfo.free_question));
 
+        UserInfo userInfo = (UserInfo)getActivity().getIntent().getSerializableExtra("data");
+        username = userInfo.username;
+        price = userInfo.price;
+        uid = userInfo.uid;
+        tea_name.setText(username);
+        tea_price.setText(price);
 
         ll_select.setOnClickListener(new View.OnClickListener() {
             @Override
