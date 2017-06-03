@@ -265,7 +265,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                 RestNetCallHelper.callNet(getActivity(),
                         MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                 .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
-                        "getSoundDetail", Tab1Fragment.this);
+                        "getSoundDetail", Tab1Fragment.this,false,true);
             }
         }
 
@@ -292,7 +292,7 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
                     RestNetCallHelper.callNet(getActivity(),
                             MyNetApiConfig.getSoundDetail, MyNetRequestConfig
                                     .getSoundDetail(getActivity(), String.valueOf(sid), "0"),
-                            "getSoundDetail", Tab1Fragment.this);
+                            "getSoundDetail", Tab1Fragment.this,false,true);
                 }
             } else if (status == Player.MusicPlayerState.stop) {
                 //  mPlayService.stop();

@@ -1017,7 +1017,7 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
 //        oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(sound.stuname);
+        oks.setText(EmojiCharacterUtil.decode(sound.stuname));
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用
@@ -1076,11 +1076,11 @@ public class ItemDetailFragment extends AbsFragment implements View.OnClickListe
                     if (sound.stuimage != null) {
                         if (sound.stuimage.contains("http://wx.qlogo.cn")) {
                             paramsToShare.setImagePath(sound.stuimage);
-                            L.e(sound.stuimage);
+                        //    L.e(sound.stuimage);
                         } else {
                             //  paramsToShare.setImagePath(MyNetApiConfig.ImageServerAddr +sound.stuimage );
                             paramsToShare.setImageUrl(MyNetApiConfig.ImageServerAddr + sound.stuimage);
-                            L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
+                         //   L.e(MyNetApiConfig.ImageServerAddr + sound.stuimage);
                         }
                     } else {
                         Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);

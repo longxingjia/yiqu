@@ -44,10 +44,10 @@ android {
         applicationId "com.yiqu.iyijiayi"
         minSdkVersion 19
         targetSdkVersion 15
-        versionCode 3
+        versionCode 4
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
-        versionName "2.0.0"
+        versionName "2.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {

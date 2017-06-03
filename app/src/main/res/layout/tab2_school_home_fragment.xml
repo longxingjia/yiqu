@@ -8,9 +8,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ImageView
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_8290AF"
+                android:orientation="horizontal">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="优秀师资"/>
+
+                <TextView
+                    android:gravity="right|center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="3dp"
+                    android:drawableRight="@mipmap/arrow"
+                    android:layout_height="match_parent"
+                    android:text="详细介绍"/>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,9 +123,6 @@
                 android:text="学校位置"/>
 
         </LinearLayout>
-
-
-
 
     </LinearLayout>
 

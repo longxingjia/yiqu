@@ -116,11 +116,13 @@ public class TextQuestionFragment extends AbsAllFragment implements View.OnClick
         times.setText(String.valueOf(userInfo.free_question));
 
         UserInfo userInfo = (UserInfo)getActivity().getIntent().getSerializableExtra("data");
-        username = userInfo.username;
-        price = userInfo.price;
-        uid = userInfo.uid;
-        tea_name.setText(username);
-        tea_price.setText(price);
+        if (userInfo != null){
+            username = userInfo.username;
+            price = userInfo.price;
+            uid = userInfo.uid;
+            tea_name.setText(username);
+            tea_price.setText(price);
+        }
 
         ll_select.setOnClickListener(new View.OnClickListener() {
             @Override

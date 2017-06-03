@@ -366,7 +366,9 @@ public class AddQuestionFragment extends AbsAllFragment implements View.OnClickL
                 ToastManager.getInstance(getActivity()).showText("提问成功,请等待老师回答");
                 userInfo.free_question--;
                 AppShare.setUserInfo(getActivity(), userInfo);
-                getActivity().finish();
+                Intent intent = new Intent();
+                getActivity().setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+                getActivity().finish();//此处一定要调用finish()方法
             } else {
                 ToastManager.getInstance(getActivity()).showText("提问失败，请重试");
             }
