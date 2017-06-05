@@ -545,7 +545,6 @@ public class Tab1Fragment extends TabContentFragment implements LoadMoreView.OnM
 
                 break;
             case R.id.question:
-
                 i.putExtra("fragment", Tab1SoundListFragment.class.getName());
                 getActivity().startActivity(i);
 
